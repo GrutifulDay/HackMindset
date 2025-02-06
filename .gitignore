@@ -1,0 +1,12 @@
+# Ignorování systémových souborů
+.DS_Store
+node_modules/
+Library/
+Music/
+Applications/
+Documents/
+Downloads/
+Movies/
+Pictures/
+Public/
+Sites/
