@@ -3,3 +3,7 @@ chrome.action.onClicked.addListener(async (tab) => {
         console.log("jsi na insta");
    }
 })
+
+chrome.runtime.onInstalled.addListener(() => {
+   console.log("HackMindset Extension nainstalováno.");
+});
