@@ -1,17 +1,19 @@
 {
-    "manifest_version": 3,
-    "name": "HackMindset",
-    "version": "1.0",
-    "description": "Rozšíření pro digitální detox.",
-    "permissions": ["tabs"],
-    "action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "16": "icon.png",
-        "48": "icon.png",
-        "128": "icon.png"
-      }
+  "manifest_version": 3,
+  "name": "HackMindset – Vědomé vyhledávání",
+  "version": "1.0",
+  "description": "Připomene ti zdravé hashtagy po 30 minutách na Instagramu.",
+  "permissions": ["tabs", "notifications", "storage"],
+  "host_permissions": ["https://www.instagram.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
     }
   }
-
-  
+}

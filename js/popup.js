@@ -1,18 +1,19 @@
-// Náhodná slova pro vyhledávání
-const randomWords = [
-    "historie žárovek", "jak se vyrábí čokoláda", "náhodná fakta o vesmíru",
-    "vývoj parních lokomotiv", "obskurní filmy 80. let", "ekosystémy v oceánech",
-    "technologie budoucnosti", "nejdelší mosty světa", "neobvyklá zvířata",
-    "co je kvantová fyzika", "historie knihoven", "jak funguje kávovar"
+const hashtags = [
+    "#LearnToCode", "#SpaceDiscovery", "#HealthyMind", "#PsychologyFacts", "#DeepThinking",
+    "#PositiveVibes", "#BookLover", "#ScienceEveryday", "#CreativeMinds", "#Mindfulness"
 ];
 
-// Funkce pro otevření náhodného vyhledávání
-function openRandomSearch() {
-    const randomQuery = randomWords[Math.floor(Math.random() * randomWords.length)];
-    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(randomQuery)}`;
-
-    chrome.tabs.create({ url: searchUrl });
+const randomHashtags = [];
+for (let i = 0; i < 3; i++) {
+    randomHashtags.push(hashtags[Math.floor(Math.random() * hashtags.length)]);
 }
 
-// Přidání event listeneru pro tlačítko
-document.getElementById("search").addEventListener("click", openRandomSearch);
+document.getElementById("hashtag1").innerText = randomHashtags[0];
+document.getElementById("hashtag2").innerText = randomHashtags[1];
+document.getElementById("hashtag3").innerText = randomHashtags[2];
+
+document.getElementById("openHashtag").addEventListener("click", () => {
+    const selectedHashtag = randomHashtags[Math.floor(Math.random() * randomHashtags.length)];
+    const url = `https://www.instagram.com/explore/tags/${selectedHashtag.replace("#", "")}/`;
+    chrome.tabs.create({ url });
+});
