@@ -17,12 +17,12 @@
       }
     },
     "background": {
-      "service_worker": "js/background.js"
+      "service_worker": "background.js"
     },
     "content_scripts": [
       {
         "matches": ["*://*.google.com/*"],
-        "js": ["js/content.js"]
+        "js": ["content.js"]
       }
     ]
   }
