@@ -1,19 +1,25 @@
 {
   "manifest_version": 3,
-  "name": "HackMindset – Vědomé vyhledávání",
-  "version": "1.0",
-  "description": "Připomene ti zdravé hashtagy po 30 minutách na Instagramu.",
-  "permissions": ["tabs", "notifications", "storage"],
-  "host_permissions": ["https://www.instagram.com/*"],
+  "name": "zpravy pozitivni",
+  "version": "1.1",
+  "description": "Upozornovac",
+  "permissions": ["storage", "tabs", "activeTab", "scripting", "alarms"],
+  "host_permissions": [
+    "*://www.seznam.cz/*",
+    "https://www.goodnewsnetwork.org/feed/",
+    "https://spinoff.nasa.gov/"
+  ],
   "background": {
-    "service_worker": "js/background.js"
+    "service_worker": "background.js"
   },
   "action": {
     "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icon.png",
-      "48": "icon.png",
-      "128": "icon.png"
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://www.seznam.cz/*"],
+      "js": ["content.js"]
     }
-  }
+  ]
 }
