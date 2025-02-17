@@ -1,8 +1,8 @@
 // NASA API - IMG DNE aktualizace kazdy den
 document.addEventListener("DOMContentLoaded", function () {
-    const apiUrl = 'https://api.nasa.gov/planetary/apod?api_key=jMn2ZZOMdgqed1ysFhsOqalitwdNud8eCenBt3LC'
+    const nasaApi = 'https://api.nasa.gov/planetary/apod?api_key=jMn2ZZOMdgqed1ysFhsOqalitwdNud8eCenBt3LC'
     
-    fetch(apiUrl)
+    fetch(nasaApi)
       .then(response => response.json())
       .then(data => {
           const nasaDescription = document.getElementById('nasaDescription')
@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
           if (data.media_type === "image") {
               document.getElementById('nasaImage').src = data.url
   
-              // Zkrácení textu na max 60 znaků
-              const fullText = data.explanation // Celý text
+              // Zkrácení textu na max 30 znaků
+              const fullText = data.explanation
               const shortText = fullText.length > 30 
                   ? fullText.slice(0, 30) + "..." 
                   : fullText
@@ -46,4 +46,5 @@ document.addEventListener("DOMContentLoaded", function () {
       nasaImage.classList.toggle("zoomed")
     })
   })
+
   
