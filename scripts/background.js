@@ -1,4 +1,12 @@
-console.log("✅ Background.js běží správně!")
+console.log("✅ BACKGROUND běží správně!")
+
+// kontrola jestli posle zpravu do content.js
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === "complete" && tab.url && tab.url.includes("instagram.com")) {
+        console.log("✅ Uživatel otevřel Instagram")
+        chrome.tabs.sendMessage(tabId, { action: "showContent" })
+    }
+})
 
 // Aktualizace / instalace novych fci
 chrome.runtime.onInstalled.addListener(() => {
@@ -18,9 +26,9 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 // Sleduje, kdy uživatel otevře Instagram
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === "complete" && tab.url && tab.url.includes("instagram.com")) {
-        console.log("✅ Uživatel otevřel Instagram")
+        console.log("✅ Uživatel OTEVREL Instagram")
 
-        chrome.tabs.sendMessage(tabId, { action: "showHashtags" })
+        chrome.tabs.sendMessage(tabId, { action: "showContent" })
     }
 })
 

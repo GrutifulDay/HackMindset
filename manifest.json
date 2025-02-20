@@ -20,8 +20,9 @@
     "scripting",
     "alarms",
     "activeTab",
-    "tabs"
-  ],
+    "tabs",
+    "webNavigation"
+],
   "host_permissions": [
     "https://api.nasa.gov/*",
     "https://api.goodnewsnetwork.org/*",
@@ -30,7 +31,7 @@
   ],
   "content_scripts": [
     {
-      "matches": ["*://www.instagram.com/*"],
+      "matches": ["*://*.instagram.com/*"],
       "js": ["scripts/content.js"]
     }
   ]
