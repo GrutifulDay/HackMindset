@@ -1,4 +1,7 @@
-import { fetchNasaImage } from "./scripts/fetch";
+import { fetchNasaImage } from "./scripts/fetch.js";
+
+console.log("✅ Popup.js načten správně!");
+
 
 document.addEventListener("DOMContentLoaded", async () => {
     console.log("✅ Popup.js běží správně!")
