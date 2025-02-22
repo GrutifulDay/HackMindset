@@ -1,7 +1,7 @@
-#nasaImage {
+/* #nasaImage {
     width: 20em;
     border-radius: .8em;
-}
+} */
 
 
 body { 
@@ -9,23 +9,22 @@ body {
     font-family: Arial, sans-serif;
     text-align: center; 
     padding: 10px; 
-    /* background: rgb(238, 228, 228); */
-    background: rgb(233, 223, 223);
+    background: rgb(238, 228, 228);
 
-    color: #38536a;
+    color: #38536a; 
    
-}
+} 
 
-#message { 
+/* #message { 
     font-weight: bold; 
     color: green; 
-}
+} */
 
-#nasaImage {
+/* #nasaImage {
     transition: transform .5 ease-in-out;
     cursor: pointer;
 }
 
 #nasaImage.zoomed {
     transform: scale(1.6);
-}
+}  */
