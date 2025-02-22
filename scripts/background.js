@@ -1,5 +1,8 @@
 console.log("✅ BACKGROUND běží správně!")
 
+
+
+
 // kontrola jestli posle zpravu do content.js
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === "complete" && tab.url && tab.url.includes("instagram.com")) {

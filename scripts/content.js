@@ -31,8 +31,7 @@ function showOverlay() {
     <strong>🚀 NASA Obrázek dne:</strong><br>
     <img src="${nasaData.url}" alt="NASA Image" width="200"><br>
     <p id="nasa-desc">${nasaData.explanation.slice(0, 50)}...</p>
-    <button id="show-full-text">📖 Více</button>
-    <button id="close-nasa-overlay">✖ Zavřít</button>    `
+    <button id="show-full-text">📖 Více</button>   `
 
     document.body.appendChild(overlay)
 
