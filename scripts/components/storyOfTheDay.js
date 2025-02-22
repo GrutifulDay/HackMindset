@@ -1,12 +1,10 @@
+import { fetchStory } from "../database.js";
 
 export async function createStoryOfTheDay() {
-    console.log(("📓 Story of the day funguje"));
+    console.log(("📓 nacitam data pribehu..."));
 
-    const storyData = {
-        title: "🌍 Příběh dne: První člověk na Měsíci",
-        content: "Dne 20. července 1969 vstoupil Neil Armstrong jako první člověk na povrch Měsíce. Jeho slavná slova 'Malý krok pro člověka, obrovský skok pro lidstvo' se zapsala do historie.",
-        author: "UI"
-    };
+    const storyData = await fetchStory()
+    console.log("📌 Načtený příběh:", storyData);
 
     const article = document.createElement("article")
     article.style.marginBottom = "20px"
@@ -21,6 +19,11 @@ export async function createStoryOfTheDay() {
     const shortText = fullText.length > 100 ? fullText.slice(0, 100) + "..." : fullText;
     description.textContent = shortText
     description.style.cursor = "pointer"
+
+    // kliknutim zobrazi cely text
+    description.addEventListener("click", () => {
+        description.textContent = (description.textContent === shortText) ? fullText : shortText;
+    })
 
     // napsal
     const author = document.createElement("cite")

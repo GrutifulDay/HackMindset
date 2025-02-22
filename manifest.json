@@ -22,11 +22,11 @@
     "activeTab",
     "tabs",
     "webNavigation"
-],
+  ],
   "host_permissions": [
     "https://api.nasa.gov/*",
     "https://api.goodnewsnetwork.org/*",
-    "https://supabase.io/*",
+    "https://wjtpcbrakswvnffjdlvd.supabase.co/*",  
     "https://www.instagram.com/*"
   ],
   "content_scripts": [
@@ -34,5 +34,8 @@
       "matches": ["*://*.instagram.com/*"],
       "js": ["scripts/content.js"]
     }
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }
