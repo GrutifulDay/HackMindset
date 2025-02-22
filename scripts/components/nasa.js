@@ -13,8 +13,16 @@ export async function createNasaSection() {
     // section.style.marginBottom = "20px"
 
     // nadpis 🚀 Astronomy Picture of the Day
-    const nasaTitle = document.createElement("h3")
-    nasaTitle.textContent = "🚀 Astronomy Picture of the Day"
+    const nasaTitle = document.createElement("h3");
+    nasaTitle.innerHTML = `🚀 Astronomy Picture of the Day by 
+    <a href="https://www.nasa.gov" 
+    target="_blank" 
+    style="color: #007BFF; 
+    text-decoration: none; 
+    font-weight: 
+    bold;"
+    >NASA</a>`
+
 
     // img
     const nasaImage = document.createElement("img")
@@ -36,9 +44,6 @@ export async function createNasaSection() {
     nasaLink.href = "https://apod.nasa.gov/apod/astropix.html"
     nasaLink.target = "_blank"
     nasaLink.textContent = "Do you want more?"
-
-    
-
 
 
     // Kliknutím zobrazí celý popis
