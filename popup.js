@@ -1,6 +1,6 @@
 import { createNasaSection } from "./scripts/components/nasa.js";
 import { createHeckMindset } from "./scripts/components/heckMindset.js";
-// import { createStoryOfTheDay } from "./scripts/components/storyOfTheDay.js";
+import { createStoryOfTheDay } from "./scripts/components/storyOfTheDay.js";
 // import { fetchStory } from "./scripts/database.js"; // ✅ Import databázové funkce
 
 console.log(("✅ Popup.js načten správně!"))
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const heckMindset = await createHeckMindset()
     const nasaSection = await createNasaSection()
-    // let storyOfTheDay = await createStoryOfTheDay()
+    let storyOfTheDay = await createStoryOfTheDay()
 
     // 📡 Načtení příběhu z databáze
     // const storyData = await fetchStory();
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     body.appendChild(heckMindset)
     body.appendChild(nasaSection)
-    // body.appendChild(storyOfTheDay)
+    body.appendChild(storyOfTheDay)
 
     console.log("✅ Všechny sekce byly přidány!");
 })
