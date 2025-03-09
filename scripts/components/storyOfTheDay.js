@@ -2,7 +2,7 @@ export async function createStoryOfTheDay() {
     console.log(("📓 Story of the day funguje"));
 
     const storyData = {
-        title: "🌍 Příběh dne: První člověk na Měsíci",
+        title: "📖 Příběh dne: První člověk na Měsíci",
         content: "Dne 20. července 1969 vstoupil Neil Armstrong jako první člověk na povrch Měsíce. Jeho slavná slova 'Malý krok pro člověka, obrovský skok pro lidstvo' se zapsala do historie.",
         author: "UI"
     };

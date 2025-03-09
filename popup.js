@@ -2,6 +2,7 @@ import { createNasaSection } from "./scripts/components/nasa.js";
 import { createHeckMindset } from "./scripts/components/heckMindset.js";
 import { createStoryOfTheDay } from "./scripts/components/storyOfTheDay.js";
 
+
 console.log(("✅ Popup.js načten správně!"))
 
 document.addEventListener("DOMContentLoaded", async () => {
