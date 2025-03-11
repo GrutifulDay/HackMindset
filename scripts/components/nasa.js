@@ -1,10 +1,16 @@
 import { fetchNasaImage } from "../fetch.js";
 
 export async function createNasaSection() {
+    console.log("✅ NASA sekce se generuje...");
+
+    const nasaData = await fetchNasaImage();
+
+    console.log("📌 Načtený NASA obrázek:", nasaData);
+
+
     console.log("✅ NASA sekce se generuje...")
 
-    const nasaData = await fetchNasaImage()
-    console.log("📌 Načtený NASA obrázek:", nasaData)
+    
 
     // 📌 VYTVORENI HTML PRVKU 
 
