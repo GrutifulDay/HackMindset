@@ -18,12 +18,13 @@ document.addEventListener("DOMContentLoaded", async () => {
      // Ověření, že nasaSection je validní DOM prvek
      if (nasaSection) {
         body.appendChild(nasaSection);  // Přidáme sekci do body
+        console.log("nasa section je nactena", nasaSection);
     } else {
         console.error("❌ NASA sekce není validní DOM prvek.");
     }
 
     body.appendChild(heckMindset)
-    // body.appendChild(nasaSection)
+    body.appendChild(nasaSection)
     body.appendChild(storyOfTheDay)
 
     console.log("✅ Všechny sekce byly přidány!");
