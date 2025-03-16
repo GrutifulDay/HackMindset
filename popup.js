@@ -1,7 +1,7 @@
 import { createNasaSection } from "./scripts/components/nasa.js";
 import { createHeckMindset } from "./scripts/components/heckMindset.js";
-// import { createStoryOfTheDay } from "./scripts/components/storyOfTheDay.js";
-// import { fetchStory } from "./scripts/database.js"; // ✅ Import databázové funkce
+import { createStoryOfTheDay } from "./scripts/components/storyOfTheDay.js";
+
 
 console.log(("✅ Popup.js načten správně!"))
 
@@ -13,19 +13,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const heckMindset = await createHeckMindset()
     const nasaSection = await createNasaSection()
-    // let storyOfTheDay = await createStoryOfTheDay()
+    let storyOfTheDay = await createStoryOfTheDay()
 
-    // 📡 Načtení příběhu z databáze
-    // const storyData = await fetchStory();
-    
-    // 🔄 Aktualizace obsahu příběhu
-    // storyOfTheDay.querySelector("h2").textContent = storyData.title;
-    // storyOfTheDay.querySelector("p").textContent = storyData.content;
-    // storyOfTheDay.querySelector("cite").textContent = storyData.author;
+     // Ověření, že nasaSection je validní DOM prvek
+     if (nasaSection) {
+        body.appendChild(nasaSection);  // Přidáme sekci do body
+        console.log("nasa section je nactena", nasaSection);
+    } else {
+        console.error("❌ NASA sekce není validní DOM prvek.");
+    }
 
     body.appendChild(heckMindset)
     body.appendChild(nasaSection)
-    // body.appendChild(storyOfTheDay)
+    body.appendChild(storyOfTheDay)
 
     console.log("✅ Všechny sekce byly přidány!");
 })
+
