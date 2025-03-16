@@ -4,15 +4,15 @@
   "version": "1.0",
   "description": "Rozšíření, které zobrazuje NASA obrázky, pozitivní zprávy a hashtagy.",
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png"
+    "16": "frontend/assets/icons/icon16.png",
+    "48": "frontend/assets/icons/icon48.png"
   },
   "action": {
-    "default_popup": "popup.html",
-    "default_icon": "icons/icon48.png"
+    "default_popup": "frontend/popup.html",
+    "default_icon": "frontend/assets/icons/icon48.png"
   },
   "background": {
-    "service_worker": "scripts/background.js",
+    "service_worker": "frontend/scripts/background.js",
     "type": "module"
   },
   "permissions": [
@@ -33,7 +33,7 @@
   "content_scripts": [
     {
       "matches": ["*://*.instagram.com/*"],
-      "js": ["scripts/content.js"]
+      "js": ["frontend/scripts/content.js"]
     }
   ],
   "content_security_policy": {

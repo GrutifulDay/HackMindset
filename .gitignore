@@ -1,12 +1,24 @@
 # Ignorování systémových souborů
 .DS_Store
+
+# Ignorování node_modules
 node_modules/
-Library/
-Music/
-Applications/
-Documents/
-Downloads/
-Movies/
-Pictures/
-Public/
-Sites/
+
+# Ignorování prostředí
+.env
+
+# Logy
+nohup.out
+*.log
+
+# Ignorování build souborů
+dist/
+build/
+
+# Ignorování závislostí v backendu a frontendovém projektu
+backend/node_modules/
+frontend/node_modules/
+
+# Ignorování verzovacích souborů
+.vscode/
+.idea/
