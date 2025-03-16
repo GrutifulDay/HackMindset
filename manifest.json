@@ -25,6 +25,7 @@
   ],
   "host_permissions": [
     "https://api.nasa.gov/*",
+    "http://localhost:3000/*",
     "https://api.goodnewsnetwork.org/*",
     "https://wjtpcbrakswvnffjdlvd.supabase.co/*",  
     "https://www.instagram.com/*"
