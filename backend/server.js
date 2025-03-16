@@ -1,14 +1,22 @@
-import dotenv from "dotenv"; 
-dotenv.config(); // ✅ Musí být nahoře, než se načte DB
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// 🛠 Získání absolutní cesty k `backend/`
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// ✅ Načtení `.env` souboru z `backend/`
+dotenv.config({ path: path.join(__dirname, ".env") });
+
+// Ověření, že proměnné jsou správně načtené
+console.log("🔍 FETCH_API_NASA:", process.env.FETCH_API_NASA);
+console.log("🔍 API_KEY_NASA:", process.env.API_KEY_NASA);
 
 import express from "express";
 import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// API Routes
-
 
 // ✅ Middleware pro správné nastavení odpovědi jako JSON 
 app.use(cors({
@@ -17,10 +25,12 @@ app.use(cors({
     credentials: true
 }));
 
-// NASA fetch API > .env
+// 🌍 NASA fetch API > .env
 app.get("/api/nasa", async (req, res) => {
     try {
         const apiUrlNasa = `${process.env.FETCH_API_NASA}${process.env.API_KEY_NASA}`;
+        console.log("🌍 Fetching from:", apiUrlNasa);
+
         const response = await fetch(apiUrlNasa);
 
         if (!response.ok) {
@@ -36,7 +46,7 @@ app.get("/api/nasa", async (req, res) => {
         }
 
     } catch (error) {
-        console.error("Chyba na serveru:", error);
+        console.error("❌ Chyba na serveru:", error);
         res.status(500).json({ error: "Chyba na serveru" });
     }
 });
