@@ -17,39 +17,7 @@ app.use(cors({
     credentials: true
 }));
 
-//app.use(cors({ origin: "*" }));
-
-// app.get("/api/nasa", async (req, res) => {
-//     try {
-//         const apiUrlNasa = `${process.env.FETCH_API_NASA}${process.env.API_KEY_NASA}`;
-//         const response = await fetch(apiUrlNasa);
-
-//         if (!response.ok) {
-//             throw new Error(`❌ Chyba při načítání dat ze serveru, status: ${response.status}`);
-//         }
-
-//         const data = await response.json();
-
-//         // 🖼 Obrázek
-//         if (data.media_type === "image") {
-//             return res.json({ type: "image", url: data.url, explanation: data.explanation });
-//         }
-
-//         // 🎥 Video
-//         if (data.media_type === "video") {
-//             return res.json({ type: "video", url: data.url, explanation: data.explanation });
-//         }
-
-//         // 🚨 Pokud je odpověď jiná, vrátíme chybu
-//         res.status(400).json({ error: "Neznámý formát NASA média." });
-
-//     } catch (error) {
-//         console.error("❌ Chyba při volání NASA API:", error.message);
-//         res.status(500).json({ error: "Interní chyba serveru." });
-//     }
-// });
-
-
+// NASA fetch API > .env
 app.get("/api/nasa", async (req, res) => {
     try {
         const apiUrlNasa = `${process.env.FETCH_API_NASA}${process.env.API_KEY_NASA}`;
