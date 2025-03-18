@@ -1,25 +1,37 @@
+import { updateNasaData } from "./update.js";
+
 console.log("✅ fetch.js načten");
 
-// FECTH Z API SERVER.JS
+// 🔥 FETCH Z API SERVER.JS
 export async function fetchNasaImage() {
+    // 🛑 Pokud není potřeba aktualizovat, použijeme uložená data
+    if (!(await updateNasaData())) {
+        const storage = await new Promise((resolve) => {
+            chrome.storage.local.get("nasaData", (result) => {
+                resolve(result);
+            });
+        });
+        return storage.nasaData;
+    }
+
+    console.log("🌍 Načítám nová data z API...");
+
     try {
-        console.log("🔄 Spouštím fetch na server...");
-
         const response = await fetch("http://localhost:3000/api/nasa");
-
         if (!response.ok) throw new Error("❌ Chyba při načítání obrázku");
 
         const data = await response.json();
         console.log("🔍 Data z API:", data);
 
-        // 📌 NEBUDU zde nastavovat ID prvky! Pouze vrátím data.
+        // 📝 Uložíme data do `chrome.storage`
+        await chrome.storage.local.set({ nasaData: data, lastFetch: Date.now() });
         return data;
-
     } catch (error) {
         console.error("⚠️ Chyba při načítání NASA dat:", error);
-        return null; // Když je chyba, vrátíme null
+        return null; // Pokud API selže, vrátíme null
     }
 }
+
 
 
 

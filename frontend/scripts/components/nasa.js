@@ -1,4 +1,4 @@
-import { fetchNasaImage } from "../fetch.js";
+import { fetchNasaImage } from "../fetch/fetch.js";
 
 export async function createNasaSection() {
     console.log("✅ NASA sekce se generuje...");
