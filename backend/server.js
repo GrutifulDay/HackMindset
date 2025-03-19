@@ -23,7 +23,7 @@ app.use(botProtection)
 app.use(ipBlocker)
 app.use(speedLimiter)
 
-// ✅ Načtení rout
+// ✅ Načtení routes
 app.use("/api/nasa", nasaRoutes);
 
 
