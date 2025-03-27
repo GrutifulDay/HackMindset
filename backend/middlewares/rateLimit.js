@@ -1,10 +1,10 @@
-// nastaveni omezeni pozadavku pri volani API 
+// // nastaveni omezeni pozadavku pri volani API 
 
 import rateLimit from "express-rate-limit";
 
 const limiterApi = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 min
-    max: 100, // max 100 pozadavku 
+    max: 10, // max 100 pozadavku 
     message: "Příliš mnoho požadavků, zkuste to znovu za 15 minut.",
     standardHeaders: true, // Posílá RateLimit hlavičky (X-RateLimit-Limit, X-RateLimit-Remaining)
     legacyHeaders: false, // Nepoužívá zastaralé hlavičky (X-RateLimit-Reset)
