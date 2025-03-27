@@ -17,7 +17,7 @@ export async function fetchNasaImage() {
     console.log("🌍 Načítám nová data z API...");
 
     try {
-        const response = await fetch("http://localhost:3000/api/nasa");
+        const response = await fetch("https://localhost:3000/api/nasa");
         if (!response.ok) throw new Error("❌ Chyba při načítání obrázku");
 
         const data = await response.json();
