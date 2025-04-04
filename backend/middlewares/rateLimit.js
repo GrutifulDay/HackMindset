@@ -6,7 +6,7 @@ const ignoredIPs = ["127.0.0.1", "::1", "::ffff:127.0.0.1"];
 const limiterApi = rateLimit({
      // windowMs: 15 * 60 * 1000, // 15 min
     windowMs: 60 * 1000,
-    max: 10, // max 100 pozadavku 
+    max: 5, // max 100 pozadavku 
     message: "Příliš mnoho požadavků, zkuste to znovu za 15 minut.",
     standardHeaders: true,
     legacyHeaders: false,

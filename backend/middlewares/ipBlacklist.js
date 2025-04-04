@@ -18,13 +18,14 @@ export default function ipBlocker(req, res, next) {
   // Zkontroluj, jestli je IP na blacklistu
   if (blacklistedIPs.has(clientIP)) {
     console.warn(`🚨 Přístup zablokován pro IP: ${clientIP}`);
+    console.log("🔍 Detekovaná IP:", clientIP);
     return res.status(403).json({ error: "Vaše IP adresa byla zablokována." });
   }
 
   next();
 }
 
-// Funkce pro dani IP do blacklistu 
+// Funkce pro dani IP do blacklistu   
 export async function addToBlacklist(ip) {
   if (ignoredIPs.has(ip)) {
     console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
