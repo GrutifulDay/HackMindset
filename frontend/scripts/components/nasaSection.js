@@ -1,4 +1,4 @@
-import { fetchNasaImage } from "../fetch/fetch.js";
+import { fetchNasaImage } from "../fetch/fetchNasa.js";
 
 export async function createNasaSection() {
     console.log("✅ NASA sekce se generuje...");
@@ -16,6 +16,8 @@ export async function createNasaSection() {
 
     // "sekce" pro nasa
     const section = document.createElement("section")
+    section.style.border = "2px solid black"
+
     // section.style.marginBottom = "20px"
 
     // nadpis 🚀 Astronomy Picture of the Day
@@ -34,7 +36,7 @@ export async function createNasaSection() {
     const nasaImage = document.createElement("img")
     nasaImage.src = nasaData.url
     nasaImage.alt = "Astronomy Picture of the Day"
-    nasaImage.style.width = "70%"
+    nasaImage.style.width = "45%"
     nasaImage.style.borderRadius = "1.2em"
     nasaImage.style.border = ".3em solid black"
 

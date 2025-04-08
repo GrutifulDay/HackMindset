@@ -1,4 +1,4 @@
-import { updateNasaData } from "./update.js";
+import { updateNasaData } from "./updateNasa.js";
 
 console.log("✅ fetch.js načten");
 
