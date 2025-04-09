@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import chalk from "chalk";
-import { MONGO_URI } from "./config.js";
+import { MONGO_URI } from "../config.js";
 
 const connectDB = async () => {
   try {

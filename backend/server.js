@@ -23,12 +23,12 @@ import botProtection from "./middlewares/botProtection.js";
 import ipBlacklist from "./middlewares/ipBlacklist.js";
 import speedLimiter from "./middlewares/slowDown.js";
 
-import connectDB from "./db.js"
-import connectFrontendDB from "./connectFrontendDB.js";
+import connectDB from "./db/db.js"
+import connectFrontendDB from "./db/connectFrontendDB.js";
 
 const app = express();
 
-// DB Mongo
+// MongoDB
 await connectDB()
 await connectFrontendDB()
 
@@ -56,7 +56,8 @@ app.use(speedLimiter)
 // testovaci router
 app.get("/api/test", (req, res) => {
     res.json({ message: "Server OK" });
-  });
+});
+
 
 // ✅ Načtení NASA router
 app.use("/api/nasa", nasaRoutes)

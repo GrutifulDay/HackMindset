@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import connectFrontendDB from "../connectFrontendDB.js";
+import connectFrontendDB from "../db/connectFrontendDB.js";
 
 const frontendConnection = connectFrontendDB();
 
