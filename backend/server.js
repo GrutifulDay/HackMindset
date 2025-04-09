@@ -9,10 +9,12 @@ import https from "https"
 import express from "express";
 import helmet from "helmet"
 import chalk from "chalk";
+// import dayjs from "dayjs";
 
 // Routes
 import nasaRoutes from "./routes/nasaRoutes.js";
 import ipRoutes from "./routes/ipRoutes.js";
+import storyRoutes from "./routes/storyRoutes.js"
 
 // Middleware
 import limiterApi from "./middlewares/rateLimit.js";
@@ -22,10 +24,13 @@ import ipBlacklist from "./middlewares/ipBlacklist.js";
 import speedLimiter from "./middlewares/slowDown.js";
 
 import connectDB from "./db.js"
+import connectFrontendDB from "./connectFrontendDB.js";
 
 const app = express();
 
+// DB Mongo
 await connectDB()
+await connectFrontendDB()
 
 // Zabezpeceni
 app.disable("x-powered-by"); // ✅ Skrytí frameworku - express.js
@@ -48,23 +53,15 @@ app.use(speedLimiter)
 // });
 
 
-// test pripojeni db 
-// import mongoose from "mongoose";
-// app.get("/api/db-status", async (req, res) => {
-//   const state = mongoose.connection.readyState;
-//   const statusMap = ["❌ Disconnected", "✅ Connected", "🔄 Connecting", "⏳ Disconnecting"];
-//   res.json({ status: statusMap[state], code: state });
-// });
-
-
 // testovaci router
 app.get("/api/test", (req, res) => {
-    res.json({ message: "Test OK" })
-})
+    res.json({ message: "Server OK" });
+  });
 
 // ✅ Načtení NASA router
 app.use("/api/nasa", nasaRoutes)
 app.use("/api", ipRoutes);
+app.use("/api", storyRoutes)
 
 // nacitani certifikatu ze slozky cert
 const options = {
