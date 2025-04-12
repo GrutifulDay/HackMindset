@@ -39,6 +39,7 @@
     ],
     "nature_travel_wildlife": [
       "wildlifelearningcenter",
+      hugo.visuals,
       "defendersofwildlife",
       "thewcs",
       "nationalparkservice",

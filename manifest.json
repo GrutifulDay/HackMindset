@@ -12,7 +12,7 @@
     "default_icon": "frontend/assets/icons/icon48.png"
   },
   "background": {
-    "service_worker": "frontend/scripts/background.js",
+    "service_worker": "frontend/app/background.js",
     "type": "module"
   },
   "permissions": [
@@ -33,7 +33,7 @@
   "content_scripts": [
     {
       "matches": ["*://*.instagram.com/*"],
-      "js": ["frontend/scripts/content.js"]
+      "js": ["frontend/app/content.js"]
     }
   ],
   "content_security_policy": {

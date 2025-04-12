@@ -16,7 +16,7 @@ export async function createHashtag() {
 
     // hint / doporuceni
     const hint = document.createElement("h3")
-    hint.textContent = "Moje tipy:"
+    hint.textContent = "Moje Insta Tipy:"
   
     Object.values(hashtagData).forEach(tag => {
       const li = document.createElement("li");
