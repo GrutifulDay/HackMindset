@@ -73,5 +73,5 @@ const options = {
 // ✅ Spuštění serveru
 https.createServer(options, app).listen(PORT, () => {
     console.log(chalk.magenta.bold("✅ Server běží na: https://localhost"));
-    console.log("🛡️  HTTPS port: ${PORT}");
+    console.log(`🛡️ HTTPS port: ${PORT}`);
 })
