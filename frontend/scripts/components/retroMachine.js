@@ -1,5 +1,5 @@
 export async function createRetroMachine() {
-    console.log("📓 Retro Machine funguje");
+    console.log("{retroMachine.js}📓 Retro Machine funguje");
 
     const retroData = {
         "year": 1971,
@@ -24,9 +24,21 @@ export async function createRetroMachine() {
     const nostalgiggle = document.createElement("p")
     nostalgiggle.textContent = retroData.nostalgiggle
 
+    // remember
+    const remember = document.createElement("button")
+    remember.textContent = "🫶"
+    Object.assign(remember.style, {
+        background: "none",
+        border: "none",
+        outline: "none",
+        fontSize: "24px",
+        cursor: "pointer"
+      });
+
     article.appendChild(year)
     article.appendChild(title)
     article.appendChild(nostalgiggle)
+    article.appendChild(remember)
       
     return article
 }

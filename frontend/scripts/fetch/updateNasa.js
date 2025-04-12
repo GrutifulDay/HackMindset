@@ -19,13 +19,13 @@ export async function updateNasaData() {
 
     // ✅ První otevření → API se volá hned (nečeká na 00:05)
     if (!nasaData || !lastFetch) {
-        console.log("🚀 První otevření - stahuji data.");
+        console.log("{updateNasa.js}🚀 První otevření - stahuji data.");
         return true;
     }
 
     // 🛑 Pokud jsou data mladší než 6 hodin a není čas aktualizace, API nevoláme
     if (lastFetch && now - lastFetch < sixHours && now < nasaUpdateTime) {
-        console.log("⏳ Data jsou stále aktuální, API se nevolá.");
+        console.log("{updateNasa.js}⏳ Data jsou stále aktuální, API se nevolá.");
         return false;
     }
 

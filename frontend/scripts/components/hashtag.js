@@ -1,10 +1,10 @@
 export async function createHashtag() {
-    console.log("✅ ＃Hashtag sekce se generuje...");
+    console.log("{hashtag.js}✅ ＃Hashtag sekce se generuje...");
   
     const hashtagData = {
-      tag1: "nasa",
-      tag2: "natgeo",
-      tag3: "natgeohistory"
+      science_tech_ai: "sciencemagazine",
+      nature_travel_wildlife: "beautifuldestinations",
+      space_learning: "nasa"
     };
   
     const aside = document.createElement("aside");

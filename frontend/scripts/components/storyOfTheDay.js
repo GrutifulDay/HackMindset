@@ -1,9 +1,10 @@
 export async function createStoryOfTheDay() {
-    console.log("📓 Story of the day funguje");
+    console.log("{storyOfTheDay.js}📓 Story of the day funguje");
 
     const storyData = {
         title: "📖 ZIP kód slaví premiéru",
-        content: "Dnes, ale v roce 1963, USA zavedly ZIP kódy. Začátek nové éry poštovní automatizace – a taky ztracených balíků. Česká pošta se tenkrát inspirovala až podezřele rychle.",
+        // content: "Dnes, ale v roce 1963, USA zavedly ZIP kódy. Začátek nové éry poštovní automatizace – a taky ztracených balíků. Česká pošta se tenkrát inspirovala až podezřele rychle.",
+        content: "V březnu 2012 se uskutečnila unikátní akce Red Bull Stratos, jejímž cílem bylo, aby člověk dosáhl rychlosti zvuku (1 Machu, což je cca 1 235 km/h) bez letadla. Oním vyvoleným se stal rakouský parašutista Felix Baumgartner, který vystoupal ve speciální kapsli do nebes ze základny Roswell v Novém Mexiku a skočil ze stratosféry. Cíl byl splněn a s ním padly i další rekordy.",
         emoji: "📬"
     };
 

@@ -1,5 +1,5 @@
 export async function createHeckMindset() {
-    console.log("✅ HeckMindset sekce se generuje...")
+    console.log("{heckMindset.js} ✅ HeckMindset sekce se generuje...")
 
     const header = document.createElement("header")
     header.style.border = "1px solid black"

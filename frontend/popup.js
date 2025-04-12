@@ -6,11 +6,11 @@ import { createHashtag } from "./scripts/components/hashtag.js";
 
 
 
-console.log(("✅ Popup.js načten správně!"))
+console.log(("{popup.js} ✅  načten správně!"))
 
 document.addEventListener("DOMContentLoaded", async () => {
     
-    console.log(("✅ Popup.js běží správně!"))
+    console.log(("{popup.js} ✅  běží správně!"))
 
     const body = document.body
 
@@ -23,9 +23,9 @@ document.addEventListener("DOMContentLoaded", async () => {
      // Ověření, že nasaSection je validní DOM prvek
      if (nasaSection) {
         body.appendChild(nasaSection);  // Přidáme sekci do body
-        console.log("nasa section je nactena", nasaSection);
+        console.log("{popup.js} nasa section je nactena", nasaSection);
     } else {
-        console.error("❌ NASA sekce není validní DOM prvek.");
+        console.error("{popup.js} ❌ NASA sekce není validní DOM prvek.");
     }
 
     body.appendChild(heckMindset)
@@ -34,6 +34,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     body.appendChild(retroMachine)
     body.appendChild(hashtag)
 
-    console.log("✅ Všechny sekce byly přidány!");
+    console.log("{popup.js} ✅ Všechny sekce byly přidány!");
 })
 

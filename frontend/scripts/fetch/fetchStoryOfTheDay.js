@@ -1,4 +1,4 @@
-console.log("📖 fetchStoryOfTheDay je načtený");
+console.log("{fetchStoryOfTheDay.js} 📖 je načtený");
 
 export async function fetchStoryOfTheDay() {
     try {

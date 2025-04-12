@@ -1,6 +1,6 @@
 import { updateNasaData } from "./updateNasa.js";
 
-console.log("✅ fetchNasa.js načten");
+console.log("✅ {fetchNasa.js} načten");
 
 // 🔥 FETCH Z API SERVER.JS
 export async function fetchNasaImage() {
