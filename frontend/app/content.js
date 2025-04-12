@@ -1,4 +1,4 @@
-import { fetchNasaImage } from "./fetch.js";
+import { fetchNasaImage } from "./fetch/fetchNasa.js";
 
 console.log("✅ Content script je připojený a běží na stránce")
 

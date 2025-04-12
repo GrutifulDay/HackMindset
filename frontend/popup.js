@@ -1,8 +1,8 @@
-import { createNasaSection } from "./scripts/components/nasaSection.js";
-import { createHeckMindset } from "./scripts/components/heckMindset.js";
-import { createStoryOfTheDay } from "./scripts/components/storyOfTheDay.js";
-import { createRetroMachine } from "./scripts/components/retroMachine.js";
-import { createHashtag } from "./scripts/components/hashtag.js";
+import { createNasaSection } from "./app/components/nasaSection.js";
+import { createHeckMindset } from "./app/components/heckMindset.js";
+import { createStoryOfTheDay } from "./app/components/storyOfTheDay.js";
+import { createRetroMachine } from "./app/components/retroMachine.js";
+import { createHashtag } from "./app/components/hashtag.js";
 
 
 
