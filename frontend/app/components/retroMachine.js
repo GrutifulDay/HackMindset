@@ -4,7 +4,9 @@ export async function createRetroMachine() {
     const retroData = {
         "year": 1971,
         "title": "Intel 4004 – první mikroprocesor",
-        "nostalgiggle": "Malý čip, velký skok. Takhle začal náš digitální svět."   
+        "nostalgiggle": "Malý čip, velký skok. Takhle začal náš digitální svět.",
+        "like": "👍",
+        "dislike": "👎" 
     }
 
     // article 
@@ -24,21 +26,44 @@ export async function createRetroMachine() {
     const nostalgiggle = document.createElement("p")
     nostalgiggle.textContent = retroData.nostalgiggle
 
-    // remember
-    const remember = document.createElement("button")
-    remember.textContent = "🫶"
-    Object.assign(remember.style, {
-        background: "none",
-        border: "none",
-        outline: "none",
-        fontSize: "24px",
-        cursor: "pointer"
-      });
+      // 👍 like
+      const like = document.createElement("li");
+      like.textContent = retroData.like;
+      like.style.listStyle = "none";
+      like.style.fontSize = "20px";
+      like.style.cursor = "pointer";
+  
+      // 👎 dislike
+      const dislike = document.createElement("li");
+      dislike.textContent = retroData.dislike;
+      dislike.style.listStyle = "none";
+      dislike.style.fontSize = "20px";
+      dislike.style.cursor = "pointer";
+  
+      // wrapper pro like & dislike – vedle sebe
+      const feedbackWrapper = document.createElement("div");
+      feedbackWrapper.style.display = "flex";
+      feedbackWrapper.style.gap = "20px";
+      feedbackWrapper.style.justifyContent = "center"
+      feedbackWrapper.appendChild(dislike);
+      feedbackWrapper.appendChild(like);
+
+  
+    // const remember = document.createElement("button")
+    // remember.textContent = "🫶"
+    // Object.assign(remember.style, {
+    //     background: "none",
+    //     border: "none",
+    //     outline: "none",
+    //     fontSize: "24px",
+    //     cursor: "pointer"
+    //   });
 
     article.appendChild(year)
     article.appendChild(title)
     article.appendChild(nostalgiggle)
-    article.appendChild(remember)
+    // article.appendChild(remember)
+    article.appendChild(feedbackWrapper)
       
     return article
 }
