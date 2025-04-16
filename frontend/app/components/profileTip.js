@@ -1,7 +1,7 @@
-export async function createHashtag() {
+export async function createProfile() {
     console.log("{hashtag.js}✅ ＃Hashtag sekce se generuje...");
   
-    const hashtagData = {
+    const profileData = {
       science_tech_ai: "sciencealert",
       nature_travel_wildlife: "beautifuldestinations",
       space_learning: "nasa"
@@ -23,7 +23,7 @@ export async function createHashtag() {
     hint.style.textDecoration = "underline"
 
   
-    Object.values(hashtagData).forEach(tag => {
+    Object.values(profileData).forEach(tag => {
       const li = document.createElement("li");
       li.style.display = "center";
       li.style.alignItems = "center";

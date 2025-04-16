@@ -2,7 +2,7 @@ import { createNasaSection } from "./app/components/nasaSection.js";
 import { createHeckMindset } from "./app/components/heckMindset.js";
 import { createStoryOfTheDay } from "./app/components/storyOfTheDay.js";
 import { createRetroMachine } from "./app/components/retroMachine.js";
-import { createHashtag } from "./app/components/hashtag.js";
+import { createProfile } from "./app/components/profileTip.js";
 import { createLanguage } from "./app/components/language.js"
 
 
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const nasaSection = await createNasaSection()
     let storyOfTheDay = await createStoryOfTheDay()
     const retroMachine = await createRetroMachine()
-    const hashtag = await createHashtag()
+    const profileTip = await createProfile()
     
 
      // Ověření, že nasaSection je validní DOM prvek
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     body.appendChild(nasaSection)
     body.appendChild(storyOfTheDay)
     body.appendChild(retroMachine)
-    body.appendChild(hashtag)
+    body.appendChild(profileTip)
 
     console.log("{popup.js} ✅ Všechny sekce byly přidány!");
 })
