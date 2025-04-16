@@ -3,6 +3,7 @@ import { createHeckMindset } from "./app/components/heckMindset.js";
 import { createStoryOfTheDay } from "./app/components/storyOfTheDay.js";
 import { createRetroMachine } from "./app/components/retroMachine.js";
 import { createHashtag } from "./app/components/hashtag.js";
+import { createLanguage } from "./app/components/language.js"
 
 
 
@@ -14,11 +15,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const body = document.body
 
+    const language = await createLanguage ()
     const heckMindset = await createHeckMindset()
     const nasaSection = await createNasaSection()
     let storyOfTheDay = await createStoryOfTheDay()
     const retroMachine = await createRetroMachine()
     const hashtag = await createHashtag()
+    
 
      // Ověření, že nasaSection je validní DOM prvek
      if (nasaSection) {
@@ -28,6 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("{popup.js} ❌ NASA sekce není validní DOM prvek.");
     }
 
+    body.appendChild(language)
     body.appendChild(heckMindset)
     body.appendChild(nasaSection)
     body.appendChild(storyOfTheDay)

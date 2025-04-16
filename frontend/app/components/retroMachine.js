@@ -5,8 +5,8 @@ export async function createRetroMachine() {
         "year": 1971,
         "title": "Intel 4004 – první mikroprocesor",
         "nostalgiggle": "Malý čip, velký skok. Takhle začal náš digitální svět.",
-        "like": "👍",
-        "dislike": "👎" 
+        "like": "(icon) věděl jsem",
+        "dislike": "(icon) nevěděl jsem" 
     }
 
     // article 
@@ -14,12 +14,17 @@ export async function createRetroMachine() {
     article.style.marginBottom = "20px"
     article.style.border = "1px solid black"
 
-     // year
-     const year = document.createElement("h3")
-     year.textContent = retroData.year
+    // nazev sekce 
+    const titleSection = document.createElement("h3")
+    titleSection.textContent = "💾 Retro Machine"
+    titleSection.style.textDecoration = "underline"
+
+    // year
+    const year = document.createElement("h3")
+    year.textContent = retroData.year
 
     // title 
-    const title = document.createElement("h4")
+    const title = document.createElement("h3")
     title.textContent = retroData.title
 
     // text / nostalgiggle
@@ -30,14 +35,14 @@ export async function createRetroMachine() {
       const like = document.createElement("li");
       like.textContent = retroData.like;
       like.style.listStyle = "none";
-      like.style.fontSize = "20px";
+      like.style.fontSize = "12px";
       like.style.cursor = "pointer";
   
       // 👎 dislike
       const dislike = document.createElement("li");
       dislike.textContent = retroData.dislike;
       dislike.style.listStyle = "none";
-      dislike.style.fontSize = "20px";
+      dislike.style.fontSize = "12px";
       dislike.style.cursor = "pointer";
   
       // wrapper pro like & dislike – vedle sebe
@@ -59,6 +64,7 @@ export async function createRetroMachine() {
     //     cursor: "pointer"
     //   });
 
+    article.appendChild(titleSection)
     article.appendChild(year)
     article.appendChild(title)
     article.appendChild(nostalgiggle)

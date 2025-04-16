@@ -46,3 +46,12 @@ chrome.alarms.onAlarm.addListener((alarm) => {
         console.log("💻 Čas na kontrolu aktualizací")
     }
 })
+
+// TOHLE MUSIM VLOZIT POZDEJI AZ BUDU PREDELAVAM popup.js > content.js
+// chrome.action.onClicked.addListener((tab) => {
+//     chrome.scripting.executeScript({
+//       target: { tabId: tab.id },
+//       files: ["content.js"]
+//     });
+//   });
+  
