@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "HeckMindset",
+  "name": "HackMindset",
   "version": "1.0",
   "description": "Rozšíření, které zobrazuje NASA obrázky, pozitivní zprávy a hashtagy.",
   "icons": {
