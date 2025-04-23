@@ -1,14 +1,15 @@
+import { fetchStoryOfTheDay } from "../fetch/fetchStoryOfTheDay.js";
+
 export async function createStoryOfTheDay() {
     console.log("{storyOfTheDay.js}📓 Story of the day funguje");
 
-    const storyData = {
-        title: "📖 ZIP kód slaví premiéru",
-        content: "Dnes, ale v roce...1963 Amerika spouští ZIP kódy a s nimi i novou kapitolu poštovní historie 📬. Balíky dostávají vlastní číselnou identitu, stroje začínají třídit jak o život a doručování má být rychlejší než kdy dřív. Jenže než si všichni zvykli, pár zásilek se cestou ztratilo. A možná bloudí dodnes...",
-        // content: "V březnu 2012 se uskutečnila unikátní akce Red Bull Stratos, jejímž cílem bylo, aby člověk dosáhl rychlosti zvuku (1 Machu, což je cca 1 235 km/h) bez letadla. Oním vyvoleným se stal rakouský parašutista Felix Baumgartner, který vystoupal ve speciální kapsli do nebes ze základny Roswell v Novém Mexiku a skočil ze stratosféry. Cíl byl splněn a s ním padly i další rekordy.",
-        like: "👍",
-        emoji: "📬",
-        dislike: "👎"
-    };
+    const storyData = await fetchStoryOfTheDay();
+    
+    if (!storyData) {
+        console.warn("⚠️ Žádný příběh nenalezen.");
+        return
+
+    }
 
     // article
     const article = document.createElement("article")
@@ -62,7 +63,7 @@ export async function createStoryOfTheDay() {
     feedbackWrapper.appendChild(like);
    
 
-    //article.appendChild(today)
+    article.appendChild(today)
     article.appendChild(title)
     article.appendChild(content)
     article.appendChild(emoji)

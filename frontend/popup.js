@@ -1,5 +1,5 @@
 import { createNasaSection } from "./app/components/nasaSection.js";
-import { createHeckMindset } from "./app/components/heckMindset.js";
+import { createHackMindset } from "./app/components/hackMindset.js";
 import { createStoryOfTheDay } from "./app/components/storyOfTheDay.js";
 import { createRetroMachine } from "./app/components/retroMachine.js";
 import { createHashtag } from "./app/components/hashtag.js";
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const body = document.body
 
-    const heckMindset = await createHeckMindset()
+    const hackMindset = await createHackMindset()
     const nasaSection = await createNasaSection()
     let storyOfTheDay = await createStoryOfTheDay()
     const retroMachine = await createRetroMachine()
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("{popup.js} ❌ NASA sekce není validní DOM prvek.");
     }
 
-    body.appendChild(heckMindset)
+    body.appendChild(hackMindset)
     body.appendChild(nasaSection)
     body.appendChild(storyOfTheDay)
     body.appendChild(retroMachine)
