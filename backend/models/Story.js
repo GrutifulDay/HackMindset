@@ -8,7 +8,7 @@ const storySchema = new mongoose.Schema({
   title: String,
   content: String,
   emoji: String
-});
+})
 
 // Připoj model ke konkrétní connection
-export default frontendConnection.model("Story", storySchema);
+export default frontendConnection.model("story", storySchema);

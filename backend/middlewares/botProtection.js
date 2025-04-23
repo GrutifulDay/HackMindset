@@ -16,10 +16,10 @@ export default function botProtection(req, res, next) {
     const userIP = getUserIP(req); // ✔️ získej čistou IP jako string
 
     // ✅ Výjimka pro Postman
-    if (userAgentString && userAgentString.includes("Postman")) {
-        console.log("🧪 Postman detekován – povolen.");
-        return next();
-    }
+    // if (userAgentString && userAgentString.includes("Postman")) {
+    //     console.log("🧪 Postman detekován – povolen.");
+    //     return next();
+    // }
 
     // ⛔️ Blokování bez user-agent
     if (!userAgentString) {
