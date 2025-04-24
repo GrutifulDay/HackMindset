@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Black List 
 const blacklistedIPSchema = new mongoose.Schema({
   ip: {
     type: String,

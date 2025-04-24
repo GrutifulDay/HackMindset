@@ -1,6 +1,9 @@
+
+// UPRAVIT - ZKRATIT
 export async function createRetroMachine() {
     console.log("{retroMachine.js}📓 Retro Machine funguje");
 
+    // BUDE Z DB 
     const retroData = {
         "year": 1971,
         "title": "Intel 4004 – první mikroprocesor",

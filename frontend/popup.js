@@ -4,7 +4,7 @@ import { createStoryOfTheDay } from "./app/components/storyOfTheDay.js";
 import { createRetroMachine } from "./app/components/retroMachine.js";
 import { createHashtag } from "./app/components/hashtag.js";
 
-
+// BUDE EXPORT DO CONTENT KVULI VZHLEDU 
 
 console.log(("{popup.js} ✅  načten správně!"))
 

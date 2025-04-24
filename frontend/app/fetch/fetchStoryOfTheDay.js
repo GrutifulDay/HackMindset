@@ -1,5 +1,6 @@
 console.log("{fetchStoryOfTheDay.js} 📖 je načtený");
 
+// NASTAVIT UPDATE 
 export async function fetchStoryOfTheDay() {
     try {
         const response = await fetch("https://localhost:3000/api/story-of-the-day")

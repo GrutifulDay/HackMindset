@@ -9,7 +9,7 @@ export async function createHackMindset() {
     hackMindsetTitle.textContent = "HackMindset"
 
 
-    // pozdeji se bude nacitat automaticky kazdy den
+    // DODELAT CAS - VYMYSLET ZPUSOB 
     const date = document.createElement("h3")
     date.textContent = "Dnes je 1.7.2025 a stalo se..."
 

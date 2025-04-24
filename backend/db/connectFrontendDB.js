@@ -4,6 +4,7 @@ import chalk from "chalk";
 
 let frontendConnection;
 
+// pripojeni + kontrola DB Frontend
 export default function connectFrontendDB() {
   try {
     frontendConnection = mongoose.createConnection(MONGO_URI_FRONTEND)

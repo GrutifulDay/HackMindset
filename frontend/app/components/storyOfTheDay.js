@@ -1,5 +1,7 @@
 import { fetchStoryOfTheDay } from "../fetch/fetchStoryOfTheDay.js";
 
+
+// UPRAVIT - ZKRATIT 
 export async function createStoryOfTheDay() {
     console.log("{storyOfTheDay.js}📓 Story of the day funguje");
 

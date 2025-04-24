@@ -1,6 +1,7 @@
 import Story from "../models/Story.js"
 import dayjs from "dayjs"
 
+// dnesni datum 
 export async function getStoryOfTheDay(req, res) {
     try {
         const today = dayjs().format("DD-MM")

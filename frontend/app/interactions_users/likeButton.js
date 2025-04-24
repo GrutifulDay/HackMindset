@@ -1,3 +1,5 @@
+
+// UPRAVIT - ZKRATIT 
 export async function likeButton() {
   const button = document.createElement("button");
   const count = document.createElement("span");
