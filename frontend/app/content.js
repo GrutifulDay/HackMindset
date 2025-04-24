@@ -1,4 +1,6 @@
-import { fetchNasaImage } from "./fetch.js";
+import { fetchNasaImage } from "./fetch/fetchNasa.js";
+
+// BUDE SE PREDELAVAT A VKLADAT SEM POPUP.JS
 
 console.log("✅ Content script je připojený a běží na stránce")
 

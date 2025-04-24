@@ -23,6 +23,10 @@ import botProtection from "./middlewares/botProtection.js";
 import ipBlacklist from "./middlewares/ipBlacklist.js";
 import speedLimiter from "./middlewares/slowDown.js";
 
+// fce 
+import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js";
+
+// Databaze 
 import connectDB from "./db/db.js"
 import connectFrontendDB from "./db/connectFrontendDB.js";
 
@@ -31,6 +35,9 @@ const app = express();
 // MongoDB
 await connectDB()
 await connectFrontendDB()
+
+// Kontrola IP adres 
+await loadBlacklistFromDB()
 
 // Zabezpeceni
 app.disable("x-powered-by"); // ✅ Skrytí frameworku - express.js

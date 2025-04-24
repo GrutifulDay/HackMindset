@@ -25,4 +25,5 @@ frontend/node_modules/
 
 backend/cert/
 
-text/frontend
+text/
+

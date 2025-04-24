@@ -1,34 +1,29 @@
+botProtection.js + ipBlacklist.js = ❌ testy
 
-// let modal = document.createElement("div")
-// popup.js
+backend
+1. vyresit firefox - botProtection.js - stale se zobrazuje
+2. vlozit a propojit fci - getUserIP.js
+3. dodelat - checkBlacklist.js
+4. rozmyslet zda pouziju XSS 
+5. validace API 
+6. dodelat server, endpoint, db pro dalsi API
+7. UAParser misto User-Agent (starsi metoda)
 
-// modal.innerHTML = `
-//     <div id="customAlert" class="modal">
-//         <div id="modal-content">
-//             <span class="close">&times;</span>
-//             <button id="openContent">Heck Mindset</button>
-//         </div>
-//     </div>`
-// document.body.appendChild(modal)
+frontend
+1. zkratit funkce 
+2. uklidit kod
+3. pripravit kod pro UI
+4. prehodit popup.js > content.js
+5. dodelat UI 
 
-// // let section = document.createElement("div")
-// // section.innerHTML = `
-// //     <div class="section">
-// //         <img id="nasaImage" src="" alt="Astronomy Picture of the Day">
-// //         <p id="nasaDescription">Loading...</p>
-// //         <a href="https://apod.nasa.gov/apod/astropix.html" target="_blank">Do you want more?</a>
-// //     </div>`
-// // document.body.appendChild(section)
-
+db
+1. nahrat data pro fetch 
 
 
-// document.getElementsByClassName("close")[0].addListener("click", () => {
-//     let openContent = document.getElementById("openContent")
+ostatni
+1. testovani
+2. bezpecnost 
+3. readme - napsat
+4. upravit manifest.json 
 
-//     document.getElementsByClassName("modal")[0].style.display = "none"
-// })
-
-
-// setTimeout(function () {
-//     document.getElementsByClassName("modal")[0].style.display = "block"
-// }, 1000) //300000 = 5min
+= poslat frontend google, zverejnit 

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import chalk from "chalk";
 import { MONGO_URI } from "../config.js";
 
+// pripojeni DB 
 const connectDB = async () => {
   try {
     await mongoose.connect(MONGO_URI, {

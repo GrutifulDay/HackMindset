@@ -1,5 +1,6 @@
 import { fetchNasaImage } from "../fetch/fetchNasa.js";
 
+// ZKRATIT 
 export async function createNasaSection() {
     console.log("{nasaSection.js}✅ NASA sekce se generuje...");
 

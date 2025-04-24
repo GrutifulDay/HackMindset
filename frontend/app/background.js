@@ -1,6 +1,6 @@
 console.log("✅ BACKGROUND běží správně!")
 
-
+// NASTAVIT 
 
 
 // kontrola jestli posle zpravu do content.js

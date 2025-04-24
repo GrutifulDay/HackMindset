@@ -1,6 +1,6 @@
 import BlacklistedIP from "../models/BlacklistedIP.js";
 
-// In-memory storage pro rychlou kontrolu
+// set se uklada do restartu serveru - je potreba fce pro ukladani  
 const blacklistedIPs = new Set();
 
 // IP adresy, které se nikdy neblokují (lokální prostředí)
@@ -25,7 +25,7 @@ export default function ipBlocker(req, res, next) {
   next();
 }
 
-// Funkce pro dani IP do blacklistu   
+// Funkce pro pridani IP do blacklistu   
 export async function addToBlacklist(ip) {
   if (ignoredIPs.has(ip)) {
     console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
@@ -55,64 +55,13 @@ export async function addToBlacklist(ip) {
   return false; // už v Setu
 }
 
+export async function loadBlacklistFromDB() {
+  try {
+    const allBlocked = await BlacklistedIP.find()
+    allBlocked.forEach(entry => blacklistedIPs.add(entry.ip))
+    console.log(`✅ Načteno ${allBlocked.length} IP adres z DB do paměti`);
+  } catch (err) {
+    console.error("❌ Chyba při načítání blacklistu z DB:", err.message);
+  }
+}
 
-
-
-// const blacklistedIPs = new Set() //pouziti set pro neopakovani IP adres
-
-// export default function ipBlocker(req, res, next) {
-//     const clientIP = req.ip
-
-//     //pokud je IP na BL, blokuje pristup
-//     if (blacklistedIPs.has(clientIP)) {
-//         console.warn(`🚨 Přístup zablokován pro IP: ${clientIP}`);
-//         return res.status(403).json({ error: "Vaše IP adresa byla zablokována." });
-//     }
-
-//     next()
-// }
-
-// export function addToBlacklist(ip) {
-//     if (!blacklistedIPs.has(ip)) {
-//         blacklistedIPs.add(ip);
-//         console.warn(`🧨 IP ${ip} byla přidána na blacklist!`);
-//         return true; // Vracie true pokud adresa byla pridana 
-//     }
-//     return false; // ❌ IP uz na blacklistu byla
-// }
-
-
-
-
-
-// import BlacklistedIP from "../models/BlacklistedIP.js";
-// import chalk from "chalk";
-
-// export async function addToBlacklist(ip) {
-//   try {
-//     const ipString =
-//       typeof ip === "string"
-//         ? ip
-//         : ip?.address || ip?.ip || JSON.stringify(ip); // uprav podle struktury
-
-//     if (!ipString || ipString.includes("[object")) {
-//       console.warn("⚠️ Neplatná IP:", ip);
-//       return;
-//     }
-
-//     console.log("IP input:", ip);
-
-
-//     const exists = await BlacklistedIP.findOne({ ip: ipString });
-//     if (exists) return;
-
-//     const newIP = new BlacklistedIP({ ip: ipString });
-//     await newIP.save();
-
-//     console.log(chalk.red.bold(`🛑 IP ${ipString} přidána na blacklist.`));
-//   } catch (err) {
-//     console.error("❌ Chyba při přidávání IP do blacklistu:", err.message);
-//   }
-// }
-
-// export default addToBlacklist

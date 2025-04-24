@@ -1,12 +1,12 @@
 import rateLimit from "express-rate-limit";
 
 // Seznam IP adres, které chceme ignorovat (localhost)
-const ignoredIPs = ["127.0.0.1", "::1", "::ffff:127.0.0.1"];
+const ignoredIPs = ["127.0.0.1", "::1", "::ffff:127.0.0.1"] // moje IP 
 
 const limiterApi = rateLimit({
      // windowMs: 15 * 60 * 1000, // 15 min
-    windowMs: 60 * 1000,
-    max: 5, // max 100 pozadavku 
+    windowMs: 60 * 1000, 
+    max: 5, // max X pozadavku
     message: "Příliš mnoho požadavků, zkuste to znovu za 15 minut.",
     standardHeaders: true,
     legacyHeaders: false,
