@@ -1,21 +1,23 @@
 import BlacklistedIP from "../models/BlacklistedIP.js";
 
+// ❌ = ZAKOMENTUJ PRO TESTY ❌ 
+
 // set se uklada do restartu serveru  
 const blacklistedIPs = new Set();
 
-
-
+// ❌
 // IP adresy, které se nikdy neblokují (lokální prostředí)
-const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"]);
+// const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"]);
 
 // Middleware pro blokovani IP
 export default function ipBlocker(req, res, next) {
   const clientIP = req.ip;
 
+  // ❌
   // Ignor zname lokalni IP
-  if (ignoredIPs.has(clientIP)) {
-    return next();
-  }
+  // if (ignoredIPs.has(clientIP)) {
+  //   return next();
+  // }
 
   // Zkontroluj, jestli je IP na blacklistu
   if (blacklistedIPs.has(clientIP)) {
@@ -28,20 +30,30 @@ export default function ipBlocker(req, res, next) {
 }
 
 // Funkce pro pridani IP do blacklistu do DB  
-export async function addToBlacklist(ip) {
-  if (ignoredIPs.has(ip)) {
-    console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
-    return false;
-  }
+export async function addToBlacklist(ip, reason = "Automatické blokování", info = {}) {
+  // ❌ 
+  // ignor Postman
+  // if (ignoredIPs.has(ip)) {
+  //   console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
+  //   return false;
+  // }
 
   if (!blacklistedIPs.has(ip)) {
-    blacklistedIPs.add(ip);
+    blacklistedIPs.add(ip)
     console.warn(`🧨 IP ${ip} přidána do Setu`);
 
     try {
-      const exists = await BlacklistedIP.findOne({ ip });
+      const exists = await BlacklistedIP.findOne({ ip })
       if (!exists) {
-        const newIP = new BlacklistedIP({ ip });
+        const newIP = new BlacklistedIP({ 
+          ip: ip || "Neznámá IP",
+          reason,
+          userAgent: info.userAgent || "Neznámý",
+          browser: info.browser || "Neznámý",
+          os: info.os || "Neznámý",
+          deviceType: info.deviceType || "Neznámý"
+        });
+        
         await newIP.save();
         console.log(`🛑 IP ${ip} uložena do databáze`);
       } else {
@@ -51,11 +63,12 @@ export async function addToBlacklist(ip) {
       console.error("❌ Chyba při ukládání IP do DB:", err.message);
     }
 
-    return true;
+    return true
   }
 
-  return false; // už v Setu
+  return false // už v Setu
 }
+
 
 // pomocna funkce pro pro kontrolu IP adres po setu  
 export async function loadBlacklistFromDB() {
