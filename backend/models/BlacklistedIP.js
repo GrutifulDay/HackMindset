@@ -4,8 +4,25 @@ import mongoose from "mongoose";
 const blacklistedIPSchema = new mongoose.Schema({
   ip: {
     type: String,
-    required: true,
-    unique: true,
+    default: "Neznámá IP",
+    // required: true, // musi byt zadana hodnota, jinak se neulozi
+    unique: true, // neopakuje se
+  },
+  userAgent: {
+    type: String,
+    default: "Neznámý", // muze byt dopneno pri detekci
+  },
+  browser: {
+    type: String,
+    default: "Neznámý",
+  },
+  os: {
+    type: String,
+    default: "Neznámý",
+  },
+  deviceType: {
+    type: String,
+    default: "Neznámý",
   },
   reason: {
     type: String,
