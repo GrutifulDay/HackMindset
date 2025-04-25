@@ -1,6 +1,9 @@
 import { addToBlacklist } from "./ipBlacklist.js";
 import { UAParser } from "ua-parser-js"
 
+// ❌ = ZAKOMENTUJ PRO TESTY ❌ 
+
+
 // ✅ Pomocná funkce pro správné získání IP adresy
 function getUserIP(req) {
     return (
@@ -15,11 +18,12 @@ export default function botProtection(req, res, next) {
     const userAgentString = req.get("User-Agent");
     const userIP = getUserIP(req); // 
 
+    // ❌ 
     // ✅ Výjimka pro Postman
-    if (userAgentString && userAgentString.includes("Postman")) {
-        console.log("🧪 Postman detekován – povolen.");
-        return next();
-    }
+    // if (userAgentString && userAgentString.includes("Postman")) {
+    //     console.log("🧪 Postman detekován – povolen.");
+    //     return next();
+    // }
 
     // ⛔️ Blokování bez user-agent
     if (!userAgentString) {
@@ -27,6 +31,8 @@ export default function botProtection(req, res, next) {
         addToBlacklist(userIP)
         return res.status(403).json({ error: "Přístup zamítnut." })
     }
+
+   
 
     // Analýza pomocí UAParser
     const parser = new UAParser(userAgentString)
@@ -39,41 +45,17 @@ export default function botProtection(req, res, next) {
     // ⚠️ Podezřelý user-agent
     if (browserName === "Other" || browserName === undefined) {
         console.warn(`🚨 Podezřelý bot detekován (${deviceType}, ${osName}) – IP ${userIP}`);
-        addToBlacklist(userIP)
+
+        addToBlacklist(userIP, "Chybějící User-Agent",{
+            userAgent: userAgentString,
+            browser: result.browser.name,
+            os: result.os.name,
+            deviceType: result.device.type
+        })
         return res.status(403).json({ error: "Přístup zamítnut."})
     }
 
     next() // ✅ vše ok
 }
-
-
-
-
-
-// import { addToBlacklist } from "./ipBlacklist.js"; 
-// import useragent from "useragent";
-
-
-// export default function botProtection(req, res, next) {
-//     const userAgentString = req.get("User-Agent")
-
-//     //blokovani botu bez User-Agent
-//     if (!userAgentString) {
-//         console.warn(`🚨 Bot detekován: IP ${req.ip} přidána na blacklist.`)
-//         addToBlacklist(req.ip); // ✅ Přidání IP na blacklist
-//         return res.status(403).json({ error: "Přístup zamítnut." })
-//     }
-
-//     //rozpoznani fake prohlizece
-//     const agent = useragent.parse(userAgentString)
-//     if (agent.family === "Other") {
-//         console.warn(`🚨 Podezřelý bot detekován: IP ${req.ip}`)
-//         addToBlacklist(req.ip); // ✅ Přidání podezřelé IP na blacklist
-//         return res.status(403).json({ error: "Přístup zamítnut." })
-//     }
-
-//     next();
-// }
-
 
 
