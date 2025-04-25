@@ -7,10 +7,10 @@ backend
 2. ✅ vlozit a propojit fci - getUserIP.js
 3. ✅ dodelat - checkBlacklist.js
 4. rozmyslet zda pouziju XSS 
-5. validace API 
+5. validace API - zad 
 6. dodelat server, endpoint, db pro dalsi API
 7. ✅ UAParser misto User-Agent (starsi metoda) 
-8. nastaveni uozorneni o blokaci ip adresy 
+8. nastaveni upozorneni o blokaci ip adresy 
 
 frontend
 1. zkratit funkce 
