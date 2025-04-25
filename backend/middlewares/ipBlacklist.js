@@ -69,6 +69,13 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
   return false // už v Setu
 }
 
+// async function getCityByIP(ip) {
+//   try {
+//     const response = await fetch(`https://ipapi.co/${ip}/json/`)
+//     const data = await response.json()
+//   }
+// }
+
 
 // pomocna funkce pro pro kontrolu IP adres po setu  
 export async function loadBlacklistFromDB() {
