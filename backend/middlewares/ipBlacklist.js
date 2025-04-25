@@ -1,7 +1,9 @@
 import BlacklistedIP from "../models/BlacklistedIP.js";
 
-// set se uklada do restartu serveru - je potreba fce pro ukladani  
+// set se uklada do restartu serveru  
 const blacklistedIPs = new Set();
+
+
 
 // IP adresy, které se nikdy neblokují (lokální prostředí)
 const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"]);
@@ -25,7 +27,7 @@ export default function ipBlocker(req, res, next) {
   next();
 }
 
-// Funkce pro pridani IP do blacklistu   
+// Funkce pro pridani IP do blacklistu do DB  
 export async function addToBlacklist(ip) {
   if (ignoredIPs.has(ip)) {
     console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
@@ -55,6 +57,7 @@ export async function addToBlacklist(ip) {
   return false; // už v Setu
 }
 
+// pomocna funkce pro pro kontrolu IP adres po setu  
 export async function loadBlacklistFromDB() {
   try {
     const allBlocked = await BlacklistedIP.find()

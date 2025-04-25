@@ -23,7 +23,7 @@
     "gsap": "^3.12.7",
     "helmet": "^8.1.0",
     "mongoose": "^8.13.1",
-    "useragent": "^2.3.0"
+    "ua-parser-js": "^2.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

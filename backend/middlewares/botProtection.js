@@ -1,14 +1,14 @@
 import { addToBlacklist } from "./ipBlacklist.js";
-import useragent from "useragent";
+import { UAParser } from "ua-parser-js"
 
 // ✅ Pomocná funkce pro správné získání IP adresy
 function getUserIP(req) {
     return (
-        req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
-        req.socket?.remoteAddress ||
-        req.connection?.remoteAddress ||
-        "neznámá IP"
-    );
+        req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||    // vezme prvni IP
+        req.socket?.remoteAddress ||    // pokud neni, vezne IP ze sitoveho pripojeni
+        req.connection?.remoteAddress ||    // starsi zpusob - naprimo ze sitoveho spojeni
+        "neznámá IP"    // pokud na nic neprisel
+    )
 }
 
 export default function botProtection(req, res, next) {
@@ -24,19 +24,26 @@ export default function botProtection(req, res, next) {
     // ⛔️ Blokování bez user-agent
     if (!userAgentString) {
         console.warn(`🚨 Bot detekován: IP ${userIP} přidána na blacklist.`);
-        addToBlacklist(userIP);
-        return res.status(403).json({ error: "Přístup zamítnut." });
+        addToBlacklist(userIP)
+        return res.status(403).json({ error: "Přístup zamítnut." })
     }
+
+    // Analýza pomocí UAParser
+    const parser = new UAParser(userAgentString)
+    const result = parser.getResult()
+
+    const browserName = result.browser.name || "Neznámý" // prohlizec
+    const deviceType = result.device.type || "Neznámý"  // zařízení
+    const osName = result.os.name || "neznámý"  // operacni system
 
     // ⚠️ Podezřelý user-agent
-    const agent = useragent.parse(userAgentString);
-    if (agent.family === "Other") {
-        console.warn(`🚨 Podezřelý bot detekován: IP ${userIP}`);
-        addToBlacklist(userIP);
-        return res.status(403).json({ error: "Přístup zamítnut." });
+    if (browserName === "Other" || browserName === undefined) {
+        console.warn(`🚨 Podezřelý bot detekován (${deviceType}, ${osName}) – IP ${userIP}`);
+        addToBlacklist(userIP)
+        return res.status(403).json({ error: "Přístup zamítnut."})
     }
 
-    next(); // ✅ vše ok
+    next() // ✅ vše ok
 }
 
 

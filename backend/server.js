@@ -9,6 +9,7 @@ import https from "https"
 import express from "express";
 import helmet from "helmet"
 import chalk from "chalk";
+import { UAParser } from "ua-parser-js";
 // import dayjs from "dayjs";
 
 // Routes
@@ -62,7 +63,18 @@ app.use(speedLimiter)
 
 // testovaci router
 app.get("/api/test", (req, res) => {
-    res.json({ message: "Server OK" });
+    const userAgentString = req.get("User-Agent") || "neznámý"
+    const parser = new UAParser(userAgentString)
+    const result = parser.getResult()
+
+    console.log("UAParser výstup:", result);
+
+    res.json({
+        message: "Server OK",
+        originalUserAgent: userAgentString,
+        parsed: result
+    })
+
 });
 
 
