@@ -16,6 +16,7 @@ import { UAParser } from "ua-parser-js";
 import nasaRoutes from "./routes/nasaRoutes.js";
 import ipRoutes from "./routes/ipRoutes.js";
 import storyRoutes from "./routes/storyRoutes.js"
+import testDB from "./routes/test-db.js"
 
 // Middleware
 import limiterApi from "./middlewares/rateLimit.js";
@@ -31,7 +32,7 @@ import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js";
 import connectDB from "./db/db.js"
 import connectFrontendDB from "./db/connectFrontendDB.js";
 
-const app = express();
+const app = express()
 
 // MongoDB
 await connectDB()
@@ -41,8 +42,8 @@ await connectFrontendDB()
 await loadBlacklistFromDB()
 
 // Zabezpeceni
-app.disable("x-powered-by"); // ✅ Skrytí frameworku - express.js
-app.use(helmet()); // ✅ Ochrana HTTP hlaviček
+app.disable("x-powered-by") // Skrytí frameworku - express.js
+app.use(helmet()) // Ochrana HTTP hlaviček
 
 // Nasazeni middlewares
 app.use(limiterApi)
@@ -82,6 +83,7 @@ app.get("/api/test", (req, res) => {
 app.use("/api/nasa", nasaRoutes)
 app.use("/api", ipRoutes);
 app.use("/api", storyRoutes)
+app.use("/api", testDB)
 
 // nacitani certifikatu ze slozky cert
 const options = {
