@@ -10,7 +10,7 @@ import express from "express";
 import helmet from "helmet"
 import chalk from "chalk";
 import { UAParser } from "ua-parser-js";
-// import dayjs from "dayjs";
+
 
 // Routes
 import nasaRoutes from "./routes/nasaRoutes.js";
@@ -31,8 +31,10 @@ import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js";
 // Databaze 
 import connectDB from "./db/db.js"
 import connectFrontendDB from "./db/connectFrontendDB.js";
+import path from "path";
 
 const app = express()
+const __dirname = path.resolve() // pri pouziti ES modulů
 
 // MongoDB
 await connectDB()
@@ -45,6 +47,7 @@ await loadBlacklistFromDB()
 app.disable("x-powered-by") // Skrytí frameworku - express.js
 app.use(helmet()) // Ochrana HTTP hlaviček
 
+
 // Nasazeni middlewares
 app.use(limiterApi)
 app.use(corsOptions)
@@ -53,14 +56,15 @@ app.use(ipBlacklist)
 app.use(speedLimiter)
 
 
-// vypnuti silenych vypisu 
-// app.use((req, res, next) => {
-//     if (process.env.NODE_ENV !== "production") {
-//         console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-//     }
-//     next();
-// });
+// ✅ Načtení NASA router
+app.use("/api/nasa", nasaRoutes)
+app.use("/api", ipRoutes);
+app.use("/api", storyRoutes)
+app.use("/api", testDB)
 
+
+// pridani statickych souboru 
+app.use(express.static(path.join(__dirname, "frontend")))
 
 // testovaci router
 app.get("/api/test", (req, res) => {
@@ -77,13 +81,6 @@ app.get("/api/test", (req, res) => {
     })
 
 });
-
-
-// ✅ Načtení NASA router
-app.use("/api/nasa", nasaRoutes)
-app.use("/api", ipRoutes);
-app.use("/api", storyRoutes)
-app.use("/api", testDB)
 
 // nacitani certifikatu ze slozky cert
 const options = {

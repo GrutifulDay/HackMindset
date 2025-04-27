@@ -1,15 +1,17 @@
 import express from "express";
+import { FETCH_API_NASA, API_KEY_NASA } from "../config.js";
+
 
 const router = express.Router();
 
 // ✅ NASA fetch API
 router.get("/", async (req, res) => {
     try {
-        if (!process.env.FETCH_API_NASA || !process.env.API_KEY_NASA) {
+        if (!FETCH_API_NASA || !API_KEY_NASA) {
             throw new Error("❌ Chybí API klíč nebo URL NASA v .env souboru.");
         }
 
-        const apiUrlNasa = `${process.env.FETCH_API_NASA}${process.env.API_KEY_NASA}`;
+        const apiUrlNasa = `${FETCH_API_NASA}${API_KEY_NASA}`;
         const response = await fetch(apiUrlNasa);
 
         if (!response.ok) {
@@ -36,11 +38,11 @@ export default router;
 // // NASA fetch API > .env
 // app.get("/api/nasa", async (req, res) => {
 //     try {
-//         if (!process.env.FETCH_API_NASA || !process.env.API_KEY_NASA) {
+//         if (!FETCH_API_NASA || !API_KEY_NASA) {
 //             throw new Error("❌ Chybí API klíč nebo URL NASA v .env souboru.")
 //         }
 
-//         const apiUrlNasa = `${process.env.FETCH_API_NASA}${process.env.API_KEY_NASA}`
+//         const apiUrlNasa = `${FETCH_API_NASA}${API_KEY_NASA}`
 //         const response = await fetch(apiUrlNasa)
 
 //         if (!response.ok) {
