@@ -1,6 +1,7 @@
 import express from "express";
 import { UAParser } from "ua-parser-js";
 import { addToBlacklist } from "../middlewares/ipBlacklist.js";
+import { TOKEN_IP_CITY } from "../config.js"
 
 const router = express.Router();
 
@@ -10,9 +11,12 @@ const getCityByIP = async (ip) => {
       ? "8.8.8.8" // Google DNS – veřejná IP pro test
       : ip;
 
+  const token = TOKEN_IP_CITY
+
   try {
-    const response = await fetch(`https://ipapi.co/${realIP}/json/`);
+    const response = await fetch(`https://ipinfo.io/${realIP}/json?token=${token}^`);
     const data = await response.json();
+    console.log("🔍 Data z ipinfo.io:", data);
     return data.city || "Neznámé město";
   } catch (err) {
     console.error("❌ Chyba při získávání města:", err.message);
@@ -28,6 +32,7 @@ router.get("/test-db", async (req, res) => {
   const result = parser.getResult();
 
   const city = await getCityByIP(userIP);
+  console.log("🌍 Město, které vrací getCityByIP:", city); 
 
   await addToBlacklist(userIP, "Test logování s městem", {
     userAgent: userAgentString,

@@ -8,10 +8,6 @@ const blacklistedIPSchema = new mongoose.Schema({
     // required: true, // musi byt zadana hodnota, jinak se neulozi
     unique: true, // neopakuje se
   },
-  city: {
-    type: String,
-    default: "Neznámá"
-  },
   userAgent: {
     type: String,
     default: "Neznámý", // muze byt dopneno pri detekci
@@ -35,8 +31,12 @@ const blacklistedIPSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now,
+  },
+  city: {
+    type: String,
+    default: "Neznámá"
   }
-});
+})
 
 const BlacklistedIP = mongoose.model("BlacklistedIP", blacklistedIPSchema);
 export default BlacklistedIP;
