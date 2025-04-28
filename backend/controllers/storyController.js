@@ -1,8 +1,8 @@
 import Story from "../models/Story.js"
 import dayjs from "dayjs"
 
-// dnesni datum 
-export async function getStoryOfTheDay(req, res) {
+// kontrola dnesniho datumu 
+export async function controllerDayOfStory(req, res) {
     try {
         const today = dayjs().format("DD-MM")
         const story = await Story.findOne({ date: today })

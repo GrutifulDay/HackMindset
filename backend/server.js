@@ -16,7 +16,7 @@ import { UAParser } from "ua-parser-js";
 import nasaRoutes from "./routes/nasaRoutes.js";
 import ipRoutes from "./routes/ipRoutes.js";
 import storyRoutes from "./routes/storyRoutes.js"
-import testDB from "./routes/test-db.js"
+// import testDB from "./routes/test-db.js"
 
 // Middleware
 import limiterApi from "./middlewares/rateLimit.js";
@@ -45,7 +45,19 @@ await loadBlacklistFromDB()
 
 // Zabezpeceni
 app.disable("x-powered-by") // Skrytí frameworku - express.js
-app.use(helmet()) // Ochrana HTTP hlaviček
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        "script-src": ["'self'"],         // povolit jen vlastni skriptove soubory
+        "object-src": ["'none'"],          // zakazuje vkladane objekty
+        "base-uri": ["'self'"],            // zakazuje menit zakl. URL pro relaticni odkazy
+        "img-src": ["'self'", "https://apod.nasa.gov", "https://mars.nasa.gov", "https://images-assets.nasa.gov"] // NASA img
+      }
+    }
+  })
+) // Ochrana HTTP hlaviček
 
 
 // Nasazeni middlewares
@@ -60,7 +72,7 @@ app.use(speedLimiter)
 app.use("/api/nasa", nasaRoutes)
 app.use("/api", ipRoutes);
 app.use("/api", storyRoutes)
-app.use("/api", testDB)
+// app.use("/api", testDB)
 
 
 // pridani statickych souboru 

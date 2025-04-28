@@ -7,7 +7,7 @@ const blacklistedIPs = new Set();
 
 // ❌
 // IP adresy, které se nikdy neblokují (lokální prostředí)
-const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"]);
+// const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"]);
 
 // Middleware pro blokovani IP
 export default function ipBlocker(req, res, next) {
@@ -15,9 +15,9 @@ export default function ipBlocker(req, res, next) {
 
   // ❌
   // Ignor zname lokalni IP
-  if (ignoredIPs.has(clientIP)) {
-    return next();
-  }
+  // if (ignoredIPs.has(clientIP)) {
+  //   return next();
+  // }
 
   // Zkontroluj, jestli je IP na blacklistu
   if (blacklistedIPs.has(clientIP)) {
@@ -33,14 +33,14 @@ export default function ipBlocker(req, res, next) {
 export async function addToBlacklist(ip, reason = "Automatické blokování", info = {}) {
   // ❌ 
   //ignor Postman
-  if (ignoredIPs.has(ip)) {
-    console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
-    return false;
-  }
+  // if (ignoredIPs.has(ip)) {
+  //   console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
+  //   return false;
+  // }
 
   if (!blacklistedIPs.has(ip)) {
     blacklistedIPs.add(ip)
-    console.warn(`🧨 IP ${ip} přidána do Setu`);
+    console.warn(`🧨 IP ${ip} přidána do Setu (důvod: ${reason})`);
 
     try {
       const exists = await BlacklistedIP.findOne({ ip })
@@ -51,7 +51,8 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
           userAgent: info.userAgent || "Neznámý",
           browser: info.browser || "Neznámý",
           os: info.os || "Neznámý",
-          deviceType: info.deviceType || "Neznámý"
+          deviceType: info.deviceType || "Neznámý",
+          city: info.city || "Neznámé město"
         });
         
         await newIP.save();
@@ -68,14 +69,6 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
 
   return false // už v Setu
 }
-
-// async function getCityByIP(ip) {
-//   try {
-//     const response = await fetch(`https://ipapi.co/${ip}/json/`)
-//     const data = await response.json()
-//   }
-// }
-
 
 // pomocna funkce pro pro kontrolu IP adres po setu  
 export async function loadBlacklistFromDB() {

@@ -1,4 +1,4 @@
-https://localhost:3000/api/test-db
+https://localhost:3000/api/test
 
 botProtection.js + ipBlacklist.js = ❌ testy
 
@@ -6,14 +6,16 @@ backend
 1. vyresit firefox - botProtection.js - stale se zobrazuje
 2. ✅ vlozit a propojit fci - getUserIP.js
 3. ✅ dodelat - checkBlacklist.js
-4. rozmyslet zda pouziju XSS 
-5. validace API - zad - nelze na server vlozit celou fetch adresu, musi byt ve frontendu
+4. ✅ rozmyslet zda pouziju XSS - jakym zpusobem 
+5. ⏲️ validace API - zad - nelze na server vlozit celou fetch adresu, musi byt ve frontendu - mam GET (neni potreba)
+- pripravena funkce pro POST textValidation.js 
 6. dodelat server, endpoint, db pro dalsi API
 7. ✅ UAParser misto User-Agent (starsi metoda) 
 8. nastaveni upozorneni o blokaci ip adresy 
-9. helmet hlavicky pridat vc img 
-10. naspat fci slova a znaky validace s zad a vlozit do kazdeho api 
+9. ✅ helmet hlavicky pridat vc img  
 11. spojit test-db do blacklistu 
+12. vyzkouset PO testu bezpecnosti honeypot - napojeni form 
+= statistika utoku 
 
 frontend
 1. zkratit funkce 

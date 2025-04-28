@@ -1,5 +1,6 @@
 import { addToBlacklist } from "./ipBlacklist.js";
 import { UAParser } from "ua-parser-js"
+import { getCityByIP } from "../helpers/ipUtils.js";
 
 // ❌ = ZAKOMENTUJ PRO TESTY ❌ 
 
@@ -14,21 +15,30 @@ function getUserIP(req) {
     )
 }
 
-export default function botProtection(req, res, next) {
+export default async function botProtection(req, res, next) {
     const userAgentString = req.get("User-Agent");
     const userIP = getUserIP(req); // 
 
     // ❌ 
     // ✅ Výjimka pro Postman
-    if (userAgentString && userAgentString.includes("Postman")) {
-        console.log("🧪 Postman detekován – povolen.");
-        return next();
-    }
+    // if (userAgentString && userAgentString.includes("Postman")) {
+    //     console.log("🧪 Postman detekován – povolen.");
+    //     return next();
+    // }
 
     // ⛔️ Blokování bez user-agent
     if (!userAgentString) {
         console.warn(`🚨 Bot detekován: IP ${userIP} přidána na blacklist.`);
-        addToBlacklist(userIP)
+
+        const city = await getCityByIP(userIP)
+
+        await addToBlacklist(userIP, "Chybějící User-Agent", {
+            userAgent: "Neznámý",
+            browser: "Neznámý",
+            os: "Neznámý",
+            deviceType: "Neznámý",
+            city: city
+        })
         return res.status(403).json({ error: "Přístup zamítnut." })
     }
 
@@ -41,16 +51,21 @@ export default function botProtection(req, res, next) {
     const browserName = result.browser.name || "Neznámý" // prohlizec
     const deviceType = result.device.type || "Neznámý"  // zařízení
     const osName = result.os.name || "neznámý"  // operacni system
+    
 
     // ⚠️ Podezřelý user-agent
     if (browserName === "Other" || browserName === undefined) {
         console.warn(`🚨 Podezřelý bot detekován (${deviceType}, ${osName}) – IP ${userIP}`);
 
-        addToBlacklist(userIP, "Chybějící User-Agent",{
+        const city = await getCityByIP(userIP);
+
+        await addToBlacklist(userIP, "Chybějící User-Agent",{
             userAgent: userAgentString,
             browser: result.browser.name,
             os: result.os.name,
-            deviceType: result.device.type
+            deviceType: result.device.type,
+            city: city
+        
         })
         return res.status(403).json({ error: "Přístup zamítnut."})
     }
