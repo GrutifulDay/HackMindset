@@ -24,7 +24,7 @@ frontend
 6. musim dodelat fetch API - kdyz spadne jedno, nespadlo i to co je za tim
 7. pocitani a ukladani like/dislike - localstorage ukladani na 24h, pak smazat 
 8. vymazat data z localstoru pred kazdym obnovenim
-9. 
+9. pridat klic do frontend/server - url bude cela viditelna, bez klice muze volat kazdy 
 
 db
 1. nahrat data pro fetch 
