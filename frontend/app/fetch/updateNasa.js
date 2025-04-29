@@ -1,3 +1,7 @@
+// bude obecna funkce? nebo oddelena? 
+console.log("{updateNasa.js} 📖 je načtený");
+
+
 export async function updateNasaData() {
     const now = Date.now();
 

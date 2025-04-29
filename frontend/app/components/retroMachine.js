@@ -1,15 +1,19 @@
+import { fetchRetroMachine } from "../fetch/fetchRetroMachine.js";
 
 // UPRAVIT - ZKRATIT
 export async function createRetroMachine() {
-    console.log("{retroMachine.js}📓 Retro Machine funguje");
+    console.log("{funkce createRetroMachine}📓 Retro Machine funguje");
 
     // BUDE Z DB 
-    const retroData = {
-        "year": 1971,
-        "title": "Intel 4004 – první mikroprocesor",
-        "nostalgiggle": "Malý čip, velký skok. Takhle začal náš digitální svět.",
-        "like": "👍",
-        "dislike": "👎" 
+    const retroData = await fetchRetroMachine()
+    // const retroDataArray = await fetchRetroMachine()
+    // const retroData = retroDataArray[0]
+
+    if (!retroData) {
+      console.warn("❌ Žádný retro příběh nenalezen");
+      console.log("🔍 retroData:", retroData);
+
+      return
     }
 
     // article 

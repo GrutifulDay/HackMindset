@@ -1,16 +1,15 @@
 import { fetchStoryOfTheDay } from "../fetch/fetchStoryOfTheDay.js";
-
+console.log("{storyOfTheDay.js}📓 Story of the day funguje");
 
 // UPRAVIT - ZKRATIT 
 export async function createStoryOfTheDay() {
-    console.log("{storyOfTheDay.js}📓 Story of the day funguje");
+    console.log("{funkce createStoryOfTheDay}📓 Story of the day funguje");
 
     const storyData = await fetchStoryOfTheDay();
     
     if (!storyData) {
         console.warn("⚠️ Žádný příběh nenalezen.");
         return
-
     }
 
     // article
