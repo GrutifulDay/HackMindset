@@ -1,64 +1,34 @@
 import express from "express";
-import { FETCH_API_NASA, API_KEY_NASA } from "../config.js";
-
+import { UAParser } from "ua-parser-js";
+import { addToBlacklist } from "../middlewares/ipBlacklist.js";
+import { fetchNasaImage } from "../controllers/nasaController.js"
 
 const router = express.Router();
 
-// ✅ NASA fetch API
-router.get("/", async (req, res) => {
-    try {
-        if (!FETCH_API_NASA || !API_KEY_NASA) {
-            throw new Error("❌ Chybí API klíč nebo URL NASA v .env souboru.");
-        }
 
-        const apiUrlNasa = `${FETCH_API_NASA}${API_KEY_NASA}`;
-        const response = await fetch(apiUrlNasa);
+async function saveIPtoBlacklist(req, res, next) {
+    const userIP = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.socket?.remoteAddress || "neznámá IP"
+    const userAgentString = req.get("User-Agent") || "Neznámý"
+    const parser = new UAParser(userAgentString)
+    const result = parser.getResult()
 
-        if (!response.ok) {
-            throw new Error(`❌ Chyba při načítání dat ze serveru, status: ${response.status}`);
-        } 
+    const apiKey = req.headers["x-api-key"]
+    const expectedKey = "8Tx1ohgFCecjS2xov3yAQqnsKLA0mp"; 
 
-        const data = await response.json();
-
-        if (data.media_type === "image") {
-            return res.json({ type: "image", url: data.url, explanation: data.explanation });
-        } else {
-            return res.json({ type: "text", url: "", explanation: "Dnes je video 🎥. Klikni na odkaz!" });
-        }
-
-    } catch (error) {
-        console.error("❌ Chyba na serveru:", error);
-        res.status(500).json({ error: "Chyba na serveru" });
+    if (apiKey !== expectedKey) {
+        await addToBlacklist(userIP, "Zavolání /nasa routeru", {
+            userAgent: userAgentString,
+            browser: result.browser.name,
+            os: result.os.name,
+            deviceType: result.device.type
+        });
+        return res.status(403).json({ error: "Neplatný API klíč" })
     }
-});
+
+    next(); // pokud je klic OK, pokracuje
+}
+
+// NASA route
+router.get("/nasa", saveIPtoBlacklist, fetchNasaImage);
 
 export default router;
-
-
-// // NASA fetch API > .env
-// app.get("/api/nasa", async (req, res) => {
-//     try {
-//         if (!FETCH_API_NASA || !API_KEY_NASA) {
-//             throw new Error("❌ Chybí API klíč nebo URL NASA v .env souboru.")
-//         }
-
-//         const apiUrlNasa = `${FETCH_API_NASA}${API_KEY_NASA}`
-//         const response = await fetch(apiUrlNasa)
-
-//         if (!response.ok) {
-//             throw new Error(`❌ Chyba při načítání dat ze serveru, status: ${response.status}`)
-//         } 
-
-//         const data = await response.json()
-
-//         if (data.media_type === "image") {
-//             return res.json({ type: "image", url: data.url, explanation: data.explanation })
-//         } else {
-//             return res.json({ type: "text", url: "", explanation: "Dnes je video 🎥. Klikni na odkaz!" })
-//         }
-
-//     } catch (error) {
-//         console.error("❌ Chyba na serveru:", error)
-//         res.status(500).json({ error: "Chyba na serveru" })
-//     }
-// })

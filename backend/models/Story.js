@@ -10,5 +10,4 @@ const storySchema = new mongoose.Schema({
   emoji: String
 })
 
-// Připoj model ke konkrétní connection
 export default frontendConnection.model("story", storySchema);

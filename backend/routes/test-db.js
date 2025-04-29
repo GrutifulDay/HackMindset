@@ -14,7 +14,7 @@ const getCityByIP = async (ip) => {
   const token = TOKEN_IP_CITY
 
   try {
-    const response = await fetch(`https://ipinfo.io/${realIP}/json?token=${token}^`);
+    const response = await fetch(`https://ipinfo.io/${realIP}/json?token=${token}`);
     const data = await response.json();
     console.log("🔍 Data z ipinfo.io:", data);
     return data.city || "Neznámé město";

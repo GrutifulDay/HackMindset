@@ -1,15 +1,22 @@
 console.log("{fetchStoryOfTheDay.js} 📖 je načtený");
 
-// NASTAVIT UPDATE 
 export async function fetchStoryOfTheDay() {
+    const API_KEY = "fd982hf28HJKfd87gf9Jdf9823kjasd";
     try {
-        const response = await fetch("https://localhost:3000/api/story-of-the-day")
-        if (!response.ok) throw new Error("Chyba pri nacitani dat")
+        const response = await fetch("https://localhost:3000/api/story-of-the-day", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-key": API_KEY
+            }
+        });
+        
+        if (!response.ok) throw new Error("❌ Chyba při načítání dat");
 
-        const data = await response.json()
-        return data
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error("fetchStoryOfTheDay error", error);
-        return null
+        return null;
     }
 }
