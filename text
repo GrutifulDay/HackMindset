@@ -1,6 +1,6 @@
 https://localhost:3000/api/test-db
 https://localhost:3000/api/blacklist   
-https://localhost:3000/api/story-of-the-day
+https://localhost:3000/api/retro-machine
 
 
 
@@ -13,12 +13,13 @@ backend
 3. ✅ dodelat - checkBlacklist.js
 4. ✅ rozmyslet zda pouziju XSS 
 5. ✅ validace API - zad - nelze na server vlozit celou fetch adresu, musi byt ve frontendu
-6. dodelat server, endpoint, db pro dalsi API
-7. ✅ UAParser misto User-Agent (starsi metoda) 
-8. nastaveni upozorneni o blokaci ip adresy 
-9. ✅ helmet hlavicky pridat vc img 
-10. ✅ napsat fci slova a znaky validace s zad a vlozit do kazdeho api - neni potreba 
-11. ✅ spojit test-db do blacklistu 
+6. ✅ Retro-Machine - dodelat server, endpoint, db pro dalsi API, kontrola data 
+7. Profile - dodelat server, endpoint, db pro dalsi API, kontrola data 
+8. ✅ UAParser misto User-Agent (starsi metoda) 
+9. nastaveni upozorneni o blokaci ip adresy 
+10. ✅ helmet hlavicky pridat vc img 
+11. ✅ napsat fci slova a znaky validace s zad a vlozit do kazdeho api - neni potreba 
+12. ✅ spojit test-db do blacklistu 
 
 frontend
 1. zkratit funkce 
