@@ -16,7 +16,8 @@ import { UAParser } from "ua-parser-js";
 import nasaRoutes from "./routes/nasaRoutes.js";
 import ipRoutes from "./routes/ipRoutes.js";
 import storyRoutes from "./routes/storyRoutes.js"
-import testDB from "./routes/test-db.js"
+import retroRoutes from "./routes/retroRoutes.js"
+// import testDB from "./routes/test-db.js"
 
 // Middleware
 import limiterApi from "./middlewares/rateLimit.js";
@@ -72,7 +73,8 @@ app.use(speedLimiter)
 app.use("/api", nasaRoutes)
 app.use("/api", ipRoutes);
 app.use("/api", storyRoutes)
-app.use("/api", testDB)
+app.use("/api", retroRoutes)
+//app.use("/api", testDB)
 
 
 // pridani statickych souboru 
