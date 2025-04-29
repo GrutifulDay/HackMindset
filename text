@@ -20,6 +20,7 @@ backend
 10. ✅ helmet hlavicky pridat vc img 
 11. ✅ napsat fci slova a znaky validace s zad a vlozit do kazdeho api - neni potreba 
 12. ✅ spojit test-db do blacklistu 
+13. uklidit 
 
 frontend
 1. zkratit funkce 
