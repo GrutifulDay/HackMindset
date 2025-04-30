@@ -35,7 +35,7 @@ export async function createStoryOfTheDay() {
     // title
     const title = document.createElement("h3")
     title.textContent = storyData.title
-    setStyle(today, {
+    setStyle(title, {
        
     })
 

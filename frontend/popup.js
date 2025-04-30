@@ -23,17 +23,14 @@ document.addEventListener("DOMContentLoaded", async () => {
      // Ověření, že nasaSection je validní DOM prvek
      if (nasaSection) {
         body.appendChild(nasaSection);  // Přidáme sekci do body
-        console.log("{popup.js} nasa section je nactena", nasaSection);
+        console.log("{popup.js} ✅ nasaSection je nactena", nasaSection);
     } else {
         console.error("{popup.js} ❌ NASA sekce není validní DOM prvek.");
     }
 
-    body.appendChild(hackMindset)
-    body.appendChild(nasaSection)
-    body.appendChild(storyOfTheDay)
-    body.appendChild(retroMachine)
-    body.appendChild(hashtag)
-
+    // 📌 pridani prvku do sekce - podle poradi 
+    body.append(hackMindset, nasaSection, storyOfTheDay, retroMachine, hashtag)
+    
     console.log("{popup.js} ✅ Všechny sekce byly přidány!");
 })
 

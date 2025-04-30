@@ -4,7 +4,6 @@ import { setStyle } from "../../utils/setStyle.js";
 console.log("{retroMachine.js} 🧩 sekce se generuje...")
 
 
-// UPRAVIT - ZKRATIT
 export async function createRetroMachine() {
   console.log("{funkce createRetroMachine} ✅ funguje")
 
