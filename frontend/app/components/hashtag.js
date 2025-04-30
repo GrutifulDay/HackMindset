@@ -1,7 +1,10 @@
+import { setStyle } from "../../utils/setStyle.js";
+
+console.log("{hashtag.js} 🧩 sekce se generuje...")
 
 // UPRAVIT 
 export async function createHashtag() {
-    console.log("{hashtag.js}✅ ＃Hashtag sekce se generuje...");
+  console.log("{funkce createHashtag} ✅ funguje")
   
     const hashtagData = {
       science_tech_ai: "sciencemagazine",
@@ -9,34 +12,44 @@ export async function createHashtag() {
       space_learning: "nasa"
     };
   
+    // 📌 VYTVORENI HTML PRVKU 
+    
+    //aside
     const aside = document.createElement("aside");
     const ul = document.createElement("ul");
-    ul.style.listStyle = "none";
-    ul.style.padding = "0";
-    ul.style.margin = "0";
-
-
+    setStyle(ul, {
+      listStyle: "none",
+      padding: "0",
+      margin: "0"
+    })
+   
     // hint / doporuceni
     const hint = document.createElement("h3")
     hint.textContent = "Moje Insta Tipy:"
   
+    // hashtagData
     Object.values(hashtagData).forEach(tag => {
-      const li = document.createElement("li");
+      const li = document.createElement("li")
       li.style.display = "center";
       li.style.alignItems = "center";
       li.style.marginBottom = "6px";
   
+      // span
       const span = document.createElement("span");
       span.textContent = tag;
   
+      // buttton
       const button = document.createElement("button");
       button.textContent = "📋";
       button.title = "Kopírovat hashtag";
-      button.style.marginLeft = "8px";
-      button.style.cursor = "pointer";
-      button.style.border = "1px solid #aaa";
-      button.style.borderRadius = "4px";
-      button.style.background = "#f9f9f9";
+      setStyle(button, {
+        marginLeft: "8px",
+        cursor: "pointer",
+        border: "1px solid #aaa",
+        borderRadius: "4px",
+        background: "#f9f9f9"
+      })
+     
   
       button.addEventListener("click", () => {
         navigator.clipboard.writeText(tag)
@@ -49,17 +62,19 @@ export async function createHashtag() {
           })
           .catch(err => {
             console.error("❌ Chyba při kopírování:", err);
-          });
-      });
-  
-      li.appendChild(span);
-      li.appendChild(button);
-      ul.appendChild(li);
-      aside.appendChild(hint)
-    });
-  
-    aside.appendChild(ul);
+          })
+      })
+    // 📌 pridani prvku do sekce - podle poradi 
+    li.append(span, button)
+
+    ul.appendChild(li)
     
-    return aside; 
+    aside.appendChild(hint)
+    })
+    
+    // 📌 pridani prvku do sekce - podle poradi 
+    aside.appendChild(ul)
+    
+    return aside
   }
   

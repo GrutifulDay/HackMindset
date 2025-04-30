@@ -1,6 +1,9 @@
+console.log("{likeButton.js} 👍 je načtený");
 
 // UPRAVIT - ZKRATIT 
 export async function likeButton() {
+  console.log("{funkce likeButton} ✅ funguje")
+
   const button = document.createElement("button");
   const count = document.createElement("span");
   const container = document.createElement("div");
@@ -48,8 +51,8 @@ export async function likeButton() {
 
   })
   
-  container.appendChild(button);
-  container.appendChild(count);
-
+  // 📌 pridani prvku do sekce - podle poradi 
+  container.append(button, count)
+  
   return container;
 }

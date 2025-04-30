@@ -6,7 +6,7 @@ import { createHashtag } from "./app/components/hashtag.js";
 
 // BUDE EXPORT DO CONTENT KVULI VZHLEDU 
 
-console.log(("{popup.js} ✅  načten správně!"))
+console.log(("{popup.js} 📋  načten správně!"))
 
 document.addEventListener("DOMContentLoaded", async () => {
     

@@ -8,14 +8,14 @@ export async function getRetroMachineControllers(req, res) {
         const retro = await Retro.findOne({ date: today })
         
         if (!retro) {
-            return res.status(404).json({ error: "Nenalezeno" })
+            return res.status(404).json({ error: "❌ Nenalezeno" })
         }
 
         const { date, ...cleanedRetro } = retro.toObject()
 
         res.json(cleanedRetro)
     } catch (error) {
-        res.status(500).json({ error: "Chyba serveru"})
+        res.status(500).json({ error: "❌ Chyba serveru"})
     }
 }
 

@@ -2,7 +2,7 @@ import { fetchNasaImage } from "./fetch/fetchNasa.js";
 
 // BUDE SE PREDELAVAT A VKLADAT SEM POPUP.JS
 
-console.log("✅ Content script je připojený a běží na stránce")
+console.log("🔎 Content script je připojený a běží na stránce")
 
 (async () => {
     const nasaData = await fetchNasaImage()

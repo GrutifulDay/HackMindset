@@ -1,4 +1,4 @@
-console.log("✅ BACKGROUND běží správně!")
+console.log("⏱️ BACKGROUND běží správně!")
 
 // NASTAVIT 
 

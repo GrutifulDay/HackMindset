@@ -1,10 +1,20 @@
+import { setStyle } from "../../utils/setStyle.js"
+
+console.log("{hackMindset.js} 🧩 sekce se generuje...")
+
 export async function createHackMindset() {
-    console.log("{hackMindset.js} ✅ HackMindset sekce se generuje...")
+    console.log("{funkce createHackMindset} ✅ funguje")
 
+
+    // 📌 VYTVORENI HTML PRVKU 
+
+    // header
     const header = document.createElement("header")
-    header.style.border = "1px solid black"
+    setStyle(header, {
+        border: "1px solid black"
+    })
 
-
+    // title
     const hackMindsetTitle = document.createElement("h2")
     hackMindsetTitle.textContent = "HackMindset"
 
@@ -13,8 +23,9 @@ export async function createHackMindset() {
     const date = document.createElement("h3")
     date.textContent = "Dnes je 1.7.2025 a stalo se..."
 
-    header.appendChild(hackMindsetTitle)
-    header.appendChild(date)
-
+    
+    // 📌 pridani prvku do sekce - podle poradi 
+    header.append(hackMindsetTitle, date)
+  
     return header
 }

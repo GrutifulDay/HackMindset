@@ -1,9 +1,12 @@
 import { updateNasaData } from "./updateNasa.js";
 
-console.log("✅ {fetchNasa.js} načten");
+console.log("{fetchNasa.js} 📡 je načtený");
+
 
 // 🔥 FETCH Z API SERVER.JS
 export async function fetchNasaImage() {
+    console.log("{funkce fetchNasaImage} ✅ funguje")
+
     const API_KEY = "8Tx1ohgFCecjS2xov3yAQqnsKLA0mp";
 
     // 🛑 Pokud neni potreba aktualizace, pouzije ulozena data 
@@ -35,7 +38,7 @@ export async function fetchNasaImage() {
         await chrome.storage.local.set({ nasaData: data, lastFetch: Date.now() })
         return data
     } catch (error) {
-        console.error("⚠️ Chyba při načítání NASA dat:", error);
+        console.error("❌ Chyba při načítání NASA dat:", error);
         return null; // Vrati se null pokud selze 
     }
 }

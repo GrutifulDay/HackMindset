@@ -1,8 +1,10 @@
 // bude obecna funkce? nebo oddelena? 
-console.log("{updateNasa.js} 📖 je načtený");
+console.log("{updateNasa.js} 📡 je načtený");
 
 
 export async function updateNasaData() {
+    console.log("{funkce updateNasaData} ✅ funguje")
+
     const now = Date.now();
 
     // 🟢 Získáme data z `chrome.storage`

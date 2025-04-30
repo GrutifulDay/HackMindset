@@ -1,7 +1,7 @@
-console.log("{fetchStoryOfTheDay.js} 📖 je načtený");
+console.log("{fetchStoryOfTheDay.js} 📡 je načtený");
 
 export async function fetchStoryOfTheDay() {
-    console.log("📚 funkce fetchStoryOfTheDay je nactecna");
+    console.log("{funkce fetchStoryOfTheDay} ✅ funguje")
 
     const API_KEY = "fd982hf28HJKfd87gf9Jdf9823kjasd";
     try {
@@ -18,7 +18,7 @@ export async function fetchStoryOfTheDay() {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error("fetchStoryOfTheDay error", error);
+        console.error("❌ fetchStoryOfTheDay error", error);
         return null;
     }
 }

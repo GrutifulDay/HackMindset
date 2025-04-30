@@ -8,12 +8,12 @@ export async function getStoryOfTheDay(req, res) {
         const story = await Story.findOne({ date: today })
         
         if (!story) {
-            return res.status(404).json({ error: "Nenalezeno" })
+            return res.status(404).json({ error: "❌ Nenalezeno" })
         }
 
         res.json(story)
     } catch (error) {
-        res.status(500).json({ error: "Chyba serveru"})
+        res.status(500).json({ error: "❌ Chyba serveru"})
     }
 }
 

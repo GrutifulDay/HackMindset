@@ -29,7 +29,7 @@ export default function botProtection(req, res, next) {
     if (!userAgentString) {
         console.warn(`🚨 Bot detekován: IP ${userIP} přidána na blacklist.`);
         addToBlacklist(userIP)
-        return res.status(403).json({ error: "Přístup zamítnut." })
+        return res.status(403).json({ error: "❌ Přístup zamítnut." })
     }
 
    
@@ -52,7 +52,7 @@ export default function botProtection(req, res, next) {
             os: result.os.name,
             deviceType: result.device.type
         })
-        return res.status(403).json({ error: "Přístup zamítnut."})
+        return res.status(403).json({ error: "❌ Přístup zamítnut."})
     }
 
     next() // ✅ vše ok

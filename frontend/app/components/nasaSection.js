@@ -1,23 +1,26 @@
+import { setStyle } from "../../utils/setStyle.js";
 import { fetchNasaImage } from "../fetch/fetchNasa.js";
+
+console.log("{nasaSection.js} 🧩 sekce se generuje...")
+
+
 
 // ZKRATIT 
 export async function createNasaSection() {
-    console.log("{nasaSection.js}✅ NASA sekce se generuje...");
+    console.log("{funkce createNasaSection} ✅ funguje")
 
     const nasaData = await fetchNasaImage();
 
     console.log("{nasaSection.js}📌 Načtený NASA obrázek:", nasaData);
 
-
-    console.log("{nasaSection.js}✅ NASA sekce se generuje...")
-
-    
-
     // 📌 VYTVORENI HTML PRVKU 
-
+    
     // "sekce" pro nasa
     const section = document.createElement("section")
-    section.style.border = "2px solid black"
+    setStyle(section, {
+        border:  "2px solid black"
+    })
+    
 
     // section.style.marginBottom = "20px"
 
@@ -37,9 +40,12 @@ export async function createNasaSection() {
     const nasaImage = document.createElement("img")
     nasaImage.src = nasaData.url
     nasaImage.alt = "Astronomy Picture of the Day"
-    nasaImage.style.width = "45%"
-    nasaImage.style.borderRadius = "1.2em"
-    nasaImage.style.border = ".3em solid black"
+    setStyle(nasaImage, {
+        width: "45%",
+        borderRadius: "1.2em",
+        border: ".3em solid black"
+    })
+    
 
     // popis - clanek
     const nasaDescription = document.createElement("p")
@@ -47,7 +53,10 @@ export async function createNasaSection() {
     const shortText = fullText.length > 100 ? fullText.slice(0, 100) + "..." : fullText
 
     nasaDescription.textContent = shortText
-    nasaDescription.style.cursor = "pointer"
+    setStyle(nasaDescription, {
+        cursor: "pointer"
+    })
+ 
 
     const nasaLink = document.createElement("a")
     nasaLink.href = "https://apod.nasa.gov/apod/astropix.html"
@@ -60,11 +69,8 @@ export async function createNasaSection() {
         nasaDescription.textContent = (nasaDescription.textContent === shortText) ? fullText : shortText
     })
 
-    // 📌 Přidání prvků do sekce
-    section.appendChild(nasaTitle)
-    section.appendChild(nasaImage)
-    section.appendChild(nasaDescription)
-    section.appendChild(nasaLink)
-
+    // 📌 pridani prvku do sekce - podle poradi 
+    section.append(nasaTitle, nasaImage, nasaDescription, nasaLink)
+    
     return section // Vrací sekci NASA
 }
