@@ -14,3 +14,7 @@ export const MONGO_URI_FRONTEND = process.env.MONGO_URI_FRONTEND;
 
 // IPinfo.io
 export const TOKEN_IP_CITY = process.env.TOKEN_IP_CITY
+
+// Api key frontend
+export const NASA_API_FRONTEND = process.env.NASA_API_FRONTEND
+export const STORY_API_FRONTEND = process.env.STORY_API_FRONTEND
