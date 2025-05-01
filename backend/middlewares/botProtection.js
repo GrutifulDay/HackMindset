@@ -3,6 +3,8 @@ import { UAParser } from "ua-parser-js"
 
 // ❌ = ZAKOMENTUJ PRO TESTY ❌ 
 
+// ROZDELIT FCE DO SLOZEK
+
 
 // ✅ Pomocná funkce pro správné získání IP adresy
 function getUserIP(req) {

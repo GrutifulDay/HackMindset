@@ -2,6 +2,8 @@ import BlacklistedIP from "../models/BlacklistedIP.js";
 
 // ❌ = ZAKOMENTUJ PRO TESTY ❌ 
 
+// ROZDELIT FCE DO SLOZEK
+
 // set se uklada do restartu serveru  
 const blacklistedIPs = new Set();
 
