@@ -1,5 +1,5 @@
 import { fetchRetroMachine } from "../fetch/fetchRetroMachine.js";
-import { setStyle } from "../../utils/setStyle.js";
+import { el } from "../../utils/uiSnippets.js";
 
 console.log("{retroMachine.js} 🧩 sekce se generuje...")
 
@@ -19,49 +19,37 @@ export async function createRetroMachine() {
 
     // 📌 VYTVORENI HTML PRVKU 
 
-    // article 
-    const article = document.createElement("article")
-    setStyle(article, {
-        marginBottom: "20px",
-        border: "2px solid red"
-    })    
+    // article     
+    const article = el("article", null, {
+      marginBottom: "20px",
+      border: "2px solid red"
+    })
   
      // year
-     const year = document.createElement("h3")
-     year.textContent = retroData.year
-     setStyle(year, {
+     const year = el("h3", retroData.year || "", {
 
      })
 
     // title 
-    const title = document.createElement("h4")
-    title.textContent = retroData.title
-    setStyle(title, {
-        
+    const title = el("h4", retroData.title || "", {
+
     })
 
     // nostalgiggle / text
-    const nostalgiggle = document.createElement("p")
-    nostalgiggle.textContent = retroData.nostalgiggle
-    setStyle(nostalgiggle, {
-        
+    const nostalgiggle = el("p", retroData.nostalgiggle, {
+
     })
 
-      // 👍 like
-      const like = document.createElement("li");
-      like.textContent = retroData.like;
-      setStyle(like, {
+      // 👍 like - pamatuji si (emoji bude upravno)
+      const like = el("li", retroData.like, {
         listStyle: "none",
         fontSize: "20px",
         cursor: "pointer"
       })
-      
   
   
-      // 👎 dislike
-      const dislike = document.createElement("li");
-      dislike.textContent = retroData.dislike;
-      setStyle(dislike, {
+      // 👎 dislike - nemapamtuji si (emoji bude upravno)
+      const dislike = el("li", retroData.dislike, {
         listStyle: "none",
         fontSize: "20px", 
         cursor: "pointer"
@@ -69,25 +57,21 @@ export async function createRetroMachine() {
      
   
       // wrapper pro like & dislike – vedle sebe
-      const feedbackWrapper = document.createElement("div");
-      setStyle(feedbackWrapper, {
+      const feedbackWrapper = el("div", null, {
         display: "flex",
         gap: "20px", 
         justifyContent: "center"
       })
       feedbackWrapper.append(dislike, like)
-     
 
-  
-    // const remember = document.createElement("button")
-    // remember.textContent = "🫶"
-    // Object.assign(remember.style, {
+      // remember
+    // const remember = el("button", "🫶", {
     //     background: "none",
     //     border: "none",
     //     outline: "none",
     //     fontSize: "24px",
     //     cursor: "pointer"
-    //   });
+    // })
 
     // 📌 pridani prvku do sekce - podle poradi 
     article.append(year, title, nostalgiggle, feedbackWrapper)

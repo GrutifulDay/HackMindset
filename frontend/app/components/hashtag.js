@@ -1,4 +1,4 @@
-import { setStyle } from "../../utils/setStyle.js";
+import { el } from "../../utils/uiSnippets.js";
 
 console.log("{hashtag.js} 🧩 sekce se generuje...")
 
@@ -15,41 +15,43 @@ export async function createHashtag() {
     // 📌 VYTVORENI HTML PRVKU 
     
     //aside
-    const aside = document.createElement("aside");
-    const ul = document.createElement("ul");
-    setStyle(ul, {
+    const aside = el("aside", null, {})
+
+    //el
+    const ul = el("ul", null, {
       listStyle: "none",
       padding: "0",
       margin: "0"
     })
    
     // hint / doporuceni
-    const hint = document.createElement("h3")
-    hint.textContent = "Moje Insta Tipy:"
+    const hint = el("h3", "Moje Insta Tipy:", {
+
+    })
   
     // hashtagData
     Object.values(hashtagData).forEach(tag => {
-      const li = document.createElement("li")
-      li.style.display = "center";
-      li.style.alignItems = "center";
-      li.style.marginBottom = "6px";
+      const li = el("li", null, {
+        display: "flex", // center
+        alignItems: "center",
+        marginBottom: "6px"
+      })
   
       // span
-      const span = document.createElement("span");
-      span.textContent = tag;
+      const span = el("span", tag, {})
   
       // buttton
-      const button = document.createElement("button");
-      button.textContent = "📋";
-      button.title = "Kopírovat hashtag";
-      setStyle(button, {
+      const button = el("button", "📋", {
         marginLeft: "8px",
         cursor: "pointer",
         border: "1px solid #aaa",
         borderRadius: "4px",
         background: "#f9f9f9"
+      }, {
+        title: "Kopírovat hashtag"
       })
-     
+    
+
   
       button.addEventListener("click", () => {
         navigator.clipboard.writeText(tag)
@@ -64,6 +66,7 @@ export async function createHashtag() {
             console.error("❌ Chyba při kopírování:", err);
           })
       })
+
     // 📌 pridani prvku do sekce - podle poradi 
     li.append(span, button)
 

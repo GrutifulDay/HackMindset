@@ -21,6 +21,7 @@ backend
 11. ✅ napsat fci slova a znaky validace s zad a vlozit do kazdeho api - neni potreba 
 12. ✅ spojit test-db do blacklistu 
 13. uklidit 
+14. validace - jen pro bloknute Ip adresy - fce pro sifrovani a odsifrovani (kdyz by se nekdo dodstal do db)
 
 frontend
 1. ✅/❌ zkratit funkce - 1/2 hotova 
