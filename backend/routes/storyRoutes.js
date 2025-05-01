@@ -27,7 +27,7 @@ async function saveIPtoBlacklist(req, res, next) {
 
     next(); // pokud je klic OK, pokracuje
 }
-
+console.log("{storyRoutes.js} pripojeno");
 
 router.get("/story-of-the-day", saveIPtoBlacklist, getStoryOfTheDay)
 
