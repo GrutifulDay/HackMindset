@@ -1,8 +1,8 @@
 import { fetchRetroMachine } from "../fetch/fetchRetroMachine.js";
+import { createInteractionButton } from "../interactions_users/interactionButton.js";
 import { el } from "../../utils/uiSnippets.js";
 
 console.log("{retroMachine.js} 🧩 sekce se generuje...")
-
 
 export async function createRetroMachine() {
   console.log("{funkce createRetroMachine} ✅ funguje")
@@ -13,7 +13,7 @@ export async function createRetroMachine() {
     if (!retroData) {
       console.warn("❌ Žádný retro příběh nenalezen");
       console.log("🔍 retroData:", retroData);
-
+      
       return
     }
 
@@ -41,37 +41,23 @@ export async function createRetroMachine() {
     })
 
       // 👍 like - pamatuji si (emoji bude upravno)
-      const like = el("li", retroData.like, {
-        listStyle: "none",
-        fontSize: "20px",
-        cursor: "pointer"
-      })
-  
+      const like = await createInteractionButton("retro_like", retroData.like, "líbi se mi")
   
       // 👎 dislike - nemapamtuji si (emoji bude upravno)
-      const dislike = el("li", retroData.dislike, {
-        listStyle: "none",
-        fontSize: "20px", 
-        cursor: "pointer"
-      })
+      const dislike = await createInteractionButton("retro_dislike", retroData.dislike, "nelíbí se mi")
      
+      // 🧠 remember - bude doplneno podle UX v DB 
+      // const remember = createInteractionButton("retro_remember", retroData.remember, "vzpomínám si")
   
       // wrapper pro like & dislike – vedle sebe
       const feedbackWrapper = el("div", null, {
         display: "flex",
         gap: "20px", 
-        justifyContent: "center"
+        justifyContent: "center",
+        flexWrap: "wrap",
       })
-      feedbackWrapper.append(dislike, like)
+      feedbackWrapper.append(dislike, like) // pridat pripadny remember atd. 
 
-      // remember
-    // const remember = el("button", "🫶", {
-    //     background: "none",
-    //     border: "none",
-    //     outline: "none",
-    //     fontSize: "24px",
-    //     cursor: "pointer"
-    // })
 
     // 📌 pridani prvku do sekce - podle poradi 
     article.append(year, title, nostalgiggle, feedbackWrapper)

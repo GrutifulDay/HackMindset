@@ -1,5 +1,6 @@
-import { el } from "../../utils/uiSnippets.js";
 import { fetchStoryOfTheDay } from "../fetch/fetchStoryOfTheDay.js"
+import { createInteractionButton } from "../interactions_users/interactionButton.js";
+import { el } from "../../utils/uiSnippets.js";
 
 console.log("{storyOfTheDay.js} 🧩 sekce se generuje...")
 
@@ -10,6 +11,7 @@ export async function createStoryOfTheDay() {
     
     if (!storyData) {
         console.warn("⚠️ Žádný příběh nenalezen.")
+
         return
     }
 
@@ -43,28 +45,17 @@ export async function createStoryOfTheDay() {
     })
 
     // 👍 like 
-    const like = el("li", storyData.like || "", {
-        listStyle: "none",
-        fontSize: "20px",
-        cursor: "pointer"
-    }, {
-        title: "To se mi líbí"
-    })
+    const like = await createInteractionButton("story_like", storyData.like, "líbí se mi")
    
     // 👎 dislike
-    const dislike = el("li", storyData.dislike || "", {
-        listStyle: "none",
-        fontSize: "20px",
-        cursor: "pointer"
-    }, {
-        title: "To se mi nelíbí"
-    })
+    const dislike = await createInteractionButton("story_dislike", storyData.dislike, "nelíbí se mi")
 
     // wrapper pro like & dislike – vedle sebe
     const feedbackWrapper = el("div", null, {
         display: "flex",
-        gap: "20px",
-        justifyContent: "center"
+        gap: "20px", 
+        justifyContent: "center",
+        flexWrap: "wrap",
     })
     feedbackWrapper.append(dislike, like)
 

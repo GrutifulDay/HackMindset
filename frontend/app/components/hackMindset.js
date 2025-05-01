@@ -10,7 +10,6 @@ export async function createHackMindset() {
 
     // header
     const header = el("header", null, {
-        border: "1px solid black"
     })
 
     // title
@@ -18,10 +17,29 @@ export async function createHackMindset() {
 
     })
 
-    // DODELAT CAS - VYMYSLET ZPUSOB 
-    const date = el("h3", "Dnes je 1.7.2025 a stalo se...", {
-        color: "blue"
+    // datum - dnes
+    const today = new Date().toLocaleDateString("cs-CZ", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric"
     })
+      
+    // datum
+    const date = el("h3", null, {
+        color: "hotpink"
+    })
+
+    const prefix = document.createTextNode("Dnes je ")
+
+    const dateSpan = el("span", today, {
+        color: "black",
+        fontWeight: "bold"
+    })
+
+    const suffix = document.createTextNode(" a stalo se...")
+
+    date.append(prefix, dateSpan, suffix)
+      
 
     // 📌 pridani prvku do sekce - podle poradi 
     header.append(hackMindsetTitle, date)

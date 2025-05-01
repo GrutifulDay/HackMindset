@@ -32,7 +32,7 @@ export async function createHashtag() {
     // hashtagData
     Object.values(hashtagData).forEach(tag => {
       const li = el("li", null, {
-        display: "flex", // center
+        // display: "flex", // center
         alignItems: "center",
         marginBottom: "6px"
       })

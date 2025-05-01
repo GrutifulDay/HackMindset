@@ -3,6 +3,19 @@ import { createHackMindset } from "./app/components/hackMindset.js";
 import { createStoryOfTheDay } from "./app/components/storyOfTheDay.js";
 import { createRetroMachine } from "./app/components/retroMachine.js";
 import { createHashtag } from "./app/components/hashtag.js";
+import { createLanguageSwitcher } from "./app/components/topBar.js";
+
+import { clearOldInteractions } from "./utils/updateInteraction.js";
+
+
+clearOldInteractions([
+    "story_like",
+    "story_dislike",
+    "retro_like",
+    "retro_dislike",
+    "story_remember",
+    "retro_remember"
+  ])
 
 // BUDE EXPORT DO CONTENT KVULI VZHLEDU 
 
@@ -14,6 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const body = document.body
 
+    const language = await createLanguageSwitcher()
     const hackMindset = await createHackMindset()
     const nasaSection = await createNasaSection()
     let storyOfTheDay = await createStoryOfTheDay()
@@ -29,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 📌 pridani prvku do sekce - podle poradi 
-    [hackMindset, nasaSection, storyOfTheDay, retroMachine, hashtag]
+    [language, hackMindset, nasaSection, storyOfTheDay, retroMachine, hashtag]
         .filter(Boolean) // odstrani vsechny  undefined, null, false nebo 0 - bude jen to co existuje 
         .forEach(section => body.appendChild(section))
     

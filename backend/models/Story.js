@@ -7,7 +7,9 @@ const storySchema = new mongoose.Schema({
   date: String,
   title: String,
   content: String,
-  emoji: String
+  emoji: String,
+  like: String,
+  dislike: String
 })
 
 export default frontendConnection.model("story", storySchema);
