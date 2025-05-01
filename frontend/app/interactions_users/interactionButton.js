@@ -2,7 +2,6 @@ import { el } from "../../utils/uiSnippets.js";
 
 console.log("{interactionButton.js} 👍 je načtený");
 
-// UPRAVIT - ZKRATIT 
 export async function createInteractionButton(key, emoji, label = "") {
   console.log("{funkce createInteractionButton} ✅ funguje")
 

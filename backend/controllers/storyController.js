@@ -1,6 +1,7 @@
 import Story from "../models/Story.js"
 import dayjs from "dayjs"
 
+// BUDE UNIVERZAL FCE
 // dnesni datum 
 export async function getStoryOfTheDay(req, res) {
     try {

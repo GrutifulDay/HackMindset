@@ -1,6 +1,7 @@
 import Retro from "../models/Retro.js"
 import dayjs from "dayjs"
 
+// BUDE UNIVERZAL FCE
 // dnesni datum 
 export async function getRetroMachineControllers(req, res) {
     try {
