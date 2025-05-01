@@ -29,18 +29,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 📌 pridani prvku do sekce - podle poradi 
-    // body.append(hackMindset, nasaSection, storyOfTheDay, retroMachine, hashtag)
-
-    // dlouhy zapis 
-    if (hackMindset) body.appendChild(hackMindset)
-    if (nasaSection) body.appendChild(nasaSection)
-    if (storyOfTheDay) body.appendChild(storyOfTheDay)
-    if (retroMachine) body.appendChild(retroMachine)
-    if (hashtag) body.appendChild(hashtag)
-
-    // zkraceny zapis 
     [hackMindset, nasaSection, storyOfTheDay, retroMachine, hashtag]
-        .filter(Boolean) // odtsrani vsechny  undefined, null, false nebo 0 - bude jen to co existuje 
+        .filter(Boolean) // odstrani vsechny  undefined, null, false nebo 0 - bude jen to co existuje 
         .forEach(section => body.appendChild(section))
     
     console.log("{popup.js} ✅ Všechny sekce byly přidány!");

@@ -31,7 +31,7 @@ export async function createNasaSection() {
     nasaTitle.append(title, link)
 
 
-    // img
+    // img 
     const nasaImage = el("img", null, {
         width: "45%",
         borderRadius: "1.2em",
