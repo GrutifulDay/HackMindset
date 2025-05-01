@@ -12,7 +12,6 @@ router.get(
     "/story-of-the-day",
     validateApiKey(STORY_API_FRONTEND, "Zavolání /story-of-the-day routeru"),
     getStoryOfTheDay
-
 )
 
 export default router
