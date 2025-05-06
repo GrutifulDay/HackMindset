@@ -34,12 +34,15 @@ export default function ipBlocker(req, res, next) {
 
 // Funkce pro pridani IP do blacklistu do DB  
 export async function addToBlacklist(ip, reason = "Automatické blokování", info = {}) {
+
   // ❌ 
   //ignor Postman
   // if (ignoredIPs.has(ip)) {
   //   console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
   //   return false
   // }
+
+  console.log("📥 Ukládám do blacklistu:", ip, info.city);
 
   if (!blacklistedIPs.has(ip)) {
     blacklistedIPs.add(ip)
@@ -54,12 +57,13 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
           userAgent: info.userAgent || "Neznámý",
           browser: info.browser || "Neznámý",
           os: info.os || "Neznámý",
-          deviceType: info.deviceType || "Neznámý"
+          deviceType: info.deviceType || "Neznámý",
+          city: info.city || "Neznámý",
         })
         
         await newIP.save()
         console.log(`🛑 IP ${ip} uložena do databáze`);
-        await notifyBlockedIP(ip, reason)
+        await notifyBlockedIP(ip, info.city, reason)
       } else {
         console.log(`⚠️ IP ${ip} už v databázi existuje`);
       }

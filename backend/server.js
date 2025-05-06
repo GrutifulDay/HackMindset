@@ -18,7 +18,7 @@ import nasaRoutes from "./routes/nasaRoutes.js"
 import storyRoutes from "./routes/storyRoutes.js"
 import retroRoutes from "./routes/retroRoutes.js"
 import profileRoutes from "./routes/profileRoutes.js"
-// import testDB from "./routes/test-db.js"
+import testDB from "./routes/test-db.js"
 
 // Middleware
 import limiterApi from "./middlewares/rateLimit.js"
@@ -76,7 +76,7 @@ app.use("/api", nasaRoutes)
 app.use("/api", storyRoutes)
 app.use("/api", retroRoutes)
 app.use("/api", profileRoutes)
-//app.use("/api", testDB)
+app.use("/api", testDB)
 
 
 // pridani statickych souboru 

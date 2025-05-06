@@ -7,7 +7,6 @@ console.log("{fetchNasa.js} 📡 je načtený");
 export async function fetchNasaImage() {
     console.log("{funkce fetchNasaImage} ✅ funguje")
 
-    const API_KEY = "8Tx1ohgFCecjS2xov3yAQqnsKLA0mp";
 
     // 🛑 Pokud neni potreba aktualizace, pouzije ulozena data 
     if (!(await updateNasaData())) {
@@ -22,13 +21,7 @@ export async function fetchNasaImage() {
     console.log("🌍 Načítám nová data z API...");
 
     try {
-        const response = await fetch("https://localhost:3000/api/nasa", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "x-api-key": API_KEY
-            }
-        })
+        const response = await fetch("https://localhost:3000/api/nasa")
         if (!response.ok) throw new Error("❌ Chyba při načítání obrázku")
 
         const data = await response.json()
