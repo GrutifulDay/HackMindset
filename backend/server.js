@@ -6,33 +6,34 @@ import fs from "fs"
 import https from "https"
 
 // NPM knihovny 
-import express from "express";
+import express from "express"
 import helmet from "helmet"
-import chalk from "chalk";
-import { UAParser } from "ua-parser-js";
+import chalk from "chalk"
+import { UAParser } from "ua-parser-js"
 
 
 // Routes
-import nasaRoutes from "./routes/nasaRoutes.js";
-import ipRoutes from "./routes/ipRoutes.js";
+import nasaRoutes from "./routes/nasaRoutes.js"
+// import ipRoutes from "./routes/ipRoutes.js"
 import storyRoutes from "./routes/storyRoutes.js"
 import retroRoutes from "./routes/retroRoutes.js"
+import profileRoutes from "./routes/profileRoutes.js"
 // import testDB from "./routes/test-db.js"
 
 // Middleware
-import limiterApi from "./middlewares/rateLimit.js";
-import corsOptions from "./middlewares/corsConfig.js";
-import botProtection from "./middlewares/botProtection.js";
-import ipBlacklist from "./middlewares/ipBlacklist.js";
-import speedLimiter from "./middlewares/slowDown.js";
+import limiterApi from "./middlewares/rateLimit.js"
+import corsOptions from "./middlewares/corsConfig.js"
+import botProtection from "./middlewares/botProtection.js"
+import ipBlacklist from "./middlewares/ipBlacklist.js"
+import speedLimiter from "./middlewares/slowDown.js"
 
 // fce 
-import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js";
+import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
 
 // Databaze 
 import connectDB from "./db/db.js"
-import connectFrontendDB from "./db/connectFrontendDB.js";
-import path from "path";
+import connectFrontendDB from "./db/connectFrontendDB.js"
+import path from "path"
 
 const app = express()
 const __dirname = path.resolve() // pri pouziti ES modulů
@@ -71,9 +72,10 @@ app.use(speedLimiter)
 
 // ✅ Načtení NASA router
 app.use("/api", nasaRoutes)
-app.use("/api", ipRoutes);
+// app.use("/api", ipRoutes)
 app.use("/api", storyRoutes)
 app.use("/api", retroRoutes)
+app.use("/api", profileRoutes)
 //app.use("/api", testDB)
 
 
@@ -86,7 +88,7 @@ app.get("/api/test", (req, res) => {
     const parser = new UAParser(userAgentString)
     const result = parser.getResult()
 
-    console.log("UAParser výstup:", result);
+    console.log("UAParser výstup:", result)
 
     res.json({
         message: "Server OK",
@@ -94,7 +96,7 @@ app.get("/api/test", (req, res) => {
         parsed: result
     })
 
-});
+})
 
 // nacitani certifikatu ze slozky cert
 const options = {
@@ -104,6 +106,6 @@ const options = {
 
 // ✅ Spuštění serveru
 https.createServer(options, app).listen(PORT, () => {
-    console.log(chalk.magenta.bold("✅ Server běží na: https://localhost"));
-    console.log(`🛡️ HTTPS port: ${PORT}`);
+    console.log(chalk.magenta.bold("✅ Server běží na: https://localhost"))
+    console.log(`🛡️ HTTPS port: ${PORT}`)
 })

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import connectFrontendDB from "../db/connectFrontendDB.js";
 
-const frontendConnection = connectFrontendDB();
+const frontendConnection = connectFrontendDB()
 
 const storySchema = new mongoose.Schema({
   date: String,
@@ -12,4 +12,4 @@ const storySchema = new mongoose.Schema({
   dislike: String
 })
 
-export default frontendConnection.model("story", storySchema);
+export default frontendConnection.model("story", storySchema)

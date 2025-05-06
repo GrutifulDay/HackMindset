@@ -1,7 +1,8 @@
-import { UAParser } from "ua-parser-js"
-import { addToBlacklist } from "./ipBlacklist.js"
+import { UAParser } from "ua-parser-js";
+import { addToBlacklist, isBlacklisted } from "./ipBlacklist.js";
 
 export function validateApiKey(expectedKey, routeDescription) {
+    console.log("validateApiKey funguje");
     return async function (req, res, next) {
         const userIP =
             req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
@@ -12,8 +13,14 @@ export function validateApiKey(expectedKey, routeDescription) {
         const parser = new UAParser(userAgentString)
         const result = parser.getResult()
 
-        const apiKey = req.headers["x-api-key"]
+        // Kontrola zda je na blacklistu 
+        const isBlocked = await isBlacklisted(userIP)
+        if (isBlocked) {
+            return res.status(403).json({ error: "Přístup zamítnut. Vaše IP je na blacklistu." })
+        }
 
+        // kontrola APi klice 
+        const apiKey = req.headers["x-api-key"]
         if (apiKey !== expectedKey) {
             await addToBlacklist(userIP, routeDescription, {
                 userAgent: userAgentString,
@@ -27,3 +34,4 @@ export function validateApiKey(expectedKey, routeDescription) {
         next()
     }
 }
+

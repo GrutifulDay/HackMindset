@@ -1,34 +1,35 @@
-import BlacklistedIP from "../models/BlacklistedIP.js";
+import BlacklistedIP from "../models/BlacklistedIP.js"
+import { notifyBlockedIP } from "../utils/discordNotification.js"
 
 // ❌ = ZAKOMENTUJ PRO TESTY ❌ 
 
 // ROZDELIT FCE DO SLOZEK
 
 // set se uklada do restartu serveru  
-const blacklistedIPs = new Set();
+const blacklistedIPs = new Set()
 
 // ❌
 // IP adresy, které se nikdy neblokují (lokální prostředí)
-const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"]);
+const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"])
 
 // Middleware pro blokovani IP
 export default function ipBlocker(req, res, next) {
-  const clientIP = req.ip;
+  const clientIP = req.ip
 
   // ❌
   // Ignor zname lokalni IP
   if (ignoredIPs.has(clientIP)) {
-    return next();
+    return next()
   }
 
   // Zkontroluj, jestli je IP na blacklistu
   if (blacklistedIPs.has(clientIP)) {
     console.warn(`🚨 Přístup zablokován pro IP: ${clientIP}`);
     console.log("🔍 Detekovaná IP:", clientIP);
-    return res.status(403).json({ error: "Vaše IP adresa byla zablokována." });
+    return res.status(403).json({ error: "Vaše IP adresa byla zablokována." })
   }
 
-  next();
+  next()
 }
 
 // Funkce pro pridani IP do blacklistu do DB  
@@ -37,12 +38,12 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
   //ignor Postman
   if (ignoredIPs.has(ip)) {
     console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
-    return false;
+    return false
   }
 
   if (!blacklistedIPs.has(ip)) {
     blacklistedIPs.add(ip)
-    console.warn(`🧨 IP ${ip} přidána do Setu (důvod: ${reason})`);
+    console.warn(`🧨 IP ${ip} přidána do Setu (důvod: ${reason})`)
 
     try {
       const exists = await BlacklistedIP.findOne({ ip })
@@ -54,10 +55,11 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
           browser: info.browser || "Neznámý",
           os: info.os || "Neznámý",
           deviceType: info.deviceType || "Neznámý"
-        });
+        })
         
-        await newIP.save();
+        await newIP.save()
         console.log(`🛑 IP ${ip} uložena do databáze`);
+        await notifyBlockedIP(ip, reason)
       } else {
         console.log(`⚠️ IP ${ip} už v databázi existuje`);
       }
@@ -76,9 +78,18 @@ export async function loadBlacklistFromDB() {
   try {
     const allBlocked = await BlacklistedIP.find()
     allBlocked.forEach(entry => blacklistedIPs.add(entry.ip))
-    console.log(`✅ Načteno ${allBlocked.length} IP adres z DB do paměti`);
+    console.log(`✅ Načteno ${allBlocked.length} IP adres z DB do paměti`)
   } catch (err) {
-    console.error("❌ Chyba při načítání blacklistu z DB:", err.message);
+    console.error("❌ Chyba při načítání blacklistu z DB:", err.message)
   }
 }
 
+export async function isBlacklisted(ip) {
+  try {
+    const found = await BlacklistedIP.findOne({ ip })
+    return !!found
+  } catch (err) {
+    console.error("❌ Chyba při kontrole blacklistu:", err.message);
+    return false
+  }
+}

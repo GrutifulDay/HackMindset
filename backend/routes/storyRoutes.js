@@ -1,4 +1,4 @@
-import express from "express";
+import express from "express"
 import { validateApiKey } from "../middlewares/validateApiKey.js"
 import { getStoryOfTheDay } from "../controllers/storyController.js"
 import { STORY_API_FRONTEND } from "../config.js"

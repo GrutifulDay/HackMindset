@@ -1,4 +1,4 @@
-import express from "express";
+import express from "express"
 import { validateApiKey } from "../middlewares/validateApiKey.js"
 import { getRetroMachine } from "../controllers/retroControllers.js"
 import { RETRO_API_FRONTEND } from "../config.js"

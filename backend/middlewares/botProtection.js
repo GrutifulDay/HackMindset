@@ -57,7 +57,7 @@ export default function botProtection(req, res, next) {
         return res.status(403).json({ error: "❌ Přístup zamítnut."})
     }
 
-    next() // ✅ vše ok
+    next() 
 }
 
 

@@ -1,4 +1,4 @@
-import slowDown from "express-slow-down";
+import slowDown from "express-slow-down"
 
 const speedLimiter = slowDown ({
     windowMs: 15 * 60 * 1000, // 15 minut

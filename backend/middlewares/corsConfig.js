@@ -1,4 +1,4 @@
-import cors from "cors";
+import cors from "cors"
 
 const corsOptions = {
     origin: ["http://127.0.0.1:5501", 

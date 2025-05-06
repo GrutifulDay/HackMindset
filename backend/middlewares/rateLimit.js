@@ -1,4 +1,4 @@
-import rateLimit from "express-rate-limit";
+import rateLimit from "express-rate-limit"
 
 // Seznam IP adres, které chceme ignorovat (localhost)
 const ignoredIPs = ["127.0.0.1", "::1", "::ffff:127.0.0.1"] // moje IP 
@@ -11,25 +11,25 @@ const limiterApi = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
     handler: (req, res) => {
-        console.warn(`Rate limit exceeded for IP: ${req.ip}`);
-        res.status(429).json({ error: "Příliš mnoho požadavků, zkuste to znovu za 15 minut." });
+        console.warn(`Rate limit exceeded for IP: ${req.ip}`)
+        res.status(429).json({ error: "Příliš mnoho požadavků, zkuste to znovu za 15 minut." })
     },
     keyGenerator: (req) => req.ip,
     
     // 💡 DŮLEŽITÉ: Tohle řekne rate limiteru, ať IGNORUJE localhost
     skip: (req) => {
-        const ip = req.ip;
-        return ignoredIPs.includes(ip);
+        const ip = req.ip
+        return ignoredIPs.includes(ip)
     }
-});
+})
 
-export default limiterApi;
+export default limiterApi
 
 
 
 // // // nastaveni omezeni pozadavku pri volani API 
 
-// import rateLimit from "express-rate-limit";
+// import rateLimit from "express-rate-limit"
 
 // const limiterApi = rateLimit({
 //     // windowMs: 15 * 60 * 1000, // 15 min
@@ -39,10 +39,10 @@ export default limiterApi;
 //     standardHeaders: true, // Posílá RateLimit hlavičky (X-RateLimit-Limit, X-RateLimit-Remaining)
 //     legacyHeaders: false, // Nepoužívá zastaralé hlavičky (X-RateLimit-Reset)
 //     handler: (req, res) => {
-//         console.warn(`Rate limit exceeded for IP: ${req.ip}`);
-//         res.status(429).json({ error: "Příliš mnoho požadavků, zkuste to znovu za 15 minut." });
+//         console.warn(`Rate limit exceeded for IP: ${req.ip}`)
+//         res.status(429).json({ error: "Příliš mnoho požadavků, zkuste to znovu za 15 minut." })
 //     },
 //     keyGenerator: (req) => req.ip, // muze se zmenit na id, kdyz by byla autentizace 
-// });
+// })
 
-// export default limiterApi;
+// export default limiterApi
