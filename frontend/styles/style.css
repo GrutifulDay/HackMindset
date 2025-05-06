@@ -11,9 +11,37 @@ body {
     padding: 10px; 
     background: rgb(238, 228, 228);
 
-    /* color: #38536a;  */
-   
+    color: #38536a; 
 } 
+
+/* html {
+    border-radius: 26px;
+    border: 1px solid black;
+
+}  */
+/* 
+
+html, body {
+    background: #f5e9e9;
+    border-radius: 24px;
+    padding: 20px;
+    width: 350px;
+    height: auto;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+  } */
+  
+
+/* 
+html, body {
+    border-radius: 16px;
+    background: #fdf6f6;
+    width: 320px;
+    padding: 20px;
+    margin: 0;
+    box-sizing: border-box;
+  } */
+  
 
 /* #message { 
     font-weight: bold; 

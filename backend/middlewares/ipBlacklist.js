@@ -10,7 +10,7 @@ const blacklistedIPs = new Set()
 
 // ❌
 // IP adresy, které se nikdy neblokují (lokální prostředí)
-const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"])
+// const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"])
 
 // Middleware pro blokovani IP
 export default function ipBlocker(req, res, next) {
@@ -18,9 +18,9 @@ export default function ipBlocker(req, res, next) {
 
   // ❌
   // Ignor zname lokalni IP
-  if (ignoredIPs.has(clientIP)) {
-    return next()
-  }
+  // if (ignoredIPs.has(clientIP)) {
+  //   return next()
+  // }
 
   // Zkontroluj, jestli je IP na blacklistu
   if (blacklistedIPs.has(clientIP)) {
@@ -36,10 +36,10 @@ export default function ipBlocker(req, res, next) {
 export async function addToBlacklist(ip, reason = "Automatické blokování", info = {}) {
   // ❌ 
   //ignor Postman
-  if (ignoredIPs.has(ip)) {
-    console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
-    return false
-  }
+  // if (ignoredIPs.has(ip)) {
+  //   console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
+  //   return false
+  // }
 
   if (!blacklistedIPs.has(ip)) {
     blacklistedIPs.add(ip)
