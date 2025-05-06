@@ -2,7 +2,7 @@ import { createNasaSection } from "./app/components/nasaSection.js";
 import { createHackMindset } from "./app/components/hackMindset.js";
 import { createStoryOfTheDay } from "./app/components/storyOfTheDay.js";
 import { createRetroMachine } from "./app/components/retroMachine.js";
-import { createHashtag } from "./app/components/hashtag.js";
+import { createProfile } from "./app/components/profile.js";
 import { createLanguageSwitcher } from "./app/components/topBar.js";
 
 import { clearOldInteractions } from "./utils/updateInteraction.js";
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const nasaSection = await createNasaSection()
     let storyOfTheDay = await createStoryOfTheDay()
     const retroMachine = await createRetroMachine()
-    const hashtag = await createHashtag()
+    const profile = await createProfile()
 
      // Ověření, že nasaSection je validní DOM prvek
      if (nasaSection) {
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 📌 pridani prvku do sekce - podle poradi 
-    [language, hackMindset, nasaSection, storyOfTheDay, retroMachine, hashtag]
+    [language, hackMindset, nasaSection, storyOfTheDay, retroMachine, profile]
         .filter(Boolean) // odstrani vsechny  undefined, null, false nebo 0 - bude jen to co existuje 
         .forEach(section => body.appendChild(section))
     

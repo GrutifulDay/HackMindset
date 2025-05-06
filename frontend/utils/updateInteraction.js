@@ -72,12 +72,12 @@ export function clearOldInteractions(keys = []) {
 
     console.log(`📦 Kontroluji "${key}" → datum uložené: ${storedDate}`);
 
-    if (storedDate !== today && currentHour >= 13) {
-      console.warn(`🧹 Mazání "${key}" (není dnešek a je po 13:00)`);
+    if (storedDate !== today && currentHour >= 14) {
+      console.warn(`🧹 Mazání "${key}" (není dnešek a je po 14:00)`);
       localStorage.removeItem(key);
       localStorage.setItem(dateKey, today);
     } else {
-      console.log(`✅ "${key}" zůstává – ${storedDate === today ? "je dnešek" : "je před 13:00"}`);
+      console.log(`✅ "${key}" zůstává – ${storedDate === today ? "je dnešek" : "je před 14:00"}`);
     }
   });
 }
