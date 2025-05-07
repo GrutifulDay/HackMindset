@@ -3,6 +3,11 @@ dotenv.config()
 
 // PORT
 export const PORT = process.env.PORT || 3000
+ 
+// ID Chrome 
+export const CHROME_EXTENSION_ID = process.env.EXTENSION_ID
+export const CHROME_EXTENSION_ALL_URL = `chrome-extension://${CHROME_EXTENSION_ID}`
+
 
 // Fetch API
 export const FETCH_API_NASA = process.env.FETCH_API_NASA

@@ -1,18 +1,23 @@
-console.log("{fetchRetroMachine.js} 📡 je načtený");
+console.log("{fetchRetroMachine.js} 📡 je načtený")
 
 export async function fetchRetroMachine() {
-    console.log("{funkce fetchRetroMachine} ✅ funguje")
+  console.log("{funkce fetchRetroMachine} ✅ funguje");
 
-    try {
-        const response = await fetch("https://localhost:3000/api/retro-machine")
-        
-        if (!response.ok) throw new Error("❌ Chyba při načítání dat");
+  try {
+    const response = await fetch("https://localhost:3000/api/retro-machine", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-extension-auth": "HECK_EXTENSION" 
+      }
+    })
 
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("❌ fetchRetroMachine error", error);
-        return null;
-    }
+    if (!response.ok) throw new Error("❌ Chyba při načítání dat")
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error("❌ fetchRetroMachine error", error);
+    return null
+  }
 }
-
