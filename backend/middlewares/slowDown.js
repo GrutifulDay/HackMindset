@@ -1,12 +1,22 @@
 import slowDown from "express-slow-down"
 
-const speedLimiter = slowDown ({
-    windowMs: 15 * 60 * 1000, // 15 minut
-    delayAfter: 5, // Po X requestech zpomalíme odpověď
-    delayMs: () => 500 // Každý další request zpomalíme o 500ms
-})
+const speedLimiter = slowDown({
+  windowMs: 15 * 60 * 1000, // 15 min 
+  delayAfter: 10, // X max pozadavku 
+  delayMs: () => 300, // Každý další request zpomalíme o Xms
+  message: "Příliš mnoho požadavků – zpomalte."
+});
 
-export default speedLimiter
-
-
-
+function logSlowRequests(req, res, next) {
+    const used = req.slowDown?.current || 0
+    const limit = req.slowDown?.limit || 0
+  
+    if (used > limit) {
+      console.warn(`🐌 IP ${req.ip} je zpomalena: ${used}/${limit}`);
+      res.setHeader("X-Slowed-Down", "true")
+    }
+  
+    next()
+  }
+  
+export default [speedLimiter, logSlowRequests]
