@@ -1,49 +1,35 @@
 import rateLimit from "express-rate-limit"
+import { addToBlacklist } from "./ipBlacklist.js"
 
 // ❌
 // Seznam IP adres, které chceme ignorovat (localhost)
-const ignoredIPs = ["127.0.0.1", "::1", "::ffff:127.0.0.1"] // moje IP 
+// const ignoredIPs = ["127.0.0.1", "::1", "::ffff:127.0.0.1"] // moje IP 
 
 const limiterApi = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 min
-    windowMs: 60 * 1000, 
+    windowMs: 1 * 60 * 1000, // 1 min - pozdeji zmenit
     max: 20, // max X pozadavku
-    message: "Příliš mnoho požadavků, zkuste to znovu za 15 minut.",
     standardHeaders: true,
-    legacyHeaders: false,
-    handler: (req, res) => {
-        console.warn(`Rate limit exceeded for IP: ${req.ip}`)
-        res.status(429).json({ error: "Příliš mnoho požadavků, zkuste to znovu za 15 minut." })
+    legacyHeaders: false, // nepouziva zastarale hlavicky 
+    handler: async (req, res) => {
+        const ip = req.ip
+
+        console.warn(`❌ Rate limit exceeded for IP: ${ip}`);
+
+        await addToBlacklist(ip, "Překročil limit 20 požadavků za minutu")
+
+        res.status(429).json({
+        error: "Příliš mnoho požadavků – zpomal prosím."
+        })
+
     },
-    keyGenerator: (req) => req.ip,
+    keyGenerator: (req) => req.ip,  // muze se zmenit na id, kdyz by byla autentizace 
     
     // 💡 DŮLEŽITÉ: Tohle řekne rate limiteru, ať IGNORUJE localhost
-    skip: (req) => {
-        const ip = req.ip
-        return ignoredIPs.includes(ip) // ❌
-    }
+    // skip: (req) => {
+    //     const ip = req.ip
+    //     // return ignoredIPs.includes(ip) // ❌
+    // }
 })
 
 export default limiterApi
 
-
-
-// // // nastaveni omezeni pozadavku pri volani API 
-
-// import rateLimit from "express-rate-limit"
-
-// const limiterApi = rateLimit({
-//     // windowMs: 15 * 60 * 1000, // 15 min
-//     windowMs: 60 * 1000,
-//     max: 100, // max 100 pozadavku 
-//     message: "Příliš mnoho požadavků, zkuste to znovu za 15 minut.",
-//     standardHeaders: true, // Posílá RateLimit hlavičky (X-RateLimit-Limit, X-RateLimit-Remaining)
-//     legacyHeaders: false, // Nepoužívá zastaralé hlavičky (X-RateLimit-Reset)
-//     handler: (req, res) => {
-//         console.warn(`Rate limit exceeded for IP: ${req.ip}`)
-//         res.status(429).json({ error: "Příliš mnoho požadavků, zkuste to znovu za 15 minut." })
-//     },
-//     keyGenerator: (req) => req.ip, // muze se zmenit na id, kdyz by byla autentizace 
-// })
-
-// export default limiterApi
