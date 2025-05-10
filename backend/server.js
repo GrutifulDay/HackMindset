@@ -4,21 +4,23 @@ import { PORT } from "./config.js"
 // zaklad
 import fs from "fs"
 import https from "https"
+import { UAParser } from "ua-parser-js"
 
 // NPM knihovny 
 import express from "express"
 import helmet from "helmet"
 import chalk from "chalk"
-import { UAParser } from "ua-parser-js"
 
 
 // Routes
 import nasaRoutes from "./routes/nasaRoutes.js"
-// import ipRoutes from "./routes/ipRoutes.js"
 import storyRoutes from "./routes/storyRoutes.js"
 import retroRoutes from "./routes/retroRoutes.js"
 import profileRoutes from "./routes/profileRoutes.js"
-import testDB from "./routes/test-db.js"
+
+// import ipRoutes from "./routes/ipRoutes.js"
+// import testDB from "./routes/test-db.js"
+
 
 // Middleware
 import limiterApi from "./middlewares/rateLimit.js"
@@ -27,8 +29,9 @@ import botProtection from "./middlewares/botProtection.js"
 import ipBlacklist from "./middlewares/ipBlacklist.js"
 import speedLimiter from "./middlewares/slowDown.js"
 
-// fce 
+// Middleware - fce 
 import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
+// import { abuseDetector } from "./middlewares/abuseDetector.js.js"
 
 // Databaze 
 import connectDB from "./db/db.js"
@@ -36,6 +39,8 @@ import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
 
 const app = express()
+app.set("trust proxy", 1)
+
 const __dirname = path.resolve() // pri pouziti ES modulů
 
 // MongoDB
@@ -63,21 +68,22 @@ app.use(
 
 
 // Nasazeni middlewares
-app.use(limiterApi)
-app.use(corsOptions)
-app.use(botProtection)
 app.use(ipBlacklist)
 app.use(speedLimiter)
+app.use(limiterApi)
+// app.use(abuseDetector)
+app.use(botProtection)
+app.use(corsOptions)
 
 
 // ✅ Načtení NASA router
 app.use("/api", nasaRoutes)
-// app.use("/api", ipRoutes)
 app.use("/api", storyRoutes)
 app.use("/api", retroRoutes)
 app.use("/api", profileRoutes)
-app.use("/api", testDB)
 
+// app.use("/api", ipRoutes)
+// app.use("/api", testDB)
 
 // pridani statickych souboru 
 app.use(express.static(path.join(__dirname, "frontend")))
