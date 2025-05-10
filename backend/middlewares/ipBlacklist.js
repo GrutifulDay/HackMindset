@@ -45,7 +45,7 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
   console.log("📥 Ukládám do blacklistu:", ip, info.city);
 
   if (!blacklistedIPs.has(ip)) {
-    blacklistedIPs.add(ip)
+    blacklistedIPs.add(ip) // pridava do pameti 
     console.warn(`🧨 IP ${ip} přidána do Setu (důvod: ${reason})`)
 
     try {
@@ -61,7 +61,7 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
           city: info.city || "Neznámý",
         })
         
-        await newIP.save()
+        await newIP.save() // ulozi do Mongo
         console.log(`🛑 IP ${ip} uložena do databáze`);
         await notifyBlockedIP(ip, info.city, reason)
       } else {
