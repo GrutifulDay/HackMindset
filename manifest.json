@@ -21,15 +21,17 @@
     "alarms",
     "activeTab",
     "tabs",
-    "webNavigation"
+    "webNavigation",
+    "https://localhost:3000/"
   ],
   "host_permissions": [
     "https://api.nasa.gov/*",
     "https://localhost:3000/*",
-    "https://api.goodnewsnetwork.org/*",
-    "https://wjtpcbrakswvnffjdlvd.supabase.co/*",  
     "https://www.instagram.com/*"
   ],
+  "externally_connectable": {
+    "matches": ["https://localhost:3000/"]
+  },
   "content_scripts": [
     {
       "matches": ["*://*.instagram.com/*"],
