@@ -6,9 +6,9 @@ export async function fetchProfile() {
   try {
     const response = await fetch("https://localhost:3000/api/profile", {
       method: "GET",
+      mode: "cors",
       headers: {
-        "Content-Type": "application/json",
-        "x-extension-auth": "HECK_EXTENSION"
+        "x-extension-auth": "HACK_EXTENSION"
       }
     })
 

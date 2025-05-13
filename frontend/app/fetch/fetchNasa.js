@@ -20,9 +20,9 @@ export async function fetchNasaImage() {
   try {
     const response = await fetch("https://localhost:3000/api/nasa", {
       method: "GET",
+      mode: "cors",
       headers: {
-        "Content-Type": "application/json",
-        "x-extension-auth": "HECK_EXTENSION" 
+        "x-extension-auth": "HACK_EXTENSION"
       }
     })
 

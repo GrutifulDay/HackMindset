@@ -5,9 +5,11 @@ dotenv.config()
 export const PORT = process.env.PORT || 3000
  
 // ID Chrome 
-export const CHROME_EXTENSION_ID = process.env.EXTENSION_ID
+export const CHROME_EXTENSION_ID = process.env.CHROME_EXTENSION_ID
 export const CHROME_EXTENSION_ALL_URL = `chrome-extension://${CHROME_EXTENSION_ID}`
 
+// x-extension-auth
+export const HACK_EXTENSION = process.env.HACK_EXTENSION
 
 // Fetch API
 export const FETCH_API_NASA = process.env.FETCH_API_NASA
@@ -28,3 +30,4 @@ export const PROFILE_API_FRONTEND = process.env.PROFILE_API_FRONTEND
 
 // Discord 
 export const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL
+

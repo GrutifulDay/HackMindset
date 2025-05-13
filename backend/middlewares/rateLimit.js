@@ -24,10 +24,11 @@ const limiterApi = rateLimit({
     },
     keyGenerator: (req) => req.ip,  // muze se zmenit na id, kdyz by byla autentizace 
     
+    // ❌
     // 💡 DŮLEŽITÉ: Tohle řekne rate limiteru, ať IGNORUJE localhost
     // skip: (req) => {
     //     const ip = req.ip
-    //     // return ignoredIPs.includes(ip) // ❌
+    //     // return ignoredIPs.includes(ip) 
     // }
 })
 

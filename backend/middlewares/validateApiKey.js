@@ -1,12 +1,12 @@
 import { UAParser } from "ua-parser-js"
 import { addToBlacklist, isBlacklisted } from "./ipBlacklist.js"
-import { TOKEN_IP_CITY, CHROME_EXTENSION_ALL_URL } from "../config.js"
+import { TOKEN_IP_CITY, CHROME_EXTENSION_ALL_URL, HACK_EXTENSION } from "../config.js"
 
 // 🌍 Získání města z IP
 const getCityByIP = async (ip) => {
   const realIP =
     ip === "::1" || ip === "::ffff:127.0.0.1" || ip === "127.0.0.1"
-      ? "8.8.8.8" // testovací fallback pro localhost
+      ? "8.8.8.8" // testovaci pro localhost
       : ip
 
   const token = TOKEN_IP_CITY
@@ -17,11 +17,12 @@ const getCityByIP = async (ip) => {
     console.log("🔍 Data z ipinfo.io:", data)
     return data.city || "Neznámé město"
   } catch (err) {
-    console.error("❌ Chyba při získávání města:", err.message);
+    console.error("❌ Chyba při získávání města:", err.message)
     return "Neznámé město"
   }
 }
 
+// 🔐 Middleware pro validaci přístupu
 export function validateApiKey(expectedKey, routeDescription) {
   console.log("validateApiKey funguje")
 
@@ -35,32 +36,66 @@ export function validateApiKey(expectedKey, routeDescription) {
     const origin = req.headers.origin || ""
     const referer = req.headers.referer || ""
     const extensionHeader = req.headers["x-extension-auth"] || ""
-
     const extensionID = CHROME_EXTENSION_ALL_URL
 
-    // kontrola IP hned na zacatku (rychlejsi)
+    // preklad aliasu na skutecny klic 
+    const realExtensionHeader =
+      extensionHeader === "HECK_EXTENSION"
+        ? HACK_EXTENSION
+        : extensionHeader
+
+    // kontrola IP z blacklist
     if (await isBlacklisted(userIP)) {
-      return res.status(403).json({ error: "Vaše IP je na blacklistu." });
+      return res.status(403).json({ error: "Vaše IP je na blacklistu." })
     }
 
-    // vyjimka: rozsireni – origin nebo referer obsahuje ID - pridano kvuli API key
-    if (
+    console.log("📦 PŘÍCHOZÍ HLAVIČKY:");
+
+    Object.entries(req.headers).forEach(([key, value]) => {
+      console.log(`→ ${key}: ${value}`);
+    });
+
+
+    // pristup pomovoleny jen z google rozsireni
+    // pokud alias - tak je z roszireni 
+    // pokud někdo pošle HECK_EXTENSION jako alias, musi mít spravny origin nebo referer
+    const isAlias = extensionHeader === "HACK_EXTENSION"
+    const isLikelyFromChrome =
+    userAgentString.includes("Chrome") && !userAgentString.includes("Postman")
+
+    // z povoleneho zdroje
+    const isFromAllowedSource =
       origin.includes(extensionID) ||
       referer.includes(extensionID) ||
-      extensionHeader === "HECK_EXTENSION"
-    ) {
-      console.log("✅ Povolen přístup z rozšíření");
-      return next();
-    }
+      isLikelyFromChrome
 
-    // platny API klic
-    const apiKey = req.headers["x-api-key"]
-    if (apiKey === expectedKey) {
-      console.log("✅ Povolen přístup pomocí API klíče");
+    // 
+    const isFromExtension =
+      (isAlias && isFromAllowedSource) ||               // alias + spravny zdroj
+      (!isAlias && realExtensionHeader === expectedKey) // pripadny test klic 
+
+    if (isFromExtension) {
+      console.log("✅ Povolen přístup z rozšíření");
+      
+      console.log("CHROME_EXTENSION_ALL_URL:", CHROME_EXTENSION_ALL_URL);
+      console.log("🧪 Příchozí x-extension-auth:", req.headers["x-extension-auth"]);
+      console.log("🧪 Očekávaný klíč (expectedKey):", expectedKey);
+
+      console.log("📩 Headers přijaté od klienta:");
+      console.log("→ origin:", req.headers.origin || "žádný origin");
+      console.log("→ referer:", req.headers.referer || "žádný referer");
+      console.log("→ x-extension-auth:", req.headers["x-extension-auth"] || "žádný");
+      console.log("→ user-agent:", req.headers["user-agent"] || "žádný");
+      console.log("🔍 isAlias:", isAlias);
+      console.log("🔍 isFromAllowedSource:", isFromAllowedSource);
+      console.log("🔍 isLikelyFromChrome:", isLikelyFromChrome);
+
+
+
       return next()
     }
 
-    // mesto 
+    // mesto + neautorizovany klic
     const parser = new UAParser(userAgentString)
     const result = parser.getResult()
     const city = await getCityByIP(userIP)
@@ -75,7 +110,7 @@ export function validateApiKey(expectedKey, routeDescription) {
     })
 
     return res
-        .status(403)
-        .json({ error: "Neplatný API klíč nebo neautorizovaný zdroj" }) 
-    }
+      .status(403)
+      .json({ error: "Neplatny API klic nebo neautorizovany zdroj" })
+  }
 }

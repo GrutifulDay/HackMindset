@@ -2,7 +2,7 @@ import express from "express"
 import chalk from "chalk"
 import { validateApiKey } from "../middlewares/validateApiKey.js"
 import { getProfile } from "../controllers/profileController.js"
-import { PROFILE_API_FRONTEND } from "../config.js"
+import { HACK_EXTENSION } from "../config.js"
 
 const router = express.Router()
 
@@ -10,7 +10,7 @@ console.log(chalk.white.bold("{profileRoutes.js} pripojeno"));
 
 router.get(
     "/profile",
-    validateApiKey(PROFILE_API_FRONTEND, "Zavolání /profile routeru"),
+    validateApiKey(HACK_EXTENSION, "Zavolání /profile routeru"),
     getProfile
 )
 

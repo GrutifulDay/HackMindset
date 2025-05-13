@@ -34,7 +34,6 @@ export default function botProtection(req, res, next) {
         return res.status(403).json({ error: "❌ Přístup zamítnut." })
     }
 
-   
 
     // Analýza pomocí UAParser
     const parser = new UAParser(userAgentString)

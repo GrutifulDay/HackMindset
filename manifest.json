@@ -29,9 +29,6 @@
     "https://localhost:3000/*",
     "https://www.instagram.com/*"
   ],
-  "externally_connectable": {
-    "matches": ["https://localhost:3000/"]
-  },
   "content_scripts": [
     {
       "matches": ["*://*.instagram.com/*"],
