@@ -1,26 +1,7 @@
 import { UAParser } from "ua-parser-js"
 import { addToBlacklist, isBlacklisted } from "./ipBlacklist.js"
-import { TOKEN_IP_CITY, CHROME_EXTENSION_ALL_URL, HACK_EXTENSION } from "../config.js"
-
-// 🌍 Získání města z IP
-const getCityByIP = async (ip) => {
-  const realIP =
-    ip === "::1" || ip === "::ffff:127.0.0.1" || ip === "127.0.0.1"
-      ? "8.8.8.8" // testovaci pro localhost
-      : ip
-
-  const token = TOKEN_IP_CITY
-
-  try {
-    const response = await fetch(`https://ipinfo.io/${realIP}/json?token=${token}`)
-    const data = await response.json()
-    console.log("🔍 Data z ipinfo.io:", data)
-    return data.city || "Neznámé město"
-  } catch (err) {
-    console.error("❌ Chyba při získávání města:", err.message)
-    return "Neznámé město"
-  }
-}
+import { getCityByIP } from "../utils/getCityByIP.js"
+import { CHROME_EXTENSION_ALL_URL, HACK_EXTENSION } from "../config.js"
 
 // 🔐 Middleware pro validaci přístupu
 export function validateApiKey(expectedKey, routeDescription) {
@@ -56,9 +37,9 @@ export function validateApiKey(expectedKey, routeDescription) {
     });
 
 
-    // pristup pomovoleny jen z google rozsireni
+    // pristup povoleny jen z google rozsireni
     // pokud alias - tak je z roszireni 
-    // pokud někdo pošle HECK_EXTENSION jako alias, musi mít spravny origin nebo referer
+    // pokud někdo pošle HACK_EXTENSION jako alias, musi mít spravny origin nebo referer
     const isAlias = extensionHeader === "HACK_EXTENSION"
     const isLikelyFromChrome =
     userAgentString.includes("Chrome") && !userAgentString.includes("Postman")
@@ -89,8 +70,6 @@ export function validateApiKey(expectedKey, routeDescription) {
       console.log("🔍 isAlias:", isAlias);
       console.log("🔍 isFromAllowedSource:", isFromAllowedSource);
       console.log("🔍 isLikelyFromChrome:", isLikelyFromChrome);
-
-
 
       return next()
     }
