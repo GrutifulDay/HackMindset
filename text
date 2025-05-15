@@ -35,7 +35,7 @@ frontend
 9. ✅ pridat klic do frontend/server - url bude cela viditelna, bez klice muze volat kazdy
 10. ✅ datum pod nadpisem - aktualni datum dnes
 11. ✅ updateNasa.js > nastavit na datum (ted je cas) - neni potreba
-12. update > ostatni fce kvuli nacitani - dle datumu 
+12. ✅ update > ostatni fce kvuli nacitani - dle datumu 
 13. nastavit content.js jen pro profily aby se zobrazovali + background
 
 db
