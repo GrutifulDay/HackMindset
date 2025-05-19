@@ -1,5 +1,5 @@
 import { fetchRetroMachine } from "../fetch/fetchRetroMachine.js";
-import { createInteractionButton } from "../interactions_users/interactionButton.js";
+import { createInteractionButton } from "./interactions_users/interactionButton.js";
 import { el } from "../../utils/uiSnippets.js";
 
 console.log("{retroMachine.js} 🧩 sekce se generuje...")

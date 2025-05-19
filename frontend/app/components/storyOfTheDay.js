@@ -1,5 +1,5 @@
 import { fetchStoryOfTheDay } from "../fetch/fetchStoryOfTheDay.js"
-import { createInteractionButton } from "../interactions_users/interactionButton.js";
+import { createInteractionButton } from "./interactions_users/interactionButton.js";
 import { el } from "../../utils/uiSnippets.js";
 
 console.log("{storyOfTheDay.js} 🧩 sekce se generuje...")
