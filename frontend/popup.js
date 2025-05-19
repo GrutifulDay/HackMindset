@@ -17,8 +17,6 @@ clearOldInteractions([
     "retro_remember"
   ])
 
-// BUDE EXPORT DO CONTENT KVULI VZHLEDU 
-
 console.log(("{popup.js} 📋  načten správně!"))
 
 document.addEventListener("DOMContentLoaded", async () => {
