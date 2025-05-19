@@ -5,18 +5,6 @@ import { createRetroMachine } from "./app/components/retroMachine.js";
 import { createProfile } from "./app/components/profile.js";
 import { createLanguageSwitcher } from "./app/components/topBar.js";
 
-import { clearOldInteractions } from "./utils/updateInteraction.js";
-
-
-clearOldInteractions([
-    "story_like",
-    "story_dislike",
-    "retro_like",
-    "retro_dislike",
-    "story_remember",
-    "retro_remember"
-  ])
-
 console.log(("{popup.js} 📋  načten správně!"))
 
 document.addEventListener("DOMContentLoaded", async () => {
