@@ -8,7 +8,7 @@ export async function fetchRetroMachine() {
       method: "GET",
       mode: "cors",
       headers: {
-        "x-extension-auth": "HACK_EXTENSION" 
+        "Authorization": "Bearer HACK_EXTENSION"
       }
     })
 

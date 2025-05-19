@@ -6,7 +6,7 @@ const corsOptions = {
     CHROME_EXTENSION_ALL_URL ], // moje ID 
     methods: ["GET"], //povoleni HTTP metody
     credentials: true, // povoleno prenosu cookies pokud bude potreba 
-    allowedHeaders: [ "Content-Type", "x-extension-auth" ], //povolene hlavicky requestu
+    allowedHeaders: [ "Content-Type", "Authorization" ], //povolene hlavicky requestu
 }
 
 export default cors(corsOptions)

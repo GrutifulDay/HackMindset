@@ -16,12 +16,15 @@ export function validateApiKey(expectedKey, routeDescription) {
     const userAgentString = req.get("User-Agent") || "Neznámý"
     const origin = req.headers.origin || ""
     const referer = req.headers.referer || ""
-    const extensionHeader = req.headers["x-extension-auth"] || ""
     const extensionID = CHROME_EXTENSION_ALL_URL
+    const rawAuthHeader = req.headers.authorization || ""
+    const extensionHeader = rawAuthHeader.startsWith("Bearer ")
+        ? rawAuthHeader.split(" ")[1]
+        : ""
 
     // preklad aliasu na skutecny klic 
     const realExtensionHeader =
-      extensionHeader === "HECK_EXTENSION"
+      extensionHeader === "HACK_EXTENSION"
         ? HACK_EXTENSION
         : extensionHeader
 
@@ -59,13 +62,13 @@ export function validateApiKey(expectedKey, routeDescription) {
       console.log("✅ Povolen přístup z rozšíření");
       
       console.log("CHROME_EXTENSION_ALL_URL:", CHROME_EXTENSION_ALL_URL);
-      console.log("🧪 Příchozí x-extension-auth:", req.headers["x-extension-auth"]);
+      console.log("🧪 Příchozí Authorization:", req.headers["Authorization"]);
       console.log("🧪 Očekávaný klíč (expectedKey):", expectedKey);
 
       console.log("📩 Headers přijaté od klienta:");
       console.log("→ origin:", req.headers.origin || "žádný origin");
       console.log("→ referer:", req.headers.referer || "žádný referer");
-      console.log("→ x-extension-auth:", req.headers["x-extension-auth"] || "žádný");
+      console.log("→ Authorization:", req.headers["Authorization"] || "žádný");
       console.log("→ user-agent:", req.headers["user-agent"] || "žádný");
       console.log("🔍 isAlias:", isAlias);
       console.log("🔍 isFromAllowedSource:", isFromAllowedSource);

@@ -8,7 +8,7 @@ export const PORT = process.env.PORT || 3000
 export const CHROME_EXTENSION_ID = process.env.CHROME_EXTENSION_ID
 export const CHROME_EXTENSION_ALL_URL = `chrome-extension://${CHROME_EXTENSION_ID}`
 
-// x-extension-auth
+// Authorization
 export const HACK_EXTENSION = process.env.HACK_EXTENSION
 
 // Fetch API
