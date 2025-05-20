@@ -1,4 +1,5 @@
 import { updateNasaData } from "./updateNasa.js"
+import { API } from "../../config.js"
 
 console.log("{fetchNasa.js} 📡 je načtený")
 
@@ -18,11 +19,9 @@ export async function fetchNasaImage() {
   console.log("🌍 Načítám nová data z API...");
 
   try {
-    const response = await fetch("https://localhost:3000/api/nasa", {
-      method: "GET",
+    const response = await fetch(API.nasa, {
       mode: "cors",
       headers: {
-        // "x-extension-auth": "HACK_EXTENSION"
         "Authorization": "Bearer HACK_EXTENSION"
       }
     })

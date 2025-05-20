@@ -1,11 +1,12 @@
+import { API } from "../../config.js"
+
 console.log("{fetchProfile.js} 📡 je načtený")
 
 export async function fetchProfile() {
   console.log("{funkce fetchProfile} ✅ funguje");
 
   try {
-    const response = await fetch("https://localhost:3000/api/profile", {
-      method: "GET",
+    const response = await fetch(API.profile, {
       mode: "cors",
       headers: {
         "Authorization": "Bearer HACK_EXTENSION"
