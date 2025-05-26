@@ -1,12 +1,15 @@
 import { fetchStoryOfTheDay } from "../fetch/fetchStoryOfTheDay.js"
 import { createInteractionButton } from "./interactions_users/interactionButton.js";
 import { el } from "../../utils/uiSnippets.js";
+import { getLanguage } from "../../utils/language.js"
+
 
 console.log("{storyOfTheDay.js} 🧩 sekce se generuje...")
 
 export async function createStoryOfTheDay() {
     console.log("{funkce createStoryOfTheDay} ✅ funguje")
 
+    const lang = getLanguage()
     const storyData = await fetchStoryOfTheDay()
     
     if (!storyData) {
@@ -22,33 +25,37 @@ export async function createStoryOfTheDay() {
         border: "1px solid black"
     })
 
-    // today 
-    const today = el("h3", storyData.today || "", {
+    const storyOfTheDayTitle = el("h3", "Story of The Day", {
 
     })
 
+    // today 
+    const today = el("h4", storyData.today || "", {
+        color: "red"
+    })
+
     // title
-    const title = el("h3", storyData.title || "", {
+    const title = el("h3", storyData.title?.[lang] || "", {
 
     })
 
     // content 
-    const content = el("p", storyData.content || "", {
+    const content = el("p", storyData.content?.[lang] || "", {
 
     })
 
     // emoji - zmena velikosti
-    const emoji = el("cite", storyData.emoji || "", {
+    const emoji = el("cite", storyData.emoji, {
         display: "block",
         fontSize: "24px",
         marginTop: "10px"
     })
 
-    // 👍 like 
-    const like = await createInteractionButton("story_like", storyData.like, "líbí se mi")
+    // 👍 like - vedel jsem 
+    const like = await createInteractionButton("story_like", storyData.like, lang === "cz" ? "líbi se mi" : "I like it")
    
-    // 👎 dislike
-    const dislike = await createInteractionButton("story_dislike", storyData.dislike, "nelíbí se mi")
+    // 👎 dislike - nevedel jsem 
+    const dislike = await createInteractionButton("story_dislike", storyData.dislike, lang === "en" ? "nelíbí se mi" : "I don't like it")
 
     // wrapper pro like & dislike – vedle sebe
     const feedbackWrapper = el("div", null, {
@@ -60,7 +67,7 @@ export async function createStoryOfTheDay() {
     feedbackWrapper.append(dislike, like)
 
     // 📌 pridani prvku do sekce - podle poradi 
-    article.append(today, title, content, emoji, feedbackWrapper)
+    article.append(storyOfTheDayTitle, today, title, content, emoji, feedbackWrapper)
 
     return article
 }

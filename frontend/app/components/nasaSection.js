@@ -19,7 +19,7 @@ export async function createNasaSection() {
 
     // 🚀 Astronomy Picture of the Day
     const nasaTitle = el("h3", null)
-    const title = document.createTextNode("🚀 Astronomy Picture of the Day by")
+    const title = document.createTextNode("🚀 Astronomy Picture of the Day by ")
     const link = el("a", "NASA", {
         color: "#007BFF",
         textDecoration: "none",

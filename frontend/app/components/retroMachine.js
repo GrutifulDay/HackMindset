@@ -1,13 +1,14 @@
 import { fetchRetroMachine } from "../fetch/fetchRetroMachine.js";
 import { createInteractionButton } from "./interactions_users/interactionButton.js";
 import { el } from "../../utils/uiSnippets.js";
+import { getLanguage } from "../../utils/language.js";
 
 console.log("{retroMachine.js} 🧩 sekce se generuje...")
 
 export async function createRetroMachine() {
   console.log("{funkce createRetroMachine} ✅ funguje")
 
-    
+    const lang = getLanguage()
     const retroData = await fetchRetroMachine()
     
     if (!retroData) {
@@ -24,6 +25,12 @@ export async function createRetroMachine() {
       marginBottom: "20px",
       border: "2px solid red"
     })
+
+    const retroMachineTitle = el("h3", "Retro-Machine", {
+      
+    })
+
+  
   
      // year
      const year = el("h3", retroData.year || "", {
@@ -31,20 +38,21 @@ export async function createRetroMachine() {
      })
 
     // title 
-    const title = el("h4", retroData.title || "", {
+    const title = el("h4", retroData.title?.[lang] || "", {
 
     })
 
     // nostalgiggle / text
-    const nostalgiggle = el("p", retroData.nostalgiggle, {
+    const nostalgiggle = el("p", retroData.nostalgiggle?.[lang] || "", {
 
     })
 
+    // upravit TEXTY 
       // 👍 like - pamatuji si (emoji bude upravno)
-      const like = await createInteractionButton("retro_like", retroData.like, "líbi se mi")
+      const like = await createInteractionButton("retro_like", retroData.like, lang === "cz" ? "líbi se mi" : "I like it")
   
-      // 👎 dislike - nemapamtuji si (emoji bude upravno)
-      const dislike = await createInteractionButton("retro_dislike", retroData.dislike, "nelíbí se mi")
+      // 👎 dislike - nemapamtuji si (emoji bude upravno) / zazil jsem ?? 
+      const dislike = await createInteractionButton("retro_dislike", retroData.dislike, lang === "en" ? "nelíbí se mi" : "I don't like it")
      
       // 🧠 remember - bude doplneno podle UX v DB 
       // const remember = createInteractionButton("retro_remember", retroData.remember, "vzpomínám si")
@@ -60,7 +68,7 @@ export async function createRetroMachine() {
 
 
     // 📌 pridani prvku do sekce - podle poradi 
-    article.append(year, title, nostalgiggle, feedbackWrapper)
+    article.append(retroMachineTitle, year, title, nostalgiggle, feedbackWrapper)
     
     return article
 }

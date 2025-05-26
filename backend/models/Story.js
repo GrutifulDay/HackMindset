@@ -5,8 +5,14 @@ const frontendConnection = connectFrontendDB()
 
 const storySchema = new mongoose.Schema({
   date: String,
-  title: String,
-  content: String,
+  title: {
+    cz: String,
+    en: String
+  },
+  content: {
+    cz: String,
+    en: String
+  },
   emoji: String,
   like: String,
   dislike: String

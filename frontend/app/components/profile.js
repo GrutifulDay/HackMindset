@@ -1,4 +1,6 @@
 import { el } from "../../utils/uiSnippets.js";
+import { getLanguage } from "../../utils/language.js";
+
 import { fetchProfile } from "../fetch/fetchProfile.js";
 
 console.log("{profile.js} 🧩 sekce se generuje...")
@@ -6,6 +8,7 @@ console.log("{profile.js} 🧩 sekce se generuje...")
 export async function createProfile() {
   console.log("{funkce createProfile} ✅ funguje");
 
+  const lang = getLanguage()
   const profileData = await fetchProfile();
 
    // const profileData = {
@@ -27,7 +30,7 @@ export async function createProfile() {
   });
 
   // hint / doporuceni
-  const hint = el("h3", "Moje Insta Tipy:", {});
+  const hint = el("h3", getLanguage() === "cz" ? "Moje Insta Tipy:" : "My Insta Tips:", {});
 
   // // konkretni klice k zobrazeni 
   const instaTipsKeys = [

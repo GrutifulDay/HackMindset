@@ -1,10 +1,27 @@
 import { el } from "../../utils/uiSnippets.js"
+import { getLanguage } from "../../utils/language.js"
 
 console.log("{hackMindset.js} 🧩 sekce se generuje...")
 
 export async function createHackMindset() {
     console.log("{funkce createHackMindset} ✅ funguje")
 
+    const lang = getLanguage() 
+
+    const translations = {
+        cz: {
+            todayPrefix: "Dnes je ",
+            todaySuffix: " a stalo se...",
+            title: "HackMindset"
+        },
+        en: {
+            todayPrefix: "Today is ",
+            todaySuffix: " and this happened...",
+            title: "HackMindset"
+        }
+    }
+
+    const t = translations[lang]
 
     // 📌 VYTVORENI HTML PRVKU 
 
@@ -18,7 +35,7 @@ export async function createHackMindset() {
     })
 
     // datum - dnes
-    const today = new Date().toLocaleDateString("cs-CZ", {
+    const today = new Date().toLocaleDateString(lang === "cz" ? "cs-CZ" : "en-GB", {
         day: "numeric",
         month: "numeric",
         year: "numeric"
@@ -29,17 +46,14 @@ export async function createHackMindset() {
         color: "hotpink"
     })
 
-    const prefix = document.createTextNode("Dnes je ")
-
+    const prefix = document.createTextNode(t.todayPrefix)
     const dateSpan = el("span", today, {
         color: "black",
         fontWeight: "bold"
     })
+    const suffix = document.createTextNode(t.todaySuffix)
 
-    const suffix = document.createTextNode(" a stalo se...")
-
-    date.append(prefix, dateSpan, suffix)
-      
+    date.append(prefix, dateSpan, suffix)      
 
     // 📌 pridani prvku do sekce - podle poradi 
     header.append(hackMindsetTitle, date)
