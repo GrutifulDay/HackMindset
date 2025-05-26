@@ -30,8 +30,6 @@ export async function createRetroMachine() {
       
     })
 
-  
-  
      // year
      const year = el("h3", retroData.year || "", {
 
