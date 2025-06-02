@@ -1,4 +1,4 @@
-import { updateSectionData } from "../../utils/dom/updateSectionData.js"
+import { updateSectionData } from "../../utils/update/updateSectionData.js"
 
 console.log("{fetchProfile.js} 📡 je načtený")
 

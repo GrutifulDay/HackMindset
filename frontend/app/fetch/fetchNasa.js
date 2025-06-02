@@ -1,5 +1,4 @@
-import { updateSectionData } from "../../utils/dom/updateSectionData.js"
-
+import { updateSectionData } from "../../utils/update/updateSectionData.js"
 console.log("{fetchNasa.js} 📡 je načtený")
 
 export async function fetchNasaImage() {
