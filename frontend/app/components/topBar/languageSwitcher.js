@@ -1,5 +1,5 @@
-import { el } from "../../../utils/uiSnippets.js"
-import { setLanguage, getLanguage } from "../../../utils/language.js"
+import { el } from "../../../utils/dom/uiSnippets.js"
+import { setLanguage, getLanguage } from "../../../utils/language/language.js"
 
 export function createLanguageSwitcher() {
   const currentLang = getLanguage() 

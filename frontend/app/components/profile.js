@@ -1,5 +1,5 @@
-import { el } from "../../utils/uiSnippets.js";
-import { getLanguage } from "../../utils/language.js";
+import { el } from "../../utils/dom/uiSnippets.js";
+import { getLanguage } from "../../utils/language/language.js"
 
 import { fetchProfile } from "../fetch/fetchProfile.js";
 
@@ -10,12 +10,6 @@ export async function createProfile() {
 
   const lang = getLanguage()
   const profileData = await fetchProfile();
-
-   // const profileData = {
-    //   science_tech_ai: "sciencemagazine",
-    //   nature_travel_wildlife: "beautifuldestinations",
-    //   space_learning: "nasa"
-    // };
 
   // 📌 VYTVORENI HTML PRVKU 
 
@@ -30,13 +24,13 @@ export async function createProfile() {
   });
 
   // hint / doporuceni
-  const hint = el("h3", getLanguage() === "cz" ? "Moje Insta Tipy:" : "My Insta Tips:", {});
+  const hint = el("h3", lang === "cz" ? "Moje Insta Tipy:" : "My Insta Tips:", {});
 
   // // konkretni klice k zobrazeni 
   const instaTipsKeys = [
-    "science_tech_ai",
+    "space_learning",
     "nature_travel_wildlife",
-    "space_learning"
+    "science_tech_ai"
   ];
 
   instaTipsKeys.forEach(key => {

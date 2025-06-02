@@ -1,8 +1,22 @@
+import { updateSectionData } from "../../utils/dom/updateSectionData.js"
+
 console.log("{fetchStoryOfTheDay.js} 📡 je načtený")
 
 export async function fetchStoryOfTheDay() {
   console.log("{funkce fetchStoryOfTheDay} ✅ funguje");
-  
+
+  const shouldUpdate = await updateSectionData("story")
+
+  if (!shouldUpdate) {
+    console.log("[story] ⏳ Data jsou aktuální – čtu z cache.");
+
+    const { storyData } = await new Promise((resolve) => {
+      chrome.storage.local.get("storyData", (result) => resolve(result))
+    })
+
+    return storyData || null
+  }
+
   try {
     const response = await fetch("https://localhost:3000/api/story-of-the-day", {
       method: "GET",
@@ -12,12 +26,25 @@ export async function fetchStoryOfTheDay() {
       }
     })
 
-    if (!response.ok) throw new Error("❌ Chyba při načítání dat")
-
     const data = await response.json()
+
+    await new Promise((resolve) => {
+      chrome.storage.local.set(
+        {
+          storyData: data,
+          story_lastFetch: Date.now(),
+        },
+        resolve
+      )
+    })
+
+    console.log("[story] ✅ Nová data uložena");
     return data
   } catch (error) {
     console.error("❌ fetchStoryOfTheDay error", error);
     return null
   }
 }
+
+
+

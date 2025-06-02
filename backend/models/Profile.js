@@ -5,9 +5,9 @@ const frontendConnection = connectFrontendDB();
 
 const profileSchema = new mongoose.Schema ({
     date: String,
-    science_tech_ai: String, 
-    nature_travel_wildlife: String,
     space_learning: String, 
+    nature_travel_wildlife: String,
+    science_tech_ai: String, 
 })
 
 export default frontendConnection.model("profile", profileSchema)

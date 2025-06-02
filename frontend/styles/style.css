@@ -1,9 +1,3 @@
-/* #nasaImage {
-    width: 20em;
-    border-radius: .8em;
-} */
-
-
 body { 
     width: 300px; 
     font-family: Arial, sans-serif;
@@ -14,45 +8,5 @@ body {
     color: #38536a; 
 } 
 
-/* html {
-    border-radius: 26px;
-    border: 1px solid black;
-
-}  */
-/* 
-
-html, body {
-    background: #f5e9e9;
-    border-radius: 24px;
-    padding: 20px;
-    width: 350px;
-    height: auto;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-  } */
   
-
-/* 
-html, body {
-    border-radius: 16px;
-    background: #fdf6f6;
-    width: 320px;
-    padding: 20px;
-    margin: 0;
-    box-sizing: border-box;
-  } */
   
-
-/* #message { 
-    font-weight: bold; 
-    color: green; 
-} */
-
-/* #nasaImage {
-    transition: transform .5 ease-in-out;
-    cursor: pointer;
-}
-
-#nasaImage.zoomed {
-    transform: scale(1.6);
-}  */

@@ -1,113 +1,169 @@
+vlozene: 
+
+space_learning:{
+  space_telescopes
+  universeviewz
+  AirAndSpaceMuseum
+  orbitgeo
+  astrophysicsmania
+  theplanetarysociety
+  nasagoddard
+  venturestellar
+  galaxies
+  airandspacemuseum
+  somoscosmosoficial
+  nasahubble
+  
+
+}
+
+nature_travel_wildlife: {
+  hikingexplore
+  beautifuldestinations
+  framedbynico
+  earthpix
+  uri_picture
+  lillylalaloulou
+  wildlifelearningcenter
+  tandaafrika
+  janhvizdal
+  curiositydotcom
+  thewcs
+  natgeoanimals
+
+}
+
+science_tech_ai: {
+  sciencechannel
+  iflscience
+  theai.creative
+  ted
+  ifonly.ai
+  sciencealert
+  inverse
+  BBC_LearningEnglish
+  sciencemagazine
+  DepthsOfWikipedia
+  oziiiai
+  BigManny
+}
+-----------------------------------------------------------
 {
-  "inspi_insta_profil": {
-    "science_tech_ai": [
-      "sciencemagazine",
-      "iflscience",
-      "sciencechannel",
-      "sciencealert",
-      "sciencemuseum",
-      "Quarks.de",
-      "ted",
-      "stemdotorg",
-      "nsfgov",
-      "cmsatdesy",
-      "science.sam",
-      "scienceofessentials",
-      "metscience",
-      "airesearches",
-      "julian_ai_art",
-      "ai2ha_com",
-      "amy.aiart",
-      "ifonly.ai",
-      "theai.creative",
-      "oziiiai",
-      "ai_art.ai",
-      "ai4teachers",
-      "evolving.ai",
-      "BBC_LearningEnglish",
-      "Dictionarycom",
-      "EnglishWithBaba3",
-      "inverse",
-      "mythbusters",
-      "nerd.candy",
-      "neutralina.lu",
-      "noaa",
-      "the_sushi_scientist",
-      "thebraincoach",
-      "themathguru",
-      "thisisbillgates"
-    ],
-    "nature_travel_wildlife": [
-      "tandaafrika",
-      "janhvizdal",
-      "moners",
-      "wildlifelearningcenter",
-      hugo.visuals,
-      "defendersofwildlife",
-      "thewcs",
-      "nationalparkservice",
-      "usinterior",
-      "georgiaaquarium",
-      "bindiirwin",
-      "paulnicklen",
-      "dr.evanantin",
-      "natgeo",
-      "natgeoanimals",
-      "natgeotravel",
-      "natgeoadventure",
-      "beautifuldestinations",
-      "earthpix",
-      "advance_wildlife_education",
-      "NatureTracking",
-      "JoelSartore",
-      "SmithsonianZoo",
-      "botanicka_zahrada_praha",
-      "thewildlifetrusts",
-      "travelinusa",
-      "theoceancleanup",
-      "thegreatplanet",
-      "NYBG",
-      "dpc_photography_",
-      "fakta_cesky",
-      "gapminder_org",
-      "mr.kylecohen",
-      "veekativhu",
-      "SubwayBookReview",
-      "sadhguru"
-    ],
-    "space_learning": [
-      "nasa",
-      "space_telescopes",
-      "universeviewz",
-      "nasaearth",
-      "nasagoddard",
-      "nasahubble",
-      "thespacegal",
-      "AirAndSpaceMuseum",
-      "theplanetarysociety",
-      "venturestellar",
-      "astrophysicsmania",
-      "galaxies",
-      "orbitgeo",
-      "discovery",
-      "natgeohistory",
-      "DepthsOfWikipedia",
-      "mary_annings_revenge",
-      "americanmuseumofnaturalhistory",
-      "Powerhouse_Museum",
-      "MuseumOfScience",
-      "SmithsonianGardens",
-      "thebroadmuseum",
-      "theartassignment",
-      "curiositydotcom",
-      "airandspacemuseum",
-      "hannah_goes_exploring",
-      "lillylalaloulou",
-      "somoscosmosoficial",
-      "the_slowfactory",
-      "tyhurstey",
-      "YourRichBFF",
-      "BigManny"
+  inspi_insta_profil: {
+
+    space_learning: [
+      nasachandraxray
+      nasa_marshall
+      astro_anil
+      nasaartemis
+      vastspacestation
+      spacefoundation
+      justinhartney
+      europeanspaceagency
+      everydayastronaut
+      canadianspaceagency
+      iss
+      rocketcenterusa
+      esamatthiasmaurer
+      spacegovuk
+      issnationallab
+      zenanaut
+      spaceuniversity
+      discovery
+      nasaearth
+      nasasolarsystem
+      europeanspaceagency
+
+      nasa
+      mary_annings_revenge
+      americanmuseumofnaturalhistory
+      Powerhouse_Museum
+      MuseumOfScience
+      SmithsonianGardens
+      thebroadmuseum
+      
+      the_slowfactory
+      YourRichBFF
+    ]
+
+    nature_travel_wildlife: [
+
+    tyhurstey
+      alexander.wedler
+      moners
+      defendersofwildlife
+      nationalparkservice
+      usinterior
+      georgiaaquarium
+      paulnicklen
+      dr.evanantin
+      natgeo
+      natgeoanimals
+      natgeotravel
+      natgeoadventure
+      advance_wildlife_education
+      NatureTracking
+      JoelSartore
+      SmithsonianZoo
+      botanicka_zahrada_praha
+      thewildlifetrusts
+      travelinusa
+      theoceancleanup
+      thegreatplanet
+      NYBG
+      dpc_photography_
+      fakta_cesky
+      gapminder_org
+      mr.kylecohen
+      veekativhu
+      SubwayBookReview
+      sadhguru
+    
+
+    science_tech_ai: [
+      
+    natgeohistory
+      thespacegal
+      sciencemuseum
+      Quarks.de
+      cleoabram
+
+      cyb3rmaddy
+      cybersecurityvoid
+      nukib.cz
+
+      nepindej
+      stemdotorg
+      nsfgov
+      cmsatdesy
+      science.sam
+      thephysicsgirl
+      drbeckyatgoodinside
+      labmuffinbeautyscience
+      notbrainscience
+      tech.neuro.phd
+      stina.biologista
+
+      scienceofessentials
+      metscience
+      airesearches
+      julian_ai_art
+      ai2ha_com
+      amy.aiart
+      
+      ai_art.ai
+      ai4teachers
+      evolving.ai
+      Dictionarycom
+      EnglishWithBaba3
+      mythbusters
+      nerd.candy
+      neutralina.lu
+      noaa
+      the_sushi_scientist
+      thebraincoach
+      themathguru
+      thisisbillgates
     ]
   }
 }
@@ -138,8 +194,7 @@ paulnicklen
 dr.evanantin
 nasahubble
 natgeo
-natgeohistory
-natgeoanimals
+
 natgeotravel
 natgeoadventure
 sciencechannel
@@ -191,7 +246,6 @@ ai2ha_com
 amy.aiart
 ifonly.ai
 theai.creative
-oziiiai
 ai_art.ai
 ai4teachers
 evolving.ai

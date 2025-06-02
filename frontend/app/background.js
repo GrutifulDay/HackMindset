@@ -1,16 +1,16 @@
 console.log("⏱️ BACKGROUND běží správně!")
 
 // ✅ Posílá zprávu do content.js po načtení stránky s Instagramem
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (
-    changeInfo.status === "complete" &&
-    tab.url &&
-    tab.url.includes("instagram.com")
-  ) {
-    console.log("✅ Uživatel otevřel Instagram");
-    chrome.tabs.sendMessage(tabId, { action: "showContent" });
-  }
-});
+// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+//   if (
+//     changeInfo.status === "complete" &&
+//     tab.url &&
+//     tab.url.includes("instagram.com")
+//   ) {
+//     console.log("✅ Uživatel otevřel Instagram");
+//     chrome.tabs.sendMessage(tabId, { action: "showContent" });
+//   }
+// });
 
 // ✅ Instalace nebo aktualizace rozšíření
 chrome.runtime.onInstalled.addListener(() => {

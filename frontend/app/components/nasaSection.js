@@ -1,4 +1,4 @@
-import { el } from "../../utils/uiSnippets.js";
+import { el } from "../../utils/dom/uiSnippets.js";
 import { fetchNasaImage } from "../fetch/fetchNasa.js";
 
 console.log("{nasaSection.js} 🧩 sekce se generuje...")
@@ -53,7 +53,7 @@ export async function createNasaSection() {
         nasaDescription.textContent = (nasaDescription.textContent === shortText) ? fullText : shortText
     })
 
-    // Do you want more? - odkaz 
+    // Do you want more? - odkaz - UPRAVIT aby byla dvojjazycna ‼
     const nasaLink = el("a", "Do you want more?",{
 
     }, {
@@ -64,5 +64,5 @@ export async function createNasaSection() {
     // 📌 pridani prvku do sekce - podle poradi 
     section.append(nasaTitle, nasaImage, nasaDescription, nasaLink)
     
-    return section // Vrací sekci NASA
+    return section
 }

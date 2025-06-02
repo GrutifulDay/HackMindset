@@ -24,7 +24,7 @@ export const setStyle = (element, styles) => {
 //     return element    // vrati vytvoreny el. zpet 
 // }
 
-// novy zapis componens = rozsirena verze 
+// novy zapis components = rozsirena verze 
 export const el = (tag, text, style = {}, attributes = {}) => {
  const element = document.createElement(tag);
 

@@ -3,6 +3,7 @@ import { createHackMindset } from "./app/components/hackMindset.js";
 import { createStoryOfTheDay } from "./app/components/storyOfTheDay.js";
 import { createRetroMachine } from "./app/components/retroMachine.js";
 import { createProfile } from "./app/components/profile.js";
+
 import { createLanguageSwitcher } from "./app/components/topBar/languageSwitcher.js";
 import { promptLanguageIfNotSet } from "./app/components/topBar/promptLanguage.js";
 

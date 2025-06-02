@@ -29,13 +29,19 @@
     "https://localhost:3000/*",
     "https://www.instagram.com/*"
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/sounds/dialup.mp3", "assets/sound.svg"],
+      "matches": ["<all_urls>"]
+    }
+  ],  
   "content_scripts": [
     {
       "matches": ["*://*.instagram.com/*"],
-      "js": ["frontend/app/content.js"]
+      "js": ["frontend/app/content.js"],
+      "type": "module"
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
-  }
+    "extension_pages": "script-src 'self'; object-src 'none'; style-src 'self'"  }
 }

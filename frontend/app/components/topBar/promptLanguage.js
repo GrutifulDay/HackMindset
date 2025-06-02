@@ -1,4 +1,6 @@
-import { hasLanguageSet, setLanguage } from "../../../utils/language.js";
+import { hasLanguageSet, setLanguage } from "../../../utils/language/language.js";
+
+// upravit vyber 
 
 export function promptLanguageIfNotSet() {
     if (!hasLanguageSet()) {
