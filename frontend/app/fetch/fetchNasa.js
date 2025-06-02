@@ -1,4 +1,6 @@
 import { updateSectionData } from "../../utils/update/updateSectionData.js"
+import { API } from "../../utils/config.js";
+
 console.log("{fetchNasa.js} 📡 je načtený")
 
 export async function fetchNasaImage() {
@@ -17,7 +19,7 @@ export async function fetchNasaImage() {
   }
 
   try {
-    const response = await fetch("https://localhost:3000/api/nasa", {
+    const response = await fetch(API.nasa, {
       method: "GET",
       mode: "cors",
       headers: {

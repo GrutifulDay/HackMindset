@@ -1,5 +1,5 @@
 import { updateSectionData } from "../../utils/update/updateSectionData.js"
-
+import { API } from "../../utils/config.js";
 console.log("{fetchProfile.js} 📡 je načtený")
 
 
@@ -19,7 +19,7 @@ export async function fetchProfile() {
   }
 
   try {
-    const response = await fetch("https://localhost:3000/api/profile", {
+    const response = await fetch(API.profile, {
       method: "GET",
       mode: "cors",
       headers: {

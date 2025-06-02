@@ -1,4 +1,5 @@
 import { updateSectionData } from "../../utils/update/updateSectionData.js"
+import { API } from "../../utils/config.js";
 
 console.log("{fetchRetroMachine.js} 📡 je načtený")
 
@@ -18,7 +19,7 @@ export async function fetchRetroMachine() {
   }
 
   try {
-    const response = await fetch("https://localhost:3000/api/retro-machine", {
+    const response = await fetch(API.retroMachine, {
       method: "GET",
       mode: "cors",
       headers: {

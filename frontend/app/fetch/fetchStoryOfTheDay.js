@@ -1,4 +1,5 @@
 import { updateSectionData } from "../../utils/update/updateSectionData.js"
+import { API } from "../../utils/config.js";
 
 console.log("{fetchStoryOfTheDay.js} 📡 je načtený")
 
@@ -18,7 +19,7 @@ export async function fetchStoryOfTheDay() {
   }
 
   try {
-    const response = await fetch("https://localhost:3000/api/story-of-the-day", {
+    const response = await fetch(API.storyOfTheDay, {
       method: "GET",
       mode: "cors",
       headers: {
