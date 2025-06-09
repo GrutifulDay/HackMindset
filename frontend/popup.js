@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const languageSwitcher = createLanguageSwitcher()
     const hackMindset = await createHackMindset()
     const nasaSection = await createNasaSection()
-    let storyOfTheDay = await createStoryOfTheDay()
+    const storyOfTheDay = await createStoryOfTheDay()
     const retroMachine = await createRetroMachine()
     const profile = await createProfile()
 
