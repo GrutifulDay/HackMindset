@@ -9,6 +9,15 @@ body {
     justify-content: center;
 } 
 
+/* header {
+    position: relative;
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  } */
+
 .active-lang {
     display: flex;
     flex-direction: column; /* pod sebe */
