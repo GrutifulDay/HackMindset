@@ -1,6 +1,6 @@
 import { fetchRetroMachine } from "../fetch/fetchRetroMachine.js";
 import { createInteractionButton } from "./interactions_users/interactionButton.js";
-import { el } from "../../utils/dom/uiSnippets.js";
+import { el, createFadeLine } from "../../utils/dom/uiSnippets.js";
 import { getLanguage } from "../../utils/language/language.js"
 import { playSound } from "../../utils/sounds/playSound.js";
 
@@ -21,13 +21,12 @@ export async function createRetroMachine() {
   // 📌 VYTVOŘENÍ HTML PRVKŮ
 
   const article = el("article", null, {
-    marginBottom: "20px",
-    border: "2px solid red"
+    // paddingTop: "1rem",
   });
 
-  const retroMachineTitle = el("h3", "Retro-Machine", {});
+  const retroMachineTitle = el("h3", "💾 Retro-Machine", {});
 
-  const year = el("h3", retroData.year || "", {});
+  const year = el("h3", retroData.year ? `> ${retroData.year} <` : "", {});
 
   const title = el("h4", retroData.title?.[lang] || "", {});
 
@@ -81,7 +80,7 @@ export async function createRetroMachine() {
   feedbackWrapper.append(dislike, like);
 
   // 📌 pridani prvku do sekce - podle poradi 
-  article.append(retroMachineTitle, year, title, nostalgiggle, feedbackWrapper);
+  article.append(createFadeLine(), retroMachineTitle, year, title, nostalgiggle, feedbackWrapper);
 
   return article;
 }
