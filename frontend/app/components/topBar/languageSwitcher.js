@@ -11,17 +11,17 @@ export function createLanguageSwitcher() {
     zIndex: "1000",
     display: "flex",
     gap: "8px",
-    cursor: "pointer"
+    cursor: "pointer",
+  }, {
+    id: "language-switcher"
   })
 
   const czFlag = el("span", "🇨🇿", { 
     fontSize: "24px",
-    borderRadius: "4px",
     padding: "2px"
   })
   const enFlag = el("span", "🇬🇧", {
     fontSize: "24px",
-    borderRadius: "4px",
     padding: "2px"
   })
 
@@ -30,9 +30,9 @@ export function createLanguageSwitcher() {
 
   // zvyraznění jazyka - ANIMACE bude 
   if (currentLang === "cz") {
-    czFlag.style.outline = "2px solid pink"
+    czFlag.classList.add("active-lang")
   } else {
-    enFlag.style.outline = "2px solid pink"
+    enFlag.classList.add("active-lang")
   }
 
   // s class ( uvidim po UX)
