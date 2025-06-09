@@ -5,4 +5,8 @@ export const API = {
   profile: `${BASE_URL}/profile`,
   retroMachine: `${BASE_URL}/retro-machine`,
   storyOfTheDay: `${BASE_URL}/story-of-the-day`,
-};
+}
+
+export const DEV_MODE = true // potom false 
+
+// chrome.storage.local.clear() do konzole pro vymaz 
