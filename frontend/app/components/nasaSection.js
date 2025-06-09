@@ -1,4 +1,4 @@
-import { el } from "../../utils/dom/uiSnippets.js";
+import { el, createFadeLine } from "../../utils/dom/uiSnippets.js";
 import { fetchNasaImage } from "../fetch/fetchNasa.js";
 
 console.log("{nasaSection.js} 🧩 sekce se generuje...")
@@ -14,8 +14,8 @@ export async function createNasaSection() {
     
     // "sekce" pro nasa
     const section = el("section", null, {
-        border:  "2px solid black"
-    })
+        // padding: "1rem",
+    })      
 
     // 🚀 Astronomy Picture of the Day
     const nasaTitle = el("h3", null)
@@ -35,7 +35,7 @@ export async function createNasaSection() {
     const nasaImage = el("img", null, {
         width: "45%",
         borderRadius: "1.2em",
-        border: ".3em solid black"
+        border: ".3em solid pink"
     }, {
         src: nasaData.url,
         alt: "Astronomy Picture of the Day"
@@ -62,7 +62,7 @@ export async function createNasaSection() {
     })
 
     // 📌 pridani prvku do sekce - podle poradi 
-    section.append(nasaTitle, nasaImage, nasaDescription, nasaLink)
+    section.append(createFadeLine(), nasaTitle, nasaImage, nasaDescription, nasaLink)
     
     return section
 }
