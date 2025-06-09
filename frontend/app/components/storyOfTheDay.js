@@ -1,13 +1,13 @@
 import { fetchStoryOfTheDay } from "../fetch/fetchStoryOfTheDay.js"
 import { createInteractionButton } from "./interactions_users/interactionButton.js";
-import { el } from "../../utils/dom/uiSnippets.js";
+import { el, createFadeLine } from "../../utils/dom/uiSnippets.js";
 import { getLanguage } from "../../utils/language/language.js"
 
 
 console.log("{storyOfTheDay.js} 🧩 sekce se generuje...")
 
 export async function createStoryOfTheDay() {
-    console.log("{funkce createStoryOfTheDay} ✅ funguje")
+    console.log("{FUNKCE createStoryOfTheDay} ✅ funguje")
 
     const lang = getLanguage()
     const storyData = await fetchStoryOfTheDay()
@@ -22,10 +22,10 @@ export async function createStoryOfTheDay() {
     
     // article
     const article = el("article", null, {
-        border: "1px solid black"
+        // paddingTop: "1rem",
     })
 
-    const storyOfTheDayTitle = el("h3", "Story of The Day", {
+    const storyOfTheDayTitle = el("h3", "📖 Story of The Day", {
 
     })
 
@@ -45,11 +45,11 @@ export async function createStoryOfTheDay() {
     })
 
     // emoji - zmena velikosti
-    const emoji = el("cite", storyData.emoji, {
-        display: "block",
-        fontSize: "24px",
-        marginTop: "10px"
-    })
+    // const emoji = el("cite", storyData.emoji, {
+    //     display: "block",
+    //     fontSize: "24px",
+    //     marginTop: "10px"
+    // })
 
     // 👍 like - vedel jsem 
     const like = await createInteractionButton("story_like", storyData.like, lang === "cz" ? "líbi se mi" : "I like it")
@@ -67,7 +67,7 @@ export async function createStoryOfTheDay() {
     feedbackWrapper.append(dislike, like)
 
     // 📌 pridani prvku do sekce - podle poradi 
-    article.append(storyOfTheDayTitle, today, title, content, emoji, feedbackWrapper)
+    article.append(createFadeLine(), storyOfTheDayTitle, today, title, content, feedbackWrapper)
 
     return article
 }
