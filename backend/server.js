@@ -31,7 +31,6 @@ import speedLimiter from "./middlewares/slowDown.js"
 
 // Middleware - fce 
 import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
-// import { abuseDetector } from "./middlewares/abuseDetector.js.js"
 
 // Databaze 
 import connectDB from "./db/db.js"
@@ -71,7 +70,6 @@ app.use(
 app.use(ipBlacklist)
 app.use(speedLimiter)
 app.use(limiterApi)
-// app.use(abuseDetector)
 app.use(botProtection)
 app.use(corsOptions)
 
