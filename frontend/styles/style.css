@@ -1,12 +1,32 @@
 body { 
-    width: 300px; 
-    font-family: Arial, sans-serif;
+    width: 550px; 
+    font-family: 'JetBrains Mono', monospace;
     text-align: center; 
     padding: 10px; 
-    background: rgb(238, 228, 228);
-
-    color: #38536a; 
+    background: #faebd74b;
+   
+    color: #272757; 
+    justify-content: center;
 } 
 
+.active-lang {
+    display: flex;
+    flex-direction: column; /* pod sebe */
+    align-items: flex-start; /* Zarovnání doleva */
+    gap: 5px; /* mezera  */
+    margin-bottom: 10px; /* mezera pod */
+    max-width: 40px;
+    transform: scale(1.5);
+    transition: transform 0.2s ease;
+    margin-top: 2px;
+  }
+
   
+  
+   
+  
+  
+  
+
+    
   
