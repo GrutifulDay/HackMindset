@@ -37,4 +37,15 @@ export const el = (tag, text, style = {}, attributes = {}) => {
  });
 
  return element;
-};
+}
+
+export function createFadeLine() {
+  return el("div", null, {
+    height: "2px",
+    width: "100%",
+    background: "linear-gradient(to right, transparent, #000, transparent)",
+    margin: "1.5rem 0"
+  }, {
+    class: "fade-line"
+  })
+}
