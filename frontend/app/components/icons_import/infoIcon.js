@@ -12,7 +12,7 @@ export function createInfoIcon() {
     right: "10px",
     top: "13px", 
   }, {
-    src: "./assets/icons/info.svg",
+    src: "../assets/icons/info.svg",
     title: lang === "cz" ? "O rozšíření" : "About Extension"
   })
 }

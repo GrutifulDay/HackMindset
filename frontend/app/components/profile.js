@@ -37,7 +37,7 @@ export async function createProfile() {
     opacity: ".8"
     
   }, {
-    src: "./assets/icons/insta.svg"
+    src: "../assets/icons/insta.svg"
   })
   const hint = el("h2", lang === "cz" ? "Moje Insta Tipy:" : "My Insta Tips:", {})
 
@@ -74,7 +74,7 @@ export async function createProfile() {
     height: "20px",
     pointerEvents: "none"
   }, {
-    src: "./assets/icons/copy.svg", 
+    src: "../assets/icons/copy.svg", 
   })
 
   const check = el("img", null, {
@@ -82,7 +82,7 @@ export async function createProfile() {
     height: "20px",
     pointerEvents: "none"
   }, {
-    src: "./assets/icons/check.svg",
+    src: "../assets/icons/check.svg",
   })
 
   // zaloha pro pozdejsi vraceni

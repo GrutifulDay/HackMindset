@@ -22,6 +22,7 @@ backend
 13. ✅ uklidit - ipBlacklist.js + botProtection > rozmistit fce ?
 14. ✅ validace - jen pro bloknute Ip adresy - fce pro sifrovani a odsifrovani (kdyz by se nekdo dodstal do db)
 15. ✅ Discord - ted je POST - zabezpeceni
+16. honeypoint
 
 frontend
 1. ✅ zkratit funkce 
@@ -37,6 +38,11 @@ frontend
 11. ✅ updateNasa.js > nastavit na datum (ted je cas) - neni potreba
 12. ✅ update > ostatni fce kvuli nacitani - dle datumu 
 13. nastavit content.js jen pro profily aby se zobrazovali + background
+14. omezit like na 1 kliknuti 
+15. ulozit like / dislike do db k pribehu 
+16. pridat img / svg pod story a retro 
+17. ✅ preklad pro chces vedet vic + display none pro translatorIcon 
+18. tool tip ?? 
 
 db
 1. nahrat data pro fetch 

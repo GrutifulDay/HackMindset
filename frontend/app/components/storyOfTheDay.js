@@ -34,7 +34,7 @@ export async function createStoryOfTheDay() {
         left: "87px",
         opacity: ".8"
     },{
-        src: "./assets/icons/microphone.svg"
+        src: "../assets/icons/microphone.svg"
     })
     storyWrapper.append(microphoneIcon, storyOfTheDayTitle)
 
@@ -59,7 +59,7 @@ export async function createStoryOfTheDay() {
         width: "57px",
         cursor: "pointer"
       }, {
-        src: "./assets/icons/vedel-white.png",
+        src: "../assets/icons/vedel-white.png",
         title: lang === "cz" ? "To jsem věděl!" : "I remember this!"
       })
     
@@ -67,7 +67,7 @@ export async function createStoryOfTheDay() {
         width: "57px",
         cursor: "pointer"
       }, {
-        src: "./assets/icons/nevedel-white.png",
+        src: "../assets/icons/nevedel-white.png",
         title: lang === "cz" ? "To jsem nevěděl..." : "I didn’t know this..."
     })
     

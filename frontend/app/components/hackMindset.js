@@ -41,7 +41,7 @@ export async function createHackMindset() {
         height: "42px",
         transform: "translateY(-6px)"
       }, {
-        src: "./assets/icons/logo-bulb.svg"
+        src: "../assets/icons/logo-bulb.svg"
       })
       
     wrapper.append(hackTitle, bulbIcon, mindsetTitle)

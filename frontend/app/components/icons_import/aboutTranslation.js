@@ -13,7 +13,7 @@ export function createTranslationIcon() {
     right: "10px",
     opacity: ".8",
   }, {
-    src: "./assets/icons/infoTranslation.svg",
+    src: "../assets/icons/infoTranslation.svg",
     title: lang === "cz" ? "O překladu" : "About Translation"
   });
 }

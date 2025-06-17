@@ -28,7 +28,7 @@ export async function createNasaSection() {
         left: "-8px",
         opacity: ".8"
     }, {
-        src: "./assets/icons/rocket.svg"
+        src: "../assets/icons/rocket.svg"
     })
 
     const nasaTitle = el("h2", null)
@@ -108,7 +108,7 @@ export async function createNasaSection() {
         height: "auto",
         
     }, {
-        src: "./assets/icons/more.svg"
+        src: "../assets/icons/more.svg"
     })
 
     nasaLink.append(

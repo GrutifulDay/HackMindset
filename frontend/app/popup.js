@@ -1,13 +1,13 @@
-import { createTopPanel } from "./app/components/topPanel.js";
-import { createNasaSection } from "./app/components/nasaSection.js";
+import { createTopPanel } from "./components/topPanel.js";
+import { createNasaSection } from "./components/nasaSection.js";
 
-import { createHackMindset } from "./app/components/hackMindset.js";
-import { createStoryOfTheDay } from "./app/components/storyOfTheDay.js";
-import { createRetroMachine } from "./app/components/retroMachine.js";
-import { createProfile } from "./app/components/profile.js";
+import { createHackMindset } from "./components/hackMindset.js";
+import { createStoryOfTheDay } from "./components/storyOfTheDay.js";
+import { createRetroMachine } from "./components/retroMachine.js";
+import { createProfile } from "./components/profile.js";
 // import { createBottomPanel } from "./app/components/bottomPanel.js";
 
-import { promptLanguageIfNotSet } from "./app/components/onboarding/promptLanguage.js";
+import { promptLanguageIfNotSet } from "./components/onboarding/promptLanguage.js";
 
 console.log(("{popup.js} 📋  načten správně!"))
 

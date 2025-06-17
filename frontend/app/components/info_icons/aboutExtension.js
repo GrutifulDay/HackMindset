@@ -78,7 +78,7 @@ export function createAboutExtension() {
         height: "auto",
         cursor: "pointer"
     }, {
-        src: "./assets/icons/github.svg",
+        src: "../assets/icons/github.svg",
         title: "GitHub"
     })
 

@@ -35,7 +35,7 @@ export async function createRetroMachine() {
       right: "101px",
       opacity: ".8"
     }, {
-      src: "./assets/icons/television.svg"
+      src: "../assets/icons/television.svg"
     })
 
   retroWrapper.append(televisionIcon, retroMachineTitle)
@@ -81,7 +81,7 @@ export async function createRetroMachine() {
     width: "57px",
     cursor: "pointer"
   }, {
-    src: "./assets/icons/vedel-white.png",
+    src: "../assets/icons/vedel-white.png",
     title: lang === "cz" ? "Tohle si pamatuju!" : "I remember this!"
   })
 
@@ -89,7 +89,7 @@ export async function createRetroMachine() {
     width: "57px",
     cursor: "pointer"
   }, {
-    src: "./assets/icons/nevedel-white.png",
+    src: "../assets/icons/nevedel-white.png",
     title: lang === "cz" ? "Tohle jsem nezažil/a!" : "I didn’t experience this!"
   })
 

@@ -11,7 +11,7 @@ export async function createBottomPanel() {
         height: "auto",
         cursor: "pointer"
     }, {
-        src: "./assets/icons/github.svg",
+        src: "../assets/icons/github.svg",
         title: "GitHub"
     })
 

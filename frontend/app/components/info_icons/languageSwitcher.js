@@ -38,8 +38,8 @@ export function createLanguageSwitcher() {
   }
 
   // volba jazyka + hoover title
-  const { wrapper: czWrapper, flag: czFlag } = createFlagWrapper("./assets/icons/CZ.svg", "Čeština", currentLang === "cz")
-  const { wrapper: enWrapper, flag: enFlag } = createFlagWrapper("./assets/icons/EN.svg", "English", currentLang === "en")
+  const { wrapper: czWrapper, flag: czFlag } = createFlagWrapper("../assets/icons/CZ.svg", "Čeština", currentLang === "cz")
+  const { wrapper: enWrapper, flag: enFlag } = createFlagWrapper("../assets/icons/EN.svg", "English", currentLang === "en")
 
   czFlag.onclick = () => {
     setLanguage("cz")
