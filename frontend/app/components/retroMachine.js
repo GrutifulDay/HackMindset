@@ -1,8 +1,8 @@
 import { fetchRetroMachine } from "../fetch/fetchRetroMachine.js";
 import { createInteractionButton } from "./interactions_users/interactionButton.js";
-import { el, createFadeLine } from "../../utils/dom/uiSnippets.js";
-import { getLanguage } from "../../utils/language/language.js";
-import { playSound } from "../../utils/sounds/playSound.js";
+import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
+import { getLanguage } from "../utils/language/language.js";
+import { playSound } from "../utils/sounds/playSound.js"
 
 console.log("{retroMachine.js} 🧩 sekce se generuje...");
 

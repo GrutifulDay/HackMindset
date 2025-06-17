@@ -1,4 +1,4 @@
-import { el, createFadeLine } from "../../utils/dom/uiSnippets.js";
+import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
 
 // SPODNI PANEL - PRIDAN GITHUB ??? - zatim zakomentovany v popup.js
 export async function createBottomPanel() {

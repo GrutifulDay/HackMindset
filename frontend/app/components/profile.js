@@ -1,5 +1,5 @@
-import { el, createFadeLine } from "../../utils/dom/uiSnippets.js";
-import { getLanguage } from "../../utils/language/language.js";
+import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
+import { getLanguage } from "../utils/language/language.js";
 import { fetchProfile } from "../fetch/fetchProfile.js";
 
 console.log("{profile.js} 🧩 sekce se generuje...");

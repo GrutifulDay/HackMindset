@@ -1,5 +1,6 @@
-import { updateSectionData } from "../../utils/update/updateSectionData.js"
-import { API } from "../../utils/config.js";
+import { updateSectionData } from "../utils/update/updateSectionData.js"
+import { API } from "../utils/config.js";
+
 console.log("{fetchProfile.js} 📡 je načtený")
 
 

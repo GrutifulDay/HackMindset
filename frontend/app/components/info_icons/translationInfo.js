@@ -1,4 +1,4 @@
-import { el } from "../../../utils/dom/uiSnippets.js"
+import { el } from "../../utils/dom/uiSnippets.js";
 
 // VISUAL - "INFO O PREKLADU" - okno / pouze pri CZ vyberu
 export function createTranslationInfo() {

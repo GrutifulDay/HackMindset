@@ -1,5 +1,5 @@
-import { el } from "../../utils/dom/uiSnippets.js"
-import { getLanguage } from "../../utils/language/language.js"
+import { el } from "../utils/dom/uiSnippets.js"
+import { getLanguage } from "../utils/language/language.js"
 
 console.log("{hackMindset.js} 🧩 sekce se generuje...")
 

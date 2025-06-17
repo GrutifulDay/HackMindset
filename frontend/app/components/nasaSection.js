@@ -1,12 +1,8 @@
-import { el, createFadeLine, attachInfoToggle } from "../../utils/dom/uiSnippets.js";
-
+import { el, createFadeLine, attachInfoToggle } from "../utils/dom/uiSnippets.js";
 import { createTranslationInfo } from "./info_icons/translationInfo.js";
 import { createTranslationIcon } from "./icons_import/aboutTranslation.js";
-
-import { getLanguage } from "../../utils/language/language.js"
-
+import { getLanguage } from "../utils/language/language.js";
 import { fetchNasaImage } from "../fetch/fetchNasa.js";
-
 
 export async function createNasaSection() {
     console.log("{funkce createNasaSection} ✅ funguje");

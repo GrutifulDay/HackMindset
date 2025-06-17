@@ -1,5 +1,5 @@
-import { el } from "../../../utils/dom/uiSnippets.js"
-import { setLanguage, getLanguage } from "../../../utils/language/language.js"
+import { el } from "../../utils/dom/uiSnippets.js"
+import { setLanguage, getLanguage } from "../../utils/language/language.js"
 
 // VISUAL - PREPINANI JAZYKA 
 export function createLanguageSwitcher() {

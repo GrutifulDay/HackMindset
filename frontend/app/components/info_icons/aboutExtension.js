@@ -1,5 +1,5 @@
-import { el } from "../../../utils/dom/uiSnippets.js";
-import { getLanguage } from "../../../utils/language/language.js";
+import { el } from "../../utils/dom/uiSnippets.js";
+import { getLanguage } from "../../utils/language/language.js";
 
 // VISUAL - "O ROZSIRENI" - okno - CZ / EN
 export function createAboutExtension() {

@@ -1,4 +1,4 @@
-import { el } from "../../../utils/dom/uiSnippets.js";
+import { el } from "../../utils/dom/uiSnippets.js";
 
 console.log("{interactionButton.js} 👍 je načtený");
 
