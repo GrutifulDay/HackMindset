@@ -3,71 +3,96 @@ import { createInteractionButton } from "./interactions_users/interactionButton.
 import { el, createFadeLine } from "../../utils/dom/uiSnippets.js";
 import { getLanguage } from "../../utils/language/language.js"
 
-
-console.log("{storyOfTheDay.js} 🧩 sekce se generuje...")
+console.log("{storyOfTheDay.js} 🧩 sekce se generuje...");
 
 export async function createStoryOfTheDay() {
-    console.log("{FUNKCE createStoryOfTheDay} ✅ funguje")
+    console.log("{FUNKCE createStoryOfTheDay} ✅ funguje");
 
     const lang = getLanguage()
     const storyData = await fetchStoryOfTheDay()
     
     if (!storyData) {
-        console.warn("⚠️ Žádný příběh nenalezen.")
-
-        return
+      console.warn("⚠️ Žádný příběh nenalezen.")
+      return
     }
 
-    // 📌 VYTVORENI HTML PRVKU 
+    const article = el("article", null, {})
+
+    // title + ikona
+    const storyOfTheDayTitle = el("h2", "Story of The Day", {}) // bude icona
     
-    // article
-    const article = el("article", null, {
-        // paddingTop: "1rem",
+    const storyWrapper = el("div", null, {
+        position: "relative",
+        marginTop: "10px"
     })
-
-    const storyOfTheDayTitle = el("h3", "📖 Story of The Day", {
-
+    
+    const microphoneIcon = el("img", null, {
+        width: "40px",
+        height: "auto",
+        position: "absolute",
+        top: "-13px",
+        left: "87px",
+        opacity: ".8"
+    },{
+        src: "./assets/icons/microphone.svg"
     })
+    storyWrapper.append(microphoneIcon, storyOfTheDayTitle)
 
-    // today 
-    const today = el("h4", storyData.today || "", {
-        color: "red"
-    })
+    const today = el("h3", storyData.today || "", {})
 
-    // title
-    const title = el("h3", storyData.title?.[lang] || "", {
-
-    })
+    const title = el("h3", storyData.title?.[lang] || "", {})
 
     // content 
-    const content = el("p", storyData.content?.[lang] || "", {
+    const content = el("p", storyData.content?.[lang] || "", {})
 
-    })
-
-    // emoji - zmena velikosti
-    // const emoji = el("cite", storyData.emoji, {
-    //     display: "block",
-    //     fontSize: "24px",
-    //     marginTop: "10px"
-    // })
-
-    // 👍 like - vedel jsem 
-    const like = await createInteractionButton("story_like", storyData.like, lang === "cz" ? "líbi se mi" : "I like it")
-   
-    // 👎 dislike - nevedel jsem 
-    const dislike = await createInteractionButton("story_dislike", storyData.dislike, lang === "en" ? "nelíbí se mi" : "I don't like it")
-
-    // wrapper pro like & dislike – vedle sebe
+    // img hlasovani + title hoover CZ / EN 
     const feedbackWrapper = el("div", null, {
         display: "flex",
-        gap: "20px", 
+        gap: "40px",
         justifyContent: "center",
         flexWrap: "wrap",
+        marginTop: "0px"
+      })
+    
+      // img bez position (zarovnani se resi ve wrapperu)
+    const likeIMG = el("img", null, {
+        width: "57px",
+        cursor: "pointer"
+      }, {
+        src: "./assets/icons/vedel-white.png",
+        title: lang === "cz" ? "To jsem věděl!" : "I remember this!"
+      })
+    
+    const dislikeIMG = el("img", null, {
+        width: "57px",
+        cursor: "pointer"
+      }, {
+        src: "./assets/icons/nevedel-white.png",
+        title: lang === "cz" ? "To jsem nevěděl..." : "I didn’t know this..."
     })
-    feedbackWrapper.append(dislike, like)
+    
+    const like = createInteractionButton(
+        likeIMG,
+        "like",
+        lang === "cz" ? "Líbí se mi" : "I like it"
+    );
+    
+    likeIMG.addEventListener("click", () => {
+      likeIMG.src = "./assets/icons/vedel-green.png"
+    })
+      
+    dislikeIMG.addEventListener("click", () => {
+      dislikeIMG.src = "./assets/icons/nevedel-green.png"
+    })
+    
+    const dislike = createInteractionButton(
+        dislikeIMG,
+        "dislike",
+        lang === "cz" ? "Nelíbí se mi" : "I don't like it"
+    )
+    
+    feedbackWrapper.append(dislike, like);
 
-    // 📌 pridani prvku do sekce - podle poradi 
-    article.append(createFadeLine(), storyOfTheDayTitle, today, title, content, feedbackWrapper)
-
+    article.append(createFadeLine(), storyWrapper, today, title, content, feedbackWrapper)
     return article
 }

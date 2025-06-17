@@ -1,7 +1,6 @@
 import { hasLanguageSet, setLanguage } from "../../../utils/language/language.js";
 
-// upravit vyber 
-
+// upravit vyber / NASTAVENI JAZYKA UZIVATELEM 
 export function promptLanguageIfNotSet() {
     if (!hasLanguageSet()) {
       const lang = confirm("Chceš aplikaci v češtině? Klikni na OK pro 🇨🇿 nebo Zrušit pro 🇬🇧")

@@ -1,34 +1,57 @@
-body { 
-    width: 550px; 
-    font-family: 'JetBrains Mono', monospace;
-    text-align: center; 
-    padding: 10px; 
-    background: #faebd74b;
-   
-    color: #272757; 
-    justify-content: center;
-} 
+body {
+  width: 100%;                 /* přizpůsobí se */
+  max-width: 550px;            /* nikdy nebude moc široké */
+  min-width: 450px;            /* ale ani extrémně úzké */
+  margin: 0 auto;              /* vycentrování */
+  padding: 16px;               /* víc prostoru kolem */
 
-/* header {
-    position: relative;
-    width: 100vw;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-  } */
+  /* den */
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.887), rgba(240, 240, 240, 0.873)); 
 
-.active-lang {
-    display: flex;
-    flex-direction: column; /* pod sebe */
-    align-items: flex-start; /* Zarovnání doleva */
-    gap: 5px; /* mezera  */
-    margin-bottom: 10px; /* mezera pod */
-    max-width: 40px;
-    transform: scale(1.5);
-    transition: transform 0.2s ease;
-    margin-top: 2px;
-  }
+    /* tohle nejspis - dark mode */
+
+  /* background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364); */
+
+  font-family: 'JetBrains Mono', monospace;
+  text-align: center;
+  object-fit: contain;
+  box-shadow: 0 0 8px rgba(78, 112, 166, 0.6);
+
+  box-sizing: border-box;      /* lepší výpočty s paddingem */
+  border: 2px solid #6c6c7a;
+}
+
+h2 {
+  font-size: 1.3em;
+  color: rgb(39 62 100);
+  text-transform: uppercase;
+  margin-top: 17px;
+}
+
+h3 {
+  font-size: 1.2em;
+  color: rgb(39 62 100);
+  margin-top: -3px;
+}
+
+p,
+li {
+  font-size: 1em;
+  color:#05054e;
+  /* color: pink; */
+}
+/* 
+* {
+  outline: 1px solid rgba(0,0,255,0.2);
+} */
+
+
+
+
+
+
+
+
 
   
   

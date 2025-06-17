@@ -1,0 +1,27 @@
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-wrapper::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 105%;
+  right: 0; /* zarovná tooltip VPRAVO */
+  transform: none;
+  background-color: #9ccfff;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+
+
+.tooltip-wrapper:hover::after {
+  opacity: 1;
+}

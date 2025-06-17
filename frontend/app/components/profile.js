@@ -7,15 +7,11 @@ console.log("{profile.js} 🧩 sekce se generuje...");
 export async function createProfile() {
   console.log("{funkce createProfile} ✅ funguje");
 
-  const lang = getLanguage();
-  const profileData = await fetchProfile();
+  const lang = getLanguage()
+  const profileData = await fetchProfile()
 
-  // aside
-  const aside = el("aside", null, {
-    // paddingTop: "1rem",
-  });
+  const aside = el("aside", null, {})
 
-  // ul
   const ul = el("ul", null, {
     listStyle: "none",
     padding: "0",
@@ -24,85 +20,101 @@ export async function createProfile() {
     gap: "10px",
     flexWrap: "wrap",
     justifyContent: "center"
-  });
+  })
 
   // nadpis
-  const hint = el("h3", lang === "cz" ? "Moje Insta Tipy:" : "My Insta Tips:", {});
+  const profileWrapper = el("div", null, {
+    position: "relative",
+    marginTop: "10px",
+  })
+
+  const instaIcon = el("img", null, {
+    width: "40px",
+    height: "auto",
+    position: "absolute",
+    top: "-11px",
+    left: "91px",
+    opacity: ".8"
+    
+  }, {
+    src: "./assets/icons/insta.svg"
+  })
+  const hint = el("h2", lang === "cz" ? "Moje Insta Tipy:" : "My Insta Tips:", {})
+
+  profileWrapper.append(instaIcon, hint)
 
   const instaTipsKeys = [
     "space_learning",
     "nature_travel_wildlife",
     "science_tech_ai"
-  ];
+  ]
 
   instaTipsKeys.forEach(key => {
     const tag = profileData[key];
-    if (!tag) return;
+    if (!tag) return
 
     const li = el("li", null, {
       alignItems: "center",
-      // marginBottom: "6px"
-    });
+  })
 
-    const span = el("span", tag, {});
+  const span = el("span", tag, {});
 
-    const button = el("button", null, {
-      marginLeft: "3px",
-      cursor: "pointer",
-      border: "none",
-      background: "transparent",
-      padding: "4px"
-    }, {
-      title: "Kopírovat hashtag"
-    });
+  const button = el("button", null, {
+    marginLeft: "3px",
+    cursor: "pointer",
+    border: "none",
+    padding: "4px",
+    background: "transparent",
+  }, {
+    title: lang === "cz" ? "Zkopíruj" : "Copy"
+  })
 
-    // ikona copy
-    const copy = el("img", null, {
-      width: "30px",
-      height: "30px",
-      pointerEvents: "none"
-    }, {
-      src: "./assets/icons/copy.svg", 
-    })
+  const copy = el("img", null, {
+    width: "20px",
+    height: "20px",
+    pointerEvents: "none"
+  }, {
+    src: "./assets/icons/copy.svg", 
+  })
 
-    const check = el("img", null, {
-      width: "30px",
-      height: "30px",
-      pointerEvents: "none"
-    }, {
-      src: "./assets/icons/check.svg",
-      alt: "Zkopírováno"
-    })
+  const check = el("img", null, {
+    width: "20px",
+    height: "20px",
+    pointerEvents: "none"
+  }, {
+    src: "./assets/icons/check.svg",
+  })
 
-    // zaloha pro pozdejsi vraceni
-    const copyIcon = copy.cloneNode(true) 
-    const checkIcon = check.cloneNode(true)
+  // zaloha pro pozdejsi vraceni
+  const copyIcon = copy.cloneNode(true) 
+  const checkIcon = check.cloneNode(true)
 
-    button.appendChild(copyIcon);
+  button.appendChild(copyIcon);
 
-    button.addEventListener("click", () => {
-      navigator.clipboard.writeText(tag)
-        .then(() => {
-          console.log(`✅ Zkopírováno: ${tag}`);
+  // fce pro kopirovani
+  button.addEventListener("click", () => {
+    navigator.clipboard.writeText(tag)
+      .then(() => {
+        console.log(`✅ Zkopírováno: ${tag}`)
 
-          // Smaž obsah a dej ✅
-          button.replaceChildren(checkIcon)
+        // smaz obsah a nahrad 
+        button.replaceChildren(checkIcon)
 
-          // Po 1s vrať ikonu
-          setTimeout(() => {
-            button.textContent = "";
-            button.appendChild(copyIcon);
-          }, 1000);
+        // Po 1s vrati ikonu 
+        setTimeout(() => {
+          button.textContent = ""
+          button.appendChild(copyIcon)
+          }, 1000)
         })
         .catch(err => {
-          console.error("❌ Chyba při kopírování:", err);
-        });
-    });
+          console.error("❌ Chyba při kopírování:", err)
+        })
+      })
 
-    li.append(span, button);
-    ul.appendChild(li);
-  });
+    li.append(span, button)
+    ul.appendChild(li)
+  })
 
-  aside.append(createFadeLine(), hint, ul);
-  return aside;
+  aside.append(createFadeLine(), profileWrapper, ul)
+  return aside
 }

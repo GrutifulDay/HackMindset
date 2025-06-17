@@ -1,0 +1,18 @@
+import { el } from "../../../utils/dom/uiSnippets.js";
+import { getLanguage } from "../../../utils/language/language.js";
+
+export function createInfoIcon() {
+  const lang = getLanguage();
+
+  return el("img", null, {
+    width: "29px",
+    height: "auto",
+    cursor: "pointer",
+    position: "absolute",
+    right: "10px",
+    top: "13px", 
+  }, {
+    src: "./assets/icons/info.svg",
+    title: lang === "cz" ? "O rozšíření" : "About Extension"
+  })
+}

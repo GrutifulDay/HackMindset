@@ -2,53 +2,65 @@ import { el } from "../../../utils/dom/uiSnippets.js";
 
 console.log("{interactionButton.js} 👍 je načtený");
 
-export async function createInteractionButton(key, emoji, label = "") {
-  console.log("{funkce createInteractionButton} ✅ funguje")
+// LOGIKA INTERACTION IMG click +1 
+export function createInteractionButton(imgElement, key, label) {
 
-  // button
-  const button = el("button", emoji, {
-    fontSize: "20px",
-    cursor: "pointer",
-    border: "none",
-    background: "none",
-  })
-  button.title = label
+  const section = key.split("_")[0] // např. "retro" nebo "story"
+  const voteDateKey = `${section}_vote_date`
+  const voteChoiceKey = `${section}_vote_choice`
+  const today = new Date().toISOString().slice(0, 10)
 
-  const dateKey = `${key}_date`
-  const storedDate = localStorage.getItem(dateKey)
-  const today = new Date().toISOString().slice(0, 10) 
+  const storedDate = localStorage.getItem(voteDateKey)
+  const storedChoice = localStorage.getItem(voteChoiceKey)
 
-  if (storedDate !== today) {
-    localStorage.removeItem(key)
-    localStorage.setItem(dateKey, today)
-  }
+  const countKey = key
+  let count = parseInt(localStorage.getItem(countKey)) || 0
 
-  const count = localStorage.getItem(key)
-  let value = count ? parseInt(count, 10) : 0
+  // cisla +1 vedle img
+  const span = el("span", count.toString(), {
+    padding: "2px 6px",
+    borderRadius: "6px",
 
-  const span = el("span", value.toString(), {
-    marginLeft: "8px",
-    marginTop: "4px"
+    fontSize: "1.1rem",
+    fontWeight: "bold",
+    color: "#333",
+    backgroundColor: "#f0f0f0",
+  }, {
+    className: "vote-count"
   })
 
-  button.addEventListener("click", () => {
-    value++
-    localStorage.setItem(key, value)
-    localStorage.setItem(dateKey, today)
-    span.textContent = value
+  // hlasovani zmenit jen na +1 denne - 1 img + skryt pocet hlasu pred hlasovanim 
+  imgElement.addEventListener("click", () => {
+    if (storedDate === today) {
+      console.log(`❌ V sekci "${section}" už bylo dnes hlasováno (${storedChoice})`);
+      return
+    }
+
+    count++
+    localStorage.setItem(countKey, count)
+    localStorage.setItem(voteDateKey, today)
+    localStorage.setItem(voteChoiceKey, key)
+
+    span.textContent = count.toString()
+    console.log(`✅ Přidáno 1 k ${key}`)
   })
 
-  // wrapper 
+  // Hover efekt - obousmerny 
+  imgElement.addEventListener("mouseover", () => {
+    imgElement.style.transform = "scale(1.05)"
+  })
+  imgElement.addEventListener("mouseout", () => {
+    imgElement.style.transform = "scale(1)"
+  })
+
+  // img + cisla
   const wrapper = el("div", null, {
     display: "flex",
-    flexDirection: "column",
     alignItems: "center",
-    color: "red",
-    gap: "2px"
+    gap: "6px",
   })
 
-  wrapper.append(button, span)
 
+  wrapper.append(span, imgElement)
   return wrapper
 }
-
