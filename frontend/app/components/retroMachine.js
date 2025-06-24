@@ -1,4 +1,5 @@
 import { fetchRetroMachine } from "../fetch/fetchRetroMachine.js";
+import { clearOldInteractions } from "../utils/update/updateInteraction.js";
 import { createInteractionButton } from "./interactions_users/interactionButton.js";
 import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
@@ -8,6 +9,8 @@ console.log("{retroMachine.js} 🧩 sekce se generuje...");
 
 export async function createRetroMachine() {
     console.log("{funkce createRetroMachine} ✅ funguje");
+
+
 
     const lang = getLanguage()
     const retroData = await fetchRetroMachine()
@@ -31,7 +34,7 @@ export async function createRetroMachine() {
       width: "40px",
       height: "auto",
       position: "absolute",
-      top: "-15px",
+      top: "-18px",
       right: "101px",
       opacity: ".8"
     }, {
@@ -67,53 +70,53 @@ export async function createRetroMachine() {
     title.appendChild(soundIcon)
   }
 
-  // interakcni tlacitka 
-  const feedbackWrapper = el("div", null, {
-    display: "flex",
-    gap: "40px",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    marginTop: "0px"
-  })
+  // interakcni tlacitka PREDELAT!!!!!
+  // const feedbackWrapper = el("div", null, {
+  //   display: "flex",
+  //   gap: "40px",
+  //   justifyContent: "center",
+  //   flexWrap: "wrap",
+  //   marginTop: "0px"
+  // })
 
-  // img bez position (zarovnani se resi ve wrapperu)
-  const likeIMG = el("img", null, {
-    width: "57px",
-    cursor: "pointer"
-  }, {
-    src: "../assets/icons/vedel-white.png",
-    title: lang === "cz" ? "Tohle si pamatuju!" : "I remember this!"
-  })
+  // // img bez position (zarovnani se resi ve wrapperu)
+  // const likeIMG = el("img", null, {
+  //   width: "57px",
+  //   cursor: "pointer"
+  // }, {
+  //   src: "../assets/icons/vedel-white.png",
+  //   title: lang === "cz" ? "Tohle si pamatuju!" : "I remember this!"
+  // })
 
-  const dislikeIMG = el("img", null, {
-    width: "57px",
-    cursor: "pointer"
-  }, {
-    src: "../assets/icons/nevedel-white.png",
-    title: lang === "cz" ? "Tohle jsem nezažil/a!" : "I didn’t experience this!"
-  })
+  // const dislikeIMG = el("img", null, {
+  //   width: "57px",
+  //   cursor: "pointer"
+  // }, {
+  //   src: "../assets/icons/nevedel-white.png",
+  //   title: lang === "cz" ? "Tohle jsem nezažil/a!" : "I didn’t experience this!"
+  // })
 
-  const like = createInteractionButton(
-    likeIMG,
-    "like",
-    lang === "cz" ? "Líbí se mi" : "I like it"
-  )
+  // const like = createInteractionButton(
+  //   likeIMG,
+  //   "like",
+  //   lang === "cz" ? "Líbí se mi" : "I like it"
+  // )
 
-  likeIMG.addEventListener("click", () => {
-    likeIMG.src = "./assets/icons/vedel-green.png" // např. zelený obrázek po kliknutí
-  })
+  // likeIMG.addEventListener("click", () => {
+  //   likeIMG.src = "../assets/icons/vedel-green.png" // např. zelený obrázek po kliknutí
+  // })
   
-  dislikeIMG.addEventListener("click", () => {
-    dislikeIMG.src = "./assets/icons/nevedel-green.png" // např. červený obrázek po kliknutí
-  })
+  // dislikeIMG.addEventListener("click", () => {
+  //   dislikeIMG.src = "../assets/icons/nevedel-green.png" // např. červený obrázek po kliknutí
+  // })
 
-  const dislike = createInteractionButton(
-    dislikeIMG,
-    "dislike",
-    lang === "cz" ? "Nelíbí se mi" : "I don't like it"
-  )
+  // const dislike = createInteractionButton(
+  //   dislikeIMG,
+  //   "dislike",
+  //   lang === "cz" ? "Nelíbí se mi" : "I don't like it"
+  // )
 
-  feedbackWrapper.append(dislike, like)
+  // feedbackWrapper.append(dislike, like)
 
 
   article.append(
@@ -121,8 +124,7 @@ export async function createRetroMachine() {
     retroWrapper,
     year,
     title,
-    nostalgiggle,
-    feedbackWrapper
+    nostalgiggle
   )
   return article
 }

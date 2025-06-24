@@ -24,18 +24,17 @@ export async function createProfile() {
 
   // nadpis
   const profileWrapper = el("div", null, {
-    position: "relative",
-    marginTop: "10px",
+    display: "flex",
+  alignItems: "center",
+  justifyContent: "center", // vycentruje jako v ostatních sekcích
+  gap: "5px",               // mezera mezi ikonou a textem
+  marginTop: "-9px",
   })
 
   const instaIcon = el("img", null, {
     width: "40px",
-    height: "auto",
-    position: "absolute",
-    top: "-11px",
-    left: "91px",
-    opacity: ".8"
-    
+  height: "auto",
+  opacity: ".8"  
   }, {
     src: "../assets/icons/insta.svg"
   })

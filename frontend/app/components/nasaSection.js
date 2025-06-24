@@ -33,6 +33,7 @@ export async function createNasaSection() {
 
     const nasaTitle = el("h2", null)
     const title = document.createTextNode("Astronomy Picture of the Day by ")
+    
     const link = el("a", "NASA", {
         color: "#3b77d0",
         fontWeight: "bold"
