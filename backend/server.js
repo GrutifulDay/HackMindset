@@ -17,6 +17,7 @@ import nasaRoutes from "./routes/nasaRoutes.js"
 import storyRoutes from "./routes/storyRoutes.js"
 import retroRoutes from "./routes/retroRoutes.js"
 import profileRoutes from "./routes/profileRoutes.js"
+import digitalRoutes from "./routes/digitalRoutes.js"
 
 // import ipRoutes from "./routes/ipRoutes.js"
 // import testDB from "./routes/test-db.js"
@@ -79,6 +80,7 @@ app.use("/api", nasaRoutes)
 app.use("/api", storyRoutes)
 app.use("/api", retroRoutes)
 app.use("/api", profileRoutes)
+app.use("/api",digitalRoutes)
 
 // app.use("/api", ipRoutes)
 // app.use("/api", testDB)
