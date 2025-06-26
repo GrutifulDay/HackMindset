@@ -23,6 +23,10 @@ backend
 14. ✅ validace - jen pro bloknute Ip adresy - fce pro sifrovani a odsifrovani (kdyz by se nekdo dodstal do db)
 15. ✅ Discord - ted je POST - zabezpeceni
 16. honeypoint
+17. test pro rateLimit !!!
+18. controller pro digital sekci 
+
+
 
 frontend
 1. ✅ zkratit funkce 
@@ -38,22 +42,29 @@ frontend
 11. ✅ updateNasa.js > nastavit na datum (ted je cas) - neni potreba
 12. ✅ update > ostatni fce kvuli nacitani - dle datumu 
 13. nastavit content.js jen pro profily aby se zobrazovali + background
-14. omezit like na 1 kliknuti 
-15. ulozit like / dislike do db k pribehu 
-16. pridat img / svg pod story a retro 
-17. ✅ preklad pro chces vedet vic + display none pro translatorIcon 
-18. tool tip ?? 
+15. ✅ pridat img / svg pod story a retro 
+16. ✅ preklad pro chces vedet vic + display none pro translatorIcon 
+17. tool tip ?? 
+18. cache - jazyk + like = pro vsehcny funkce vc jazyka 
+19. predelat interakce - ukladani, fetch, +1 vc omezeni na jeden klik, vymaz, img upravit 
+20. github pridat link na profil 
+21. animace gsap tooltipy, kliky na img + icons 
+22. animace mezi prepinani jazyku !!!
+23. digital sekce - rozmyslet zda bude videt cely tyden do obnoveni, nebo bude skryty 
+24. pridat text ohledne AI + nepravda
+
 
 db
 1. nahrat data pro fetch 
 
-
 ostatni
 1. testovani
 2. bezpecnost 
-3. readme - napsat
+3. readme
 4. upravit manifest.json 
 5. vymazat console.log
+6. texty v tabulkach 
+7. nasadit na server
 
 = poslat frontend google, zverejnit 
 
