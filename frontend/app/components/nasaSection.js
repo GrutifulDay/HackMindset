@@ -40,7 +40,8 @@ export async function createNasaSection() {
     }, {
         href: "https://www.nasa.gov",
         target: "_blank",
-        className: "nasa-link"
+        className: "nasa-link",
+        rel: "noopener noreferrer"
     })
 
     nasaTitle.append(title, link)
@@ -101,13 +102,13 @@ export async function createNasaSection() {
     }, {
         href: "https://apod.nasa.gov/apod/astropix.html",
         target: "_blank",
-        className: "nasa-url"
+        className: "nasa-url",
+        rel: "noopener noreferrer"
     })
 
     const moreIcon = el("img", null, {
         width: "12px",
-        height: "auto",
-        
+        height: "auto",   
     }, {
         src: "../assets/icons/more.svg"
     })

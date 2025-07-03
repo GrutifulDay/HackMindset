@@ -8,6 +8,6 @@ export const API = {
   digitalSignpost: `${BASE_URL}/digitalSignpost`
 }
 
-export const DEV_MODE = true // true / false 
+export const DEV_MODE = false // true / false 
 
 // chrome.storage.local.clear() do konzole pro vymaz 

@@ -34,7 +34,8 @@ export async function createProfile() {
   const instaIcon = el("img", null, {
     width: "40px",
   height: "auto",
-  opacity: ".8"  
+  opacity: ".8",
+
   }, {
     src: "../assets/icons/insta.svg"
   })
@@ -54,6 +55,7 @@ export async function createProfile() {
 
     const li = el("li", null, {
       alignItems: "center",
+      display: "flex"
   })
 
   const span = el("span", tag, {});
@@ -64,6 +66,8 @@ export async function createProfile() {
     border: "none",
     padding: "4px",
     background: "transparent",
+
+
   }, {
     title: lang === "cz" ? "Zkopíruj" : "Copy"
   })
@@ -71,7 +75,7 @@ export async function createProfile() {
   const copy = el("img", null, {
     width: "20px",
     height: "20px",
-    pointerEvents: "none"
+    pointerEvents: "none",
   }, {
     src: "../assets/icons/copy.svg", 
   })

@@ -14,6 +14,6 @@ export function createTranslationIcon() {
     opacity: ".8",
   }, {
     src: "../assets/icons/infoTranslation.svg",
-    title: lang === "cz" ? "O překladu" : "About Translation"
-  });
+    title: lang === "cz" ? "O překladu" : "About Translation",
+  })
 }

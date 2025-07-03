@@ -73,17 +73,25 @@ export function createAboutExtension() {
 
     const footer = el("footer", null, {})
 
+    const gitHubLink = el("a", null, {
+        display: "inline-block"
+    }, {
+        href: "https://github.com/GrutifulDay/HackMindset.git",
+        target: "_blank",
+        rel: "noopener noreferrer"
+    })
+
     const gitHubIcon = el("img", null, {
         width: "40px",
         height: "auto",
         cursor: "pointer"
     }, {
         src: "../assets/icons/github.svg",
-        title: "GitHub"
+        title: "GitHub",
     })
 
-
-    footer.append(gitHubIcon)
+    gitHubLink.append(gitHubIcon)
+    footer.append(gitHubLink)
     container.append(closeBtn, footer, title, line1, line2)
     return container
 }
