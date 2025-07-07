@@ -1,5 +1,5 @@
 /* linerani gradient cara pod logem */
-#hack-title::after {
+.hack-title::after {
     content: "";
     display: block;
     height: 2px;

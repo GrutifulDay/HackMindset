@@ -1,5 +1,13 @@
 console.log("⏱️ BACKGROUND běží správně!")
 
+// ulozeni a vyber jazyka po instalaci rozsireni 
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "install") {
+    chrome.storage.local.set({ onboardingCompleted: false }) // ulozeno do localStorage 
+  }
+})
+
+
 // ✅ Posílá zprávu do content.js po načtení stránky s Instagramem
 // chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 //   if (

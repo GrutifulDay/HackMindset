@@ -29,11 +29,11 @@ export async function createHackMindset() {
     })
 
     const hackTitle = el("h1", "hack", {}, {
-        id: "hack-title"
+        class: "hack-title"
     })
 
     const mindsetTitle = el("h1", "mindset", {}, {
-        id: "hack-title"
+        class: "hack-title"
     })
   
     const bulbIcon = el("img", null, {

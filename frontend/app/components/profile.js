@@ -4,6 +4,8 @@ import { fetchProfile } from "../fetch/fetchProfile.js";
 
 console.log("{profile.js} 🧩 sekce se generuje...");
 
+
+
 export async function createProfile() {
   console.log("{funkce createProfile} ✅ funguje");
 
