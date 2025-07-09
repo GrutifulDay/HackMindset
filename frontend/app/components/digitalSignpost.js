@@ -2,7 +2,7 @@ import { el, createFadeLine, attachInfoToggle } from "../utils/dom/uiSnippets.js
 import { getLanguage } from "../utils/language/language.js";
 import { fetchDigitalSignpost } from "../fetch/fetchDigitalSignpost.js"
 import { createWarningIcon } from "./icons_import/warningIcon.js";
-import { createWarningInfoWindow } from "./info_icons/warningInfo.js";
+import { createUntruthVotingWindow } from "./info_icons/warningInfo.js";
 
 console.log("{digitalSignpost.js} 🧩 sekce se generuje...");
 
@@ -13,7 +13,7 @@ export async function createDigitalSignpost() {
     const digitalSignpost = await fetchDigitalSignpost()
 
     const warningIcon = createWarningIcon()
-    const warningInfoWindow = createWarningInfoWindow()
+    const untruthVotingWindow = createUntruthVotingWindow()
 
     const article = el("article", null, {})
 
@@ -52,9 +52,9 @@ export async function createDigitalSignpost() {
 
     const recommendation = el("p", digitalSignpost.recommendation?. [lang] ||"", {})
 
-    warningIcon.addEventListener("click", () => warningInfoWindow.show())
+    warningIcon.addEventListener("click", () => untruthVotingWindow.show())
 
-    document.body.append(warningInfoWindow)
+    document.body.append(untruthVotingWindow)
 
     article.append(
         createFadeLine(),

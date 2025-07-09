@@ -1,5 +1,5 @@
 import { el, createFadeLine, attachInfoToggle } from "../utils/dom/uiSnippets.js";
-import { createTranslationInfo } from "./info_icons/translationInfo.js";
+import { createTranslationInfoWindow } from "./info_icons/translationInfo.js";
 import { createTranslationIcon } from "./icons_import/aboutTranslation.js";
 import { getLanguage } from "../utils/language/language.js";
 import { fetchNasaImage } from "../fetch/fetchNasa.js";
@@ -66,7 +66,7 @@ export async function createNasaSection() {
 
     // ikona info o prekladu
     const translationIcon = createTranslationIcon()
-    const translationInfoIcon = createTranslationInfo()
+    const translationInfoIcon = createTranslationInfoWindow()
 
     // klik na ikonu 
     attachInfoToggle(translationIcon, translationInfoIcon, () => translationInfoIcon.show());

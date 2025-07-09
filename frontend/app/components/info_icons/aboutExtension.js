@@ -2,7 +2,7 @@ import { el } from "../../utils/dom/uiSnippets.js";
 import { getLanguage } from "../../utils/language/language.js";
 
 // VISUAL - "O ROZSIRENI" - okno - CZ / EN
-export function createAboutExtension() {
+export function createAboutExtensionWindow() {
     const lang = getLanguage()
     
     const texts = {

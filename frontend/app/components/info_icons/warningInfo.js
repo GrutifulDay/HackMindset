@@ -1,7 +1,7 @@
 import { el } from "../../utils/dom/uiSnippets.js";
 import { getLanguage } from "../../utils/language/language.js";
 
-export function createWarningInfoWindow() {
+export function createUntruthVotingWindow() {
     const lang = getLanguage()
 
     const container = el("div", null, {
@@ -64,7 +64,7 @@ export function createWarningInfoWindow() {
         }
     )
 
-    // DOPLNIT text 
+    // DOPLNIT text
     const listItems = [
         lang === "cz" ? "9. 7. 2025" : "July 9, 2025",
         lang === "cz" ? "Špatná informace" : "Incorrect info",

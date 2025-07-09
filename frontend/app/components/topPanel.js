@@ -1,7 +1,7 @@
 import { el } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
 
-import { createAboutExtension } from "./info_icons/aboutExtension.js";
+import { createAboutExtensionWindow } from "./info_icons/aboutExtension.js";
 import { createLanguageSwitcher } from "./info_icons/languageSwitcher.js";
 import { createInfoIcon } from "./icons_import/infoIcon.js";
 
@@ -36,7 +36,7 @@ export async function createTopPanel() {
   // infoIcon.style.right = "10px";
 
   const infoIcon = createInfoIcon()
-  const aboutExtension = createAboutExtension()
+  const aboutExtension = createAboutExtensionWindow()
 
   // klik na ikonu 
   attachInfoToggle(infoIcon, aboutExtension, () => aboutExtension.show())

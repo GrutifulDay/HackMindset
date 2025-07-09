@@ -1,7 +1,7 @@
 import { el } from "../../utils/dom/uiSnippets.js";
 
 // VISUAL - "INFO O PREKLADU" - okno / pouze pri CZ vyberu
-export function createTranslationInfo() {
+export function createTranslationInfoWindow() {
     const container = el("div", null, {
         position: "absolute",
         bottom: "122px",
@@ -25,16 +25,16 @@ export function createTranslationInfo() {
         fontSize: "20px",
         fontWeight: "bold",
         color: "#333"
-    });
+    })
 
     // fce click zavreni mimo element container
     function closeContainer() {
         container.style.display = "none";
-        document.removeEventListener("click", handleOutsideClick);
+        document.removeEventListener("click", handleOutsideClick)
     }
 
     // zavreni klik na X
-    closeBtn.addEventListener("click", closeContainer);
+    closeBtn.addEventListener("click", closeContainer)
 
     // Zavření kliknutím mimo container
     function handleOutsideClick(e) {
