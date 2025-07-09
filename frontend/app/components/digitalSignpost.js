@@ -1,6 +1,8 @@
-import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
+import { el, createFadeLine, attachInfoToggle } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
 import { fetchDigitalSignpost } from "../fetch/fetchDigitalSignpost.js"
+import { createWarningIcon } from "./icons_import/warningIcon.js";
+import { createWarningInfoWindow } from "./info_icons/warningInfo.js";
 
 console.log("{digitalSignpost.js} 🧩 sekce se generuje...");
 
@@ -9,6 +11,9 @@ export async function createDigitalSignpost() {
 
     const lang = getLanguage()
     const digitalSignpost = await fetchDigitalSignpost()
+
+    const warningIcon = createWarningIcon()
+    const warningInfoWindow = createWarningInfoWindow()
 
     const article = el("article", null, {})
 
@@ -47,6 +52,18 @@ export async function createDigitalSignpost() {
 
     const recommendation = el("p", digitalSignpost.recommendation?. [lang] ||"", {})
 
-    article.append(createFadeLine(), digitalWrapper,infoTime, title, content, recommendation)
+    warningIcon.addEventListener("click", () => warningInfoWindow.show())
+
+    document.body.append(warningInfoWindow)
+
+    article.append(
+        createFadeLine(),
+        digitalWrapper,
+        infoTime,
+        title,
+        content,
+        warningIcon,
+        recommendation
+    )
     return article
 }
