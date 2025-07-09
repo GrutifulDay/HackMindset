@@ -67,6 +67,7 @@ app.use(
 ) // Ochrana HTTP hlaviček
 
 
+
 // Nasazeni middlewares
 app.use(ipBlacklist)
 app.use(speedLimiter)
@@ -74,6 +75,7 @@ app.use(limiterApi)
 app.use(botProtection)
 app.use(corsOptions)
 
+app.use(express.json())
 
 // ✅ Načtení NASA router
 app.use("/api", nasaRoutes)

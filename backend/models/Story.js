@@ -13,9 +13,8 @@ const storySchema = new mongoose.Schema({
     cz: String,
     en: String
   },
-  emoji: String,
-  like: String,
-  dislike: String
+  like: { type: Number, default: 0 },
+  dislike: { type: Number, default: 0 },
 })
 
 export default frontendConnection.model("story", storySchema)
