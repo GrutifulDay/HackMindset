@@ -7,7 +7,7 @@ import { addToBlacklist } from "./ipBlacklist.js"
 
 const limiterApi = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 min - pozdeji zmenit
-    max: 20, // max X pozadavku
+    max: 100, // max X pozadavku
     standardHeaders: true,
     legacyHeaders: false, // nepouziva zastarale hlavicky 
     handler: async (req, res) => {
