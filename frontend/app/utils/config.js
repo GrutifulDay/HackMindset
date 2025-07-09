@@ -5,9 +5,13 @@ export const API = {
   profile: `${BASE_URL}/profile`,
   retroMachine: `${BASE_URL}/retro-machine`,
   storyOfTheDay: `${BASE_URL}/story-of-the-day`,
-  digitalSignpost: `${BASE_URL}/digitalSignpost`
+  digitalSignpost: `${BASE_URL}/digitalSignpost`,
+  retroVotesGet: `${BASE_URL}/retro-machine/retroVotesGet`,
+  retroVotesPost: `${BASE_URL}/retro-machine/retroVotesPost`,
+  storyVotesGet: `${BASE_URL}/story-of-the-day/storyVotesGet`,
+  storyVotesPost: `${BASE_URL}/story-of-the-day/storyVotesPost`,
 }
 
-export const DEV_MODE = false // true / false 
+export const DEV_MODE = true // true / false 
 
 // chrome.storage.local.clear() do konzole pro vymaz 

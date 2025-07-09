@@ -14,8 +14,8 @@ const retroSchema = new mongoose.Schema({
         cz: String,
         en: String
     },
-    like: String,
-    dislike: String,
+    like: { type: Number, default: 0 },
+    dislike: { type: Number, default: 0 },
 })
 
 export default frontendConnection.model("retro", retroSchema)
