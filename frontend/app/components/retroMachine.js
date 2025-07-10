@@ -4,6 +4,10 @@ import { createVotingReportUsers } from "./interactions_users/votingReport.js";
 import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
 import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
+
+import { createUntruthIcon } from "./icons_import/untruthIcon.js";
+import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js";
+
 import { createModemSound } from "./sound_section/modem.js";
 
 
@@ -18,7 +22,7 @@ export async function createRetroMachine() {
   let retroData = getCachedData(CACHE_KEY)
 
   if (retroData) {
-    console.log("[story] ⏳ Data jsou aktuální – čtu z cache.")
+    console.log("[retro] ⏳ Data jsou aktuální – čtu z cache.")
   } else {
     console.log("🌐 Načítám nová data ze serveru");
     retroData = await fetchRetroMachine()
@@ -30,7 +34,9 @@ export async function createRetroMachine() {
     return
   }
 
-  const article = el("article")
+  const article = el("article", null, {
+    position: "relative"
+  })
 
   const retroMachineTitle = el("h2", "Retro Machine")
   const retroWrapper = el("div", null, {
@@ -66,7 +72,7 @@ export async function createRetroMachine() {
     flexWrap: "wrap",
     marginTop: "0px"
   })
-
+  
   const rememberIMG = el("img", null, {
     width: "56px",
     cursor: "pointer"
@@ -75,7 +81,7 @@ export async function createRetroMachine() {
     title: lang === "cz" ? "Tohle si pamatuju!" : "I remember this!",
     class: "vote-img"
   })
-
+  
   const notExperienceIMG = el("img", null, {
     width: "57px",
     cursor: "pointer"
@@ -84,79 +90,118 @@ export async function createRetroMachine() {
     title: lang === "cz" ? "Tohle jsem nezažil/a!" : "I didn’t experience this!",
     class: "vote-img"
   })
-
+  
   const rememberCount = el("span", "", {
-    display: "none"
+    display: "none",
   }, {
     className: "vote-count"
   })
-
+  
   const notExperienceCount = el("span", "", {
     display: "none"
   }, {
     className: "vote-count"
   })
-
+  
   // fce hlasovani 
   function createVoteElement(imgElement, countSpan) {
+    // Wrapper pro img i cislo
+    const imageWrapper = el("div", null, {
+      position: "relative",
+      height: "100px", 
+      width: "80px",
+      display: "flex",
+      alignItems: "flex-end", 
+      justifyContent: "center",
+      paddingTop: "26px" 
+    })
+  
+    // Obrazek 
+    imgElement.style.height = "74px";
+    imgElement.style.objectFit = "contain";
+  
+    // cislo nad img 
+    Object.assign(countSpan.style, {
+      position: "absolute",
+      fontFamily: "monospace",
+      top: "0px",
+      left: "50%",
+      transform: "translateX(-50%)",
+      fontSize: "14px",
+      fontWeight: "bold",
+      padding: "2px 8px",
+      borderRadius: "6px",
+      backgroundColor: "#ffffff",
+      color: "#000",
+      lineHeight: "20px",
+      minWidth: "32px", 
+      textAlign: "center",
+      boxShadow: "0 1px 4px rgba(0,0,0,0.1)"
+    })
+  
+    imageWrapper.append(imgElement, countSpan)
+  
+    // Celý hlasovací blok
     const wrapper = el("div", null, {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      gap: "4px"
+      justifyContent: "flex-start",
+      width: "80px",
+      height: "130px" 
     })
-    wrapper.append(imgElement, countSpan)
+  
+    wrapper.append(imageWrapper)
     return wrapper
   }
-
+  
   // pridani fce k wrapper
   const rememberWrapper = createVoteElement(rememberIMG, rememberCount) 
   const notExperienceWrapper = createVoteElement(notExperienceIMG, notExperienceCount)
   feedbackWrapper.append(notExperienceWrapper, rememberWrapper)
-
-  const todayKey = retroData.date 
-  console.log("🧪 todayKey:", todayKey)
-
-
-  // Nacteni hlasu z DB
-  const voteCounts = await fetchGetVoteRetro(todayKey)
   
   // Kontrola, zda uzivatel jz hlasoval
-  const votedToday = localStorage.getItem("retroVotedToday")
-
+  const todayKey = retroData.date 
+  const localStorageKey = `retroVotedToday_${todayKey}` 
+  console.log("🧪 todayKey:", todayKey)
+  
+  const voteCounts = await fetchGetVoteRetro(todayKey)
+  const votedToday = localStorage.getItem(localStorageKey)
+  
+  
   // zablokuje hlasovani, ukaze barevny img 
   if (votedToday) {
     rememberIMG.style.pointerEvents = "none"
     notExperienceIMG.style.pointerEvents = "none"
-
+  
     rememberIMG.style.opacity = votedToday === "like" ? "1" : "0.4"
     notExperienceIMG.style.opacity = votedToday === "dislike" ? "1" : "0.4"
-
+  
     if (votedToday === "like") {
     rememberIMG.src = "../assets/icons/zazil-green.png"
   } else {
     notExperienceIMG.src = "../assets/icons/nezazil-green.png"
   }
-
+  
   rememberCount.textContent = voteCounts.like
   notExperienceCount.textContent = voteCounts.dislike
   rememberCount.style.display = "inline"
   notExperienceCount.style.display = "inline"
   }
-
-  // zablokuj hlasovani, zobraz barevny/vybranny img a aktualyzovane pocty z db 
+  
+  // zablokuj hlasovani, zobraz barevny/vybranny img a aktual. pocty z db 
   async function handleVote(option) {
     const updated = await fetchPostVoteRetro(todayKey, option)
     if (!updated) return
-
+  
     rememberCount.textContent = updated.like
     notExperienceCount.textContent = updated.dislike
     rememberCount.style.display = "inline"
     notExperienceCount.style.display = "inline"
-
+  
     rememberIMG.style.pointerEvents = "none"
     notExperienceIMG.style.pointerEvents = "none"
-
+  
     if (option === "like") {
       rememberIMG.src = "../assets/icons/zazil-green.png"
       rememberIMG.style.opacity = "1"
@@ -166,30 +211,56 @@ export async function createRetroMachine() {
       notExperienceIMG.style.opacity = "1"
       rememberIMG.style.opacity = "0.4"
     }
-
-    localStorage.setItem("retroVotedToday", option)
-
+  
+    localStorage.setItem(localStorageKey, option)
+  
     createVotingReportUsers(lang === "cz" ? "Děkujeme, ze hlasujete každý den 💚" : "Thank you for voting every day 💚")
   }
+  
+    // Event listenery
+    rememberIMG.addEventListener("click", () => {
+      handleVote("like")
+    })
+  
+    notExperienceIMG.addEventListener("click", () => {
+      handleVote("dislike")
+    })
+  
+    // OZNACENI CHYBNE INFORMACE 
+    const untruthIcon = createUntruthIcon()
+    const untruthVotingWindow = createUntruthVotingWindow()
+    document.body.append(untruthVotingWindow)
+  
+    const untruthWrapper = el("div", null, {
+      position: "absolute",
+      top: "8px",
+      left: "0px",
+      zIndex: "10",
+      backgroundColor: "pink"
+    })
+  
+    untruthIcon.addEventListener("click", () => untruthVotingWindow.show(untruthIcon))
+  
+    // zvyrazneni hoover
+    untruthWrapper.addEventListener("mouseenter", () => {
+      untruthWrapper.style.opacity = "1"
+    })
+    untruthWrapper.addEventListener("mouseleave", () => {
+      untruthWrapper.style.opacity = "0.6"
+    })
+    console.log("🧪 untruthIcon:", untruthIcon);
+  
+    untruthWrapper.append(untruthIcon)
 
-  // Event listenery
-  rememberIMG.addEventListener("click", () => {
-    handleVote("like")
-  })
 
-  notExperienceIMG.addEventListener("click", () => {
-    handleVote("dislike")
-  })
-
-
-
-  article.append(
-    createFadeLine(),
-    retroWrapper,
-    year,
-    title,
-    nostalgiggle,
-    feedbackWrapper
+    article.append(
+      createFadeLine(),
+      untruthWrapper,
+      retroWrapper,
+      year,
+      title,
+      nostalgiggle,
+      feedbackWrapper
   )
   return article
 }

@@ -7,18 +7,18 @@ console.log("{updateInteractions.js} 🧹 připraven na úklid")
  */
 
 export function clearOldInteractions(keys = []) {
-    const today = new Date().toISOString().slice(0, 10); // "2025-05-01"
+    const today = new Date().toISOString().slice(0, 10) // "2025-05-01"
   
     keys.forEach((key) => {
-      const dateKey = `${key}_date`;
-      const storedDate = localStorage.getItem(dateKey);
+      const dateKey = `${key}_date`
+      const storedDate = localStorage.getItem(dateKey)
   
       if (storedDate !== today) {
         console.log(`🧹 Mazu hodnoty pro ${key}, ulozene: ${storedDate}`)
         localStorage.removeItem(key);
-        localStorage.setItem(dateKey, today);
+        localStorage.setItem(dateKey, today)
       }
-    });
+    })
 }
 
 console.log("{clearOldInteractions.js} 🧹 připraven na testování")

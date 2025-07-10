@@ -12,5 +12,7 @@ export function createVotingReportUsers(text) {
     }, 2500)
 }
 
+// pridat diky za odeslani chyb 
+
   
   

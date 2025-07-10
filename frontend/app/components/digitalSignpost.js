@@ -1,8 +1,8 @@
 import { el, createFadeLine, attachInfoToggle } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
 import { fetchDigitalSignpost } from "../fetch/fetchDigitalSignpost.js"
-import { createWarningIcon } from "./icons_import/warningIcon.js";
-import { createUntruthVotingWindow } from "./info_icons/warningInfo.js";
+import { createUntruthIcon } from "./icons_import/untruthIcon.js";
+import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js";
 
 console.log("{digitalSignpost.js} 🧩 sekce se generuje...");
 
@@ -12,10 +12,9 @@ export async function createDigitalSignpost() {
     const lang = getLanguage()
     const digitalSignpost = await fetchDigitalSignpost()
 
-    const warningIcon = createWarningIcon()
-    const untruthVotingWindow = createUntruthVotingWindow()
-
-    const article = el("article", null, {})
+    const article = el("article", null, {
+        position: "relative"
+    })
 
     const digitalWrapper = el("div", null, {
         display: "flex",
@@ -52,17 +51,39 @@ export async function createDigitalSignpost() {
 
     const recommendation = el("p", digitalSignpost.recommendation?. [lang] ||"", {})
 
-    warningIcon.addEventListener("click", () => untruthVotingWindow.show())
-
+    // OZNACENI CHYBNE INFORMACE 
+    const untruthIcon = createUntruthIcon()
+    const untruthVotingWindow = createUntruthVotingWindow()
     document.body.append(untruthVotingWindow)
+
+    const untruthWrapper = el("div", null, {
+        position: "absolute",
+        top: "8px",
+        left: "0px",
+        zIndex: "10",
+        backgroundColor: "pink"
+    })
+
+    untruthIcon.addEventListener("click", () => untruthVotingWindow.show(untruthIcon))
+
+    // zvyrazneni 
+    untruthWrapper.addEventListener("mouseenter", () => {
+        untruthWrapper.style.opacity = "1"
+    })
+      untruthWrapper.addEventListener("mouseleave", () => {
+        untruthWrapper.style.opacity = "0.6"
+    })
+      
+
+    untruthWrapper.append(untruthIcon)
 
     article.append(
         createFadeLine(),
+        untruthWrapper,
         digitalWrapper,
         infoTime,
         title,
         content,
-        warningIcon,
         recommendation
     )
     return article

@@ -3,6 +3,10 @@ import { fetchGetVoteStory, fetchPostVoteStory } from "../fetch/fetchStoryVotes.
 import { createVotingReportUsers } from "./interactions_users/votingReport.js";
 import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
+
+import { createUntruthIcon } from "./icons_import/untruthIcon.js";
+import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js";
+
 import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
 
 console.log("{storyOfTheDay.js} 🧩 sekce se generuje...");
@@ -30,7 +34,9 @@ export async function createStoryOfTheDay() {
     return
   }
 
-  const article = el("article", null, {});
+  const article = el("article", null, {
+    position: "relative"
+  });
 
   const storyOfTheDayTitle = el("h2", "Story of The Day", {})
   const storyWrapper = el("div", null, {
@@ -87,10 +93,11 @@ const notExperienceIMG = el("img", null, {
 })
 
 const rememberCount = el("span", "", {
-  display: "none"
+  display: "none",
 }, {
   className: "vote-count"
 })
+
 
 const notExperienceCount = el("span", "", {
   display: "none"
@@ -100,15 +107,59 @@ const notExperienceCount = el("span", "", {
 
 // fce hlasovani 
 function createVoteElement(imgElement, countSpan) {
+  // Wrapper pro img + cislo
+  const imageWrapper = el("div", null, {
+    position: "relative",
+    height: "100px", 
+    width: "80px",
+    display: "flex",
+    alignItems: "flex-end", 
+    justifyContent: "center",
+    paddingTop: "26px" 
+  })
+
+  // img
+  imgElement.style.height = "74px"
+  imgElement.style.objectFit = "contain"
+
+  // cislo nad img
+  Object.assign(countSpan.style, {
+    position: "absolute",
+    fontFamily: "monospace",
+    top: "0px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    fontSize: "14px",
+    fontWeight: "bold",
+    padding: "2px 8px",
+    borderRadius: "6px",
+    backgroundColor: "#ffffff",
+    color: "#000",
+    lineHeight: "20px",
+    minWidth: "32px", 
+    textAlign: "center",
+    boxShadow: "0 1px 4px rgba(0,0,0,0.1)"
+  })
+
+  imageWrapper.append(imgElement, countSpan)
+
+  // cely hlasovaci blok 
   const wrapper = el("div", null, {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: "4px"
+    justifyContent: "flex-start",
+    width: "80px",
+    height: "130px" 
   })
-  wrapper.append(imgElement, countSpan)
+
+  wrapper.append(imageWrapper)
   return wrapper
 }
+
+
+
+
 
 // pridani fce k wrapper
 const rememberWrapper = createVoteElement(rememberIMG, rememberCount) 
@@ -180,8 +231,36 @@ rememberIMG.addEventListener("click", () => {
 notExperienceIMG.addEventListener("click", () => {
   handleVote("dislike")
 })
+
+// OZNACENI CHYBNE INFORMACE 
+const untruthIcon = createUntruthIcon()
+const untruthVotingWindow = createUntruthVotingWindow()
+document.body.append(untruthVotingWindow)
+
+const untruthWrapper = el("div", null, {
+  position: "absolute",
+  top: "8px",
+  right: "23px", 
+  zIndex: "10",
+  backgroundColor: "pink"
+
+})
+
+untruthIcon.addEventListener("click", () => untruthVotingWindow.show(untruthIcon))
+
+// zvyrazneni 
+untruthWrapper.addEventListener("mouseenter", () => {
+    untruthWrapper.style.opacity = "1"
+})
+  untruthWrapper.addEventListener("mouseleave", () => {
+    untruthWrapper.style.opacity = "0.6"
+})
+
+untruthWrapper.append(untruthIcon)
   
-  article.append(createFadeLine(), 
+  article.append(
+    createFadeLine(), 
+    untruthWrapper,
     storyWrapper,
     today, 
     title, 

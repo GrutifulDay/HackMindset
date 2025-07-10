@@ -6,17 +6,15 @@ export function createUntruthVotingWindow() {
 
     const container = el("div", null, {
         position: "absolute",
-        bottom: "122px",
-        right: "28px",
         padding: "15px",
         zIndex: "1000",
         maxWidth: "300px",
         display: "none",
         backgroundColor: "#f7f3ff",
         borderRadius: "10px",
-        boxShadow: "0 4px 10px rgba(0,0,0,0.2)", 
+        boxShadow: "0 4px 10px rgba(0,0,0,0.2)"
     })
-
+    
     const closeBtn = el("span", "×", {
         position: "absolute",
         top: "5px",
@@ -41,17 +39,44 @@ export function createUntruthVotingWindow() {
 
     closeBtn.addEventListener("click", closeContainer)
 
-    container.show = function () {
-        container.style.display = "block";
+    container.show = function (referenceElement) {
+        const rect = referenceElement.getBoundingClientRect()
+        container.style.display = "block" // musi byt viditelna, jinak offsetWidth/Height nebude fungovat
+    
+        const top = window.scrollY + rect.top - container.offsetHeight - 5
+
+// zjisti stred obrazovky
+    const screenCenter = window.innerWidth / 2
+
+    let left
+
+    if (rect.left < screenCenter) {
+    // ikona je vlevo → zobraz popup zprava od ikony
+        left = window.scrollX + rect.right + 5
+    } else {
+        // ikona je vpravo → zobraz popup zleva od ikony
+        left = window.scrollX + rect.left - container.offsetWidth - 5
+    }
+
+        container.style.top = `${top}px`
+        container.style.left = `${left}px`
+
         setTimeout(() => {
             document.addEventListener("click", handleOutsideClick)
         }, 0)
-    }
+    }   
 
     // texty 
     const title = el("strong", lang === "cz"
         ? "Chceš něco označit jako nepravda?"
-        : "Do you want to label something as untrue?"
+        : "Do you want to label something as untrue?",
+        {
+            display: "block",      
+            marginTop: "14px",   
+            fontSize: "13px",
+            color: "#000",
+            textTransform: "uppercase"
+        }
     )
 
     const message = el("p", lang === "cz"
@@ -84,7 +109,6 @@ export function createUntruthVotingWindow() {
         const icon = el("img", null, {
             width: "20px",
             height: "20px",
-            cursor: "pointer"
         }, {
             src: "../assets/icons/mark-off.svg",
             alt: "select icon"
