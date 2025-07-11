@@ -17,7 +17,12 @@ const digitalSchema = new mongoose.Schema ({
     recommendation: {
         cz: String,
         en: String
-    }
+    },
+    untruthVotes: {
+        type: Map,
+        of: Number,
+        default: {}
+      }
 })
 
 export default frontendConnection.model("digital", digitalSchema)

@@ -157,10 +157,6 @@ function createVoteElement(imgElement, countSpan) {
   return wrapper
 }
 
-
-
-
-
 // pridani fce k wrapper
 const rememberWrapper = createVoteElement(rememberIMG, rememberCount) 
 const notExperienceWrapper = createVoteElement(notExperienceIMG, notExperienceCount)
@@ -237,6 +233,8 @@ const untruthIcon = createUntruthIcon()
 const untruthVotingWindow = createUntruthVotingWindow()
 document.body.append(untruthVotingWindow)
 
+untruthIcon.dataset.section = "story"
+
 const untruthWrapper = el("div", null, {
   position: "absolute",
   top: "8px",
@@ -246,8 +244,12 @@ const untruthWrapper = el("div", null, {
 
 })
 
-untruthIcon.addEventListener("click", () => untruthVotingWindow.show(untruthIcon))
-
+untruthIcon.addEventListener("click", () => {
+  untruthVotingWindow.show(untruthIcon, {
+    section: "story",
+    date: storyData.date
+  })
+})
 // zvyrazneni 
 untruthWrapper.addEventListener("mouseenter", () => {
     untruthWrapper.style.opacity = "1"

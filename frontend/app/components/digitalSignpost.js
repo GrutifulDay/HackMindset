@@ -3,6 +3,7 @@ import { getLanguage } from "../utils/language/language.js";
 import { fetchDigitalSignpost } from "../fetch/fetchDigitalSignpost.js"
 import { createUntruthIcon } from "./icons_import/untruthIcon.js";
 import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js";
+import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
 
 console.log("{digitalSignpost.js} 🧩 sekce se generuje...");
 
@@ -10,7 +11,22 @@ export async function createDigitalSignpost() {
     console.log("{funkce createDigitalSignpost} ✅ funguje");
 
     const lang = getLanguage()
-    const digitalSignpost = await fetchDigitalSignpost()
+    const CACHE_KEY = `digital_cache_${lang}`
+
+    let digitalData = getCachedData(CACHE_KEY)
+
+    if (digitalData) {
+        console.log("[retro] ⏳ Data jsou aktuální – čtu z cache.")
+      } else {
+        console.log("🌐 Načítám nová data ze serveru")
+        digitalData = await fetchDigitalSignpost()  // ✅ už funguje
+        if (digitalData) setCachedData(CACHE_KEY, digitalData)
+      }
+    
+      if (!digitalData) {
+        console.warn("⚠️ Žádný příběh nenalezen.");
+        return
+      }
 
     const article = el("article", null, {
         position: "relative"
@@ -45,16 +61,19 @@ export async function createDigitalSignpost() {
         id: "info-TimeDescription"
     })
    
-    const title =  el("h3", digitalSignpost.title?.[lang] || "", {})
+    const title =  el("h3", digitalData.title?.[lang] || "", {})
 
-    const content = el("p", digitalSignpost.content?.[lang] || "", {})
+    const content = el("p", digitalData.content?.[lang] || "", {})
 
-    const recommendation = el("p", digitalSignpost.recommendation?. [lang] ||"", {})
+    const recommendation = el("p", digitalData.recommendation?. [lang] ||"", {})
 
     // OZNACENI CHYBNE INFORMACE 
     const untruthIcon = createUntruthIcon()
     const untruthVotingWindow = createUntruthVotingWindow()
     document.body.append(untruthVotingWindow)
+
+    untruthIcon.dataset.section = "digital"
+
 
     const untruthWrapper = el("div", null, {
         position: "absolute",
@@ -64,7 +83,12 @@ export async function createDigitalSignpost() {
         backgroundColor: "pink"
     })
 
-    untruthIcon.addEventListener("click", () => untruthVotingWindow.show(untruthIcon))
+    untruthIcon.addEventListener("click", () => {
+        untruthVotingWindow.show(untruthIcon, {
+          section: "digital",
+          date: digitalData.date
+        })
+    })
 
     // zvyrazneni 
     untruthWrapper.addEventListener("mouseenter", () => {
@@ -73,8 +97,7 @@ export async function createDigitalSignpost() {
       untruthWrapper.addEventListener("mouseleave", () => {
         untruthWrapper.style.opacity = "0.6"
     })
-      
-
+    
     untruthWrapper.append(untruthIcon)
 
     article.append(

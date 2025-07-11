@@ -10,8 +10,9 @@ export const API = {
   retroVotesPost: `${BASE_URL}/retro-machine/retroVotesPost`,
   storyVotesGet: `${BASE_URL}/story-of-the-day/storyVotesGet`,
   storyVotesPost: `${BASE_URL}/story-of-the-day/storyVotesPost`,
+  untruthVotesPost: `${BASE_URL}/untruth-votes`,
 }
 
-export const DEV_MODE = false // true / false 
+export const DEV_MODE = true // true / false 
 
 // chrome.storage.local.clear() do konzole pro vymaz 

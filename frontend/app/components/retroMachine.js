@@ -230,6 +230,8 @@ export async function createRetroMachine() {
     const untruthIcon = createUntruthIcon()
     const untruthVotingWindow = createUntruthVotingWindow()
     document.body.append(untruthVotingWindow)
+
+    untruthIcon.dataset.section = "retro"
   
     const untruthWrapper = el("div", null, {
       position: "absolute",
@@ -239,8 +241,14 @@ export async function createRetroMachine() {
       backgroundColor: "pink"
     })
   
-    untruthIcon.addEventListener("click", () => untruthVotingWindow.show(untruthIcon))
-  
+    untruthIcon.addEventListener("click", () => {
+      untruthVotingWindow.show(untruthIcon, {
+        section: "retro",
+        date: retroData.date
+      })
+    })
+    
+
     // zvyrazneni hoover
     untruthWrapper.addEventListener("mouseenter", () => {
       untruthWrapper.style.opacity = "1"
