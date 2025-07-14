@@ -2,14 +2,13 @@
   "manifest_version": 3,
   "name": "HackMindset",
   "version": "1.0",
-  "description": "Rozšíření, které zobrazuje NASA obrázky, pozitivní zprávy a hashtagy.",
-  "icons": {
-    "16": "frontend/assets/icons/icon16.png",
-    "48": "frontend/assets/icons/icon48.png"
-  },
+  "description": "An educational extension that delivers daily space photos, digital wisdom, and inspiring content.",
   "action": {
-    "default_popup": "frontend/app/index.html",
-    "default_icon": "frontend/assets/icons/icon48.png"
+    "default_icon": {
+      "16": "frontend/assets/icons/icon16.png",
+      "48": "frontend/assets/icons/icon48.png"
+    },
+    "default_popup": "frontend/app/index.html"
   },
   "background": {
     "service_worker": "frontend/app/background.js",
@@ -19,14 +18,11 @@
     "storage",
     "scripting",
     "alarms",
-    "activeTab",
     "tabs",
-    "webNavigation",
-    "https://localhost:3000/"
+    "webNavigation"
   ],
   "host_permissions": [
     "https://api.nasa.gov/*",
-    "https://localhost:3000/*",
     "https://www.instagram.com/*"
   ],
   "web_accessible_resources": [
@@ -34,14 +30,17 @@
       "resources": ["assets/sounds/dialup.mp3", "assets/sound.svg"],
       "matches": ["<all_urls>"]
     }
-  ],  
+  ],
   "content_scripts": [
     {
-      "matches": ["*://*.instagram.com/*"],
-      "js": ["frontend/app/content.js"],
-      "type": "module"
+      "matches": [
+        "*://instagram.com/*",
+        "*://*.instagram.com/*"
+      ],
+      "js": ["frontend/app/content.js"]
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'none'; style-src 'self'"  }
+    "extension_pages": "script-src 'self'; object-src 'none'; style-src 'self'"
+  }
 }

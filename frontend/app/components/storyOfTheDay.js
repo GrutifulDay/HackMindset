@@ -64,6 +64,16 @@ export async function createStoryOfTheDay() {
   const today = el("h3", storyData.today || "", {})
   const title = el("h3", storyData.title?.[lang] || "", {})
   const content = el("p", storyData.content?.[lang] || "", {})
+  const voteTitle = el("p", lang === "cz" 
+      ? "Chceš hlasovat?" 
+      : "Can you Vote?", 
+  {
+    textTransform: "uppercase",
+    fontSize: ".8rem",
+    fontWeight: "bold",
+    marginTop: "30px"
+
+  })
 
  // HLASOVANI  
  const feedbackWrapper = el("div", null, {
@@ -267,6 +277,7 @@ untruthWrapper.append(untruthIcon)
     today, 
     title, 
     content,
+    voteTitle,
     feedbackWrapper
   )
   return article

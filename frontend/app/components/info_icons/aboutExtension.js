@@ -8,13 +8,27 @@ export function createAboutExtensionWindow() {
     const texts = {
         cz: {
             title: "O rozšíření",
-            line1: "Toto rozšíření ti každý den zobrazí nový obsah – příběh, retro technologii i obrázek od NASA.",
-            line2: "Cílem je nahradit bezmyšlenkovité scrollování smysluplným obsahem. Každý den trochu moudřejší.",
+            line1: "HeckMindset přináší několik tichých denních zastavení – o vesmíru, historii, technologiích a jednoduchých tipech, jak se zorientovat v digitálním světě.",
+            line2: "Každá sekce má svůj jasný smysl:",
+            line3: "NASA obrázek dne – připomínka toho, co se děje mimo naši planetu. Malé okno do světa vědy a objevování vesmíru.",
+            line4: "Digitální průvodce – jednoduché rady, jak být online v bezpečí a v obraze.",
+            line5: "Příběh dne – skutečná historická událost propojená s dnešním datem, stručně a s kontextem.",
+            line6: "Retro Machine – návrat k tomu, jak se technologie vyvíjela od 70. let až do současnosti, skrze konkrétní zařízení a vzpomínky.",
+            line7: "Insta Tipy – vybrané edukační a inspirativní Instagram profily, rozdělené do oblastí:",
+            line8: "vesmír a poznání",
+            line9: "příroda, cestování a divočina"
         },
         en: {
             title: "About Extension",
-            line1: "This extension shows you new content every day – a story, retro tech, and a NASA image.",
-            line2: "The goal is to replace mindless scrolling with meaningful content. A little wiser every day.",
+            line1: "HeckMindset brings a few quiet daily moments – about space, history, technology, and simple tips to stay oriented in the digital world.",
+            line2: "Each section has a clear purpose:",
+            line3: "NASA Image of the Day – a reminder of what’s happening beyond our planet. A small window into science and space exploration.",
+            line4: "Digital Guide – simple advice on how to stay safe and aware online.",
+            line5: "Story of the Day – a real historical event connected to the current date, written briefly and with context.",
+            line6: "Retro Machine – a look back at how technology evolved from the 1970s to today, through specific devices and memories.",
+            line7: "Insta Tips – selected educational and inspiring Instagram profiles, grouped into:",
+            line8: "space & learning",
+            line9: "nature, travel & wildlife",
         }
     }
 
@@ -68,8 +82,11 @@ export function createAboutExtensionWindow() {
     }
 
     const title = el("strong", t.title)
-    const line1 = el("p", t.line1)
-    const line2 = el("p", t.line2)
+    const lines = [t.line1, t.line2, t.line3, t.line4, t.line5, t.line6, t.line7, t.line8, t.line9]
+    .filter(Boolean) // vyhodí undefined
+    .map(text => el("p", text))
+
+    
 
     const footer = el("footer", null, {})
 
@@ -92,6 +109,6 @@ export function createAboutExtensionWindow() {
 
     gitHubLink.append(gitHubIcon)
     footer.append(gitHubLink)
-    container.append(closeBtn, footer, title, line1, line2)
+    container.append(closeBtn, footer, title, ...lines)
     return container
 }

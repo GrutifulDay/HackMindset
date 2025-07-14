@@ -60,7 +60,16 @@ export async function createRetroMachine() {
   const year = el("h3", retroData.year ? `> ${retroData.year} <` : "")
   const title = el("h3", retroData.title?.[lang] || "")
   const nostalgiggle = el("p", retroData.nostalgiggle?.[lang] || "")
+  const voteTitle = el("p", lang === "cz" 
+      ? "Chceš hlasovat?" 
+      : "Can you Vote?", 
+  {
+    textTransform: "uppercase",
+    fontSize: ".8rem",
+    fontWeight: "bold",
+    marginTop: "30px"
 
+  })
   // FCE PRO ZVUK 
   createModemSound(retroData, lang, title)
 
@@ -214,7 +223,7 @@ export async function createRetroMachine() {
   
     localStorage.setItem(localStorageKey, option)
   
-    createVotingReportUsers(lang === "cz" ? "Děkujeme, ze hlasujete každý den 💚" : "Thank you for voting every day 💚")
+    createVotingReportUsers(lang === "cz" ? "Děkujeme, že hlasujete každý den 💚" : "Thank you for voting every day 💚")
   }
   
     // Event listenery
@@ -268,6 +277,7 @@ export async function createRetroMachine() {
       year,
       title,
       nostalgiggle,
+      voteTitle,
       feedbackWrapper
   )
   return article

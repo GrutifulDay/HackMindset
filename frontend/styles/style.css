@@ -23,14 +23,14 @@ body {
 
 h2 {
   font-size: 1.3em;
-  color: rgb(39 62 100);
+  color: #273E64;
   text-transform: uppercase;
   margin-top: 21px;
 }
 
 h3 {
   font-size: 1.2em;
-  color: rgb(39 62 100);
+  color: #273E64;
   margin-top: -3px;
 }
 
@@ -39,13 +39,6 @@ li {
   font-size: 1em;
   color:#05054e;
 }
-
-
-
-
-
-
-
 
 
 
