@@ -11,6 +11,7 @@ export const API = {
   storyVotesGet: `${BASE_URL}/story-of-the-day/storyVotesGet`,
   storyVotesPost: `${BASE_URL}/story-of-the-day/storyVotesPost`,
   untruthVotesPost: `${BASE_URL}/untruth-votes`,
+  untruthLimitLog: `${BASE_URL}/untruth-limit-log`
 }
 
 export const DEV_MODE = true // true / false 

@@ -61,8 +61,8 @@ export async function createRetroMachine() {
   const title = el("h3", retroData.title?.[lang] || "")
   const nostalgiggle = el("p", retroData.nostalgiggle?.[lang] || "")
   const voteTitle = el("p", lang === "cz" 
-      ? "Chceš hlasovat?" 
-      : "Can you Vote?", 
+      ? "Chceš vidět vysledky hlasování? Hlasuj i ty." 
+      : "Do you want to see the voting results? Vote too.", 
   {
     textTransform: "uppercase",
     fontSize: ".8rem",
@@ -235,50 +235,55 @@ export async function createRetroMachine() {
       handleVote("dislike")
     })
   
-    // OZNACENI CHYBNE INFORMACE 
-    const untruthIcon = createUntruthIcon()
-    const untruthVotingWindow = createUntruthVotingWindow()
-    document.body.append(untruthVotingWindow)
+// OZNACENI CHYBNE INFORMACE
+const untruthIcon = createUntruthIcon()
+const untruthVotingWindow = createUntruthVotingWindow()
+document.body.append(untruthVotingWindow)
 
-    untruthIcon.dataset.section = "retro"
-  
-    const untruthWrapper = el("div", null, {
-      position: "absolute",
-      top: "8px",
-      left: "0px",
-      zIndex: "10",
-      backgroundColor: "pink"
-    })
-  
-    untruthIcon.addEventListener("click", () => {
-      untruthVotingWindow.show(untruthIcon, {
-        section: "retro",
-        date: retroData.date
-      })
-    })
-    
+const section = "retro"
+const date = retroData.date // napr. "2025-07-14"
 
-    // zvyrazneni hoover
-    untruthWrapper.addEventListener("mouseenter", () => {
-      untruthWrapper.style.opacity = "1"
-    })
-    untruthWrapper.addEventListener("mouseleave", () => {
-      untruthWrapper.style.opacity = "0.6"
-    })
-    console.log("🧪 untruthIcon:", untruthIcon);
-  
-    untruthWrapper.append(untruthIcon)
+untruthIcon.dataset.section = section
+
+// wrapper pro pozici + hover efekt
+const untruthWrapper = el("div", null, {
+  position: "absolute",
+  top: "8px",
+  left: "0px",
+  zIndex: "10",
+})
+
+untruthIcon.addEventListener("click", () => {
+  untruthVotingWindow.show(untruthIcon, {
+    section,
+    date
+  })
+})
+
+// hover efekt
+untruthWrapper.addEventListener("mouseenter", () => {
+  untruthWrapper.style.opacity = "1"
+})
+untruthWrapper.addEventListener("mouseleave", () => {
+  untruthWrapper.style.opacity = "0.6"
+})
+
+console.log("🧪 untruthIcon:", untruthIcon)
+
+untruthWrapper.append(untruthIcon)
 
 
-    article.append(
-      createFadeLine(),
-      untruthWrapper,
-      retroWrapper,
-      year,
-      title,
-      nostalgiggle,
-      voteTitle,
-      feedbackWrapper
-  )
-  return article
+article.append(
+  createFadeLine(),
+  untruthWrapper,
+  retroWrapper,
+  year,
+  title,
+  nostalgiggle,
+  voteTitle,
+  feedbackWrapper
+)
+
+return article
+
 }

@@ -72,23 +72,32 @@ export async function createDigitalSignpost() {
     const untruthVotingWindow = createUntruthVotingWindow()
     document.body.append(untruthVotingWindow)
 
-    untruthIcon.dataset.section = "digital"
+    const section = "digital"
+    const date = digitalData.date //  napr. "2025-07-14"
+
+    untruthIcon.dataset.section = section
 
 
     const untruthWrapper = el("div", null, {
         position: "absolute",
         top: "8px",
         left: "0px",
-        zIndex: "10",
-        backgroundColor: "pink"
-    })
+        zIndex: "9999",
+        pointerEvents: "auto",
+        opacity: "0.6",
+        transition: "opacity 0.2s",
+        border: "1px solid black"
+      })
+      
 
-    untruthIcon.addEventListener("click", () => {
+      untruthIcon.addEventListener("click", () => {
+        console.log("🧪 CLICK DETEKTOVÁN NA untruthIcon")
         untruthVotingWindow.show(untruthIcon, {
-          section: "digital",
-          date: digitalData.date
+          section,
+          date
         })
-    })
+      })
+      
 
     // zvyrazneni 
     untruthWrapper.addEventListener("mouseenter", () => {

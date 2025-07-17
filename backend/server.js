@@ -19,6 +19,7 @@ import retroRoutes from "./routes/retroRoutes.js"
 import profileRoutes from "./routes/profileRoutes.js"
 import digitalRoutes from "./routes/digitalRoutes.js"
 import untruthRoutes from "./routes/untruthRoutes.js"
+import untruthLimitRoutes from "./routes/untruthLimit.js"
 
 // import ipRoutes from "./routes/ipRoutes.js"
 // import testDB from "./routes/test-db.js"
@@ -58,10 +59,12 @@ app.use(
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        "script-src": ["'self'"],         // povolit jen vlastni skriptove soubory
-        "object-src": ["'none'"],          // zakazuje vkladane objekty
-        "base-uri": ["'self'"],            // zakazuje menit zakl. URL pro relaticni odkazy
-        "img-src": ["'self'", "https://apod.nasa.gov", "https://mars.nasa.gov", "https://images-assets.nasa.gov"] // NASA img
+        "script-src": ["'self'"],   // povolit jen vlastni skriptove soubory
+        "object-src": ["'none'"],   // zakazuje vkladane objekty
+        "base-uri": ["'self'"],    // zakazuje menit zakl. URL pro relaticni odkazy
+        "img-src": ["'self'", "https://apod.nasa.gov", "https://mars.nasa.gov", "https://images-assets.nasa.gov"],  // NASA img
+        "connect-src": ["'self'", "https://api.nasa.gov"], // Přidání connect-src pro API volání
+        "frame-ancestors": ["'none'"] // Přidání ochrany proti clickjacking
       }
     }
   })
@@ -83,8 +86,9 @@ app.use("/api", nasaRoutes)
 app.use("/api", storyRoutes)
 app.use("/api", retroRoutes)
 app.use("/api", profileRoutes)
-app.use("/api",digitalRoutes)
+app.use("/api", digitalRoutes)
 app.use("/api", untruthRoutes)
+app.use("/api", untruthLimitRoutes)
 
 // app.use("/api", ipRoutes)
 // app.use("/api", testDB)

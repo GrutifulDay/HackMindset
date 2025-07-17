@@ -13,6 +13,16 @@ export function createVotingReportUsers(text) {
 }
 
 // pridat diky za odeslani chyb 
+export function createFeedbackUntruth(text) {
+  const message = document.createElement("div")
+  message.className = "untruth-thanks"
+  message.textContent = text
 
+  document.body.appendChild(message)
+
+  setTimeout(() => {
+    message.remove()
+  }, 2500)
+}
   
   

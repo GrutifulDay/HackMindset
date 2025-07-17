@@ -9,7 +9,7 @@ console.log("{fetchPostUntruthVotes.js} 📡 načten")
  * @returns {Object|null} - odpověď ze serveru nebo null při chybě
  */
 
-export async function fetchPostUntruthVotes(date, feedback, section) {
+export async function fetchUntruthVotes(date, feedback, section) {
   try {
     const response = await fetch(API.untruthVotesPost, {
       method: "POST",
@@ -18,7 +18,11 @@ export async function fetchPostUntruthVotes(date, feedback, section) {
         "Content-Type": "application/json",
         "Authorization": "Bearer HACK_EXTENSION"
       },
-      body: JSON.stringify({ date, feedback, section })
+      body: JSON.stringify({ 
+        date, 
+        feedback, 
+        section 
+      })
     })
 
     return await response.json()

@@ -36,7 +36,7 @@ export async function createStoryOfTheDay() {
 
   const article = el("article", null, {
     position: "relative"
-  });
+  })
 
   const storyOfTheDayTitle = el("h2", "Story of The Day", {})
   const storyWrapper = el("div", null, {
@@ -65,14 +65,13 @@ export async function createStoryOfTheDay() {
   const title = el("h3", storyData.title?.[lang] || "", {})
   const content = el("p", storyData.content?.[lang] || "", {})
   const voteTitle = el("p", lang === "cz" 
-      ? "Chceš hlasovat?" 
-      : "Can you Vote?", 
+      ? "Chceš vidět vysledky hlasování? Hlasuj i ty." 
+      : "Do you want to see the voting results? Vote too.", 
   {
     textTransform: "uppercase",
     fontSize: ".8rem",
     fontWeight: "bold",
     marginTop: "30px"
-
   })
 
  // HLASOVANI  
@@ -172,7 +171,7 @@ const rememberWrapper = createVoteElement(rememberIMG, rememberCount)
 const notExperienceWrapper = createVoteElement(notExperienceIMG, notExperienceCount)
 feedbackWrapper.append(notExperienceWrapper, rememberWrapper)
 
-// Kontrola, zda uzivatel jz hlasoval
+// Kontrola, zda uzivatel jiz hlasoval
 const todayKey = storyData.date 
 const localStorageKey = `storyVotedToday_${todayKey}` 
 console.log("🧪 todayKey:", todayKey)
@@ -243,23 +242,25 @@ const untruthIcon = createUntruthIcon()
 const untruthVotingWindow = createUntruthVotingWindow()
 document.body.append(untruthVotingWindow)
 
-untruthIcon.dataset.section = "story"
+const section = "story"
+const date = storyData.date
+
+untruthIcon.dataset.section = section
 
 const untruthWrapper = el("div", null, {
   position: "absolute",
   top: "8px",
   right: "23px", 
-  zIndex: "10",
-  backgroundColor: "pink"
-
+  zIndex: "10"
 })
 
 untruthIcon.addEventListener("click", () => {
   untruthVotingWindow.show(untruthIcon, {
-    section: "story",
-    date: storyData.date
+    section,
+    date
   })
 })
+
 // zvyrazneni 
 untruthWrapper.addEventListener("mouseenter", () => {
     untruthWrapper.style.opacity = "1"
@@ -282,4 +283,3 @@ untruthWrapper.append(untruthIcon)
   )
   return article
 }
-
