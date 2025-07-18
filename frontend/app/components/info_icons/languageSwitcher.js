@@ -43,12 +43,15 @@ export function createLanguageSwitcher() {
 
   czFlag.onclick = () => {
     setLanguage("cz")
-    location.reload()
+    document.body.classList.add("fade-out")
+    setTimeout(() => chrome.runtime.reload(), 400)
   }
+  
 
   enFlag.onclick = () => {
     setLanguage("en")
-    location.reload()
+    document.body.classList.add("fade-out")
+    setTimeout(() => chrome.runtime.reload(), 400)
   }
 
   // cela cast cz / en 

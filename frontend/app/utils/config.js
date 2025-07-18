@@ -16,4 +16,10 @@ export const API = {
 
 export const DEV_MODE = true // true / false 
 
-// chrome.storage.local.clear() do konzole pro vymaz 
+// chrome.storage.local.clear() // pro uplny vymaz 
+// localStorage.clear()   
+
+ // vymaz untruth hlasovani
+// Object.keys(localStorage)    
+//   .filter(key => key.startsWith("untruth-") || key.startsWith("abuse-limit-"))
+//   .forEach(key => localStorage.removeItem(key))

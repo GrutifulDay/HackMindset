@@ -119,29 +119,57 @@ export function createUntruthVotingWindow() {
   container.show = function (referenceElement, metadata = {}) {
     container.dataset.section = metadata.section || "unknown"
     container.dataset.date = metadata.date || ""
-    container.style.display = "block" // nejprve zobraz
+    container.style.display = "block"
   
-    // vlozim do dalsiho snimku pomoci requestAnimationFrame,
-    // aby `offsetHeight` byl spravbe
+    // ✅ kontrola, jestli už bylo odesláno dnes
+    const section = container.dataset.section
+    const date = container.dataset.date
+    const today = new Date().toISOString().slice(0, 10)
+    const voteKey = `untruth-${section}-${date}-${today}`
+  
+    const alreadySubmitted = localStorage.getItem(voteKey) === "1"
+  
+    if (alreadySubmitted) {
+      submitButton.disabled = true
+      submitButton.textContent = lang === "cz" ? "Odesláno" : "Submitted"
+      submitButton.style.opacity = "0.6"
+    } else {
+      submitButton.disabled = false
+      submitButton.textContent = lang === "cz" ? "Odeslat" : "Submit"
+      submitButton.style.opacity = "1"
+    }
+  
+    // pozice leva / prava stejna vzdalenost od ikony 
     requestAnimationFrame(() => {
       const rect = referenceElement.getBoundingClientRect()
-  
+    
       const top = window.scrollY + rect.top - container.offsetHeight - 5
       const screenCenter = window.innerWidth / 2
       const left = rect.left < screenCenter
         ? window.scrollX + rect.right + 5
         : window.scrollX + rect.left - container.offsetWidth - 5
-  
+    
       container.style.top = `${top}px`
       container.style.left = `${left}px`
-  
+    
+      // 🟣 scroll nahoru, kdyz neni videt cely okno 
+      requestAnimationFrame(() => {
+        const rectContainer = container.getBoundingClientRect()
+    
+        if (rectContainer.top < 0 || rectContainer.bottom > window.innerHeight) {
+          container.scrollIntoView({
+            behavior: "smooth",   // plynuly 
+            block: "start"    // center do stredu 
+          })
+        }
+      })
       document.addEventListener("click", handleOutsideClick)
       console.log("✅ Zobrazovací funkce FINÁLNĚ nastavila pozici.")
     })
+    
   }
   
-
-  submitButton.addEventListener("click", async () => {
+    submitButton.addEventListener("click", async () => {
     const section = container.dataset.section
     const date = container.dataset.date
 
