@@ -9,6 +9,8 @@ import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js
 
 import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
 
+import { createAddTooltip } from "../utils/dom/tooltip.js";
+
 console.log("{storyOfTheDay.js} 🧩 sekce se generuje...");
 
 
@@ -83,23 +85,17 @@ export async function createStoryOfTheDay() {
   marginTop: "0px"
 })
 
+// vedel/a
 const rememberIMG = el("img", null, {
   width: "56px",
   cursor: "pointer"
 }, {
   src: "../assets/icons/zazil-white.png",
-  title: lang === "cz" ? "Tohle si pamatuju!" : "I remember this!",
   class: "vote-img"
 })
-
-const notExperienceIMG = el("img", null, {
-  width: "57px",
-  cursor: "pointer"
-}, {
-  src: "../assets/icons/nezazil-white.png",
-  title: lang === "cz" ? "Tohle jsem nezažil/a!" : "I didn’t experience this!",
-  class: "vote-img"
-})
+createAddTooltip( rememberIMG, 
+  lang === "cz" ? "Tohle už jsem věděl/a!" : "I already knew this!"
+  )
 
 const rememberCount = el("span", "", {
   display: "none",
@@ -107,12 +103,25 @@ const rememberCount = el("span", "", {
   className: "vote-count"
 })
 
+// nevedel/a 
+const notExperienceIMG = el("img", null, {
+  width: "57px",
+  cursor: "pointer"
+}, {
+  src: "../assets/icons/nezazil-white.png",
+  class: "vote-img"
+})
+createAddTooltip( notExperienceIMG, 
+  lang === "cz" ? "Tohle jsem fakt nevěděl/a!" : "Wow, I didn’t know this!"
+  )
+
 
 const notExperienceCount = el("span", "", {
   display: "none"
 }, {
   className: "vote-count"
 })
+
 
 // fce hlasovani 
 function createVoteElement(imgElement, countSpan) {

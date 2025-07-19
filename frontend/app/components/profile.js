@@ -1,10 +1,10 @@
 import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
 import { fetchProfile } from "../fetch/fetchProfile.js";
+import { createAddTooltip } from "../utils/dom/tooltip.js";
+
 
 console.log("{profile.js} 🧩 sekce se generuje...");
-
-
 
 export async function createProfile() {
   console.log("{funkce createProfile} ✅ funguje");
@@ -68,11 +68,10 @@ export async function createProfile() {
     border: "none",
     padding: "4px",
     background: "transparent",
-
-
-  }, {
-    title: lang === "cz" ? "Zkopíruj" : "Copy"
   })
+  
+  // přidání tooltipu
+  createAddTooltip(button, lang === "cz" ? "Zkopíruj" : "Copy")
 
   const copy = el("img", null, {
     width: "20px",

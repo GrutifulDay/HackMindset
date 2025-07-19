@@ -1,10 +1,9 @@
 import { el } from "../../utils/dom/uiSnippets.js";
-import { getLanguage } from "../../utils/language/language.js";
+import { createAddTooltip } from "../../utils/dom/tooltip.js";
 
 export function createTranslationIcon() {
-  const lang = getLanguage();
 
-  return el("img", null, {
+  const icon = el("img", null, {
     width: "20px",
     height: "auto",
     cursor: "pointer",
@@ -14,6 +13,9 @@ export function createTranslationIcon() {
     opacity: ".8",
   }, {
     src: "../assets/icons/infoTranslation.svg",
-    title: lang === "cz" ? "O překladu" : "About Translation",
   })
+
+  createAddTooltip(icon, "Proč je to anglicky?")
+
+  return icon
 }

@@ -8,6 +8,8 @@ import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.j
 import { createUntruthIcon } from "./icons_import/untruthIcon.js";
 import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js";
 
+import { createAddTooltip } from "../utils/dom/tooltip.js";
+
 import { createModemSound } from "./sound_section/modem.js";
 
 
@@ -82,35 +84,43 @@ export async function createRetroMachine() {
     marginTop: "0px"
   })
   
+
   const rememberIMG = el("img", null, {
     width: "56px",
     cursor: "pointer"
   }, {
     src: "../assets/icons/zazil-white.png",
-    title: lang === "cz" ? "Tohle si pamatuju!" : "I remember this!",
     class: "vote-img"
   })
-  
-  const notExperienceIMG = el("img", null, {
-    width: "57px",
-    cursor: "pointer"
-  }, {
-    src: "../assets/icons/nezazil-white.png",
-    title: lang === "cz" ? "Tohle jsem nezažil/a!" : "I didn’t experience this!",
-    class: "vote-img"
-  })
-  
+  createAddTooltip(rememberIMG,
+    lang === "cz" ? "To jsem zažil/a!" : "I've experienced this!"
+    )
+
   const rememberCount = el("span", "", {
     display: "none",
   }, {
     className: "vote-count"
   })
   
+
+  const notExperienceIMG = el("img", null, {
+    width: "57px",
+    cursor: "pointer"
+  }, {
+    src: "../assets/icons/nezazil-white.png",
+    class: "vote-img"
+  })
+  createAddTooltip(notExperienceIMG,
+    lang === "cz" ? "To jsem nezažil/a." : "I haven’t experienced this."
+
+    )
+
   const notExperienceCount = el("span", "", {
     display: "none"
   }, {
     className: "vote-count"
   })
+  
   
   // fce hlasovani 
   function createVoteElement(imgElement, countSpan) {

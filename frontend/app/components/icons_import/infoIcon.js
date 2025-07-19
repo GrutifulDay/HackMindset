@@ -1,10 +1,11 @@
 import { el } from "../../utils/dom/uiSnippets.js";
 import { getLanguage } from "../../utils/language/language.js";
+import { createAddTooltip } from "../../utils/dom/tooltip.js";
 
 export function createInfoIcon() {
   const lang = getLanguage();
 
-  return el("img", null, {
+  const icon = el("img", null, {
     width: "29px",
     height: "auto",
     cursor: "pointer",
@@ -12,7 +13,10 @@ export function createInfoIcon() {
     right: "10px",
     top: "13px", 
   }, {
-    src: "../assets/icons/info.svg",
-    title: lang === "cz" ? "O rozšíření" : "About Extension"
+    src: "../assets/icons/info.svg"
   })
+
+  createAddTooltip(icon, lang === "cz" ? "O rozšíření" : "About Extension");
+
+  return icon;
 }

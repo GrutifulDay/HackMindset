@@ -5,6 +5,7 @@ import { getLanguage } from "../../utils/language/language.js";
 export function createAboutExtensionWindow() {
     const lang = getLanguage()
     
+    // dodelat texty 
     const texts = {
         cz: {
             title: "O rozšíření",
@@ -16,7 +17,8 @@ export function createAboutExtensionWindow() {
             line6: "Retro Machine – návrat k tomu, jak se technologie vyvíjela od 70. let až do současnosti, skrze konkrétní zařízení a vzpomínky.",
             line7: "Insta Tipy – vybrané edukační a inspirativní Instagram profily, rozdělené do oblastí:",
             line8: "vesmír a poznání",
-            line9: "příroda, cestování a divočina"
+            line9: "příroda, cestování a divočina",
+            line10: "Věškeré hlasování je zcela anonymní, nesbírám cookies, IP adresy atd, jde jen o statistiku"
         },
         en: {
             title: "About Extension",
@@ -29,6 +31,8 @@ export function createAboutExtensionWindow() {
             line7: "Insta Tips – selected educational and inspiring Instagram profiles, grouped into:",
             line8: "space & learning",
             line9: "nature, travel & wildlife",
+            line10: "Věškeré hlasování je zcela anonymní, nesbírám cookies, IP adresy atd, jde jen o statistiku"
+
         }
     }
 
@@ -82,7 +86,7 @@ export function createAboutExtensionWindow() {
     }
 
     const title = el("strong", t.title)
-    const lines = [t.line1, t.line2, t.line3, t.line4, t.line5, t.line6, t.line7, t.line8, t.line9]
+    const lines = [t.line1, t.line2, t.line3, t.line4, t.line5, t.line6, t.line7, t.line8, t.line9, t.line10]
     .filter(Boolean) // vyhodí undefined
     .map(text => el("p", text))
 
@@ -95,7 +99,7 @@ export function createAboutExtensionWindow() {
     }, {
         href: "https://github.com/GrutifulDay/HackMindset.git",
         target: "_blank",
-        rel: "noopener noreferrer"
+        rel: "noopener noreferrer"     // zabrani vkladani 
     })
 
     const gitHubIcon = el("img", null, {

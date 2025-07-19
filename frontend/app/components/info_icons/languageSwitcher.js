@@ -1,9 +1,10 @@
 import { el } from "../../utils/dom/uiSnippets.js"
 import { setLanguage, getLanguage } from "../../utils/language/language.js"
+import { createAddTooltip } from "../../utils/dom/tooltip.js";
 
 // VISUAL - PREPINANI JAZYKA 
 export function createLanguageSwitcher() {
-  const currentLang = getLanguage()
+  const lang = getLanguage()
 
   function createFlagWrapper(src, title, isActive) {
     // vlozeni do wrapper pro zarovnani 
@@ -38,21 +39,34 @@ export function createLanguageSwitcher() {
   }
 
   // volba jazyka + hoover title
-  const { wrapper: czWrapper, flag: czFlag } = createFlagWrapper("../assets/icons/CZ.svg", "Čeština", currentLang === "cz")
-  const { wrapper: enWrapper, flag: enFlag } = createFlagWrapper("../assets/icons/EN.svg", "English", currentLang === "en")
+  const { wrapper: czWrapper, flag: czFlag } = createFlagWrapper(
+    "../assets/icons/CZ.svg",
+    null,
+    lang === "cz" // <-- DŮLEŽITÉ
+  )
+
+  
+  const { wrapper: enWrapper, flag: enFlag } = createFlagWrapper(
+    "../assets/icons/EN.svg",
+    null,
+    lang === "en" // <-- DŮLEŽITÉ
+  )
+
+  createAddTooltip(czFlag, "Čeština")
+  createAddTooltip(enFlag, "English")
+
+
 
   czFlag.onclick = () => {
     setLanguage("cz")
-    document.body.classList.add("fade-out")
-    setTimeout(() => chrome.runtime.reload(), 400)
+    location.reload()
   }
   
-
   enFlag.onclick = () => {
     setLanguage("en")
-    document.body.classList.add("fade-out")
-    setTimeout(() => chrome.runtime.reload(), 400)
+    location.reload()
   }
+  
 
   // cela cast cz / en 
   const wrapper = el("div", null, {
@@ -72,3 +86,4 @@ export function createLanguageSwitcher() {
   wrapper.append(czWrapper, enWrapper)
   return wrapper
 }
+
