@@ -1,4 +1,3 @@
-/* popis nasa textu */
 .nasa-description:hover {
   text-decoration: underline;
 }
@@ -10,7 +9,6 @@
     transition: text-decoration 0.2s ease;
 }
 
-/* nasa url - chces vedet vic?  */
 .nasa-url {
     transition: text-decoration 0.2s ease;
     text-decoration: none;
@@ -20,10 +18,9 @@
 
 .nasa-url:hover {
   text-decoration: underline;
-  color: #3b77d0; /* upravit barvu podle ostatnich */
+  color: #3b77d0; 
 }
 
-/* NASA - odkaz na web */
 .nasa-link {
   text-decoration: none;
   color: #3b77d0;
@@ -33,22 +30,3 @@
 .nasa-link:hover {
   text-decoration: underline;
 }
-
-
-/*   
-  
-  #nasa-section .star {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: rgb(228, 11, 11);
-    border-radius: 50%;
-    opacity: 0.4;
-    animation: twinkle 2s infinite ease-in-out;
-  }
-  
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  } */
-  

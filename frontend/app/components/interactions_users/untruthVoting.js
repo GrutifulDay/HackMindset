@@ -115,13 +115,11 @@ export function createUntruthVotingWindow() {
 
   initUntruthLimit()
 
-  // otevreni okna 
   container.show = function (referenceElement, metadata = {}) {
     container.dataset.section = metadata.section || "unknown"
     container.dataset.date = metadata.date || ""
     container.style.display = "block"
   
-    // ✅ kontrola, jestli už bylo odesláno dnes
     const section = container.dataset.section
     const date = container.dataset.date
     const today = new Date().toISOString().slice(0, 10)
@@ -139,7 +137,6 @@ export function createUntruthVotingWindow() {
       submitButton.style.opacity = "1"
     }
   
-    // pozice leva / prava stejna vzdalenost od ikony 
     requestAnimationFrame(() => {
       const rect = referenceElement.getBoundingClientRect()
     
@@ -152,21 +149,18 @@ export function createUntruthVotingWindow() {
       container.style.top = `${top}px`
       container.style.left = `${left}px`
     
-      // 🟣 scroll nahoru, kdyz neni videt cely okno 
       requestAnimationFrame(() => {
         const rectContainer = container.getBoundingClientRect()
     
         if (rectContainer.top < 0 || rectContainer.bottom > window.innerHeight) {
           container.scrollIntoView({
-            behavior: "smooth",   // plynuly 
-            block: "start"    // center do stredu 
+            behavior: "smooth",   
+            block: "start"   
           })
         }
       })
       document.addEventListener("click", handleOutsideClick)
-      console.log("✅ Zobrazovací funkce FINÁLNĚ nastavila pozici.")
     })
-    
   }
   
     submitButton.addEventListener("click", async () => {
@@ -185,23 +179,18 @@ export function createUntruthVotingWindow() {
     const voteKey = `untruth-${section}-${date}-${today}`
     const abuseKey = `abuse-limit-${section}-${month}`
 
-    // Zneuziti = vsechno zaskrtnuto
     const isAbuse = selected.length === 4
 
-    // Pokud uz v tomhle mesici poslal zneuziti, nepridavat znova
     if (isAbuse) {
       if (!localStorage.getItem(abuseKey)) {
-        await fetchUntruthLimit( section, date ) // +1 v DB
+        await fetchUntruthLimit( section, date )
         localStorage.setItem(abuseKey, "1")
         createFeedbackUntruth(lang === "cz"
           ? "Díky. Tvůj podnět byl zaznamenán 👍"
           : "Thanks. Your report was recorded. 👍"
         )
-      } else {
-        console.log("📛 Zneužití už bylo tento měsíc zaznamenáno")
       }
     } else {
-      // Platny bezny hlas
       await fetchUntruthVotes(date, selected, section)
       increaseUntruthVote()
       createFeedbackUntruth(lang === "cz"

@@ -9,7 +9,7 @@ function runOnboardingIfNeeded() {
     if (!completed) {
       selectionLanguage()
     } else {
-        initPopup() // hlavni UI
+        initPopup()
     }
   })
 }

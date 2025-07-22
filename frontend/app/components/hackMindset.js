@@ -1,16 +1,11 @@
 import { el } from "../utils/dom/uiSnippets.js"
 import { getLanguage } from "../utils/language/language.js"
 
-console.log("{hackMindset.js} 🧩 sekce se generuje...")
-
 export async function createHackMindset() {
-    console.log("{funkce createHackMindset} ✅ funguje")
-
     const lang = getLanguage() 
     
     const header = el("header", null, {})
 
-    // title + logo
     const wrapper = el("div", null, {
         fontSize: "1rem",
         fontWeight: "600",
@@ -45,7 +40,6 @@ export async function createHackMindset() {
       
     wrapper.append(hackTitle, bulbIcon, mindsetTitle)
    
-    // CZ / EN > text + datum
     const translations = {
         cz: {
             todayPrefix: "Dnes je ",
@@ -58,7 +52,7 @@ export async function createHackMindset() {
             title: "HackMindset"
         }
     }
-    const t = translations[lang] || translations["en"] // vychozi ["en"]
+    const t = translations[lang] || translations["en"] 
     
     const today = new Date().toLocaleDateString(lang === "cz" ? "cs-CZ" : "en-GB", {
         day: "numeric",

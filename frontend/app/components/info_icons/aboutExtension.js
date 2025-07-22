@@ -1,11 +1,9 @@
 import { el } from "../../utils/dom/uiSnippets.js";
 import { getLanguage } from "../../utils/language/language.js";
 
-// VISUAL - "O ROZSIRENI" - okno - CZ / EN
 export function createAboutExtensionWindow() {
     const lang = getLanguage()
     
-    // dodelat texty 
     const texts = {
         cz: {
             title: "O rozšíření",
@@ -63,7 +61,6 @@ export function createAboutExtensionWindow() {
         color: "#333"
     })
 
-    // fce click zavreni mimo element container
     function closeContainer() {
         container.style.display = "none";
         document.removeEventListener("click", handleOutsideClick);
@@ -74,7 +71,6 @@ export function createAboutExtensionWindow() {
         }
     }
 
-    // zavreni click na X 
     closeBtn.addEventListener("click", closeContainer);
 
     container.show = function () {
@@ -87,7 +83,7 @@ export function createAboutExtensionWindow() {
 
     const title = el("strong", t.title)
     const lines = [t.line1, t.line2, t.line3, t.line4, t.line5, t.line6, t.line7, t.line8, t.line9, t.line10]
-    .filter(Boolean) // vyhodí undefined
+    .filter(Boolean) 
     .map(text => el("p", text))
 
     
@@ -99,7 +95,7 @@ export function createAboutExtensionWindow() {
     }, {
         href: "https://github.com/GrutifulDay/HackMindset.git",
         target: "_blank",
-        rel: "noopener noreferrer"     // zabrani vkladani 
+        rel: "noopener noreferrer"  
     })
 
     const gitHubIcon = el("img", null, {

@@ -1,8 +1,5 @@
 import { API } from "../utils/config.js";
 
-console.log("{fetchRetroVotes.js} 📡 načten");
-
-// ziskani postu hlasu pro dany den 
 export async function fetchGetVoteRetro(date) {
   try {
     const response = await fetch(`${API.retroVotesGet}/${date}`, {
@@ -16,12 +13,10 @@ export async function fetchGetVoteRetro(date) {
 
     return await response.json()
   } catch (error) {
-    console.error("❌ Chyba při získávání hlasů:", error);
     return { like: 0, dislike: 0 }
   }
 }
 
-// odesilani hlasu
 export async function fetchPostVoteRetro(date, option) {
 
   try {
@@ -37,7 +32,6 @@ export async function fetchPostVoteRetro(date, option) {
 
     return await response.json()
   } catch (error) {
-    console.error("❌ Chyba při odesílání hlasu:", error);
     return null
   }
 }

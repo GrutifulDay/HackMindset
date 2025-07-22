@@ -1,6 +1,5 @@
 import { DEV_MODE } from "../config.js"; 
 
-// obecna fce pro ukladani
 export function getCachedData(cacheKey) {
   if (DEV_MODE) {
     localStorage.removeItem(cacheKey)
@@ -21,7 +20,6 @@ export function getCachedData(cacheKey) {
 
     return parsed.data
   } catch (e) {
-    console.warn(`❌ Chyba při čtení cache (${cacheKey}):`, e)
     localStorage.removeItem(cacheKey)
     return null
   }
