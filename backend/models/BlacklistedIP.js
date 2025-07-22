@@ -1,6 +1,6 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-// Black List 
+// Black List
 const blacklistedIPSchema = new mongoose.Schema({
   ip: {
     type: String,
@@ -33,9 +33,9 @@ const blacklistedIPSchema = new mongoose.Schema({
   },
   city: {
     type: String,
-    default: "Neznámá"
-  }
-})
+    default: "Neznámá",
+  },
+});
 
-const BlacklistedIP = mongoose.model("BlacklistedIP", blacklistedIPSchema)
-export default BlacklistedIP
+const BlacklistedIP = mongoose.model("BlacklistedIP", blacklistedIPSchema);
+export default BlacklistedIP;

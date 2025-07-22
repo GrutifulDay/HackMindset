@@ -1,26 +1,26 @@
 // db/connectFrontendDB.js
 
-import mongoose from "mongoose"
-import { MONGO_URI_FRONTEND } from "../config.js"
-import chalk from "chalk"
+import mongoose from "mongoose";
+import { MONGO_URI_FRONTEND } from "../config.js";
+import chalk from "chalk";
 
-let frontendConnection
+let frontendConnection;
 
 export default function connectFrontendDB() {
   try {
     frontendConnection = mongoose.createConnection(MONGO_URI_FRONTEND, {
-      dbName: "frontendData"  
-    })
+      dbName: "frontendData",
+    });
 
     frontendConnection.on("connected", () => {
       console.log(chalk.green.bold("✅ Připojeno k MongoDB frontendData"));
-    })
+    });
 
     frontendConnection.on("error", (err) => {
       console.error(chalk.red.bold("❌ Chyba v připojení k frontendData:", err));
-    })
+    });
 
-    return frontendConnection
+    return frontendConnection;
   } catch (error) {
     console.error(chalk.red.bold("❌ Nepodařilo se připojit k frontendData:", error));
   }

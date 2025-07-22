@@ -1,12 +1,11 @@
-import { el } from "../../utils/dom/uiSnippets.js"
-import { setLanguage, getLanguage } from "../../utils/language/language.js"
+import { el } from "../../utils/dom/uiSnippets.js";
+import { setLanguage, getLanguage } from "../../utils/language/language.js";
 import { createAddTooltip } from "../../utils/dom/tooltip.js";
 
 export function createLanguageSwitcher() {
-  const lang = getLanguage()
+  const lang = getLanguage();
 
   function createFlagWrapper(src, title, isActive) {
-
     const wrapper = el("div", null, {
       width: "24px",
       height: "auto",
@@ -14,69 +13,76 @@ export function createLanguageSwitcher() {
       alignItems: "center",
       justifyContent: "center",
       position: "relative",
-      padding: "2px", 
-    })
+      padding: "2px",
+    });
 
-    const flag = el("img", null, {
-      width: "100%",
-      height: "100%",
-      objectFit: "contain",
-      transition: "transform 0.2s ease",
-    }, {
-      src
-    })
+    const flag = el(
+      "img",
+      null,
+      {
+        width: "100%",
+        height: "100%",
+        objectFit: "contain",
+        transition: "transform 0.2s ease",
+      },
+      {
+        src,
+      }
+    );
 
-    flag.title = title
+    flag.title = title;
 
     if (isActive) {
-      flag.classList.add("active-lang")
+      flag.classList.add("active-lang");
     }
 
-    wrapper.append(flag)
-    return { wrapper, flag }
+    wrapper.append(flag);
+    return { wrapper, flag };
   }
 
   const { wrapper: czWrapper, flag: czFlag } = createFlagWrapper(
     "../assets/icons/CZ.svg",
     null,
     lang === "cz" // <-- DŮLEŽITÉ
-  )
+  );
 
-  
   const { wrapper: enWrapper, flag: enFlag } = createFlagWrapper(
     "../assets/icons/EN.svg",
     null,
-    lang === "en" 
-  )
+    lang === "en"
+  );
 
-  createAddTooltip(czFlag, "Čeština")
-  createAddTooltip(enFlag, "English")
+  createAddTooltip(czFlag, "Čeština");
+  createAddTooltip(enFlag, "English");
 
   czFlag.onclick = () => {
-    setLanguage("cz")
-    location.reload()
-  }
-  
+    setLanguage("cz");
+    location.reload();
+  };
+
   enFlag.onclick = () => {
-    setLanguage("en")
-    location.reload()
-  }
-  
-  const wrapper = el("div", null, {
-    position: "absolute",
-    top: "13px",
-    left: "10px",
-    zIndex: "1000",
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    cursor: "pointer",
-  }, {
-    id: "language-switcher"
-  })
+    setLanguage("en");
+    location.reload();
+  };
 
+  const wrapper = el(
+    "div",
+    null,
+    {
+      position: "absolute",
+      top: "13px",
+      left: "10px",
+      zIndex: "1000",
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+      cursor: "pointer",
+    },
+    {
+      id: "language-switcher",
+    }
+  );
 
-  wrapper.append(czWrapper, enWrapper)
-  return wrapper
+  wrapper.append(czWrapper, enWrapper);
+  return wrapper;
 }
-

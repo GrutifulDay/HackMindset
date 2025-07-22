@@ -1,5 +1,15 @@
 {
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.5"
+  },
+  "devDependencies": {
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "prettier": "^3.6.2"
+  },
+  "scripts": {
+    "lint": "eslint . --fix"
   }
+  
 }

@@ -1,7 +1,7 @@
 // import express from "express"
 // import { UAParser } from "ua-parser-js"
 // import BlacklistedIP from "../models/BlacklistedIP.js"
-// import { addToBlacklist } from "../middlewares/ipBlacklist.js" 
+// import { addToBlacklist } from "../middlewares/ipBlacklist.js"
 
 // const router = express.Router()
 
@@ -20,7 +20,7 @@
 //   })
 
 //   try {
-//     const ips = await BlacklistedIP.find().sort({ date: -1 }) // od nejnovejsiho po nejstarsi 
+//     const ips = await BlacklistedIP.find().sort({ date: -1 }) // od nejnovejsiho po nejstarsi
 //     res.json(ips)
 //   } catch (err) {
 //     console.error("❌ Chyba při získávání blacklistu:", err.message)
@@ -29,5 +29,3 @@
 // })
 
 // export default router
-
-

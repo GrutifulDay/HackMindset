@@ -8,7 +8,6 @@
 
 // console.log(chalk.blue.bold("{test-db.js} pripojeno"));
 
-
 // const getCityByIP = async (ip) => {
 //   const realIP =
 //     ip === "::1" || ip === "::ffff:127.0.0.1" || ip === "127.0.0.1"
@@ -28,7 +27,6 @@
 //   }
 // };
 
-
 // router.get("/test-db", async (req, res) => {
 //   const userIP = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.socket?.remoteAddress || "neznámá IP";
 //   const userAgentString = req.get("User-Agent") || "Neznámý";
@@ -36,7 +34,7 @@
 //   const result = parser.getResult();
 
 //   const city = await getCityByIP(userIP);
-//   console.log("🌍 Město, které vrací getCityByIP:", city); 
+//   console.log("🌍 Město, které vrací getCityByIP:", city);
 
 //   await addToBlacklist(userIP, "Test logování s městem", {
 //     userAgent: userAgentString,
@@ -53,6 +51,5 @@
 //     parsed: result
 //   });
 // });
-
 
 // export default router;

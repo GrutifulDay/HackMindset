@@ -1,19 +1,17 @@
-import express from "express"
-import chalk from "chalk"
-import { validateApiKey } from "../middlewares/validateApiKey.js"
-import { getDigital } from "../controllers/digitalController.js"
-import { HACK_EXTENSION } from "../config.js"
+import express from "express";
+import chalk from "chalk";
+import { validateApiKey } from "../middlewares/validateApiKey.js";
+import { getDigital } from "../controllers/digitalController.js";
+import { HACK_EXTENSION } from "../config.js";
 
-const router = express.Router()
+const router = express.Router();
 
 console.log(chalk.white.bold("{digitalRoutes.js} pripojeno"));
 
 router.get(
-    "/digitalSignpost",
-    validateApiKey(HACK_EXTENSION, "Zavolání /digitalSignpost routeru"),
-    getDigital
-)
+  "/digitalSignpost",
+  validateApiKey(HACK_EXTENSION, "Zavolání /digitalSignpost routeru"),
+  getDigital
+);
 
-export default router
-
-
+export default router;

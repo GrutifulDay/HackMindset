@@ -1,83 +1,96 @@
-import { el } from "../utils/dom/uiSnippets.js"
-import { getLanguage } from "../utils/language/language.js"
+import { el } from "../utils/dom/uiSnippets.js";
+import { getLanguage } from "../utils/language/language.js";
 
 export async function createHackMindset() {
-    const lang = getLanguage() 
-    
-    const header = el("header", null, {})
+  const lang = getLanguage();
 
-    const wrapper = el("div", null, {
-        fontSize: "1rem",
-        fontWeight: "600",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "10px",
-        marginBottom: "-34px",
-        textTransform: "uppercase",
-        textAlign: "center",
-        letterSpacing: "0.5px",
-        textShadow: "1px 2px 3px rgba(0, 0, 0, 1.5)",
-        color: "#ffe5f0",
-        
-    })
+  const header = el("header", null, {});
 
-    const hackTitle = el("h1", "hack", {}, {
-        class: "hack-title"
-    })
+  const wrapper = el("div", null, {
+    fontSize: "1rem",
+    fontWeight: "600",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px",
+    marginBottom: "-34px",
+    textTransform: "uppercase",
+    textAlign: "center",
+    letterSpacing: "0.5px",
+    textShadow: "1px 2px 3px rgba(0, 0, 0, 1.5)",
+    color: "#ffe5f0",
+  });
 
-    const mindsetTitle = el("h1", "mindset", {}, {
-        class: "hack-title"
-    })
-  
-    const bulbIcon = el("img", null, {
-        width: "42px",
-        height: "42px",
-        transform: "translateY(-6px)"
-      }, {
-        src: "../assets/icons/logo-bulb.svg"
-      })
-      
-    wrapper.append(hackTitle, bulbIcon, mindsetTitle)
-   
-    const translations = {
-        cz: {
-            todayPrefix: "Dnes je ",
-            todaySuffix: " a stalo se...",
-            title: "HackMindset"
-        },
-        en: {
-            todayPrefix: "Today is ",
-            todaySuffix: " and this happened...",
-            title: "HackMindset"
-        }
+  const hackTitle = el(
+    "h1",
+    "hack",
+    {},
+    {
+      class: "hack-title",
     }
-    const t = translations[lang] || translations["en"] 
-    
-    const today = new Date().toLocaleDateString(lang === "cz" ? "cs-CZ" : "en-GB", {
-        day: "numeric",
-        month: "numeric",
-        year: "numeric"
-    })
+  );
 
-    const date = el("h3", null, {
-        marginBottom: "6px",
-        marginTop: "12px"
-    })
+  const mindsetTitle = el(
+    "h1",
+    "mindset",
+    {},
+    {
+      class: "hack-title",
+    }
+  );
 
-    const prefix = document.createTextNode(t.todayPrefix)
+  const bulbIcon = el(
+    "img",
+    null,
+    {
+      width: "42px",
+      height: "42px",
+      transform: "translateY(-6px)",
+    },
+    {
+      src: "../assets/icons/logo-bulb.svg",
+    }
+  );
 
-    const dateSpan = el("span", today, {
-        fontWeight: "bold",
-        fontFamily: "'Rubik', sans-serif",
-        fontWeight: "700",
-        fontSize: "1rem"
-    })
-    const suffix = document.createTextNode(t.todaySuffix)
+  wrapper.append(hackTitle, bulbIcon, mindsetTitle);
 
-    date.append(prefix, dateSpan, suffix)      
+  const translations = {
+    cz: {
+      todayPrefix: "Dnes je ",
+      todaySuffix: " a stalo se...",
+      title: "HackMindset",
+    },
+    en: {
+      todayPrefix: "Today is ",
+      todaySuffix: " and this happened...",
+      title: "HackMindset",
+    },
+  };
+  const t = translations[lang] || translations["en"];
 
+  const today = new Date().toLocaleDateString(lang === "cz" ? "cs-CZ" : "en-GB", {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+  });
 
-    header.append(wrapper, date)
-    return header
+  const date = el("h3", null, {
+    marginBottom: "6px",
+    marginTop: "12px",
+  });
+
+  const prefix = document.createTextNode(t.todayPrefix);
+
+  const dateSpan = el("span", today, {
+    fontWeight: "bold",
+    fontFamily: "'Rubik', sans-serif",
+    fontWeight: "700",
+    fontSize: "1rem",
+  });
+  const suffix = document.createTextNode(t.todaySuffix);
+
+  date.append(prefix, dateSpan, suffix);
+
+  header.append(wrapper, date);
+  return header;
 }

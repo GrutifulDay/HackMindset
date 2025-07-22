@@ -4,10 +4,10 @@ import { fetchProfile } from "../fetch/fetchProfile.js";
 import { createAddTooltip } from "../utils/dom/tooltip.js";
 
 export async function createProfile() {
-  const lang = getLanguage()
-  const profileData = await fetchProfile()
+  const lang = getLanguage();
+  const profileData = await fetchProfile();
 
-  const aside = el("aside", null, {})
+  const aside = el("aside", null, {});
 
   const ul = el("ul", null, {
     listStyle: "none",
@@ -16,95 +16,105 @@ export async function createProfile() {
     display: "flex",
     gap: "10px",
     flexWrap: "wrap",
-    justifyContent: "center"
-  })
+    justifyContent: "center",
+  });
 
   const profileWrapper = el("div", null, {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    gap: "5px",            
+    gap: "5px",
     marginTop: "-9px",
-  })
+  });
 
-  const instaIcon = el("img", null, {
-    width: "40px",
-  height: "auto",
-  opacity: ".8",
+  const instaIcon = el(
+    "img",
+    null,
+    {
+      width: "40px",
+      height: "auto",
+      opacity: ".8",
+    },
+    {
+      src: "../assets/icons/insta.svg",
+    }
+  );
+  const hint = el("h2", lang === "cz" ? "Moje Insta Tipy:" : "My Insta Tips:", {});
 
-  }, {
-    src: "../assets/icons/insta.svg"
-  })
-  const hint = el("h2", lang === "cz" ? "Moje Insta Tipy:" : "My Insta Tips:", {})
+  profileWrapper.append(instaIcon, hint);
 
-  profileWrapper.append(instaIcon, hint)
+  const instaTipsKeys = ["space_learning", "nature_travel_wildlife", "science_tech_ai"];
 
-  const instaTipsKeys = [
-    "space_learning",
-    "nature_travel_wildlife",
-    "science_tech_ai"
-  ]
-
-  instaTipsKeys.forEach(key => {
+  instaTipsKeys.forEach((key) => {
     const tag = profileData[key];
-    if (!tag) return
+    if (!tag) return;
 
     const li = el("li", null, {
       alignItems: "center",
-      display: "flex"
-  })
+      display: "flex",
+    });
 
-  const span = el("span", tag, {});
+    const span = el("span", tag, {});
 
-  const button = el("button", null, {
-    marginLeft: "3px",
-    cursor: "pointer",
-    border: "none",
-    padding: "4px",
-    background: "transparent",
-  })
-  
-  createAddTooltip(button, lang === "cz" ? "Zkopíruj" : "Copy")
+    const button = el("button", null, {
+      marginLeft: "3px",
+      cursor: "pointer",
+      border: "none",
+      padding: "4px",
+      background: "transparent",
+    });
 
-  const copy = el("img", null, {
-    width: "20px",
-    height: "20px",
-    pointerEvents: "none",
-  }, {
-    src: "../assets/icons/copy.svg", 
-  })
+    createAddTooltip(button, lang === "cz" ? "Zkopíruj" : "Copy");
 
-  const check = el("img", null, {
-    width: "20px",
-    height: "20px",
-    pointerEvents: "none"
-  }, {
-    src: "../assets/icons/check.svg",
-  })
+    const copy = el(
+      "img",
+      null,
+      {
+        width: "20px",
+        height: "20px",
+        pointerEvents: "none",
+      },
+      {
+        src: "../assets/icons/copy.svg",
+      }
+    );
 
-  const copyIcon = copy.cloneNode(true) 
-  const checkIcon = check.cloneNode(true)
+    const check = el(
+      "img",
+      null,
+      {
+        width: "20px",
+        height: "20px",
+        pointerEvents: "none",
+      },
+      {
+        src: "../assets/icons/check.svg",
+      }
+    );
 
-  button.appendChild(copyIcon);
+    const copyIcon = copy.cloneNode(true);
+    const checkIcon = check.cloneNode(true);
 
-  button.addEventListener("click", () => {
-    navigator.clipboard.writeText(tag)
-      .then(() => {
-        button.replaceChildren(checkIcon)
+    button.appendChild(copyIcon);
 
-        setTimeout(() => {
-          button.textContent = ""
-          button.appendChild(copyIcon)
-          }, 1000)
+    button.addEventListener("click", () => {
+      navigator.clipboard
+        .writeText(tag)
+        .then(() => {
+          button.replaceChildren(checkIcon);
+
+          setTimeout(() => {
+            button.textContent = "";
+            button.appendChild(copyIcon);
+          }, 1000);
         })
-        .catch(err => {
-        })
-      })
+        .catch((err) => {});
+    });
 
-    li.append(span, button)
-    ul.appendChild(li)
-  })
+    li.append(span, button);
+    ul.appendChild(li);
+  });
 
-  aside.append(createFadeLine(), profileWrapper, ul)
-  return aside
+  aside.append(createFadeLine(), profileWrapper, ul);
+  return aside;
 }

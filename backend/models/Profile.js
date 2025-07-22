@@ -3,11 +3,11 @@ import connectFrontendDB from "../db/connectFrontendDB.js";
 
 const frontendConnection = connectFrontendDB();
 
-const profileSchema = new mongoose.Schema ({
-    date: String,
-    space_learning: String, 
-    nature_travel_wildlife: String,
-    science_tech_ai: String, 
-})
+const profileSchema = new mongoose.Schema({
+  date: String,
+  space_learning: String,
+  nature_travel_wildlife: String,
+  science_tech_ai: String,
+});
 
-export default frontendConnection.model("profile", profileSchema)
+export default frontendConnection.model("profile", profileSchema);

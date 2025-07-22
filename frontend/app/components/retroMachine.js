@@ -10,118 +10,141 @@ import { createAddTooltip } from "../utils/dom/tooltip.js";
 import { createModemSound } from "./sound_section/modem.js";
 
 export async function createRetroMachine() {
+  const lang = getLanguage();
+  const CACHE_KEY = `retro_cache_${lang}`;
 
-  const lang = getLanguage()
-  const CACHE_KEY = `retro_cache_${lang}`
-
-  let retroData = getCachedData(CACHE_KEY)
+  let retroData = getCachedData(CACHE_KEY);
 
   if (retroData) {
   } else {
-    retroData = await fetchRetroMachine()
-    if (retroData) setCachedData(CACHE_KEY, retroData)
+    retroData = await fetchRetroMachine();
+    if (retroData) setCachedData(CACHE_KEY, retroData);
   }
 
   if (!retroData) {
-    return
+    return;
   }
 
   const article = el("article", null, {
-    position: "relative"
-  })
+    position: "relative",
+  });
 
-  const retroMachineTitle = el("h2", "Retro Machine")
+  const retroMachineTitle = el("h2", "Retro Machine");
   const retroWrapper = el("div", null, {
     position: "relative",
-    marginTop: "10px"
-  })
+    marginTop: "10px",
+  });
 
-  const televisionIcon = el("img", null, {
-    width: "40px",
-    height: "auto",
-    position: "absolute",
-    top: "-18px",
-    right: "101px",
-    opacity: ".8"
-  }, {
-    src: "../assets/icons/television.svg"
-  })
+  const televisionIcon = el(
+    "img",
+    null,
+    {
+      width: "40px",
+      height: "auto",
+      position: "absolute",
+      top: "-18px",
+      right: "101px",
+      opacity: ".8",
+    },
+    {
+      src: "../assets/icons/television.svg",
+    }
+  );
 
-  retroWrapper.append(televisionIcon, retroMachineTitle)
+  retroWrapper.append(televisionIcon, retroMachineTitle);
 
-  const year = el("h3", retroData.year ? `> ${retroData.year} <` : "")
-  const title = el("h3", retroData.title?.[lang] || "")
-  const nostalgiggle = el("p", retroData.nostalgiggle?.[lang] || "")
-  const voteTitle = el("p", lang === "cz" 
-      ? "Chceš vidět vysledky hlasování? Hlasuj i ty." 
-      : "Do you want to see the voting results? Vote too.", 
-  {
-    textTransform: "uppercase",
-    fontSize: ".8rem",
-    fontWeight: "bold",
-    marginTop: "30px"
-
-  })
-  createModemSound(retroData, lang, title)
+  const year = el("h3", retroData.year ? `> ${retroData.year} <` : "");
+  const title = el("h3", retroData.title?.[lang] || "");
+  const nostalgiggle = el("p", retroData.nostalgiggle?.[lang] || "");
+  const voteTitle = el(
+    "p",
+    lang === "cz"
+      ? "Chceš vidět vysledky hlasování? Hlasuj i ty."
+      : "Do you want to see the voting results? Vote too.",
+    {
+      textTransform: "uppercase",
+      fontSize: ".8rem",
+      fontWeight: "bold",
+      marginTop: "30px",
+    }
+  );
+  createModemSound(retroData, lang, title);
 
   const feedbackWrapper = el("div", null, {
     display: "flex",
     gap: "40px",
     justifyContent: "center",
     flexWrap: "wrap",
-    marginTop: "0px"
-  })
-  
-  const rememberIMG = el("img", null, {
-    width: "56px",
-    cursor: "pointer"
-  }, {
-    src: "../assets/icons/zazil-white.png",
-    class: "vote-img"
-  })
-  createAddTooltip(rememberIMG,
-    lang === "cz" ? "To jsem zažil/a!" : "I've experienced this!"
-    )
+    marginTop: "0px",
+  });
 
-  const rememberCount = el("span", "", {
-    display: "none",
-  }, {
-    className: "vote-count"
-  })
-  
+  const rememberIMG = el(
+    "img",
+    null,
+    {
+      width: "56px",
+      cursor: "pointer",
+    },
+    {
+      src: "../assets/icons/zazil-white.png",
+      class: "vote-img",
+    }
+  );
+  createAddTooltip(rememberIMG, lang === "cz" ? "To jsem zažil/a!" : "I've experienced this!");
 
-  const notExperienceIMG = el("img", null, {
-    width: "57px",
-    cursor: "pointer"
-  }, {
-    src: "../assets/icons/nezazil-white.png",
-    class: "vote-img"
-  })
-  createAddTooltip(notExperienceIMG,
+  const rememberCount = el(
+    "span",
+    "",
+    {
+      display: "none",
+    },
+    {
+      className: "vote-count",
+    }
+  );
+
+  const notExperienceIMG = el(
+    "img",
+    null,
+    {
+      width: "57px",
+      cursor: "pointer",
+    },
+    {
+      src: "../assets/icons/nezazil-white.png",
+      class: "vote-img",
+    }
+  );
+  createAddTooltip(
+    notExperienceIMG,
     lang === "cz" ? "To jsem nezažil/a." : "I haven’t experienced this."
-    )
+  );
 
-  const notExperienceCount = el("span", "", {
-    display: "none"
-  }, {
-    className: "vote-count"
-  })
-  
-  
+  const notExperienceCount = el(
+    "span",
+    "",
+    {
+      display: "none",
+    },
+    {
+      className: "vote-count",
+    }
+  );
+
   function createVoteElement(imgElement, countSpan) {
     const imageWrapper = el("div", null, {
       position: "relative",
-      height: "100px", 
+      height: "100px",
       width: "80px",
       display: "flex",
-      alignItems: "flex-end", 
+      alignItems: "flex-end",
       justifyContent: "center",
-      paddingTop: "26px" 
-    })
-  
+      paddingTop: "26px",
+    });
+
     imgElement.style.height = "74px";
     imgElement.style.objectFit = "contain";
-  
+
     Object.assign(countSpan.style, {
       position: "absolute",
       fontFamily: "monospace",
@@ -135,133 +158,135 @@ export async function createRetroMachine() {
       backgroundColor: "#ffffff",
       color: "#000",
       lineHeight: "20px",
-      minWidth: "32px", 
+      minWidth: "32px",
       textAlign: "center",
-      boxShadow: "0 1px 4px rgba(0,0,0,0.1)"
-    })
-  
-    imageWrapper.append(imgElement, countSpan)
-  
+      boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+    });
+
+    imageWrapper.append(imgElement, countSpan);
+
     const wrapper = el("div", null, {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "flex-start",
       width: "80px",
-      height: "130px" 
-    })
-  
-    wrapper.append(imageWrapper)
-    return wrapper
+      height: "130px",
+    });
+
+    wrapper.append(imageWrapper);
+    return wrapper;
   }
-  
-  const rememberWrapper = createVoteElement(rememberIMG, rememberCount) 
-  const notExperienceWrapper = createVoteElement(notExperienceIMG, notExperienceCount)
-  feedbackWrapper.append(notExperienceWrapper, rememberWrapper)
-  
-  const todayKey = retroData.date 
-  const localStorageKey = `retroVotedToday_${todayKey}` 
-  
-  const voteCounts = await fetchGetVoteRetro(todayKey)
-  const votedToday = localStorage.getItem(localStorageKey)
-  
+
+  const rememberWrapper = createVoteElement(rememberIMG, rememberCount);
+  const notExperienceWrapper = createVoteElement(notExperienceIMG, notExperienceCount);
+  feedbackWrapper.append(notExperienceWrapper, rememberWrapper);
+
+  const todayKey = retroData.date;
+  const localStorageKey = `retroVotedToday_${todayKey}`;
+
+  const voteCounts = await fetchGetVoteRetro(todayKey);
+  const votedToday = localStorage.getItem(localStorageKey);
+
   if (votedToday) {
-    rememberIMG.style.pointerEvents = "none"
-    notExperienceIMG.style.pointerEvents = "none"
-  
-    rememberIMG.style.opacity = votedToday === "like" ? "1" : "0.4"
-    notExperienceIMG.style.opacity = votedToday === "dislike" ? "1" : "0.4"
-  
+    rememberIMG.style.pointerEvents = "none";
+    notExperienceIMG.style.pointerEvents = "none";
+
+    rememberIMG.style.opacity = votedToday === "like" ? "1" : "0.4";
+    notExperienceIMG.style.opacity = votedToday === "dislike" ? "1" : "0.4";
+
     if (votedToday === "like") {
-    rememberIMG.src = "../assets/icons/zazil-green.png"
-  } else {
-    notExperienceIMG.src = "../assets/icons/nezazil-green.png"
-  }
-  
-  rememberCount.textContent = voteCounts.like
-  notExperienceCount.textContent = voteCounts.dislike
-  rememberCount.style.display = "inline"
-  notExperienceCount.style.display = "inline"
-  }
-  
-  async function handleVote(option) {
-    const updated = await fetchPostVoteRetro(todayKey, option)
-    if (!updated) return
-  
-    rememberCount.textContent = updated.like
-    notExperienceCount.textContent = updated.dislike
-    rememberCount.style.display = "inline"
-    notExperienceCount.style.display = "inline"
-  
-    rememberIMG.style.pointerEvents = "none"
-    notExperienceIMG.style.pointerEvents = "none"
-  
-    if (option === "like") {
-      rememberIMG.src = "../assets/icons/zazil-green.png"
-      rememberIMG.style.opacity = "1"
-      notExperienceIMG.style.opacity = "0.4"
+      rememberIMG.src = "../assets/icons/zazil-green.png";
     } else {
-      notExperienceIMG.src = "../assets/icons/nezazil-green.png"
-      notExperienceIMG.style.opacity = "1"
-      rememberIMG.style.opacity = "0.4"
+      notExperienceIMG.src = "../assets/icons/nezazil-green.png";
     }
-  
-    localStorage.setItem(localStorageKey, option)
-  
-    createVotingReportUsers(lang === "cz" ? "Děkujeme, že hlasujete každý den 💚" : "Thank you for voting every day 💚")
+
+    rememberCount.textContent = voteCounts.like;
+    notExperienceCount.textContent = voteCounts.dislike;
+    rememberCount.style.display = "inline";
+    notExperienceCount.style.display = "inline";
   }
-  
-    rememberIMG.addEventListener("click", () => {
-      handleVote("like")
-    })
-  
-    notExperienceIMG.addEventListener("click", () => {
-      handleVote("dislike")
-    })
-  
-const untruthIcon = createUntruthIcon()
-const untruthVotingWindow = createUntruthVotingWindow()
-document.body.append(untruthVotingWindow)
 
-const section = "retro"
-const date = retroData.date 
+  async function handleVote(option) {
+    const updated = await fetchPostVoteRetro(todayKey, option);
+    if (!updated) return;
 
-untruthIcon.dataset.section = section
+    rememberCount.textContent = updated.like;
+    notExperienceCount.textContent = updated.dislike;
+    rememberCount.style.display = "inline";
+    notExperienceCount.style.display = "inline";
 
-const untruthWrapper = el("div", null, {
-  position: "absolute",
-  top: "8px",
-  left: "0px",
-  zIndex: "9999",
-  opacity: "0.6",
-  transition: "opacity 0.2s", 
-})
+    rememberIMG.style.pointerEvents = "none";
+    notExperienceIMG.style.pointerEvents = "none";
 
-untruthIcon.addEventListener("click", () => {
-  untruthVotingWindow.show(untruthIcon, {
-    section,
-    date
-  })
-})
+    if (option === "like") {
+      rememberIMG.src = "../assets/icons/zazil-green.png";
+      rememberIMG.style.opacity = "1";
+      notExperienceIMG.style.opacity = "0.4";
+    } else {
+      notExperienceIMG.src = "../assets/icons/nezazil-green.png";
+      notExperienceIMG.style.opacity = "1";
+      rememberIMG.style.opacity = "0.4";
+    }
 
-untruthWrapper.addEventListener("mouseenter", () => {
-  untruthWrapper.style.opacity = "1"
-})
-untruthWrapper.addEventListener("mouseleave", () => {
-  untruthWrapper.style.opacity = "0.6"
-})
+    localStorage.setItem(localStorageKey, option);
 
-untruthWrapper.append(untruthIcon)
+    createVotingReportUsers(
+      lang === "cz" ? "Děkujeme, že hlasujete každý den 💚" : "Thank you for voting every day 💚"
+    );
+  }
 
-article.append(
-  createFadeLine(),
-  untruthWrapper,
-  retroWrapper,
-  year,
-  title,
-  nostalgiggle,
-  voteTitle,
-  feedbackWrapper
-)
-return article
+  rememberIMG.addEventListener("click", () => {
+    handleVote("like");
+  });
+
+  notExperienceIMG.addEventListener("click", () => {
+    handleVote("dislike");
+  });
+
+  const untruthIcon = createUntruthIcon();
+  const untruthVotingWindow = createUntruthVotingWindow();
+  document.body.append(untruthVotingWindow);
+
+  const section = "retro";
+  const date = retroData.date;
+
+  untruthIcon.dataset.section = section;
+
+  const untruthWrapper = el("div", null, {
+    position: "absolute",
+    top: "8px",
+    left: "0px",
+    zIndex: "9999",
+    opacity: "0.6",
+    transition: "opacity 0.2s",
+  });
+
+  untruthIcon.addEventListener("click", () => {
+    untruthVotingWindow.show(untruthIcon, {
+      section,
+      date,
+    });
+  });
+
+  untruthWrapper.addEventListener("mouseenter", () => {
+    untruthWrapper.style.opacity = "1";
+  });
+  untruthWrapper.addEventListener("mouseleave", () => {
+    untruthWrapper.style.opacity = "0.6";
+  });
+
+  untruthWrapper.append(untruthIcon);
+
+  article.append(
+    createFadeLine(),
+    untruthWrapper,
+    retroWrapper,
+    year,
+    title,
+    nostalgiggle,
+    voteTitle,
+    feedbackWrapper
+  );
+  return article;
 }

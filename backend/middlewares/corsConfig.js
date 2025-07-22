@@ -1,16 +1,14 @@
-import cors from "cors"
+import cors from "cors";
 import { CHROME_EXTENSION_ALL_URL } from "../config.js";
 
 const corsOptions = {
-    origin: [ "http://127.0.0.1:5501", 
-    CHROME_EXTENSION_ALL_URL ], // moje ID 
-    methods: ["GET"], //povoleni HTTP metody
-    credentials: true, // povoleno prenosu cookies pokud bude potreba 
-    allowedHeaders: [ "Content-Type", "Authorization" ], //povolene hlavicky requestu
-}
+  origin: ["http://127.0.0.1:5501", CHROME_EXTENSION_ALL_URL], // moje ID
+  methods: ["GET"], //povoleni HTTP metody
+  credentials: true, // povoleno prenosu cookies pokud bude potreba
+  allowedHeaders: ["Content-Type", "Authorization"], //povolene hlavicky requestu
+};
 
-export default cors(corsOptions)
-
+export default cors(corsOptions);
 
 // import cors from "cors";
 // import { CHROME_EXTENSION_ALL_URL } from "../config.js";
@@ -44,8 +42,3 @@ export default cors(corsOptions)
 
 // // Export middleware
 // export default cors(corsOptions)
-
-
-
-
-

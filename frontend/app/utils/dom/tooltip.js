@@ -10,7 +10,7 @@ export function createAddTooltip(targetElement, text) {
     tooltip.style.opacity = 1;
   });
 
-  targetElement.addEventListener("mousemove", e => {
+  targetElement.addEventListener("mousemove", (e) => {
     const offset = 12;
     const tooltipWidth = tooltip.offsetWidth;
     const pageWidth = window.innerWidth;

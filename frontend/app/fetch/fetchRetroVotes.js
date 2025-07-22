@@ -7,31 +7,30 @@ export async function fetchGetVoteRetro(date) {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer HACK_EXTENSION"
-      }
-    })
+        Authorization: "Bearer HACK_EXTENSION",
+      },
+    });
 
-    return await response.json()
+    return await response.json();
   } catch (error) {
-    return { like: 0, dislike: 0 }
+    return { like: 0, dislike: 0 };
   }
 }
 
 export async function fetchPostVoteRetro(date, option) {
-
   try {
     const response = await fetch(API.retroVotesPost, {
       method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer HACK_EXTENSION"
+        Authorization: "Bearer HACK_EXTENSION",
       },
-      body: JSON.stringify({ date, option })
-    })
+      body: JSON.stringify({ date, option }),
+    });
 
-    return await response.json()
+    return await response.json();
   } catch (error) {
-    return null
+    return null;
   }
 }

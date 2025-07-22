@@ -1,16 +1,15 @@
-import { updateSectionData } from "../utils/update/updateSectionData.js"
+import { updateSectionData } from "../utils/update/updateSectionData.js";
 import { API } from "../utils/config.js";
 
 export async function fetchStoryOfTheDay() {
-
-  const shouldUpdate = await updateSectionData("story")
+  const shouldUpdate = await updateSectionData("story");
 
   if (!shouldUpdate) {
     const { storyData } = await new Promise((resolve) => {
-      chrome.storage.local.get("storyData", (result) => resolve(result))
-    })
+      chrome.storage.local.get("storyData", (result) => resolve(result));
+    });
 
-    return storyData || null
+    return storyData || null;
   }
 
   try {
@@ -18,11 +17,11 @@ export async function fetchStoryOfTheDay() {
       method: "GET",
       mode: "cors",
       headers: {
-        "Authorization": "Bearer HACK_EXTENSION"
-      }
-    })
+        Authorization: "Bearer HACK_EXTENSION",
+      },
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
     await new Promise((resolve) => {
       chrome.storage.local.set(
@@ -31,13 +30,10 @@ export async function fetchStoryOfTheDay() {
           story_lastFetch: Date.now(),
         },
         resolve
-      )
-    })
-    return data
+      );
+    });
+    return data;
   } catch (error) {
-    return null
+    return null;
   }
 }
-
-
-

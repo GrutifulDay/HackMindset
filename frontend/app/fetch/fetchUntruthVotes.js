@@ -1,9 +1,9 @@
-import { API } from "../utils/config.js"
+import { API } from "../utils/config.js";
 /**
- * 
- * @param {String} date 
- * @param {Array<String>} feedback 
- * @returns {Object|null} 
+ *
+ * @param {String} date
+ * @param {Array<String>} feedback
+ * @returns {Object|null}
  */
 export async function fetchUntruthVotes(date, feedback, section) {
   try {
@@ -12,16 +12,16 @@ export async function fetchUntruthVotes(date, feedback, section) {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer HACK_EXTENSION"
+        Authorization: "Bearer HACK_EXTENSION",
       },
-      body: JSON.stringify({ 
-        date, 
-        feedback, 
-        section 
-      })
-    })
-    return await response.json()
+      body: JSON.stringify({
+        date,
+        feedback,
+        section,
+      }),
+    });
+    return await response.json();
   } catch (error) {
-    return null
+    return null;
   }
 }

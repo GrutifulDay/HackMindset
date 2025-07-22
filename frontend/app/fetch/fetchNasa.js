@@ -1,14 +1,14 @@
-import { updateSectionData } from "../utils/update/updateSectionData.js"
+import { updateSectionData } from "../utils/update/updateSectionData.js";
 import { API } from "../utils/config.js";
 
 export async function fetchNasaImage() {
-  const shouldUpdate = await updateSectionData("nasa")
+  const shouldUpdate = await updateSectionData("nasa");
 
   if (!shouldUpdate) {
     const { nasaData } = await new Promise((resolve) => {
-      chrome.storage.local.get("nasaData", (result) => resolve(result))
-    })
-    return nasaData || null
+      chrome.storage.local.get("nasaData", (result) => resolve(result));
+    });
+    return nasaData || null;
   }
 
   try {
@@ -16,11 +16,11 @@ export async function fetchNasaImage() {
       method: "GET",
       mode: "cors",
       headers: {
-        "Authorization": "Bearer HACK_EXTENSION"
-      }
-    })
+        Authorization: "Bearer HACK_EXTENSION",
+      },
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
     await new Promise((resolve) => {
       chrome.storage.local.set(
@@ -29,11 +29,10 @@ export async function fetchNasaImage() {
           nasa_lastFetch: Date.now(),
         },
         resolve
-      )
-    })
-    return data
+      );
+    });
+    return data;
   } catch (error) {
-    return null
+    return null;
   }
 }
-
