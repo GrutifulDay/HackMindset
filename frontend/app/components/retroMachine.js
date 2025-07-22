@@ -112,7 +112,6 @@ export async function createRetroMachine() {
   })
   createAddTooltip(notExperienceIMG,
     lang === "cz" ? "To jsem nezažil/a." : "I haven’t experienced this."
-
     )
 
   const notExperienceCount = el("span", "", {
@@ -260,7 +259,9 @@ const untruthWrapper = el("div", null, {
   position: "absolute",
   top: "8px",
   left: "0px",
-  zIndex: "10",
+  zIndex: "9999",
+  opacity: "0.6",
+  transition: "opacity 0.2s", 
 })
 
 untruthIcon.addEventListener("click", () => {

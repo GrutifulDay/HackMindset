@@ -2,6 +2,7 @@ import { el } from "../../utils/dom/uiSnippets.js";
 import { getLanguage } from "../../utils/language/language.js";
 import { createAddTooltip } from "../../utils/dom/tooltip.js";
 
+// info ikona
 export function createInfoIcon() {
   const lang = getLanguage();
 

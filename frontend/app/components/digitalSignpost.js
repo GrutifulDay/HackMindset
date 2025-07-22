@@ -39,13 +39,12 @@ export async function createDigitalSignpost() {
         gap: "10px",
         marginTop: "17px",
         marginLeft: "53px"
-        
     })
 
     const titleDigitalSignpost = el ("h2", lang === "cz" ? "Digitální rozcestník" : "Digital signpost", {
         margin: "0"
-
     })
+
     const signpostIcon = el("img", null, {
         width: "40px",
         height: "auto",
@@ -85,8 +84,7 @@ export async function createDigitalSignpost() {
         zIndex: "9999",
         pointerEvents: "auto",
         opacity: "0.6",
-        transition: "opacity 0.2s",
-        border: "1px solid black"
+        transition: "opacity 0.2s",        
       })
       
 

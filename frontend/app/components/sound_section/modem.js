@@ -1,7 +1,7 @@
 import { el } from "../../utils/dom/uiSnippets.js";
 import { toggleSound } from "../../utils/sounds/playSound.js"; // místo playSound
 
-// prehravani pro urcitou sekci 
+// PREHRAVANI ZVUKU pro urcitou sekci 
 export function createModemSound(retroData, lang, titleEl) {
   const modemTitleCZ = "Hayes Micromodem 100 – Modem pro domácí uživatele"
   const modemTitleEN = "Hayes Micromodem 100 – Modem for the Masses"
@@ -12,7 +12,7 @@ export function createModemSound(retroData, lang, titleEl) {
 
   if (!shouldAddSound) return;
 
-  // pridat ikoni modemu 
+  // pridat ikonu modemu 
   const soundIcon = el("img", null, {
     marginLeft: "10px",
     width: "17px",

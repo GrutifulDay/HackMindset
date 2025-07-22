@@ -3,6 +3,8 @@ import { createTranslationInfoWindow } from "./info_icons/translationInfo.js";
 import { createTranslationIcon } from "./icons_import/aboutTranslation.js";
 import { getLanguage } from "../utils/language/language.js";
 import { fetchNasaImage } from "../fetch/fetchNasa.js";
+import { createAddTooltip } from "../utils/dom/tooltip.js";
+
 
 export async function createNasaSection() {
     console.log("{funkce createNasaSection} ✅ funguje");
@@ -43,6 +45,8 @@ export async function createNasaSection() {
         className: "nasa-link",
         rel: "noopener noreferrer"
     })
+
+    createAddTooltip(link, "nasa.gov")
 
     nasaTitle.append(title, link)
     titleWrapper.append(rocketIcon, nasaTitle)

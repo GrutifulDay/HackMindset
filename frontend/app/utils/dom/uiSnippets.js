@@ -23,69 +23,28 @@ export const setStyle = (element, styles) => {
     Object.assign(element.style, styles)
 }
 
-// cely zapis v components 
-// export const el = (tag, text, style = {}) => {
-//     const element = document.createElement(tag) // nazev podle html
-//     if (text) element.textContent = text // pokud mam text, vlozim ho do elementu
-//     setStyle(element, style)  // fce na prirazeni stylu 
-//     return element    // vrati vytvoreny el. zpet 
-// }
-
-// novy zapis components = rozsirena verze bez tooltip
-// export const el = (tag, text, style = {}, attributes = {}) => {
-//  const element = document.createElement(tag);
-
-//  if (text) element.textContent = text;
-
-//  Object.assign(element.style, style);
-
-//  Object.entries(attributes).forEach(([key, value]) => {
-//    element[key] = value;
-//  });
-
-//  return element;
-// }
 
 
 // novy zapis components = rozsirena verze tooltip
 export const el = (tag, text, style = {}, attributes = {}) => {
-  const element = document.createElement(tag);
+  const element = document.createElement(tag)
 
-  if (text) element.textContent = text;
-  Object.assign(element.style, style);
+  if (text) element.textContent = text
+  Object.assign(element.style, style)
 
   Object.entries(attributes).forEach(([key, value]) => {
     if (key.startsWith("data-") || key === "aria-label" || key.includes("-")) {
-      element.setAttribute(key, value); // pro atributy jako data-tooltip
+      element.setAttribute(key, value) // pro atributy jako data-tooltip
     } else if (key === "class") {
       element.className = value
     } else {
-      element[key] = value; // klasické DOM vlastnosti
+      element[key] = value // klasické DOM vlastnosti
     }
-  });
+  })
 
   return element
 }
 
-// wrap s tooltipem 
-export function createTooltipElement(tag, text, style = {}, attributes = {}, tooltipText = "") {
-  const inner = el(tag, text, style, attributes);
-
-  // obrázek nebo prvek uvnitř obalu
-  inner.style.pointerEvents = "none"; // aby klik fungoval na wrapperu
-
-  const wrapper = el("div", null, {
-    display: "inline-block",
-    position: "relative",
-    cursor: "pointer"
-  }, {
-    class: "tooltip-wrapper",
-    "data-tooltip": tooltipText
-  });
-
-  wrapper.appendChild(inner);
-  return wrapper;
-}
 
 // delici cara 
 export function createFadeLine() {

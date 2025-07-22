@@ -55,8 +55,6 @@ export function createLanguageSwitcher() {
   createAddTooltip(czFlag, "Čeština")
   createAddTooltip(enFlag, "English")
 
-
-
   czFlag.onclick = () => {
     setLanguage("cz")
     location.reload()

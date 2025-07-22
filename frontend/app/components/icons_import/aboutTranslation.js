@@ -1,6 +1,7 @@
 import { el } from "../../utils/dom/uiSnippets.js";
 import { createAddTooltip } from "../../utils/dom/tooltip.js";
 
+// info o prekladu ikona
 export function createTranslationIcon() {
 
   const icon = el("img", null, {
@@ -15,7 +16,7 @@ export function createTranslationIcon() {
     src: "../assets/icons/infoTranslation.svg",
   })
 
-  createAddTooltip(icon, "Proč je to anglicky?")
+  createAddTooltip(icon, "Proč není text česky?")
 
   return icon
 }

@@ -27,7 +27,11 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["assets/sounds/dialup.mp3", "assets/sound.svg"],
+      "resources": [
+        "frontend/assets/icons/logo-bulb.svg",
+        "frontend/assets/sound.svg",
+        "frontend/assets/sounds/dialup.mp3"
+      ],
       "matches": ["<all_urls>"]
     }
   ],
