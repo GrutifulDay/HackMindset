@@ -14,5 +14,5 @@ export const API = {
   untruthLimitLog: `${BASE_URL}/untruth-limit-log`
 }
 
-export const DEV_MODE = true
+export const DEV_MODE = false
 
