@@ -9,7 +9,7 @@ export function createVotingReportUsers(text) {
   
     setTimeout(() => {
       message.remove()
-    }, 2500)
+    }, 3500)
 }
 
 // zprava uzivateli po oznaceni chyb  

@@ -1,5 +1,5 @@
 /* popis nasa textu */
-.nasa-description:hover {
+/* .nasa-description:hover {
   text-decoration: underline;
 }
 .nasa-description:hover {
@@ -8,7 +8,7 @@
 
 .nasa-description {
     transition: text-decoration 0.2s ease;
-}
+} */
 
 /* nasa url - chces vedet vic?  */
 .nasa-url {

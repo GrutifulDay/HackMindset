@@ -1,5 +1,6 @@
-import { el } from "../../utils/dom/uiSnippets.js";
+import { el, closeLikeOldTV } from "../../utils/dom/uiSnippets.js";
 import { getLanguage } from "../../utils/language/language.js";
+import { createAddTooltip } from "../../utils/dom/tooltip.js"
 
 // VISUAL - "O ROZSIRENI" - okno - CZ / EN
 export function createAboutExtensionWindow() {
@@ -65,9 +66,13 @@ export function createAboutExtensionWindow() {
 
     // fce click zavreni mimo element container
     function closeContainer() {
-        container.style.display = "none";
         document.removeEventListener("click", handleOutsideClick);
+        closeLikeOldTV(container, () => {
+            container.style.display = "none";
+            container.style.transform = "scale(1)"; // obnovíš stav pro další otevření
+        });
     }
+    
     function handleOutsideClick(e) {
         if (!container.contains(e.target)) {
             closeContainer();
@@ -85,7 +90,14 @@ export function createAboutExtensionWindow() {
         }, 0)
     }
 
-    const title = el("strong", t.title)
+    const title = el("strong", t.title, {
+        fontSize: "1.1em",
+        color: "#273E64",
+        textTransform: "uppercase",
+        textDecoration: "underline",
+        marginTop: "3px"
+
+    })
     const lines = [t.line1, t.line2, t.line3, t.line4, t.line5, t.line6, t.line7, t.line8, t.line9, t.line10]
     .filter(Boolean) // vyhodí undefined
     .map(text => el("p", text))
@@ -93,6 +105,16 @@ export function createAboutExtensionWindow() {
     
 
     const footer = el("footer", null, {})
+
+    const gitHubIcon = el("img", null, {
+        width: "30px",
+        height: "auto",
+        cursor: "pointer",
+        transition: "transform 0.2s ease-in-out"
+
+    }, {
+        src: "../assets/icons/github.svg",
+    })
 
     const gitHubLink = el("a", null, {
         display: "inline-block"
@@ -102,17 +124,19 @@ export function createAboutExtensionWindow() {
         rel: "noopener noreferrer"     // zabrani vkladani 
     })
 
-    const gitHubIcon = el("img", null, {
-        width: "40px",
-        height: "auto",
-        cursor: "pointer"
-    }, {
-        src: "../assets/icons/github.svg",
-        title: "GitHub",
-    })
+    gitHubIcon.addEventListener("mouseenter", () => {
+        gitHubIcon.style.transform = "scale(1.10)";
+    });
+    gitHubIcon.addEventListener("mouseleave", () => {
+        gitHubIcon.style.transform = "scale(1)";
+    });
+
+    createAddTooltip(gitHubIcon,
+        "GitHub"
+        )
 
     gitHubLink.append(gitHubIcon)
     footer.append(gitHubLink)
-    container.append(closeBtn, footer, title, ...lines)
+    container.append(closeBtn, title, ...lines, footer)
     return container
 }

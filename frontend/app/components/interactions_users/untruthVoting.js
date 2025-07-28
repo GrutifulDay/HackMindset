@@ -44,8 +44,8 @@ export function createUntruthVotingWindow() {
   closeBtn.addEventListener("click", closeContainer)
 
   const title = el("h3", lang === "cz"
-    ? "Chceš něco označit jako nepravda?"
-    : "Do you want to label something as untrue?", {
+    ? "Našli jste chybu?"
+    : "Did you find a mistake?", {
     display: "block",
     marginTop: "14px",
     fontWeight: "bold",
@@ -53,13 +53,13 @@ export function createUntruthVotingWindow() {
     color: "#273E64"
   })
 
-  const message = el("p", lang === "cz"
-    ? "Pokud si myslíš, že tento článek není pravdivý, označ konkrétní části."
-    : "If you think this article isn't true, select specific parts below.", {
-    marginTop: "8px",
-    color: "#273E64",
-    fontSize: "1em"
-  })
+  // const = el("p", lang === "cz"
+  //   ? "Pokud si myslíš, že tento článek není pravdivý, označ konkrétní části."
+  //   : "If you think this article isn't true, select specific parts below.", {
+  //   marginTop: "8px",
+  //   color: "#273E64",
+  //   fontSize: "1em"
+  // })
 
   const listItems = [
     lang === "cz" ? "Rok je špatně" : "The year is wrong",
@@ -220,7 +220,7 @@ export function createUntruthVotingWindow() {
   container.append(
     closeBtn,
     title,
-    message,
+    
     listWrapper,
     submitButton
   )

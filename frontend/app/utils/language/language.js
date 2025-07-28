@@ -7,7 +7,7 @@ export function setLanguage(lang) {
   }
   
   export function getLanguage() {
-    return localStorage.getItem("preferredLanguage") || "cz"
+    return localStorage.getItem("preferredLanguage") || "en"
   }
   
   export function hasLanguageSet() {

@@ -16,7 +16,7 @@ export function createUntruthIcon() {
     src: "../assets/icons/warning.svg",
   })
 
-  createAddTooltip(icon, lang === "cz" ? "Chces označit informaci jako nepravda? Klikni" : "Do you want to mark the information as false? Click")
+  createAddTooltip(icon, lang === "cz" ? "Chceš nahlásit chybu?" : "Do you want to report false information?")
 
   return icon
 }

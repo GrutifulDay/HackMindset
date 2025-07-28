@@ -1,3 +1,4 @@
+import { gsap } from "gsap"
 console.log("{uiSnippets.js} ✅ funguje")
 
 // POMOCNE FUNKCE
@@ -84,4 +85,23 @@ export function attachInfoToggle(trigger, target, customShow) {
       setTimeout(() => document.addEventListener("click", handleOutsideClick), 0)
     }
   })
+}
+
+
+export function closeLikeOldTV(element, onComplete = () => {}) {
+  gsap.to(element, {
+    duration: 0.3,
+    scaleY: 0.05,
+    ease: "power2.in",
+    onComplete: () => {
+      gsap.to(element, {
+        duration: 0.2,
+        scaleX: 0.05,
+        ease: "power2.in",
+        onComplete: () => {
+          onComplete();
+        }
+      });
+    }
+  });
 }

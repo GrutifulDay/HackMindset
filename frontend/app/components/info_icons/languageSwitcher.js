@@ -28,7 +28,8 @@ export function createLanguageSwitcher() {
       src
     })
 
-    flag.title = title
+    if (title) flag.title = title;
+
 
     if (isActive) {
       flag.classList.add("active-lang")

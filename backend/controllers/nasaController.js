@@ -18,7 +18,7 @@ export async function fetchNasaImage(req, res) {
         if (data.media_type === "image") {
             return res.json({ type: "image", url: data.url, explanation: data.explanation })
         } else {
-            return res.json({ type: "text", url: "", explanation: "Dnes je video 🎥. Klikni na odkaz!" })
+            return res.json({ type: "video", url: data.url, explanation: `Dnes je video 🎥, klikni na odkaz: "Chceš vědět víc?"` })
         }
 
     } catch (error) {

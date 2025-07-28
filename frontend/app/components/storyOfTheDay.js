@@ -67,9 +67,9 @@ export async function createStoryOfTheDay() {
   const title = el("h3", storyData.title?.[lang] || "", {})
   const content = el("p", storyData.content?.[lang] || "", {})
   const voteTitle = el("p", lang === "cz" 
-      ? "Chceš vidět vysledky hlasování? Hlasuj i ty." 
-      : "Do you want to see the voting results? Vote too.", 
-  {
+  ? "Chceš vidět výsledky hlasování? Klikni na jeden z obrázků a hlasuj i ty." 
+  : "Do you want to see the voting results? Click on one of the images and cast your vote too.", 
+{
     textTransform: "uppercase",
     fontSize: ".8rem",
     fontWeight: "bold",
@@ -88,9 +88,10 @@ export async function createStoryOfTheDay() {
 // vedel/a
 const rememberIMG = el("img", null, {
   width: "56px",
+  height: "auto",
   cursor: "pointer"
 }, {
-  src: "../assets/icons/zazil-white.png",
+  src: "../assets/icons/pruhledna-zarovka.png",
   class: "vote-img"
 })
 createAddTooltip( rememberIMG, 
@@ -106,6 +107,7 @@ const rememberCount = el("span", "", {
 // nevedel/a 
 const notExperienceIMG = el("img", null, {
   width: "57px",
+  height: "auto",
   cursor: "pointer"
 }, {
   src: "../assets/icons/nezazil-white.png",
@@ -178,7 +180,7 @@ function createVoteElement(imgElement, countSpan) {
 // pridani fce k wrapper
 const rememberWrapper = createVoteElement(rememberIMG, rememberCount) 
 const notExperienceWrapper = createVoteElement(notExperienceIMG, notExperienceCount)
-feedbackWrapper.append(notExperienceWrapper, rememberWrapper)
+feedbackWrapper.append(rememberWrapper, notExperienceWrapper)
 
 // Kontrola, zda uzivatel jiz hlasoval
 const todayKey = storyData.date 
@@ -198,7 +200,7 @@ if (votedToday) {
   notExperienceIMG.style.opacity = votedToday === "dislike" ? "1" : "0.4"
 
   if (votedToday === "like") {
-  rememberIMG.src = "../assets/icons/zazil-green.png"
+  rememberIMG.src = "../assets/icons/zarovka-zluta.png"
 } else {
   notExperienceIMG.src = "../assets/icons/nezazil-green.png"
 }

@@ -63,8 +63,8 @@ export async function createRetroMachine() {
   const title = el("h3", retroData.title?.[lang] || "")
   const nostalgiggle = el("p", retroData.nostalgiggle?.[lang] || "")
   const voteTitle = el("p", lang === "cz" 
-      ? "Chceš vidět vysledky hlasování? Hlasuj i ty." 
-      : "Do you want to see the voting results? Vote too.", 
+      ? "Chceš vidět výsledky hlasování? Klikni na jeden z obrázků a hlasuj i ty." 
+      : "Do you want to see the voting results? Click on one of the images and cast your vote too.", 
   {
     textTransform: "uppercase",
     fontSize: ".8rem",

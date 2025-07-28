@@ -14,7 +14,7 @@ export const API = {
   untruthLimitLog: `${BASE_URL}/untruth-limit-log`
 }
 
-export const DEV_MODE = false // true / false 
+export const DEV_MODE = true // true / false 
 
 // chrome.storage.local.clear() // pro uplny vymaz 
 // localStorage.clear()   
