@@ -1,4 +1,3 @@
-import { gsap } from "gsap"
 console.log("{uiSnippets.js} ✅ funguje")
 
 // POMOCNE FUNKCE
