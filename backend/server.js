@@ -20,6 +20,7 @@ import profileRoutes from "./routes/profileRoutes.js"
 import digitalRoutes from "./routes/digitalRoutes.js"
 import untruthRoutes from "./routes/untruthRoutes.js"
 import untruthLimitRoutes from "./routes/untruthLimit.js"
+import feedbackRoutes from "./routes/feedbackRoutes.js"
 
 // import ipRoutes from "./routes/ipRoutes.js"
 // import testDB from "./routes/test-db.js"
@@ -79,7 +80,8 @@ app.use(limiterApi)
 app.use(botProtection)
 app.use(corsOptions)
 
-app.use(express.json())
+app.use(express.json({ limit: "10kb" }))
+
 
 // ✅ Načtení NASA router
 app.use("/api", nasaRoutes)
@@ -89,6 +91,7 @@ app.use("/api", profileRoutes)
 app.use("/api", digitalRoutes)
 app.use("/api", untruthRoutes)
 app.use("/api", untruthLimitRoutes)
+app.use("/api", feedbackRoutes)
 
 // app.use("/api", ipRoutes)
 // app.use("/api", testDB)

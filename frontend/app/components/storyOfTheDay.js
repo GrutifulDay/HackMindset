@@ -110,7 +110,7 @@ const notExperienceIMG = el("img", null, {
   height: "auto",
   cursor: "pointer"
 }, {
-  src: "../assets/icons/nezazil-white.png",
+  src: "../assets/icons/jedna.png",
   class: "vote-img"
 })
 createAddTooltip( notExperienceIMG, 
@@ -139,7 +139,7 @@ function createVoteElement(imgElement, countSpan) {
   })
 
   // img
-  imgElement.style.height = "74px"
+  imgElement.style.height = "auto"
   imgElement.style.objectFit = "contain"
 
   // cislo nad img
@@ -225,7 +225,7 @@ async function handleVote(option) {
   notExperienceIMG.style.pointerEvents = "none"
 
   if (option === "like") {
-    rememberIMG.src = "../assets/icons/zazil-green.png"
+    rememberIMG.src = "../assets/icons/zarovka-zluta.png"
     rememberIMG.style.opacity = "1"
     notExperienceIMG.style.opacity = "0.4"
   } else {

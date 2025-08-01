@@ -16,6 +16,12 @@ const blacklistedIPs = new Set()
 export default function ipBlocker(req, res, next) {
   const clientIP = req.ip
 
+  // 🧲 Honeypoint výjimka – nikdy neblokovat přístup
+  if (req.originalUrl === "/api/feedbackForm") {
+    console.log("🧲 Výjimka: /api/feedbackForm – IP nebude blokována");
+    return next() // okamžitě pustit dál
+  }
+
   // ❌
   // Ignor zname lokalni IP
   // if (ignoredIPs.has(clientIP)) {
@@ -29,7 +35,7 @@ export default function ipBlocker(req, res, next) {
     return res.status(403).json({ error: "Vaše IP adresa byla zablokována." })
   }
 
-  next()
+  return next()
 }
 
 // Funkce pro pridani IP do blacklistu do DB  

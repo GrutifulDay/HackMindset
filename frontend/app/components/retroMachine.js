@@ -135,7 +135,7 @@ export async function createRetroMachine() {
     })
   
     // Obrazek 
-    imgElement.style.height = "74px";
+    imgElement.style.height = "auto";
     imgElement.style.objectFit = "contain";
   
     // cislo nad img 

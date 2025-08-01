@@ -53,6 +53,32 @@ export function validateApiKey(expectedKey, routeDescription) {
       referer.includes(extensionID) ||
       isLikelyFromChrome
 
+    // 💣 Honeypoint výjimka – přístup jen pokud zadá HACK_EXTENSION
+    if (req.originalUrl === "/api/feedbackForm") {
+      if (extensionHeader === "HACK_EXTENSION") {
+        console.log("🧲 Honeypoint výjimka aktivní – přístup povolen")
+        return next()
+      } else {
+        // Logování IP a blokace
+        const userAgentString = req.get("User-Agent") || "Neznámý"
+        const parser = new UAParser(userAgentString)
+        const result = parser.getResult()
+        const city = await getCityByIP(userIP)
+    
+        await addToBlacklist(userIP, "Neplatný pokus o honeypoint", {
+          userAgent: userAgentString,
+          browser: result.browser?.name || "Neznámý",
+          os: result.os?.name || "Neznámý",
+          deviceType: result.device?.type || "Neznámý",
+          city: city || "Neznámý",
+        })
+    
+        console.warn(`🚨 Honeypoint – blokace IP: ${userIP}`)
+        return res.status(403).json({ error: "Neplatný API klíč" })
+      }
+    }
+
+
     // 
     const isFromExtension =
       (isAlias && isFromAllowedSource) ||               // alias + spravny zdroj

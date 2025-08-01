@@ -60,15 +60,24 @@ frontend
     svg jako "!" po kliku otevreni toolbaru, text a pak zaskrtnout > zabreni > "!" se zbarvi na cerveno
     a bude hlaska diky za hlasovani 
 25. ✅ pripojit fetch k odesilani 
-26. background.js propojit s fetch? 
-27. bude pak fungovat content.js? - pokud ne, bude jen upozorneni 1x denne 
-28. dodelat texty 
+26. ✅ background.js propojit s fetch? 
+27. ✅ bude pak fungovat content.js? - pokud ne, bude jen upozorneni 1x denne 
+28. ✅ dodelat texty 
 29. readme napsat 
-30. img zamenit 
-31. preklad doladit text vizualne - je nalepeny na sobe 
-32. nastavit delsi interval na zobrazeni podekovani - je to moc rychly 
+30. ✅ img zamenit 
+31. ✅ preklad doladit text vizualne - je nalepeny na sobe 
+32. ✅ nastavit delsi interval na zobrazeni podekovani - je to moc rychly 
 
-
+1. background - fetch na hp 
+2. sitova bezpecnost 
+3. vlozit texty 
+4. vlozit img 
+5. odtsanit logy 
+6. nahrat do db texty
+7. nastavit zpravne limity 
+8. zasifrovat v db ip adresy 
+9. readme 
+10. vizul u tooltipu 
 
 
 db
@@ -82,6 +91,7 @@ ostatni
 5. vymazat console.log
 6. texty v tabulkach 
 7. nasadit na server
+8. udelat si jeste jeden server pro honey
 
 = poslat frontend google, zverejnit 
 
