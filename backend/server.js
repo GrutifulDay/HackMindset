@@ -42,7 +42,13 @@ import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
 
 const app = express()
-app.set("trust proxy", 1)
+app.set("trust proxy", 1)  // duveruje proxy v retezci jako NGINX
+app.disable("etag");  
+
+app.use((req, res, next) => {
+  console.log(`[REQUEST] ${req.method} ${req.url}`);
+  next();
+});
 
 const __dirname = path.resolve() // pri pouziti ES modulů
 
@@ -70,6 +76,7 @@ app.use(
     }
   })
 ) // Ochrana HTTP hlaviček
+
 
 
 
@@ -116,13 +123,15 @@ app.get("/api/test", (req, res) => {
 })
 
 // nacitani certifikatu ze slozky cert
-const options = {
-    key: fs.readFileSync('./cert/key.pem'),
-    cert: fs.readFileSync('./cert/cert.pem'),
-}
+// const options = {
+//     key: fs.readFileSync('./cert/key.pem'),
+//     cert: fs.readFileSync('./cert/cert.pem'),
+// }
 
 // ✅ Spuštění serveru
-https.createServer(options, app).listen(PORT, () => {
-    console.log(chalk.magenta.bold("✅ Server běží na: https://localhost"))
-    console.log(`🛡️ HTTPS port: ${PORT}`)
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Server běží na http://0.0.0.0:${PORT}`)
 })
+
+
+

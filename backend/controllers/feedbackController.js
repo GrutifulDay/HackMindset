@@ -1,6 +1,6 @@
 import crypto from "crypto"
 import chalk from "chalk"
-import FeedbackHoney from "../models/feedbackHoney.js"
+import HoneySession from "../models/FeedbackHoney.js"
 
 export async function feedbackHoneyPoint(req, res) {
   console.log("🎯 Honeypoint byl aktivován přes /feedbackForm")
@@ -12,7 +12,7 @@ export async function feedbackHoneyPoint(req, res) {
   console.log(chalk.yellow.bold(`💡 Nový honeypoint sessionId: ${sessionId}`))
 
   // 💾 Uložení do DB – ID + IP + user agent + čas
-  const session = new FeedbackHoney({
+  const session = new HoneySession({
     sessionId,
     ip: req.ip,
     userAgent: req.get("User-Agent"),

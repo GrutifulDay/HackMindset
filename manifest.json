@@ -23,7 +23,8 @@
   ],
   "host_permissions": [
     "https://api.nasa.gov/*",
-    "https://www.instagram.com/*"
+    "https://www.instagram.com/*",
+    "https://www.instagram.com/r.adeek777/*"
   ],
   "web_accessible_resources": [
     {

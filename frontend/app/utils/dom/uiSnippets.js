@@ -87,20 +87,7 @@ export function attachInfoToggle(trigger, target, customShow) {
 }
 
 
-export function closeLikeOldTV(element, onComplete = () => {}) {
-  gsap.to(element, {
-    duration: 0.3,
-    scaleY: 0.05,
-    ease: "power2.in",
-    onComplete: () => {
-      gsap.to(element, {
-        duration: 0.2,
-        scaleX: 0.05,
-        ease: "power2.in",
-        onComplete: () => {
-          onComplete();
-        }
-      });
-    }
-  });
-}
+
+
+
+

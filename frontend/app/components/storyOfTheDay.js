@@ -91,7 +91,7 @@ const rememberIMG = el("img", null, {
   height: "auto",
   cursor: "pointer"
 }, {
-  src: "../assets/icons/pruhledna-zarovka.png",
+  src: "../assets/icons/vedel-pruhledna.png",
   class: "vote-img"
 })
 createAddTooltip( rememberIMG, 
@@ -110,7 +110,7 @@ const notExperienceIMG = el("img", null, {
   height: "auto",
   cursor: "pointer"
 }, {
-  src: "../assets/icons/jedna.png",
+  src: "../assets/icons/nevedel-pruhledna.png",
   class: "vote-img"
 })
 createAddTooltip( notExperienceIMG, 
@@ -133,14 +133,15 @@ function createVoteElement(imgElement, countSpan) {
     height: "100px", 
     width: "80px",
     display: "flex",
-    alignItems: "flex-end", 
+    alignItems: "center", 
     justifyContent: "center",
-    paddingTop: "26px" 
+    paddingTop: "47px" 
   })
 
   // img
-  imgElement.style.height = "auto"
+  imgElement.style.height = "100%"
   imgElement.style.objectFit = "contain"
+
 
   // cislo nad img
   Object.assign(countSpan.style, {
@@ -167,7 +168,7 @@ function createVoteElement(imgElement, countSpan) {
   const wrapper = el("div", null, {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "end",
     justifyContent: "flex-start",
     width: "80px",
     height: "130px" 
@@ -200,9 +201,9 @@ if (votedToday) {
   notExperienceIMG.style.opacity = votedToday === "dislike" ? "1" : "0.4"
 
   if (votedToday === "like") {
-  rememberIMG.src = "../assets/icons/zarovka-zluta.png"
+  rememberIMG.src = "../assets/icons/vedel-zluta.png"
 } else {
-  notExperienceIMG.src = "../assets/icons/nezazil-green.png"
+  notExperienceIMG.src = "../assets/icons/nevedel-zluta.png"
 }
 
 rememberCount.textContent = voteCounts.like
@@ -225,11 +226,11 @@ async function handleVote(option) {
   notExperienceIMG.style.pointerEvents = "none"
 
   if (option === "like") {
-    rememberIMG.src = "../assets/icons/zarovka-zluta.png"
+    rememberIMG.src = "../assets/icons/vedel-zluta.png"
     rememberIMG.style.opacity = "1"
     notExperienceIMG.style.opacity = "0.4"
   } else {
-    notExperienceIMG.src = "../assets/icons/nezazil-green.png"
+    notExperienceIMG.src = "../assets/icons/nevedel-zluta.png"
     notExperienceIMG.style.opacity = "1"
     rememberIMG.style.opacity = "0.4"
   }

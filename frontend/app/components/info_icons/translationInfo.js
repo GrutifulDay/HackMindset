@@ -99,7 +99,7 @@ export function createTranslationInfoWindow() {
 
     // texty 
     const title = el("strong", "O překladu", {
-        fontSize: "1.1em",
+        fontSize: "1.2em",
         color: "#273E64",
         textTransform: "uppercase",
         textDecoration: "underline"
