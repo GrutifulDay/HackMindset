@@ -49,6 +49,8 @@ app.use((req, res, next) => {
   console.log(`[REQUEST] ${req.method} ${req.url}`);
   next();
 });
+console.log("✅ Start server.js");
+
 
 const __dirname = path.resolve() // pri pouziti ES modulů
 
@@ -132,6 +134,9 @@ app.get("/api/test", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server běží na http://0.0.0.0:${PORT}`)
 })
+console.log(`✅ Spouštím na portu ${PORT}`);
+
+
 
 
 
