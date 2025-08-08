@@ -203,7 +203,7 @@ if (votedToday) {
   if (votedToday === "like") {
   rememberIMG.src = "../assets/icons/vedel-zluta.png"
 } else {
-  notExperienceIMG.src = "../assets/icons/nevedel-zluta.png"
+  notExperienceIMG.src = "../assets/icons/nevedel-zluta-2.png"
 }
 
 rememberCount.textContent = voteCounts.like
