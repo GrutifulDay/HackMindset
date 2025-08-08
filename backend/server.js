@@ -2,8 +2,8 @@
 import { PORT } from "./config.js"
 
 // zaklad
-import fs from "fs"
-import https from "https"
+// import fs from "fs"
+// import https from "https"
 import { UAParser } from "ua-parser-js"
 
 // NPM knihovny 
@@ -132,8 +132,9 @@ app.get("/api/test", (req, res) => {
 
 // ✅ Spuštění serveru
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Server běží na http://0.0.0.0:${PORT}`)
-})
+  console.log(`✅ Server běží na http://0.0.0.0:${PORT}`);
+});
+
 console.log(`✅ Spouštím na portu ${PORT}`);
 
 
