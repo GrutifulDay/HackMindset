@@ -120,9 +120,6 @@ app.use("/api", feedbackRoutes)
 // app.use("/api", ipRoutes)
 // app.use("/api", testDB)
 
-// pridani statickych souboru 
-app.use(express.static(path.join(__dirname, "frontend")))
-
 app.get("/", (req, res) => {
   res.status(200).send("HackMindset backend is running");
 });
@@ -148,6 +145,8 @@ app.get("/api/test", (req, res) => {
 
 })
 
+// pridani statickych souboru 
+app.use(express.static(path.join(__dirname, "frontend")))
 
 
 // nacitani certifikatu ze slozky cert
