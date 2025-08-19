@@ -1,12 +1,22 @@
 import cors from "cors";
 import { CHROME_EXTENSION_ALL_URL } from "../config.js";
 
+// Whitelist povolených originů
+const allowedOrigins = [
+  "http://127.0.0.1:5501",
+  CHROME_EXTENSION_ALL_URL,
+  "https://hackmindset.app"
+];
+
 const corsOptions = {
-  origin: [
-    "http://127.0.0.1:5501",
-    CHROME_EXTENSION_ALL_URL,
-    "https://hackmindset.app" // ← PŘIDEJ!
-  ],
+  origin: function (origin, callback) {
+    // Povolí požadavek, pokud není origin nebo je v whitelistu
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "OPTIONS"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],

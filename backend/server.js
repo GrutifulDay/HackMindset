@@ -68,16 +68,21 @@ app.use(
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        "script-src": ["'self'"],   // povolit jen vlastni skriptove soubory
-        "object-src": ["'none'"],   // zakazuje vkladane objekty
-        "base-uri": ["'self'"],    // zakazuje menit zakl. URL pro relaticni odkazy
-        "img-src": ["'self'", "https://apod.nasa.gov", "https://mars.nasa.gov", "https://images-assets.nasa.gov"],  // NASA img
-        "connect-src": ["'self'", "https://api.nasa.gov"], // Přidání connect-src pro API volání
-        "frame-ancestors": ["'none'"] // Přidání ochrany proti clickjacking
+        "script-src": ["'self'"],
+        "object-src": ["'none'"],
+        "base-uri": ["'self'"],
+        "img-src": [
+          "'self'",
+          "https://apod.nasa.gov",
+          "https://mars.nasa.gov",
+          "https://images-assets.nasa.gov"
+        ],
+        "connect-src": ["'self'", "https://api.nasa.gov"],
+        "frame-ancestors": ["'none'"]
       }
     }
   })
-) // Ochrana HTTP hlaviček
+)   // Ochrana HTTP hlaviček
 
 
 
