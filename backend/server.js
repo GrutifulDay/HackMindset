@@ -84,6 +84,7 @@ app.use(
   })
 )
 
+console.log("🛠️ DEBUG: Tento soubor se opravdu spustil!");
 
 
 
