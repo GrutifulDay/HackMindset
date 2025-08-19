@@ -51,7 +51,6 @@ app.use((req, res, next) => {
 });
 console.log("✅ Start server.js");
 
-
 const __dirname = path.resolve() // pri pouziti ES modulů
 
 // MongoDB
@@ -124,6 +123,10 @@ app.use("/api", feedbackRoutes)
 // pridani statickych souboru 
 app.use(express.static(path.join(__dirname, "frontend")))
 
+app.get("/", (req, res) => {
+  res.status(200).send("HackMindset backend is running");
+});
+
 // testovaci router
 app.get("/api/test", (req, res) => {
     const userAgentString = req.get("User-Agent") || "neznámý"
@@ -140,9 +143,6 @@ app.get("/api/test", (req, res) => {
 
 })
 
-app.get("/", (req, res) => {
-  res.status(200).send("HackMindset backend is running");
-});
 
 
 // nacitani certifikatu ze slozky cert
