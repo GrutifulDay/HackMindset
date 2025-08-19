@@ -141,6 +141,8 @@ app.use(express.static(path.join(__dirname, "frontend")))
 //     cert: fs.readFileSync('./cert/cert.pem'),
 // }
 
+console.log(app._router.stack.map(r => r.route && r.route.path).filter(Boolean))
+
 // ✅ Spuštění serveru
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server běží na http://0.0.0.0:${PORT}`);
