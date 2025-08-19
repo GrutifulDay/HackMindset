@@ -127,6 +127,11 @@ app.get("/", (req, res) => {
   res.status(200).send("HackMindset backend is running");
 });
 
+
+app.get("/ping", (req, res) => {
+  res.status(200).send("pong");
+});
+
 // testovaci router
 app.get("/api/test", (req, res) => {
     const userAgentString = req.get("User-Agent") || "neznámý"
