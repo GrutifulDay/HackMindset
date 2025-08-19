@@ -140,6 +140,11 @@ app.get("/api/test", (req, res) => {
 
 })
 
+app.get("/", (req, res) => {
+  res.status(200).send("HackMindset backend is running");
+});
+
+
 // nacitani certifikatu ze slozky cert
 // const options = {
 //     key: fs.readFileSync('./cert/key.pem'),
