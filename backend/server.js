@@ -63,26 +63,31 @@ await loadBlacklistFromDB()
 
 // Zabezpeceni
 app.disable("x-powered-by") // Skrytí frameworku - express.js
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      useDefaults: true,
-      directives: {
-        "script-src": ["'self'"],
-        "object-src": ["'none'"],
-        "base-uri": ["'self'"],
-        "img-src": [
-          "'self'",
-          "https://apod.nasa.gov",
-          "https://mars.nasa.gov",
-          "https://images-assets.nasa.gov"
-        ],
-        "connect-src": ["'self'", "https://api.nasa.gov"],
-        "frame-ancestors": ["'none'"]
-      }
-    }
-  })
-)   // Ochrana HTTP hlaviček
+app.use(helmet.contentSecurityPolicy({
+  useDefaults: true,
+  directives: {
+    "script-src": ["'self'"],
+    "object-src": ["'none'"],
+    "base-uri": ["'self'"],
+    "img-src": [
+      "'self'",
+      "https://apod.nasa.gov",
+      "https://mars.nasa.gov",
+      "https://images-assets.nasa.gov"
+    ],
+    "connect-src": ["'self'", "https://api.nasa.gov"],
+    "frame-ancestors": ["'none'"]
+  }
+}));   // Ochrana HTTP hlaviček
+
+// Volitelné — jednotlivé hlavičky můžeš přidat/odebrat ručně:
+app.use(helmet.frameguard({ action: "deny" }));
+app.use(helmet.referrerPolicy({ policy: "strict-origin" }));
+app.use(helmet.dnsPrefetchControl({ allow: false }));
+app.use(helmet.permittedCrossDomainPolicies({ permittedPolicies: "none" }));
+app.use(helmet.originAgentCluster());
+app.use(helmet.crossOriginOpenerPolicy());
+app.use(helmet.crossOriginResourcePolicy());
 
 
 
