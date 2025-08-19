@@ -65,18 +65,25 @@ app.disable("x-powered-by") // Skrytí frameworku - express.js
 app.use(
   helmet({
     contentSecurityPolicy: {
-      useDefaults: true,
+      useDefaults: false, // vypni defaulty, ať máš kontrolu
       directives: {
+        "default-src": ["'self'"],
+        "script-src": ["'self'"],
         "img-src": [
           "'self'",
           "https://apod.nasa.gov",
           "https://mars.nasa.gov",
           "https://images-assets.nasa.gov"
         ],
+        "connect-src": ["'self'", "https://api.nasa.gov"],
+        "base-uri": ["'self'"],
+        "object-src": ["'none'"],
+        "frame-ancestors": ["'none'"]
       }
     }
   })
 )
+
 
 
 
