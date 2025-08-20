@@ -51,6 +51,20 @@ app.use((req, res, next) => {
 });
 console.log("✅ Start server.js");
 
+const startTime = new Date().toLocaleString('cs-CZ', {
+  timeZone: 'Europe/Prague',
+  hour12: false,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+});
+
+console.log(chalk.green.bold(`🟢 Server spuštěn: ${startTime}`));
+
+
 const __dirname = path.resolve() // pri pouziti ES modulů
 
 // MongoDB
