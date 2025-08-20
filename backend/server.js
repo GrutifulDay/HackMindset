@@ -62,7 +62,7 @@ const startTime = new Date().toLocaleString('cs-CZ', {
   second: '2-digit',
 });
 
-console.log(chalk.green.bold(`🟢 Server spuštěn: ${startTime}`));
+console.log(chalk.magenta.bold(`🟢 Server spuštěn: ${startTime}`));
 
 
 const __dirname = path.resolve() // pri pouziti ES modulů
