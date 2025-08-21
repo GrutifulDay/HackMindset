@@ -100,11 +100,6 @@ app.use(
 
 console.log("🛠️ DEBUG: Tento soubor se opravdu spustil!");
 
-
-
-
-
-
 // Nasazeni middlewares
 app.use(ipBlacklist)
 app.use(speedLimiter)

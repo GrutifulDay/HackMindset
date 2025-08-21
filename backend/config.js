@@ -15,7 +15,7 @@ export const HACK_EXTENSION = process.env.HACK_EXTENSION
 export const FETCH_API_NASA = process.env.FETCH_API_NASA
 export const API_KEY_NASA = process.env.API_KEY_NASA
 
-//Databaze
+// Databaze
 export const MONGO_URI = process.env.MONGO_URI
 export const MONGO_URI_FRONTEND = process.env.MONGO_URI_FRONTEND
 
@@ -30,4 +30,6 @@ export const PROFILE_API_FRONTEND = process.env.PROFILE_API_FRONTEND
 
 // Discord 
 export const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL
+
+export const MAXMIND_LICENSE_KEY = process.env.MAXMIND_LICENSE_KEY
 
