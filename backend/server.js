@@ -79,24 +79,24 @@ app.disable("x-powered-by") // Skrytí frameworku - express.js
 app.use(
   helmet({
     contentSecurityPolicy: {
-      useDefaults: false, // vypni defaulty, ať máš kontrolu
+      useDefaults: false,
       directives: {
-        "default-src": ["'self'"],
-        "script-src": ["'self'"],
-        "img-src": [
-          "'self'",
-          "https://apod.nasa.gov",
-          "https://mars.nasa.gov",
-          "https://images-assets.nasa.gov"
-        ],
-        "connect-src": ["'self'", "https://api.nasa.gov"],
-        "base-uri": ["'self'"],
-        "object-src": ["'none'"],
-        "frame-ancestors": ["'none'"]
+        /* tvé direktivy */
       }
-    }
+    },
+    referrerPolicy: false,
+    frameguard: false,
+    hsts: false,
+    xssFilter: false,
+    dnsPrefetchControl: false,
+    permittedCrossDomainPolicies: false,
+    originAgentCluster: false,
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: false,
+    crossOriginResourcePolicy: false
   })
-)
+);
+
 
 console.log("🛠️ DEBUG: Tento soubor se opravdu spustil!");
 
