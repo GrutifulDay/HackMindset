@@ -22,6 +22,8 @@ import untruthRoutes from "./routes/untruthRoutes.js"
 import untruthLimitRoutes from "./routes/untruthLimit.js"
 import feedbackRoutes from "./routes/feedbackRoutes.js"
 
+import secLogRoutes from "./routes/secLog.js"
+
 // import ipRoutes from "./routes/ipRoutes.js"
 // import testDB from "./routes/test-db.js"
 
@@ -119,6 +121,7 @@ app.use("/api", digitalRoutes)
 app.use("/api", untruthRoutes)
 app.use("/api", untruthLimitRoutes)
 app.use("/api", feedbackRoutes)
+app.use("api", secLogRoutes)
 
 // app.use("/api", ipRoutes)
 // app.use("/api", testDB)
