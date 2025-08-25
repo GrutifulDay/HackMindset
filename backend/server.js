@@ -107,7 +107,7 @@ app.use(limiterApi)
 app.use(botProtection)
 app.use(corsOptions)
 
-app.use(express.json({ limit: "10kb" }))
+app.use(express.json({ limit: "25kb" }))
 
 
 // ✅ Načtení NASA router
@@ -161,8 +161,8 @@ app.use(express.static(path.join(__dirname, "frontend")))
 console.log(app._router.stack.map(r => r.route && r.route.path).filter(Boolean))
 
 // ✅ Spuštění serveru
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Server běží na http://0.0.0.0:${PORT}`);
+app.listen(PORT, "127.0.0.1", () => {
+  console.log(`✅ Server běží na http://127.0.0.1:${PORT}`);
 });
 
 console.log(`✅ Spouštím na portu ${PORT}`);
