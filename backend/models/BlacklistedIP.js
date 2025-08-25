@@ -35,7 +35,7 @@ const blacklistedIPSchema = new mongoose.Schema({
     type: String,
     default: "Neznámá"
   }, 
-  index: { expires: 2592000 }  // (TTL nastaveni) automaticky smaze po 30 dnech
+  expires: 2592000 // (TTL nastaveni) automaticky smaze po 30 dnech
 })
 
 const BlacklistedIP = mongoose.model("BlacklistedIP", blacklistedIPSchema)
