@@ -105,23 +105,16 @@ app.disable("x-powered-by") // Skrytí frameworku - express.js
 console.log("🛠️ DEBUG: Tento soubor se opravdu spustil!");
 
 // Nasazeni middlewares
-// app.use(ipBlacklist)
-// app.use(speedLimiter)
-// app.use(limiterApi)
-// app.use(botProtection)
-// app.use(corsOptions)
-
-// debug: co vidí Express za IP (pouze pro /api/test)
 app.use(corsOptions);   // 1) preflight
 app.use(ipBlacklist);   // 2) hned blokovat známé IP
 app.use(botProtection); // 3) detekce botů/UA
 app.use(speedLimiter);  // 4) zpomalení floodu
 app.use(limiterApi);    // 5) tvrdý rate limit
 
-
-
 app.use(express.json({ limit: "25kb" }))
 
+// pokud by bylo potreba, jde nastavit pristenjsi limit jednotlive: 
+// app.use("/api/feedbackForm", express.json({ limit: "4kb" }));
 
 // ✅ Načtení NASA router
 app.use("/api", nasaRoutes)

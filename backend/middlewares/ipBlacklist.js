@@ -60,7 +60,7 @@ export default async function ipBlocker(req, res, next) {
             authorization: req.get("authorization"),
             "content-type": req.get("content-type"),
           }),
-          // body vědomě neparsujeme (middleware je před body parserem)
+          body: redact(req.body || {}),
         },
       });
     } catch (e) {
