@@ -44,7 +44,7 @@ import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
 
 const app = express()
-app.set("trust proxy", "loopback");  // duveruje proxy (1) v retezci jako NGINX, presnejsi loopback 
+app.set("trust proxy", true); 
 app.disable("etag");  
 
 app.use(secLogRoutes)
