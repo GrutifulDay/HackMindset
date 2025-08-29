@@ -103,6 +103,9 @@ app.use(
 
 console.log("🛠️ DEBUG: Tento soubor se opravdu spustil!");
 
+app.use("/_sec-log", express.json({ limit: "10kb", type: "application/json" }));
+app.use(secLogRoutes); // tenhle router řeší POST /_sec-log
+
 // Nasazeni middlewares
 app.use(corsOptions);   // 1) preflight
 app.use(ipBlacklist);   // 2) hned blokovat známé IP
