@@ -1,17 +1,17 @@
 {
   "manifest_version": 3,
-  "name": "HackMindset",
+  "name": "HackMindset<-production",
   "version": "1.0",
   "description": "An educational extension that delivers daily space photos, digital wisdom, and inspiring content.",
   "action": {
     "default_icon": {
-      "16": "frontend/assets/icons/icon16.png",
-      "48": "frontend/assets/icons/icon48.png"
+      "16": "assets/icons/icon16.png",
+      "48": "assets/icons/icon48.png"
     },
-    "default_popup": "frontend/app/index.html"
+    "default_popup": "app/index.html"
   },
   "background": {
-    "service_worker": "frontend/app/background.js",
+    "service_worker": "app/background.js",
     "type": "module"
   },
   "permissions": [
@@ -29,9 +29,9 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "frontend/assets/icons/logo-bulb.svg",
-        "frontend/assets/sound.svg",
-        "frontend/assets/sounds/dialup.mp3"
+        "assets/icons/logo-bulb.svg",
+        "assets/sound.svg",
+        "assets/sounds/dialup.mp3"
       ],
       "matches": ["<all_urls>"]
     }
@@ -42,7 +42,7 @@
         "*://instagram.com/*",
         "*://*.instagram.com/*"
       ],
-      "js": ["frontend/app/content.js"]
+      "js": ["app/content.js"]
     }
   ],
   "content_security_policy": {
