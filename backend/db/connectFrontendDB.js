@@ -13,15 +13,15 @@ export default function connectFrontendDB() {
     })
 
     frontendConnection.on("connected", () => {
-      console.log(chalk.green.bold("✅ Připojeno k MongoDB frontendData"));
+      console.log(chalk.green.bold("✅ Připojeno k MongoDB"));
     })
 
     frontendConnection.on("error", (err) => {
-      console.error(chalk.red.bold("❌ Chyba v připojení k frontendData:", err));
-    })
+      console.error(chalk.red.bold("❌ Chyba v připojení k MongoDB:", err.message));
+    });
 
     return frontendConnection
   } catch (error) {
-    console.error(chalk.red.bold("❌ Nepodařilo se připojit k frontendData:", error));
+    console.error(chalk.red.bold("❌ Nepodařilo se připojit k MongoDB:", error.message));
   }
 }

@@ -1,15 +1,16 @@
 import crypto from "crypto"
 import chalk from "chalk"
 import HoneySession from "../models/FeedbackHoney.js"
+import { debug } from "../utils/logger.js";
 
 export async function feedbackHoneyPoint(req, res) {
-  console.log("🎯 Honeypoint byl aktivován přes /feedbackForm")
+  debug("🎯 Honeypoint byl aktivován…");
 
   // 🎯 Aktivace honeypointu – generování náhodného session ID (např. "4f9a3bd1e7a2")
   const sessionId = crypto.randomBytes(8).toString("hex")
 
   // 🖨️ Vypiš ID do terminálu pro sledování
-  console.log(chalk.yellow.bold(`💡 Nový honeypoint sessionId: ${sessionId}`))
+  debug("✅ Honeypoint session uložena do DB")
 
   // 💾 Uložení do DB – ID + IP + user agent + čas
   const session = new HoneySession({
@@ -22,7 +23,7 @@ export async function feedbackHoneyPoint(req, res) {
 
   try {
     await session.save()
-    console.log(chalk.green("✅ Honeypoint session uložena do DB"))
+    debug(chalk.green("✅ Honeypoint session uložena do DB"))
   } catch (err) {
     console.error(chalk.red("❌ Chyba při ukládání session do DB:"), err.message)
   }

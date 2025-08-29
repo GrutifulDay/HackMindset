@@ -2,6 +2,7 @@ import { UAParser } from "ua-parser-js"
 import { addToBlacklist, isBlacklisted } from "./ipBlacklist.js"
 import { getCityByIP } from "../utils/getCityByIP.js"
 import { CHROME_EXTENSION_ALL_URL, HACK_EXTENSION } from "../config.js"
+import { debug } from "../utils/logger.js"
 
 // 🔐 Middleware pro validaci přístupu
 export function validateApiKey(expectedKey, routeDescription) {
@@ -85,20 +86,20 @@ export function validateApiKey(expectedKey, routeDescription) {
       (!isAlias && realExtensionHeader === expectedKey) // pripadny test klic 
 
     if (isFromExtension) {
-      console.log("✅ Povolen přístup z rozšíření");
+      debug("✅ Povolen přístup z rozšíření");
       
-      console.log("CHROME_EXTENSION_ALL_URL:", CHROME_EXTENSION_ALL_URL);
-      console.log("🧪 Příchozí Authorization:", req.headers["Authorization"]);
-      console.log("🧪 Očekávaný klíč (expectedKey):", expectedKey);
+      debug("CHROME_EXTENSION_ALL_URL:", CHROME_EXTENSION_ALL_URL);
+      debug("🧪 Příchozí Authorization:", req.headers["Authorization"]);
+      debug("🧪 Očekávaný klíč (expectedKey):", expectedKey);
 
-      console.log("📩 Headers přijaté od klienta:");
-      console.log("→ origin:", req.headers.origin || "žádný origin");
-      console.log("→ referer:", req.headers.referer || "žádný referer");
-      console.log("→ Authorization:", req.headers["Authorization"] || "žádný");
-      console.log("→ user-agent:", req.headers["user-agent"] || "žádný");
-      console.log("🔍 isAlias:", isAlias);
-      console.log("🔍 isFromAllowedSource:", isFromAllowedSource);
-      console.log("🔍 isLikelyFromChrome:", isLikelyFromChrome);
+      debug("📩 Headers přijaté od klienta:");
+      debug("→ origin:", req.headers.origin || "žádný origin");
+      debug("→ referer:", req.headers.referer || "žádný referer");
+      debug("→ Authorization:", req.headers["Authorization"] || "žádný");
+      debug("→ user-agent:", req.headers["user-agent"] || "žádný");
+      debug("🔍 isAlias:", isAlias);
+      debug("🔍 isFromAllowedSource:", isFromAllowedSource);
+      debug("🔍 isLikelyFromChrome:", isLikelyFromChrome);
 
       return next()
     }
