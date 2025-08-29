@@ -113,9 +113,10 @@ console.log("🛠️ DEBUG: Tento soubor se opravdu spustil!");
 
 app.use(corsOptions)    // nejdřív preflight
 app.use(ipBlacklist)    // hned potom, aby bloknutá IP nešla dál
-app.use(botProtection)  // až pak kontrola User-Agent/heuristik
 app.use(speedLimiter)   // zpomalení floodu
 app.use(limiterApi)     // tvrdý rate limit
+app.use(botProtection)  // až pak kontrola User-Agent/heuristik
+
 
 app.use(express.json({ limit: "25kb" }))
 

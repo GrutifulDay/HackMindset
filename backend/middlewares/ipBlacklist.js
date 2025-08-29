@@ -8,13 +8,19 @@ import { notifyBlockedIP } from "../utils/discordNotification.js"
 // set se uklada do restartu serveru  
 const blacklistedIPs = new Set()
 
+const normalizeIp = (ip) => {
+  if (!ip) return ip;
+  const m = String(ip).match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
+  return m ? m[1] : ip;
+};
+
 // ❌
 // IP adresy, které se nikdy neblokují (lokální prostředí)
-// const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"])
+const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1", "172.104.157.204"]);
 
 // Middleware pro blokovani IP
 export default function ipBlocker(req, res, next) {
-  const clientIP = req.ip
+  const clientIP = normalizeIp(req.ip)
 
   // 🧲 Honeypoint výjimka – nikdy neblokovat přístup
   if (req.originalUrl === "/api/feedbackForm") {
@@ -24,9 +30,9 @@ export default function ipBlocker(req, res, next) {
 
   // ❌
   // Ignor zname lokalni IP
-  // if (ignoredIPs.has(clientIP)) {
-  //   return next()
-  // }
+  if (ignoredIPs.has(clientIP)) {
+    return next()
+  }
 
   // Zkontroluj, jestli je IP na blacklistu
   if (blacklistedIPs.has(clientIP)) {
