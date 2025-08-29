@@ -111,11 +111,20 @@ console.log("🛠️ DEBUG: Tento soubor se opravdu spustil!");
 // app.use(botProtection)
 // app.use(corsOptions)
 
-app.use(corsOptions)    // nejdřív preflight
-app.use(ipBlacklist)    // hned potom, aby bloknutá IP nešla dál
-app.use(speedLimiter)   // zpomalení floodu
-app.use(limiterApi)     // tvrdý rate limit
-app.use(botProtection)  // až pak kontrola User-Agent/heuristik
+// debug: co vidí Express za IP (pouze pro /api/test)
+app.use((req, res, next) => {
+  if (req.path === "/api/test") {
+    console.log("🔎 Express sees IP:", req.ip, "XFF:", req.headers["x-forwarded-for"]);
+  }
+  next();
+});
+
+app.use(corsOptions);   // 1) preflight
+app.use(ipBlacklist);   // 2) hned blokovat známé IP
+app.use(botProtection); // 3) detekce botů/UA
+app.use(speedLimiter);  // 4) zpomalení floodu
+app.use(limiterApi);    // 5) tvrdý rate limit
+
 
 
 app.use(express.json({ limit: "25kb" }))
