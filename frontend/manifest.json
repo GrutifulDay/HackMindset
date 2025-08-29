@@ -6,7 +6,8 @@
   "action": {
     "default_icon": {
       "16": "assets/icons/icon16.png",
-      "48": "assets/icons/icon48.png"
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/zarovka128.png"
     },
     "default_popup": "app/index.html"
   },
@@ -22,20 +23,18 @@
     "webNavigation"
   ],
   "host_permissions": [
+    "https://hackmindset.app/*",
     "https://api.nasa.gov/*",
-    "https://www.instagram.com/*",
-    "https://www.instagram.com/r.adeek777/*"
+    "https://*.instagram.com/*"
   ],
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "assets/icons/logo-bulb.svg",
-        "assets/sound.svg",
-        "assets/sounds/dialup.mp3"
-      ],
-      "matches": ["<all_urls>"]
-    }
-  ],
+  "web_accessible_resources": [{
+    "resources": [
+      "assets/icons/logo-bulb.svg",
+      "assets/icons/sound.svg",
+      "assets/sounds/modemSound.mp3"
+    ],
+    "matches": ["https://*.instagram.com/*"]
+  }],
   "content_scripts": [
     {
       "matches": [
@@ -46,6 +45,6 @@
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'none'; style-src 'self'"
+    "extension_pages": "script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://hackmindset.app https://api.nasa.gov"
   }
 }
