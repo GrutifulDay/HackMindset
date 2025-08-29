@@ -1,7 +1,6 @@
 import BlacklistedIP from "../models/BlacklistedIP.js"
 import { notifyBlockedIP } from "../utils/discordNotification.js"
-
-// ❌ = ZAKOMENTUJ PRO TESTY ❌ 
+import { saveSecurityLog } from "../services/securityLogService.js"
 
 // set se uklada do restartu serveru  
 const blacklistedIPs = new Set()
@@ -12,30 +11,61 @@ const normalizeIp = (ip) => {
   return m ? m[1] : ip;
 };
 
-// ❌
-// IP adresy, které se nikdy neblokují (lokální prostředí)
+// IP adresy, které se nikdy neblokují (lokální/provozní prostředí)
 const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1", "172.104.157.204"]);
 
+// Redakce citlivých hodnot v query/hlavičkách
+const redact = (obj = {}) => {
+  const SENSITIVE = new Set(["password","pass","token","apikey","api_key","authorization","cookie"]);
+  const out = {};
+  for (const [k,v] of Object.entries(obj)) {
+    out[k] = SENSITIVE.has(k.toLowerCase()) ? "[REDACTED]" : v;
+  }
+  return out;
+};
+
 // Middleware pro blokovani IP
-export default function ipBlocker(req, res, next) {
+export default async function ipBlocker(req, res, next) {
   const clientIP = normalizeIp(req.ip)
 
   // 🧲 Honeypoint výjimka – nikdy neblokovat přístup
   if (req.originalUrl === "/api/feedbackForm") {
-    console.log("🧲 Výjimka: /api/feedbackForm – IP nebude blokována");
-    return next() // okamžitě pustit dál
+    return next()
   }
 
-  // ❌
-  // Ignor zname lokalni IP
+  // Allowlist
   if (ignoredIPs.has(clientIP)) {
     return next()
   }
 
-  // Zkontroluj, jestli je IP na blacklistu
+  // Zablokovaná IP → zaloguj, co zkouší, a vrať 403
   if (blacklistedIPs.has(clientIP)) {
-    console.warn(`🚨 Přístup zablokován pro IP: ${clientIP}`);
-    console.log("🔍 Detekovaná IP:", clientIP);
+    try {
+      await saveSecurityLog({
+        src: "express",
+        kind: "blocked",
+        ip: clientIP,                          // už normalizovaná
+        method: req.method,
+        host: req.headers.host,
+        path: req.path,                        // bez query stringu
+        status: 403,
+        ua: req.get("user-agent"),
+        ref: req.get("referer"),
+        rule: "ip_blacklist",
+        note: "Blocked by ipBlacklist middleware",
+        raw: {
+          query: redact(req.query),            // co poslal v URL (sanitováno)
+          headers: redact({
+            origin: req.get("origin"),
+            authorization: req.get("authorization"),
+            "content-type": req.get("content-type"),
+          }),
+          // body vědomě neparsujeme (middleware je před body parserem)
+        },
+      });
+    } catch (e) {
+      console.error("sec-log save error:", e.message);
+    }
     return res.status(403).json({ error: "Vaše IP adresa byla zablokována." })
   }
 
@@ -44,7 +74,6 @@ export default function ipBlocker(req, res, next) {
 
 // Funkce pro pridani IP do blacklistu do DB  
 export async function addToBlacklist(ip, reason = "Automatické blokování", info = {}) {
-
   ip = normalizeIp(ip);
   if (!ip) return false;
 
@@ -53,13 +82,6 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
     console.log(`ℹ️ ${ip} je v allowlistu – přeskočeno.`);
     return false;
   }
-
-  // ❌ 
-  //ignor Postman
-  // if (ignoredIPs.has(ip)) {
-  //   console.log(`ℹ️ IP ${ip} je na seznamu výjimek (localhost), nebude blokována.`);
-  //   return false
-  // }
 
   console.log("📥 Ukládám do blacklistu:", ip, info.city);
 
@@ -71,7 +93,7 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
       const exists = await BlacklistedIP.findOne({ ip })
       if (!exists) {
         const newIP = new BlacklistedIP({ 
-          ip: ip || "Neznámá IP",
+          ip,
           reason,
           userAgent: info.userAgent || "Neznámý",
           browser: info.browser || "Neznámý",
@@ -79,8 +101,7 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
           deviceType: info.deviceType || "Neznámý",
           city: info.city || "Neznámý",
         })
-        
-        await newIP.save() // ulozi do Mongo
+        await newIP.save()
         console.log(`🛑 IP ${ip} uložena do databáze`);
         await notifyBlockedIP(ip, info.city, reason)
       } else {
@@ -96,16 +117,16 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
   return false // už v Setu
 }
 
-// pomocna funkce pro pro kontrolu IP adres po setu  
+// Načtení blacklistu do paměti (bez allowlistu)
 export async function loadBlacklistFromDB() {
   try {
     const allBlocked = await BlacklistedIP.find({}, { ip: 1 });
-    blacklistedIPs.clear();  // ať se to nena-skládá duplicitně po víc restartech
+    blacklistedIPs.clear();
     allBlocked.forEach(entry => {
       const ip = normalizeIp(entry.ip);
       if (ip && !ignoredIPs.has(ip)) blacklistedIPs.add(ip);
     });
-    console.log(`✅ Načteno ${blacklistedIPs.size} IP adres z DB do paměti`);
+    console.log(`✅ Načteno ${blacklistedIPs.size} IP adres z DB do paměti`)
   } catch (err) {
     console.error("❌ Chyba při načítání blacklistu z DB:", err.message);
   }
@@ -114,10 +135,10 @@ export async function loadBlacklistFromDB() {
 export async function isBlacklisted(ip) {
   try {
     ip = normalizeIp(ip);
-    const found = await BlacklistedIP.findOne({ ip });
-    return !!found;
+    const found = await BlacklistedIP.findOne({ ip })
+    return !!found
   } catch (err) {
     console.error("❌ Chyba při kontrole blacklistu:", err.message);
-    return false;
+    return false
   }
 }
