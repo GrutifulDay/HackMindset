@@ -3,8 +3,6 @@ import { notifyBlockedIP } from "../utils/discordNotification.js"
 
 // ❌ = ZAKOMENTUJ PRO TESTY ❌ 
 
-// ROZDELIT FCE DO SLOZEK
-
 // set se uklada do restartu serveru  
 const blacklistedIPs = new Set()
 
@@ -46,6 +44,15 @@ export default function ipBlocker(req, res, next) {
 
 // Funkce pro pridani IP do blacklistu do DB  
 export async function addToBlacklist(ip, reason = "Automatické blokování", info = {}) {
+
+  ip = normalizeIp(ip);
+  if (!ip) return false;
+
+  // nepřidávej vlastní server / localhost
+  if (ignoredIPs.has(ip)) {
+    console.log(`ℹ️ ${ip} je v allowlistu – přeskočeno.`);
+    return false;
+  }
 
   // ❌ 
   //ignor Postman
@@ -92,20 +99,25 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
 // pomocna funkce pro pro kontrolu IP adres po setu  
 export async function loadBlacklistFromDB() {
   try {
-    const allBlocked = await BlacklistedIP.find()
-    allBlocked.forEach(entry => blacklistedIPs.add(entry.ip))
-    console.log(`✅ Načteno ${allBlocked.length} IP adres z DB do paměti`)
+    const allBlocked = await BlacklistedIP.find({}, { ip: 1 });
+    blacklistedIPs.clear();  // ať se to nena-skládá duplicitně po víc restartech
+    allBlocked.forEach(entry => {
+      const ip = normalizeIp(entry.ip);
+      if (ip && !ignoredIPs.has(ip)) blacklistedIPs.add(ip);
+    });
+    console.log(`✅ Načteno ${blacklistedIPs.size} IP adres z DB do paměti`);
   } catch (err) {
-    console.error("❌ Chyba při načítání blacklistu z DB:", err.message)
+    console.error("❌ Chyba při načítání blacklistu z DB:", err.message);
   }
 }
 
 export async function isBlacklisted(ip) {
   try {
-    const found = await BlacklistedIP.findOne({ ip })
-    return !!found
+    ip = normalizeIp(ip);
+    const found = await BlacklistedIP.findOne({ ip });
+    return !!found;
   } catch (err) {
     console.error("❌ Chyba při kontrole blacklistu:", err.message);
-    return false
+    return false;
   }
 }
