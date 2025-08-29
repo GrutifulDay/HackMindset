@@ -1,4 +1,3 @@
-// pomocna funkce pro tvorbu HTML el
 const el = (tag, text, style = {}, attributes = {}) => {
   const element = document.createElement(tag)
 
@@ -14,16 +13,13 @@ const el = (tag, text, style = {}, attributes = {}) => {
       element[key] = value
     }
   })
-
   return element
 }
 
-// Fallback: ziska jazyk z localStorage
 function getLanguage() {
   return localStorage.getItem("hackmindset_language") || "en"
 }
 
-// fce pro zobrazeni upozorneni
 function showHackMindsetReminder(langFromMessage) {
   if (document.getElementById("showContent")) return
 
@@ -57,7 +53,6 @@ function showHackMindsetReminder(langFromMessage) {
     border: "2px solid #6c6c7a"
   }, { id: "showContent" })
 
-  // nadpis + logo
   const titleWrapper = el("div", null, {
     display: "flex",
     alignItems: "center",
@@ -83,7 +78,6 @@ function showHackMindsetReminder(langFromMessage) {
 
   titleWrapper.append(hackTitle, icon, mindsetTitle)
 
-  // dekorativni cara
   const underline = el("div", null, {
     height: "2px",
     width: "80%",
@@ -91,12 +85,10 @@ function showHackMindsetReminder(langFromMessage) {
     background: "linear-gradient(to right, transparent, #e9e9f2 40%, #e9e9f2 60%, transparent)"
   })
 
-  // zprava
   const messageText = el("p", `${messages[lang] || messages.en}`, {
     margin: 0
   })
 
-  // zaviraci krizek
   const closeBtn = el("span", "✕", {
     position: "absolute",
     top: "3px",
@@ -116,7 +108,6 @@ function showHackMindsetReminder(langFromMessage) {
   }, 90000)
 }
 
-// Listener na zpravy z background.js
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "hackmindset_reminder") {
     showHackMindsetReminder(message.lang) 

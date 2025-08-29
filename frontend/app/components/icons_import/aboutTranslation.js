@@ -1,10 +1,8 @@
 import { el } from "../../utils/dom/uiSnippets.js";
 import { createAddTooltip } from "../../utils/dom/tooltip.js";
 
-// info o prekladu ikona
 export function createTranslationIcon() {
-
-  const icon = el("img", null, {
+   const icon = el("img", null, {
     width: "20px",
     height: "auto",
     cursor: "pointer",

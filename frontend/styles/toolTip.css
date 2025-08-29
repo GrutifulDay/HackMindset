@@ -1,27 +1,7 @@
-/* .tooltip-box {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-  background: #333;
-  color: #fff;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 14px;
-  line-height: 1.4;
-  transition: opacity 0.2s ease;
-  z-index: 9999;
-
-  max-width: 240px;
-  white-space: normal;
-  word-break: break-word;
-} */
-
 .tooltip-box {
   position: absolute;
-  /* background-color: #e0f7ec; zelena ???? */
   background-color: #e3f0ff; /* modra ???? */
   color:#6c6c7a;
-  /* border: 1px solid #e4cfcf; */
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 1em;
@@ -32,7 +12,5 @@
   transition: opacity 0.2s ease;
   max-width: 200px;
   z-index: 9999;
-  /* text-transform: uppercase; */
-
 }
 

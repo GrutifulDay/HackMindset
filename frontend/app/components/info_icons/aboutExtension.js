@@ -53,12 +53,11 @@ export function createAboutExtensionWindow() {
         zIndex: "1000",
         maxWidth: "300px",
         display: "none",
-        textAlign: "center"  // 💡 přidáno
+        textAlign: "center" 
     }, {
         id: "info-panel"
     });
     
-
     const closeBtn = el("span", "×", {
         position: "absolute",
         top: "5px",
@@ -143,7 +142,6 @@ export function createAboutExtensionWindow() {
         creditLink.style.transform = "scale(1)";
         creditLink.style.color = "#666";
     });
-    
 
     if (lang === "cz") {
         creditLine.append("Ilustraci v sekci Story of the day vytvořil ", creditLink);
@@ -151,7 +149,6 @@ export function createAboutExtensionWindow() {
         creditLine.append("The illustration in the Story of the Day section was created by ", creditLink);
     }
 
-    // GitHub footer
     const footer = el("footer", null, { marginTop: "16px", textAlign: "center" });
     const gitHubIcon = el("img", null, {
         width: "30px",
@@ -192,6 +189,5 @@ export function createAboutExtensionWindow() {
         creditLine,
         footer
     );
-
     return container;
 }

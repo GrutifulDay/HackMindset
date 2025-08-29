@@ -2,7 +2,6 @@ import { el } from "../../utils/dom/uiSnippets.js";
 import { setLanguage, hasLanguageSet } from "../../utils/language/language.js";
 import { initPopup } from "../../initApp.js";
 
-// VYBER JAZYKA - zacatek 
 export function selectionLanguage() {
   if (hasLanguageSet()) return;
 
@@ -23,7 +22,6 @@ export function selectionLanguage() {
    
     textShadow: "1px 2px 3px rgba(0, 0, 0, 1.5)",
     color: "#ffe5f0",
-    
 })
 
 const hackTitle = el("h1", "hack", {}, {
@@ -47,10 +45,7 @@ const bulbIcon = el("img", null, {
   const title = el("h3", "Do you want the extension in Czech or English?", {
     marginBottom: "30px",
   })
-  const buttons = el("div", null, {
-
-  }, { class: "language-buttons" })
-
+  const buttons = el("div", null, {}, { class: "language-buttons" })
   const btnCZ = el("button", "Čeština", {}, { class: "lang-button" })
   const btnEN = el("button", "English", {}, { class: "lang-button" })
 
