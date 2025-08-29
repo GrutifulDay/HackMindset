@@ -12,7 +12,7 @@ const normalizeIp = (ip) => {
 };
 
 // IP adresy, které se nikdy neblokují (lokální/provozní prostředí)
-const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1", "172.104.157.204"]);
+const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"]);
 
 // Redakce citlivých hodnot v query/hlavičkách
 const redact = (obj = {}) => {

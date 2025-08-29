@@ -112,13 +112,6 @@ console.log("🛠️ DEBUG: Tento soubor se opravdu spustil!");
 // app.use(corsOptions)
 
 // debug: co vidí Express za IP (pouze pro /api/test)
-app.use((req, res, next) => {
-  if (req.path === "/api/test") {
-    console.log("🔎 Express sees IP:", req.ip, "XFF:", req.headers["x-forwarded-for"]);
-  }
-  next();
-});
-
 app.use(corsOptions);   // 1) preflight
 app.use(ipBlacklist);   // 2) hned blokovat známé IP
 app.use(botProtection); // 3) detekce botů/UA
