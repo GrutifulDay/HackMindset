@@ -201,7 +201,7 @@ if (votedToday) {
   notExperienceIMG.style.opacity = votedToday === "dislike" ? "1" : "0.4"
 
   if (votedToday === "like") {
-  rememberIMG.src = "../assets/icons/vedel-zluta.png"
+  rememberIMG.src = "../assets/icons/vedel-barevna.png"
 } else {
   notExperienceIMG.src = "../assets/icons/nevedel-zluta-2.png"
 }

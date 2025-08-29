@@ -7,7 +7,7 @@ const router = express.Router();
 router.use(express.json({ limit: "16kb", type: "application/json" }));
 
 // Bezpečnostní brána: jen localhost + speciální hlavička
-router.use((req, res, next) => {
+router.use("/_sec-log", (req, res, next) => {
   const ip = req.ip;
   const localhost = (ip === "127.0.0.1" || ip === "::1" || ip === "::ffff:127.0.0.1");
   if (!localhost) return res.status(403).json({ error: "Only localhost." });

@@ -2,8 +2,8 @@
 import { PORT } from "./config.js"
 
 // zaklad
-// import fs from "fs"
-// import https from "https"
+import fs from "fs"
+import https from "https"
 import { UAParser } from "ua-parser-js"
 
 // NPM knihovny 
@@ -105,11 +105,17 @@ app.disable("x-powered-by") // Skrytí frameworku - express.js
 console.log("🛠️ DEBUG: Tento soubor se opravdu spustil!");
 
 // Nasazeni middlewares
-app.use(ipBlacklist)
-app.use(speedLimiter)
-app.use(limiterApi)
-app.use(botProtection)
-app.use(corsOptions)
+// app.use(ipBlacklist)
+// app.use(speedLimiter)
+// app.use(limiterApi)
+// app.use(botProtection)
+// app.use(corsOptions)
+
+app.use(corsOptions)    // nejdřív preflight
+app.use(ipBlacklist)    // hned potom, aby bloknutá IP nešla dál
+app.use(botProtection)  // až pak kontrola User-Agent/heuristik
+app.use(speedLimiter)   // zpomalení floodu
+app.use(limiterApi)     // tvrdý rate limit
 
 app.use(express.json({ limit: "25kb" }))
 
@@ -138,6 +144,47 @@ app.get("/ping", (req, res) => {
   res.status(200).send("pong");
 });
 
+import mongoose from "mongoose";
+
+// ✅ Healthcheck endpoint
+app.get("/health", async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      // 0 = disconnected, 2 = connecting, 3 = disconnecting
+      return res.status(503).json({ 
+        status: "unhealthy", 
+        detail: "MongoDB not connected" 
+      });
+    }
+
+    const admin = mongoose.connection.db.admin();
+
+    // Timeout ochrana – když se DB sekne
+    const pingPromise = admin.ping();
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Ping timeout")), 2000)
+    );
+
+    await Promise.race([pingPromise, timeout]);
+
+    return res.status(200).json({ status: "ok" });
+
+  } catch (err) {
+    if (err.message.includes("timeout")) {
+      return res.status(504).json({ 
+        status: "timeout", 
+        detail: "MongoDB did not respond in time" 
+      });
+    }
+
+    return res.status(500).json({ 
+      status: "error", 
+      detail: err.message 
+    });
+  }
+});
+
+
 // testovaci router
 app.get("/api/test", (req, res) => {
     const userAgentString = req.get("User-Agent") || "neznámý"
@@ -164,6 +211,11 @@ app.use(express.static(path.join(__dirname, "frontend")))
 //     cert: fs.readFileSync('./cert/cert.pem'),
 // }
 
+
+// https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
+//   console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
+// });
+
 console.log(app._router.stack.map(r => r.route && r.route.path).filter(Boolean))
 
 // ✅ Spuštění serveru
@@ -171,7 +223,7 @@ app.listen(PORT, "127.0.0.1", () => {
   console.log(`✅ Server běží na http://127.0.0.1:${PORT}`);
 });
 
-console.log(`✅ Spouštím na portu ${PORT}`);
+
 
 
 

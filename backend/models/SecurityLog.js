@@ -17,3 +17,4 @@ const SecurityLogSchema = new mongoose.Schema({
 }, { versionKey: false });
 
 export default mongoose.model("SecurityLog", SecurityLogSchema, "securitylogs");
+
