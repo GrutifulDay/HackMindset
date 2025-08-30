@@ -9,11 +9,19 @@ const router = express.Router()
  
 console.log("{storyRoutes.js} pripojeno");
 
-router.get(
-    "/retro-machine",
-    validateApiKey(HACK_EXTENSION, "Zavolání /retro-machine routeru"),
-    getRetroMachine
-)
+router.get("/retro-machine", async (req, res) => {
+    try {
+      const doc = await Retro
+        .findOne(/* tvoje podmínka – třeba dnešní záznam */)
+        .select("title nostalgiggle date year -_id")   // ← jen whitelist polí
+        .lean();
+  
+      if (!doc) return res.status(404).json({ error: "❌ Nenalezeno" });
+      return res.status(200).json(doc);
+    } catch (e) {
+      return res.status(500).json({ error: "Server error" });
+    }
+  });
 
 router.get(
     "/retro-machine/retroVotesGet/:date",
