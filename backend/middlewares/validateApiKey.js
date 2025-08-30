@@ -8,9 +8,8 @@ import { INTERNAL_API_KEYS, ALLOW_LOCAL_NO_PROXY, HACK_EXTENSION } from "../conf
 export function validateApiKey(routeDescription = "api") {
   console.log("validateApiKey ✅ aktivní");
 
-  const ALLOWED_METHODS = new Set(["GET", "POST", "HEAD"]);
-  const INTERNAL_HEADER_NAME = "x-internal-auth";
-  const VALID_KEYS = new Set(INTERNAL_API_KEYS); // ← JEDINÉ místo pravdy
+  const ALLOWED_METHODS = new Set(["GET", "POST", "HEAD", "OPTIONS"]);  const INTERNAL_HEADER_NAME = "x-internal-auth";
+  const VALID_KEYS = new Set(INTERNAL_API_KEYS);
 
   const safeEq = (a, b) => {
     if (typeof a !== "string" || typeof b !== "string") return false;
@@ -22,12 +21,14 @@ export function validateApiKey(routeDescription = "api") {
 
   return async function (req, res, next) {
     // 0) Metody
+    if (req.method === "OPTIONS") return res.sendStatus(204);
+
     if (!ALLOWED_METHODS.has(req.method)) {
       return res.status(405).json({ error: "Method Not Allowed" });
     }
 
     // 1) IP + blacklist
-    const userIP = req.ip || req.socket?.remoteAddress || "neznámá IP";
+    const userIP = req.ip || "neznámá IP";
     if (await isBlacklisted(userIP)) {
       return res.status(403).json({ error: "Vaše IP je na blacklistu." });
     }
@@ -38,7 +39,7 @@ export function validateApiKey(routeDescription = "api") {
     const transformedBearer = bearer === "HACK_EXTENSION" ? HACK_EXTENSION : bearer;
 
     // 3) Hlavní autorita: interní hlavička z proxy
-    const internalHeader = req.headers[INTERNAL_HEADER_NAME];
+    const internalHeader = req.get("X-Internal-Auth") || "";
     let allowed = false;
 
     if (internalHeader && VALID_KEYS.size > 0) {

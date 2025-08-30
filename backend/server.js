@@ -40,7 +40,7 @@ import path from "path"
 import mongoose from "mongoose"
 
 const app = express()
-app.set("trust proxy", true)
+app.set("trust proxy", "loopback");
 app.disable("etag")
 app.disable("x-powered-by")
 
