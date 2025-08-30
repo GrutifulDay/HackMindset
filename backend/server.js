@@ -1,16 +1,15 @@
 // dotevn
 import { PORT } from "./config.js"
 
+import { debug, info, error } from "./utils/logger.js"
+
 // zaklad
-import fs from "fs"
-import https from "https"
 import { UAParser } from "ua-parser-js"
 
 // NPM knihovny 
 import express from "express"
 import helmet from "helmet"
 import chalk from "chalk"
-
 
 // Routes
 import nasaRoutes from "./routes/nasaRoutes.js"
@@ -21,12 +20,7 @@ import digitalRoutes from "./routes/digitalRoutes.js"
 import untruthRoutes from "./routes/untruthRoutes.js"
 import untruthLimitRoutes from "./routes/untruthLimit.js"
 import feedbackRoutes from "./routes/feedbackRoutes.js"
-
 import secLogRoutes from "./routes/secLog.js"
-
-// import ipRoutes from "./routes/ipRoutes.js"
-// import testDB from "./routes/test-db.js"
-
 
 // Middleware
 import limiterApi from "./middlewares/rateLimit.js"
@@ -34,40 +28,42 @@ import corsOptions from "./middlewares/corsConfig.js"
 import botProtection from "./middlewares/botProtection.js"
 import ipBlacklist from "./middlewares/ipBlacklist.js"
 import speedLimiter from "./middlewares/slowDown.js"
-
-// Middleware - fce 
 import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
+
+// ✅ API brána (validátor) – použij svůj modul/umístění
+import { validateApiKey } from "./middlewares/validateApiKey.js"
 
 // Databaze 
 import connectDB from "./db/db.js"
 import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
+import mongoose from "mongoose"
 
 const app = express()
-app.set("trust proxy", true); 
-app.disable("etag");  
+app.set("trust proxy", true)
+app.disable("etag")
+app.disable("x-powered-by")
 
-app.use(secLogRoutes)
-
+// Request log (lehký)
 app.use((req, res, next) => {
-  console.log(`[REQUEST] ${req.method} ${req.url}`);
+  debug(`➡️  ${req.method} ${req.url}`);
   next();
 });
-console.log("✅ Start server.js");
 
-const startTime = new Date().toLocaleString('cs-CZ', {
-  timeZone: 'Europe/Prague',
+info("✅ Start server.js");
+
+
+const startTime = new Date().toLocaleString("cs-CZ", {
+  timeZone: "Europe/Prague",
   hour12: false,
-  year: 'numeric',
-  month: '2-digit',
-  day: '2-digit',
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit',
-});
-
-console.log(chalk.magenta.bold(`💣 Server spuštěn: ${startTime}`));
-
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+})
+console.log(chalk.magenta.bold(`💣 Server spuštěn: ${startTime}`))
 
 const __dirname = path.resolve() // pri pouziti ES modulů
 
@@ -78,8 +74,7 @@ await connectFrontendDB()
 // Kontrola IP adres 
 await loadBlacklistFromDB()
 
-// Zabezpeceni
-app.disable("x-powered-by") // Skrytí frameworku - express.js
+// Helmet – CSP (lehce)
 app.use(
   helmet.contentSecurityPolicy({
     useDefaults: false,
@@ -98,27 +93,63 @@ app.use(
       "frame-ancestors": ["'none'"]
     }
   })
-);
+)
+
+debug("🛠️ Tento soubor se opravdu spustil!");
 
 
-console.log("🛠️ DEBUG: Tento soubor se opravdu spustil!");
+// ─────────────────────────────────────────────────────────────
+// Veřejné routy – necháme je fungovat vždy
+// ─────────────────────────────────────────────────────────────
+app.get("/", (_req, res) => {
+  res.status(200).send("HackMindset backend is running")
+})
 
-app.use("/_sec-log", express.json({ limit: "10kb", type: "application/json" }));
-app.use(secLogRoutes); // tenhle router řeší POST /_sec-log
+app.get("/ping", (_req, res) => {
+  res.status(200).send("pong")
+})
 
-// Nasazeni middlewares
-app.use(corsOptions);   // 1) preflight
-app.use(ipBlacklist);   // 2) hned blokovat známé IP
-app.use(botProtection); // 3) detekce botů/UA
-app.use(speedLimiter);  // 4) zpomalení floodu
-app.use(limiterApi);    // 5) tvrdý rate limit
+app.get("/health", async (_req, res) => {
+  try {
+    // ... původní kód ...
+    return res.status(200).json({ status: "ok" });
+  } catch (err) {
+    if (err.message.includes("timeout")) {
+      warn("⏱️ Mongo ping timeout");
+      return res.status(504).json({ status: "timeout", detail: "MongoDB did not respond in time" });
+    }
+    error("💥 /health error:", err.message);
+    return res.status(500).json({ status: "error", detail: err.message });
+  }
+});
 
+// ─────────────────────────────────────────────────────────────
+// Interní servisní router pro /_sec-log
+// (Uvnitř má vlastní pre-auth + JSON parser; tady nic dalšího nedávej.)
+// ─────────────────────────────────────────────────────────────
+app.use(secLogRoutes)
+
+// ─────────────────────────────────────────────────────────────
+// Globální middlewares pro „zbytek“ provozu
+// ─────────────────────────────────────────────────────────────
+app.use(corsOptions)    // 1) preflight
+app.use(ipBlacklist)    // 2) blokace známých IP
+app.use(botProtection)  // 3) detekce botů/UA
+app.use(speedLimiter)   // 4) zpomalení floodu
+app.use(limiterApi)     // 5) tvrdý rate limit
+
+// JSON parser pro běžné API
 app.use(express.json({ limit: "25kb" }))
 
-// pokud by bylo potreba, jde nastavit pristenjsi limit jednotlive: 
-// app.use("/api/feedbackForm", express.json({ limit: "4kb" }));
+// ─────────────────────────────────────────────────────────────
+// 🔐 API brána – aplikuj JEN na /api/*
+// (Autorita je serverová; očekává interní hlavičku od proxy +/nebo tajný klíč z .env)
+// ─────────────────────────────────────────────────────────────
+app.use("/api", validateApiKey("api"))
 
-// ✅ Načtení NASA router
+// ─────────────────────────────────────────────────────────────
+// API routy – až ZA validátorem
+// ─────────────────────────────────────────────────────────────
 app.use("/api", nasaRoutes)
 app.use("/api", storyRoutes)
 app.use("/api", retroRoutes)
@@ -127,103 +158,26 @@ app.use("/api", digitalRoutes)
 app.use("/api", untruthRoutes)
 app.use("/api", untruthLimitRoutes)
 app.use("/api", feedbackRoutes)
-// app.use("/api", secLogRoutes)
 
-
-// app.use("/api", ipRoutes)
-// app.use("/api", testDB)
-
-app.get("/", (req, res) => {
-  res.status(200).send("HackMindset backend is running");
-});
-
-
-app.get("/ping", (req, res) => {
-  res.status(200).send("pong");
-});
-
-import mongoose from "mongoose";
-
-// ✅ Healthcheck endpoint
-app.get("/health", async (req, res) => {
-  try {
-    if (mongoose.connection.readyState !== 1) {
-      // 0 = disconnected, 2 = connecting, 3 = disconnecting
-      return res.status(503).json({ 
-        status: "unhealthy", 
-        detail: "MongoDB not connected" 
-      });
-    }
-
-    const admin = mongoose.connection.db.admin();
-
-    // Timeout ochrana – když se DB sekne
-    const pingPromise = admin.ping();
-    const timeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("Ping timeout")), 2000)
-    );
-
-    await Promise.race([pingPromise, timeout]);
-
-    return res.status(200).json({ status: "ok" });
-
-  } catch (err) {
-    if (err.message.includes("timeout")) {
-      return res.status(504).json({ 
-        status: "timeout", 
-        detail: "MongoDB did not respond in time" 
-      });
-    }
-
-    return res.status(500).json({ 
-      status: "error", 
-      detail: err.message 
-    });
-  }
-});
-
-
-// testovaci router
+// testovací router
 app.get("/api/test", (req, res) => {
-    const userAgentString = req.get("User-Agent") || "neznámý"
-    const parser = new UAParser(userAgentString)
-    const result = parser.getResult()
-
-    console.log("UAParser výstup:", result)
-
-    res.json({
-        message: "Server OK",
-        originalUserAgent: userAgentString,
-        parsed: result
-    })
-
+  const userAgentString = req.get("User-Agent") || "neznámý"
+  const parser = new UAParser(userAgentString)
+  const result = parser.getResult()
+  debug("UAParser výstup:", result)
+  res.json({ message: "Server OK", originalUserAgent: userAgentString, parsed: result })
 })
 
-// pridani statickych souboru 
+// Statické soubory (pokud je potřebuješ)
 app.use(express.static(path.join(__dirname, "frontend")))
 
-
-// nacitani certifikatu ze slozky cert
-// const options = {
-//     key: fs.readFileSync('./cert/key.pem'),
-//     cert: fs.readFileSync('./cert/cert.pem'),
-// }
-
-
-// https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-//   console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
-// });
-
-console.log(app._router.stack.map(r => r.route && r.route.path).filter(Boolean))
+// Debug výpis registrovaných cest
+try {
+  const routes = app._router?.stack?.map(r => r?.route?.path).filter(Boolean)
+  if (routes?.length) console.log(routes)
+} catch { /* ignore */ }
 
 // ✅ Spuštění serveru
 app.listen(PORT, "127.0.0.1", () => {
-  console.log(`✅ Server běží na http://127.0.0.1:${PORT}`);
+  info(`✅ Server běží na http://127.0.0.1:${PORT}`);
 });
-
-
-
-
-
-
-
