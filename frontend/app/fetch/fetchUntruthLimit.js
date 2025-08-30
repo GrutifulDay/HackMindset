@@ -15,7 +15,7 @@ export async function fetchUntruthLimit(section, date) {
     mode: "cors",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer HACK_EXTENSION"
+      "X-Client-Tag": "HACK_EXTENSION"
     },
     body: JSON.stringify({ section, date: formattedDate }) 
   })

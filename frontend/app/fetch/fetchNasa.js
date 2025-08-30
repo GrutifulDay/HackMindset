@@ -23,7 +23,7 @@ export async function fetchNasaImage() {
       method: "GET",
       mode: "cors",
       headers: {
-        "Authorization": "Bearer HACK_EXTENSION"
+        "X-Client-Tag": "HACK_EXTENSION"
       }
     })
 

@@ -30,7 +30,7 @@ export async function fetchPostVoteStory(date, option) {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer HACK_EXTENSION"
+        "X-Client-Tag": "HACK_EXTENSION"
       },
       body: JSON.stringify({ date, option })
     })
