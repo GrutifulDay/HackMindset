@@ -1,5 +1,6 @@
 import express from "express"
 import { validateApiKey } from "../middlewares/validateApiKey.js"
+import { stripUntruthVotes } from "../middlewares/stripUntruthVotes.js"
 import { getRetroMachine } from "../controllers/retroControllers.js"
 import { getRetroVotes, addRetroVote } from "../controllers/retroVotesController.js"
 import { HACK_EXTENSION } from "../config.js"
@@ -11,6 +12,7 @@ console.log("{storyRoutes.js} pripojeno");
 
 router.get(
     "/retro-machine",
+    stripUntruthVotes,
     validateApiKey(HACK_EXTENSION, "Zavolání /retro-machine routeru"),
     getRetroMachine
 )

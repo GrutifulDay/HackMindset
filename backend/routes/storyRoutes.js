@@ -1,5 +1,6 @@
 import express from "express"
 import { validateApiKey } from "../middlewares/validateApiKey.js"
+import { stripUntruthVotes } from "../middlewares/stripUntruthVotes.js"
 import { getStoryOfTheDay } from "../controllers/storyController.js"
 import { getStoryVotes, addStoryVote } from "../controllers/storyVotesController.js"
 import { HACK_EXTENSION } from "../config.js"
@@ -11,6 +12,7 @@ console.log("{storyRoutes.js} pripojeno");
 
 router.get(
     "/story-of-the-day",
+    stripUntruthVotes,
     validateApiKey(HACK_EXTENSION, "Zavolání /story-of-the-day routeru"),
     getStoryOfTheDay
 )
