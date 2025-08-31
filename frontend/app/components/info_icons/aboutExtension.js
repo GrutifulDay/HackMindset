@@ -69,21 +69,21 @@ export function createAboutExtensionWindow() {
         color: "#333"
     });
 
+    // fce click zavreni mimo element container
     function closeContainer() {
-        document.removeEventListener("click", handleOutsideClick);
-        closeLikeOldTV(container, () => {
-            container.style.display = "none";
-            container.style.transform = "scale(1)";
-        });
+        container.style.display = "none";
+        document.removeEventListener("click", handleOutsideClick)
     }
 
+    // zavreni klik na X
+    closeBtn.addEventListener("click", closeContainer)
+
+    // Zavření kliknutím mimo container
     function handleOutsideClick(e) {
         if (!container.contains(e.target)) {
             closeContainer();
         }
     }
-
-    closeBtn.addEventListener("click", closeContainer);
 
     container.show = function () {
         container.style.display = "block";

@@ -104,7 +104,7 @@ const rememberCount = el("span", "", {
   className: "vote-count"
 })
 
-// nevedel/a 
+// nevedel
 const notExperienceIMG = el("img", null, {
   width: "57px",
   height: "auto",
@@ -203,7 +203,7 @@ if (votedToday) {
   if (votedToday === "like") {
   rememberIMG.src = "../assets/icons/vedel-zluta.png"
 } else {
-  notExperienceIMG.src = "../assets/icons/nevedel-zluta-2.png"
+  notExperienceIMG.src = "../assets/icons/nevedel-zluta.png"
 }
 
 rememberCount.textContent = voteCounts.like
