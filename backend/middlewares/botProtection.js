@@ -1,62 +1,80 @@
-import { addToBlacklist } from "./ipBlacklist.js";
 import { UAParser } from "ua-parser-js"
+import { addToBlacklist } from "./ipBlacklist.js"
 
-// ❌ = ZAKOMENTUJ PRO TESTY ❌ 
+// ✅ IP normalizace (odstraní ::ffff:)
+function normalizeIp(ip) {
+  if (!ip) return ip
+  const m = String(ip).match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/)
+  return m ? m[1] : ip
+}
 
-// ROZDELIT FCE DO SLOZEK
-
-
-// ✅ Pomocná funkce pro správné získání IP adresy
+// ✅ Vytáhni IP – preferuj proxy hlavičku, jinak socket
 function getUserIP(req) {
-    return (
-        req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||    // vezme prvni IP
-        req.socket?.remoteAddress ||    // pokud neni, vezne IP ze sitoveho pripojeni
-        req.connection?.remoteAddress ||    // starsi zpusob - naprimo ze sitoveho spojeni
-        "neznámá IP"    // pokud na nic neprisel
-    )
+  const xff = req.headers["x-forwarded-for"]
+  const ip =
+    (Array.isArray(xff) ? xff[0] : (xff?.split(",")[0]?.trim())) ||
+    req.socket?.remoteAddress ||
+    req.connection?.remoteAddress ||
+    req.ip ||
+    "neznámá IP"
+  return normalizeIp(ip)
 }
 
-export default function botProtection(req, res, next) {
-    const userAgentString = req.get("User-Agent");
-    const userIP = getUserIP(req); // 
+export default async function botProtection(req, res, next) {
+  const userAgentString = req.get("User-Agent") || ""
+  const userIP = getUserIP(req)
 
-    // ❌ 
-    // ✅ Výjimka pro Postman
-    // if (userAgentString && userAgentString.includes("Postman")) {
-    //     console.log("🧪 Postman detekován – povolen.");
-    //     return next();
-    // }
+  // --- (volitelná) výjimka pro Postman při testech ---
+  // if (userAgentString.includes("Postman")) return next()
 
-    // ⛔️ Blokování bez user-agent
-    if (!userAgentString) {
-        console.warn(`🚨 Bot detekován: IP ${userIP} přidána na blacklist.`);
-        addToBlacklist(userIP)
-        return res.status(403).json({ error: "❌ Přístup zamítnut." })
-    }
+  // ⛔️ 1) Chybí User-Agent -> rovnou blok
+  if (!userAgentString.trim()) {
+    try {
+      await addToBlacklist(userIP, "missingUserAgent", {
+        userAgent: "Neznámý",
+        endpoint: req.originalUrl,
+        method: req.method,
+        layer: "express",
+        statusCode: 403,
+      })
+    } catch { /* nechceme kvůli logu shodit req */ }
+    return res.status(403).json({ error: "❌ Přístup zamítnut." })
+  }
 
+  // 🔍 2) Analýza UA
+  const parser = new UAParser(userAgentString)
+  const result = parser.getResult()
 
-    // Analýza pomocí UAParser
-    const parser = new UAParser(userAgentString)
-    const result = parser.getResult()
+  const browserName = result.browser?.name || "Neznámý"
+  const deviceType  = result.device?.type  || "Neznámý"
+  const osName      = result.os?.name     || "Neznámý"
 
-    const browserName = result.browser.name || "Neznámý" // prohlizec
-    const deviceType = result.device.type || "Neznámý"  // zařízení
-    const osName = result.os.name || "neznámý"  // operacni system
+  // ⚠️ 3) Podezřelé UA – browser „Other“ (typické pro curl/wget/skripty)
+  //     Můžeš přidat vlastní signatury botů níže (curl, wget, python-requests, httpclient, go-http, libwww-perl…)
+  const suspiciousSignatures = [
+    "curl", "wget", "python-requests", "httpclient", "go-http", "libwww-perl",
+    "okhttp", "java/", "node-fetch", "aiohttp", "scrapy",
+  ]
+  const looksLikeScript = suspiciousSignatures.some(sig =>
+    userAgentString.toLowerCase().includes(sig)
+  )
 
-    // ⚠️ Podezřelý user-agent
-    if (browserName === "Other" || browserName === undefined) {
-        console.warn(`🚨 Podezřelý bot detekován (${deviceType}, ${osName}) – IP ${userIP}`);
+  if (browserName === "Other" || looksLikeScript) {
+    try {
+      await addToBlacklist(userIP, "suspiciousUserAgent", {
+        userAgent: userAgentString,
+        browser: browserName,
+        os: osName,
+        deviceType,
+        endpoint: req.originalUrl,
+        method: req.method,
+        layer: "express",
+        statusCode: 403,
+      })
+    } catch { /* ignore */ }
+    return res.status(403).json({ error: "❌ Přístup zamítnut." })
+  }
 
-        addToBlacklist(userIP, "Chybějící User-Agent",{
-            userAgent: userAgentString,
-            browser: result.browser.name,
-            os: result.os.name,
-            deviceType: result.device.type
-        })
-        return res.status(403).json({ error: "❌ Přístup zamítnut."})
-    }
-
-    next() 
+  // ✅ 4) Vypadá to jako běžný prohlížeč → pusť dál
+  return next()
 }
-
-

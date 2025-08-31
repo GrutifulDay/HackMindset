@@ -8,7 +8,8 @@ import { INTERNAL_API_KEYS, ALLOW_LOCAL_NO_PROXY, HACK_EXTENSION } from "../conf
 export function validateApiKey(routeDescription = "api") {
   console.log("validateApiKey ✅ aktivní");
 
-  const ALLOWED_METHODS = new Set(["GET", "POST", "HEAD", "OPTIONS"]);  const INTERNAL_HEADER_NAME = "x-internal-auth";
+  const ALLOWED_METHODS = new Set(["GET", "POST", "HEAD", "OPTIONS"]);
+  const INTERNAL_HEADER_NAME = "x-internal-auth";
   const VALID_KEYS = new Set(INTERNAL_API_KEYS);
 
   const safeEq = (a, b) => {
@@ -22,7 +23,6 @@ export function validateApiKey(routeDescription = "api") {
   return async function (req, res, next) {
     // 0) Metody
     if (req.method === "OPTIONS") return res.sendStatus(204);
-
     if (!ALLOWED_METHODS.has(req.method)) {
       return res.status(405).json({ error: "Method Not Allowed" });
     }
@@ -61,20 +61,37 @@ export function validateApiKey(routeDescription = "api") {
 
     if (allowed) return next();
 
-    // 4) Neúspěch → blacklist + 403
+    // 4) Neúspěch → KONKRÉTNÍ reason + kontext → blacklist + 403/401
     try {
       const ua = req.get("User-Agent") || "Neznámý";
       const parser = new UAParser(ua);
       const result = parser.getResult();
       const city = await getCityByIP(userIP);
-      await addToBlacklist(userIP, routeDescription, {
-        userAgent: ua,
-        browser: result.browser?.name || "Neznámý",
-        os: result.os?.name || "Neznámý",
-        deviceType: result.device?.type || "Neznámý",
+
+      // Rozliš konkrétní důvod selhání
+      const failedBecause = internalHeader
+        ? "invalidInternalAuth"   // hlavička byla, ale klíč nesedí
+        : "invalidApiKey";        // žádná interní hlavička → volání mimo proxy
+
+      await addToBlacklist(userIP, failedBecause, {
+        // IP/geo
         city: city || "Neznámý",
+        // request kontext
+        endpoint: req.originalUrl,
+        method: req.method,
+        userAgent: ua,
+        // app vrstva + status
+        layer: "express",
+        statusCode: failedBecause === "invalidInternalAuth" ? 403 : 401,
+        // doplň si klidně i ruleId/ruleName/tags podle chuti:
+        // ruleId: "AUTH001",
+        // ruleName: routeDescription,
+        // tags: ["auth","proxy"],
+        // cokoliv dalšího umíš doplnit (country/asn/isp/reverseDns) sem
       });
-    } catch { /* nechceme shodit request kvůli blacklistu */ }
+    } catch {
+      // nechceme shodit request kvůli chybě v blacklistu
+    }
 
     return res.status(403).json({ error: "Neplatný přístup" });
   };
