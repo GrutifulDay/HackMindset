@@ -103,26 +103,7 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
         })
         await newIP.save()
         console.log(`🛑 IP ${ip} uložena do databáze`);
-        await notifyBlockedIP({
-          ip,
-          reason,
-          country: info.country,
-          city: info.city || "Neznámé",
-          asn: info.asn,
-          isp: info.isp,
-          reverseDns: info.reverseDns,
-        
-          endpoint: info.endpoint,
-          method: info.method,
-          requestsCount: info.requestsCount,
-          requestsWindow: info.requestsWindow,
-        
-          layer: info.layer || "express",
-          statusCode: info.statusCode || (/rate|limit/i.test(reason) ? 429 : 403),
-        
-          userAgent: info.userAgent || "Neznámý",
-          occurredAt: new Date()
-        })        
+        await notifyBlockedIP(ip, info.city, reason)
       } else {
         console.log(`⚠️ IP ${ip} už v databázi existuje`);
       }
