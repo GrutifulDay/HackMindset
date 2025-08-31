@@ -1,4 +1,3 @@
-// notifyBlockedIP.js
 import { DISCORD_WEBHOOK_URL } from "../config.js"
 
 /**
