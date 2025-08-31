@@ -8,24 +8,15 @@ const limiterApi = rateLimit({
     legacyHeaders: false,
     handler: async (req, res) => {
         const ip = req.ip;
-      
+
         console.warn(`⚠️ Rate limit exceeded for IP: ${ip}`);
-      
-        await addToBlacklist(ip, "rateLimitExceeded (30/min)", {
-          endpoint: req.originalUrl,
-          method: req.method,
-          userAgent: req.get("user-agent") || "Neznámý",
-          requestsCount: 31,          // min. aktuální hodnota – můžeš sem později doplnit dynamicky
-          requestsWindow: "60s",
-          layer: "express",
-          statusCode: 429,
-        });
-      
+
+        await addToBlacklist(ip, "Překročil limit 30 požadavků za minutu");
+
         return res.status(429).json({
-          error: "Příliš mnoho požadavků – zkuste to prosím později.",
+            error: "Příliš mnoho požadavků – zkuste to prosím později.",
         });
-      },
-      
+    },
     keyGenerator: (req) => req.ip,
     skip: (req) => {
         // Výjimky: tvoje vlastní IP + rozšíření, pokud bude potřeba

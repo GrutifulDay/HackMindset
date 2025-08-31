@@ -1,4 +1,3 @@
-// middlewares/ipBlocker.js
 import BlacklistedIP from "../models/BlacklistedIP.js"
 import { notifyBlockedIP } from "../utils/discordNotification.js"
 import { saveSecurityLog } from "../services/securityLogService.js"
@@ -24,22 +23,6 @@ const redact = (obj = {}) => {
   }
   return out;
 };
-
-/**
- * Pomůcka: naplň info z Express requestu (lze přepsat přes overrides).
- * Používej v rate-limiteru / validateApiKey / geo-bloku:
- *   addToBlacklist(ip, "rateLimitExceeded (30/min)", buildNotifyInfo(req, { requestsCount: 47, requestsWindow: "60s" }))
- */
-export function buildNotifyInfo(req, overrides = {}) {
-  const base = {
-    endpoint: req.originalUrl,
-    method: req.method,
-    userAgent: req.get("user-agent") || "Neznámý",
-    layer: "express",            // výchozí – přepiš v proxy/NGINX na "openresty"
-    statusCode: 403,             // přepiš na 429 u rate-limit nebo 401 u API key
-  };
-  return { ...base, ...overrides };
-}
 
 // Middleware pro blokovani IP
 export default async function ipBlocker(req, res, next) {
@@ -90,15 +73,9 @@ export default async function ipBlocker(req, res, next) {
 }
 
 // Funkce pro pridani IP do blacklistu do DB  
-export async function addToBlacklist(ip, reason, info = {}) {
+export async function addToBlacklist(ip, reason = "Automatické blokování", info = {}) {
   ip = normalizeIp(ip);
   if (!ip) return false;
-
-  // DŮLEŽITÉ: reason nechci defaultovat na generické – ať se vždy pošle konkrétní
-  if (!reason || typeof reason !== "string") {
-    console.warn(`⚠️ addToBlacklist: prázdný nebo neplatný reason pro IP ${ip} – nahrazuji 'unspecified'`);
-    reason = "unspecified"; // raději explicitní než zavádějící „Automatické blokování“
-  }
 
   // nepřidávej vlastní server / localhost
   if (ignoredIPs.has(ip)) {
@@ -126,24 +103,6 @@ export async function addToBlacklist(ip, reason, info = {}) {
         })
         await newIP.save()
         console.log(`🛑 IP ${ip} uložena do databáze`);
-
-        // ——— Bezpečné defaulty pro notify ———
-        const layer = info.layer || "express";
-        // Pokud důvod vypadá na rate-limit → 429, jinak nech 403 (lze přepsat v info)
-        const statusCode = (info.statusCode != null)
-          ? info.statusCode
-          : (/rate|limit/i.test(reason) ? 429 : 403);
-
-        // sanity log - pak smazat 
-        console.log("notifyBlockedIP input →", {
-          ip, reason,
-          endpoint: info.endpoint,
-          method: info.method,
-          userAgent: info.userAgent,
-          layer,
-          statusCode
-        });
-
         await notifyBlockedIP({
           ip,
           reason,
@@ -152,21 +111,20 @@ export async function addToBlacklist(ip, reason, info = {}) {
           asn: info.asn,
           isp: info.isp,
           reverseDns: info.reverseDns,
-
+        
           endpoint: info.endpoint,
           method: info.method,
           requestsCount: info.requestsCount,
           requestsWindow: info.requestsWindow,
-
-          layer,
-          statusCode,
-
+        
+          layer: info.layer || "express",
+          statusCode: info.statusCode || (/rate|limit/i.test(reason) ? 429 : 403),
+        
           userAgent: info.userAgent || "Neznámý",
           occurredAt: new Date()
-        })
+        })        
       } else {
         console.log(`⚠️ IP ${ip} už v databázi existuje`);
-        // ZDE schválně neposílám Discord znovu, ať nespamujeme kanál
       }
     } catch (err) {
       console.error("❌ Chyba při ukládání IP do DB:", err.message);
