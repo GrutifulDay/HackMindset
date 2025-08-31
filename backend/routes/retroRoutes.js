@@ -1,6 +1,6 @@
 import express from "express"
 import { validateApiKey } from "../middlewares/validateApiKey.js"
-import { stripUntruthVotes } from "../middlewares/stripUntruthVotes.js"
+import stripUntruthVotes from "../middlewares/stripUntruthVotes.js"
 import { getRetroMachine } from "../controllers/retroControllers.js"
 import { getRetroVotes, addRetroVote } from "../controllers/retroVotesController.js"
 import { HACK_EXTENSION } from "../config.js"
