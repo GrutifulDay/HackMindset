@@ -19,12 +19,14 @@ router.get(
 
 router.get(
     "/retro-machine/retroVotesGet/:date",
+    stripUntruthVotes,
     validateApiKey(HACK_EXTENSION, "Zavolání GET /retroVotesGet"),
     getRetroVotes
 )
 
 router.post(
     "/retro-machine/retroVotesPost",
+    stripUntruthVotes,
     validateApiKey(HACK_EXTENSION, "Zavolání POST /retroVotesPost"),
     addRetroVote
 )

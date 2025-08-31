@@ -19,12 +19,14 @@ router.get(
 
 router.get(
     "/story-of-the-day/storyVotesGet/:date",
+    stripUntruthVotes,
     validateApiKey(HACK_EXTENSION, "Zavolání GET /storyVotesGet"),
     getStoryVotes
 )
 
 router.post(
     "/story-of-the-day/storyVotesPost",
+    stripUntruthVotes,
     validateApiKey(HACK_EXTENSION, "Zavolání POST /storyVotesPost"),
     addStoryVote
 )
