@@ -4,8 +4,6 @@ import { addToBlacklist, isBlacklisted } from "./ipBlacklist.js";
 import { getCityByIP } from "../utils/getCityByIP.js";
 import { INTERNAL_API_KEYS, ALLOW_LOCAL_NO_PROXY, HACK_EXTENSION } from "../config.js";
 
-console.log("✅ validateApiKey aktivní pro:", req.method, req.originalUrl);
-
 
 // 🔐 Middleware pro validaci přístupu (proxy-only + serverové tajemství)
 export function validateApiKey(routeDescription = "api") {
