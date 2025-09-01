@@ -1,6 +1,5 @@
 import { el } from "../../utils/dom/uiSnippets.js";
 
-// VISUAL - "INFO O PREKLADU" - okno / pouze pri CZ vyberu
 export function createTranslationInfoWindow() {
     const container = el("div", null, {
         position: "absolute",
@@ -9,7 +8,7 @@ export function createTranslationInfoWindow() {
         padding: "15px",
         zIndex: "1000",
         maxWidth: "300px",
-        display: "none", // start hidden 
+        display: "none",
 
         backgroundColor: "#fff8e1",
         borderRadius: "10px",
@@ -27,26 +26,21 @@ export function createTranslationInfoWindow() {
         color: "#333"
     })
 
-    // fce click zavreni mimo element container
     function closeContainer() {
         container.style.display = "none";
         document.removeEventListener("click", handleOutsideClick)
     }
 
-    // zavreni klik na X
     closeBtn.addEventListener("click", closeContainer)
 
-    // Zavření kliknutím mimo container
     function handleOutsideClick(e) {
         if (!container.contains(e.target)) {
             closeContainer();
         }
     }
 
-    // fce pro zobraceni volana zvenku 
     container.show = function () {
         container.style.display = "block";
-        // prodleva mezi klikem a zavrenim
         setTimeout(() => {
             document.addEventListener("click", handleOutsideClick);
         }, 0);
@@ -96,8 +90,6 @@ export function createTranslationInfoWindow() {
         moreIcon
     )
     
-
-    // texty 
     const title = el("strong", "O překladu", {
         fontSize: "1.2em",
         color: "#273E64",
@@ -105,7 +97,6 @@ export function createTranslationInfoWindow() {
         textDecoration: "underline"
     });
 
-    // doplnit logo z google 
     const line1 = el("p", null)
 
     line1.append(
@@ -128,9 +119,6 @@ export function createTranslationInfoWindow() {
         ]),
         urlTranslation
     )
-    
-    
-
 
     container.append(closeBtn, title, line1);
     return container;

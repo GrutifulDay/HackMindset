@@ -14,8 +14,6 @@ export function createAddTooltip(targetElement, text) {
     const offset = 12;
     const tooltipWidth = tooltip.offsetWidth;
     const pageWidth = window.innerWidth;
-
-    // Detekce: zobrazit vlevo nebo vpravo
     const showLeft = e.pageX + tooltipWidth + offset > pageWidth;
 
     tooltip.style.left = showLeft

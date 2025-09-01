@@ -1,6 +1,3 @@
-console.log("{language.js} ✅ funguje")
-
-
 export function setLanguage(lang) {
     localStorage.setItem("preferredLanguage", lang)
     chrome.storage.local.set({ preferredLanguage: lang })

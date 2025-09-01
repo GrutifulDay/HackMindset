@@ -1,20 +1,13 @@
 import { updateSectionData } from "../utils/update/updateSectionData.js"
 import { API } from "../utils/config.js";
 
-console.log("{fetchNasa.js} 📡 je načtený")
-
 export async function fetchNasaImage() {
-  console.log("{funkce fetchNasaImage} ✅ funguje");
-
   const shouldUpdate = await updateSectionData("nasa")
 
   if (!shouldUpdate) {
-    console.log("[nasa] ⏳ Data jsou aktuální – čtu z cache.");
-
     const { nasaData } = await new Promise((resolve) => {
       chrome.storage.local.get("nasaData", (result) => resolve(result))
     })
-
     return nasaData || null
   }
 
@@ -26,9 +19,7 @@ export async function fetchNasaImage() {
         "X-Client-Tag": "HACK_EXTENSION"
       }
     })
-
     const data = await response.json()
-
     await new Promise((resolve) => {
       chrome.storage.local.set(
         {
@@ -38,8 +29,6 @@ export async function fetchNasaImage() {
         resolve
       )
     })
-
-    console.log("[nasa] ✅ Nová data uložena");
     return data
   } catch (error) {
     console.error("❌ fetchNasaImage error", error);

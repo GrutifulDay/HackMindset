@@ -3,24 +3,14 @@ import { fetchGetVoteStory, fetchPostVoteStory } from "../fetch/fetchStoryVotes.
 import { createVotingReportUsers } from "./interactions_users/votingReport.js";
 import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
-
 import { createUntruthIcon } from "./icons_import/untruthIcon.js";
 import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js";
-
 import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
-
 import { createAddTooltip } from "../utils/dom/tooltip.js";
 
-console.log("{storyOfTheDay.js} 🧩 sekce se generuje...");
-
-
 export async function createStoryOfTheDay() {
-  console.log("{FUNKCE createStoryOfTheDay} ✅ funguje");
-
-
   const lang = getLanguage()
   const CACHE_KEY = `story_cache_${lang}`
-
   let storyData = getCachedData(CACHE_KEY)
 
   if (storyData) {
@@ -75,8 +65,7 @@ export async function createStoryOfTheDay() {
     fontWeight: "bold",
     marginTop: "30px"
   })
-
- // HLASOVANI  
+  
  const feedbackWrapper = el("div", null, {
   display: "flex",
   gap: "40px",
@@ -85,7 +74,6 @@ export async function createStoryOfTheDay() {
   marginTop: "0px"
 })
 
-// vedel/a
 const rememberIMG = el("img", null, {
   width: "56px",
   height: "auto",
@@ -104,7 +92,6 @@ const rememberCount = el("span", "", {
   className: "vote-count"
 })
 
-// nevedel
 const notExperienceIMG = el("img", null, {
   width: "57px",
   height: "auto",
@@ -124,10 +111,7 @@ const notExperienceCount = el("span", "", {
   className: "vote-count"
 })
 
-
-// fce hlasovani 
 function createVoteElement(imgElement, countSpan) {
-  // Wrapper pro img + cislo
   const imageWrapper = el("div", null, {
     position: "relative",
     height: "100px", 
@@ -138,12 +122,9 @@ function createVoteElement(imgElement, countSpan) {
     paddingTop: "47px" 
   })
 
-  // img
   imgElement.style.height = "100%"
   imgElement.style.objectFit = "contain"
 
-
-  // cislo nad img
   Object.assign(countSpan.style, {
     position: "absolute",
     fontFamily: "monospace",
@@ -164,7 +145,6 @@ function createVoteElement(imgElement, countSpan) {
 
   imageWrapper.append(imgElement, countSpan)
 
-  // cely hlasovaci blok 
   const wrapper = el("div", null, {
     display: "flex",
     flexDirection: "column",
@@ -178,12 +158,10 @@ function createVoteElement(imgElement, countSpan) {
   return wrapper
 }
 
-// pridani fce k wrapper
 const rememberWrapper = createVoteElement(rememberIMG, rememberCount) 
 const notExperienceWrapper = createVoteElement(notExperienceIMG, notExperienceCount)
 feedbackWrapper.append(rememberWrapper, notExperienceWrapper)
 
-// Kontrola, zda uzivatel jiz hlasoval
 const todayKey = storyData.date 
 const localStorageKey = `storyVotedToday_${todayKey}` 
 console.log("🧪 todayKey:", todayKey)
@@ -191,8 +169,6 @@ console.log("🧪 todayKey:", todayKey)
 const voteCounts = await fetchGetVoteStory(todayKey)
 const votedToday = localStorage.getItem(localStorageKey)
 
-
-// zablokuje hlasovani, ukaze barevny img 
 if (votedToday) {
   rememberIMG.style.pointerEvents = "none"
   notExperienceIMG.style.pointerEvents = "none"
@@ -212,7 +188,6 @@ rememberCount.style.display = "inline"
 notExperienceCount.style.display = "inline"
 }
 
-// zablokuj hlasovani, zobraz barevny/vybranny img a aktual. pocty z db 
 async function handleVote(option) {
   const updated = await fetchPostVoteStory(todayKey, option)
   if (!updated) return
@@ -240,7 +215,6 @@ async function handleVote(option) {
   createVotingReportUsers(lang === "cz" ? "Děkujeme, ze hlasujete každý den 💚" : "Thank you for voting every day 💚")
 }
 
-// Event listenery
 rememberIMG.addEventListener("click", () => {
   handleVote("like")
 })
@@ -249,7 +223,6 @@ notExperienceIMG.addEventListener("click", () => {
   handleVote("dislike")
 })
 
-// OZNACENI CHYBNE INFORMACE 
 const untruthIcon = createUntruthIcon()
 const untruthVotingWindow = createUntruthVotingWindow()
 document.body.append(untruthVotingWindow)
@@ -275,14 +248,12 @@ untruthIcon.addEventListener("click", () => {
   })
 })
 
-// zvyrazneni 
 untruthWrapper.addEventListener("mouseenter", () => {
     untruthWrapper.style.opacity = "1"
 })
   untruthWrapper.addEventListener("mouseleave", () => {
     untruthWrapper.style.opacity = "0.6"
 })
-
 untruthWrapper.append(untruthIcon)
   
   article.append(

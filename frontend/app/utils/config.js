@@ -1,5 +1,4 @@
 const BASE_URL = "https://hackmindset.app/api"
-// const BASE_URL = "https://localhost:3000/api"
 
 export const API = {
   nasa: `${BASE_URL}/nasa`,
@@ -15,12 +14,5 @@ export const API = {
   untruthLimitLog: `${BASE_URL}/untruth-limit-log`
 }
 
-export const DEV_MODE = true // true / false - pro produkci 
+export const DEV_MODE = true 
 
-// chrome.storage.local.clear() // pro uplny vymaz 
-// localStorage.clear()   
-
- // vymaz untruth hlasovani
-// Object.keys(localStorage)    
-//   .filter(key => key.startsWith("untruth-") || key.startsWith("abuse-limit-"))
-//   .forEach(key => localStorage.removeItem(key))

@@ -1,12 +1,9 @@
 import { API } from "../utils/config.js"
 
-console.log("{fetchPostUntruthVotes.js} 📡 načten")
-
 /**
- * Odeslání hlasování o nepravdivé informaci
- * @param {String} date - např. "10-07-2025"
- * @param {Array<String>} feedback - pole označených bodů (např. ["Rok je špatně"])
- * @returns {Object|null} - odpověď ze serveru nebo null při chybě
+ * @param {String} date 
+ * @param {Array<String>} feedback 
+ * @returns {Object|null} 
  */
 
 export async function fetchUntruthVotes(date, feedback, section) {

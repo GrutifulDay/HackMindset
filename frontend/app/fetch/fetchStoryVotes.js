@@ -1,8 +1,5 @@
 import { API } from "../utils/config.js";
 
-console.log("{fetchStoryVotes.js} 📡 načten");
-
-// ziskani postu hlasu pro dany den 
 export async function fetchGetVoteStory(date) {
   try {
     const response = await fetch(`${API.storyVotesGet}/${date}`, {
@@ -13,7 +10,6 @@ export async function fetchGetVoteStory(date) {
         "Authorization": "Bearer HACK_EXTENSION"
       }
     })
-
     return await response.json()
   } catch (error) {
     console.error("❌ Chyba při získávání hlasů:", error);
@@ -21,9 +17,7 @@ export async function fetchGetVoteStory(date) {
   }
 }
 
-// odesilani hlasu
 export async function fetchPostVoteStory(date, option) {
-
   try {
     const response = await fetch(API.storyVotesPost, {
       method: "POST",
@@ -34,7 +28,6 @@ export async function fetchPostVoteStory(date, option) {
       },
       body: JSON.stringify({ date, option })
     })
-
     return await response.json()
   } catch (error) {
     console.error("❌ Chyba při odesílání hlasu:", error);

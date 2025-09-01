@@ -19,7 +19,7 @@ export async function createDigitalSignpost() {
         console.log("[retro] ⏳ Data jsou aktuální – čtu z cache.")
       } else {
         console.log("🌐 Načítám nová data ze serveru")
-        digitalData = await fetchDigitalSignpost()  // ✅ už funguje
+        digitalData = await fetchDigitalSignpost() 
         if (digitalData) setCachedData(CACHE_KEY, digitalData)
       }
     
@@ -66,13 +66,12 @@ export async function createDigitalSignpost() {
 
     const recommendation = el("p", digitalData.recommendation?. [lang] ||"", {})
 
-    // OZNACENI CHYBNE INFORMACE 
     const untruthIcon = createUntruthIcon()
     const untruthVotingWindow = createUntruthVotingWindow()
     document.body.append(untruthVotingWindow)
 
     const section = "digital"
-    const date = digitalData.date //  napr. "2025-07-14"
+    const date = digitalData.date 
 
     untruthIcon.dataset.section = section
 
@@ -87,7 +86,6 @@ export async function createDigitalSignpost() {
         transition: "opacity 0.2s",        
       })
       
-
       untruthIcon.addEventListener("click", () => {
         console.log("🧪 CLICK DETEKTOVÁN NA untruthIcon")
         untruthVotingWindow.show(untruthIcon, {
@@ -95,9 +93,7 @@ export async function createDigitalSignpost() {
           date
         })
       })
-      
 
-    // zvyrazneni 
     untruthWrapper.addEventListener("mouseenter", () => {
         untruthWrapper.style.opacity = "1"
     })

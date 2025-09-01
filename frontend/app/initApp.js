@@ -8,11 +8,7 @@ import { createDigitalSignpost } from "./components/digitalSignpost.js";
 
 
 export async function initPopup() {
-    console.log("{initApp.js} ✅ Běží hlavní obsah!");
-
     const body = document.body;
-
-
     const topPanel = await createTopPanel();
     const hackMindset = await createHackMindset();
     const nasaSection = await createNasaSection();
@@ -24,6 +20,4 @@ export async function initPopup() {
   [topPanel, hackMindset, nasaSection, digitalSignpost, storyOfTheDay, retroMachine, profile]
     .filter(Boolean)
     .forEach((section) => body.appendChild(section));
-
-  console.log("{initApp.js} ✅ Všechny sekce byly přidány!");
 }

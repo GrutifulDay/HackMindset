@@ -2,12 +2,11 @@ import { el } from "../../utils/dom/uiSnippets.js"
 import { setLanguage, getLanguage } from "../../utils/language/language.js"
 import { createAddTooltip } from "../../utils/dom/tooltip.js";
 
-// VISUAL - PREPINANI JAZYKA 
 export function createLanguageSwitcher() {
   const lang = getLanguage()
 
   function createFlagWrapper(src, title, isActive) {
-    // vlozeni do wrapper pro zarovnani 
+
     const wrapper = el("div", null, {
       width: "24px",
       height: "auto",
@@ -18,7 +17,6 @@ export function createLanguageSwitcher() {
       padding: "2px", 
     })
 
-    // cz + en 
     const flag = el("img", null, {
       width: "100%",
       height: "100%",
@@ -39,18 +37,17 @@ export function createLanguageSwitcher() {
     return { wrapper, flag }
   }
 
-  // volba jazyka + hoover title
   const { wrapper: czWrapper, flag: czFlag } = createFlagWrapper(
     "../assets/icons/CZ.svg",
     null,
-    lang === "cz" // <-- DŮLEŽITÉ
+    lang === "cz" 
   )
 
   
   const { wrapper: enWrapper, flag: enFlag } = createFlagWrapper(
     "../assets/icons/EN.svg",
     null,
-    lang === "en" // <-- DŮLEŽITÉ
+    lang === "en" 
   )
 
   createAddTooltip(czFlag, "Čeština")
@@ -66,8 +63,6 @@ export function createLanguageSwitcher() {
     location.reload()
   }
   
-
-  // cela cast cz / en 
   const wrapper = el("div", null, {
     position: "absolute",
     top: "13px",
@@ -80,7 +75,6 @@ export function createLanguageSwitcher() {
   }, {
     id: "language-switcher"
   })
-
 
   wrapper.append(czWrapper, enWrapper)
   return wrapper

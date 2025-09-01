@@ -4,14 +4,11 @@ export function playSound(filename) {
     const audio = new Audio(chrome.runtime.getURL(path))
     audio.play()
 }
-
 let currentAudio = null
 
-// prepinani 
 export function toggleSound(filename, soundIcon) {
   const path = chrome.runtime.getURL(`frontend/assets/sounds/${filename}`) 
-
-  // zapnout / vypnout zvuk 
+ 
   if (!currentAudio || currentAudio.paused) {
     currentAudio = new Audio(path)
     currentAudio.play()

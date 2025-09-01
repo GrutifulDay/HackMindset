@@ -10,7 +10,6 @@ export async function createHackMindset() {
     
     const header = el("header", null, {})
 
-    // title + logo
     const wrapper = el("div", null, {
         fontSize: "1rem",
         fontWeight: "600",
@@ -24,7 +23,6 @@ export async function createHackMindset() {
         letterSpacing: "0.5px",
         textShadow: "1px 2px 3px rgba(0, 0, 0, 1.5)",
         color: "#ffe5f0",
-        
     })
 
     const hackTitle = el("h1", "hack", {}, {
@@ -45,7 +43,6 @@ export async function createHackMindset() {
       
     wrapper.append(hackTitle, bulbIcon, mindsetTitle)
    
-    // CZ / EN > text + datum
     const translations = {
         cz: {
             todayPrefix: "Dnes je ",
@@ -58,7 +55,7 @@ export async function createHackMindset() {
             title: "HackMindset"
         }
     }
-    const t = translations[lang] || translations["en"] // vychozi ["en"]
+    const t = translations[lang] || translations["en"] 
     
     const today = new Date().toLocaleDateString(lang === "cz" ? "cs-CZ" : "en-GB", {
         day: "numeric",
@@ -82,8 +79,6 @@ export async function createHackMindset() {
     const suffix = document.createTextNode(t.todaySuffix)
 
     date.append(prefix, dateSpan, suffix)      
-
-
     header.append(wrapper, date)
     return header
 }

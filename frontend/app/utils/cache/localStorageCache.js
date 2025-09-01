@@ -1,15 +1,12 @@
 import { DEV_MODE } from "../config.js"; 
 
-// obecna fce pro ukladani
 export function getCachedData(cacheKey) {
   if (DEV_MODE) {
     localStorage.removeItem(cacheKey)
     return null
   }
-
   const cached = localStorage.getItem(cacheKey)
   if (!cached) return null
-
   try {
     const parsed = JSON.parse(cached)
     const today = new Date().toISOString().slice(0, 10)
@@ -18,7 +15,6 @@ export function getCachedData(cacheKey) {
       localStorage.removeItem(cacheKey)
       return null
     }
-
     return parsed.data
   } catch (e) {
     console.warn(`❌ Chyba při čtení cache (${cacheKey}):`, e)

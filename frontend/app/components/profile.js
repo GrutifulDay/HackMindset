@@ -3,12 +3,7 @@ import { getLanguage } from "../utils/language/language.js";
 import { fetchProfile } from "../fetch/fetchProfile.js";
 import { createAddTooltip } from "../utils/dom/tooltip.js";
 
-
-console.log("{profile.js} 🧩 sekce se generuje...");
-
 export async function createProfile() {
-  console.log("{funkce createProfile} ✅ funguje");
-
   const lang = getLanguage()
   const profileData = await fetchProfile()
 
@@ -24,12 +19,11 @@ export async function createProfile() {
     justifyContent: "center"
   })
 
-  // nadpis
   const profileWrapper = el("div", null, {
     display: "flex",
   alignItems: "center",
-  justifyContent: "center", // vycentruje jako v ostatních sekcích
-  gap: "5px",               // mezera mezi ikonou a textem
+  justifyContent: "center", 
+  gap: "5px",              
   marginTop: "-9px",
   })
 
@@ -37,7 +31,6 @@ export async function createProfile() {
     width: "40px",
   height: "auto",
   opacity: ".8",
-
   }, {
     src: "../assets/icons/insta.svg"
   })
@@ -70,7 +63,6 @@ export async function createProfile() {
     background: "transparent",
   })
   
-  // přidání tooltipu
   createAddTooltip(button, lang === "cz" ? "Zkopíruj" : "Copy")
 
   const copy = el("img", null, {
@@ -89,22 +81,18 @@ export async function createProfile() {
     src: "../assets/icons/check.svg",
   })
 
-  // zaloha pro pozdejsi vraceni
   const copyIcon = copy.cloneNode(true) 
   const checkIcon = check.cloneNode(true)
 
   button.appendChild(copyIcon);
 
-  // fce pro kopirovani
   button.addEventListener("click", () => {
     navigator.clipboard.writeText(tag)
       .then(() => {
         console.log(`✅ Zkopírováno: ${tag}`)
 
-        // smaz obsah a nahrad 
         button.replaceChildren(checkIcon)
 
-        // Po 1s vrati ikonu 
         setTimeout(() => {
           button.textContent = ""
           button.appendChild(copyIcon)

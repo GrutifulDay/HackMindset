@@ -5,7 +5,6 @@ import { getLanguage } from "../utils/language/language.js";
 import { fetchNasaImage } from "../fetch/fetchNasa.js";
 import { createAddTooltip } from "../utils/dom/tooltip.js";
 
-
 export async function createNasaSection() {
     console.log("{funkce createNasaSection} ✅ funguje");
 
@@ -16,7 +15,6 @@ export async function createNasaSection() {
     
     const section = el("section", null, {}, {})      
 
-    // icon + nadpis + link Nasa
     const titleWrapper = el("div", null, {
         position: "relative",
         marginTop: "10px",
@@ -51,8 +49,6 @@ export async function createNasaSection() {
     nasaTitle.append(title, link)
     titleWrapper.append(rocketIcon, nasaTitle)
 
-
-    // img + popis + icon 
     const nasaImage = el("img", null, {
         width: "45%",
         borderRadius: "1.2em",
@@ -68,21 +64,15 @@ export async function createNasaSection() {
         marginTop: "10px"
     })
 
-    // ikona info o prekladu
     const translationIcon = createTranslationIcon()
     const translationInfoIcon = createTranslationInfoWindow()
 
-    // klik na ikonu 
     attachInfoToggle(translationIcon, translationInfoIcon, () => translationInfoIcon.show());
 
-
-    // click rozbaleni celeho textu
     const fullText = nasaData.explanation
     const shortText = fullText.length > 100 ? fullText.slice(0, 100) + "..." : fullText
     
-    const nasaDescription = el("p", shortText, {
-        // fontFamily: "`JetBrains Mono`",
-    })
+    const nasaDescription = el("p", shortText, {})
 
     nasaDescription.addEventListener("click", () => {
         nasaDescription.textContent = (nasaDescription.textContent === shortText) ? fullText : shortText
@@ -93,7 +83,6 @@ export async function createNasaSection() {
     }
     descriptionWrapper.append(nasaDescription);
     
-    // odkaz CZ / EN
     const moreText = lang === "cz" ? "Chceš vědět víc?" : "Want to know more?"
 
     const nasaLink = el("a", moreText,{

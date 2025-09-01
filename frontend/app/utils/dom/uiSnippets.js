@@ -1,31 +1,21 @@
-console.log("{uiSnippets.js} ✅ funguje")
-
-// POMOCNE FUNKCE
-
 /**
- * vytvori HTML element s vol. textem, stylem a atributy.
  *
- * @param {string} tag - HTML tag (např. 'div', 'a', 'p', 'img', ...)
- * @param {string|null} text - Textový obsah prvku (ne HTML)
- * @param {object} style - CSS styly jako objekt (např. { color: 'red' })
- * @param {object} attributes - Libovolné atributy (např. { src, alt, href, id, ... })
- * @param {HTMLElement} element - Element, který chceš obalit tooltipem
- * @param {string} tooltipText - Text tooltipu
- * @returns {HTMLElement} Wrapper s tooltipem
- * @param {HTMLElement} trigger Ikona, která spouští zobrazení
- * @param {HTMLElement} target Element s obsahem info boxu
- * @param {Function} [customShow] Volitelná funkce pro zobrazení (např. target.show())
+ * @param {string} tag 
+ * @param {string|null} text 
+ * @param {object} style 
+ * @param {object} attributes 
+ * @param {HTMLElement} element 
+ * @param {string} tooltipText 
+ * @returns {HTMLElement} 
+ * @param {HTMLElement} trigger 
+ * @param {HTMLElement} target 
+ * @param {Function} [customShow] 
  */
 
-
-// style fce -  kratsi zapis 
 export const setStyle = (element, styles) => {
     Object.assign(element.style, styles)
 }
 
-
-
-// novy zapis components = rozsirena verze tooltip
 export const el = (tag, text, style = {}, attributes = {}) => {
   const element = document.createElement(tag)
 
@@ -34,25 +24,21 @@ export const el = (tag, text, style = {}, attributes = {}) => {
 
   Object.entries(attributes).forEach(([key, value]) => {
     if (key.startsWith("data-") || key === "aria-label" || key.includes("-")) {
-      element.setAttribute(key, value) // pro atributy jako data-tooltip
+      element.setAttribute(key, value)
     } else if (key === "class") {
       element.className = value
     } else {
-      element[key] = value // klasické DOM vlastnosti
+      element[key] = value 
     }
   })
-
   return element
 }
 
-
-// delici cara 
 export function createFadeLine() {
   return el("div", null, {
     height: "2px",
     width: "100%",
     background: "linear-gradient(to right, transparent, #000, transparent)",
-    // margin: "5px 0"
     marginBottom: "10px",
     marginTop: "10px"
   }, {
@@ -60,7 +46,6 @@ export function createFadeLine() {
   })
 }
 
-// fce pro otevirani oken 
 export function attachInfoToggle(trigger, target, customShow) {
   const handleOutsideClick = (event) => {
     if (!target.contains(event.target) && event.target !== trigger) {
