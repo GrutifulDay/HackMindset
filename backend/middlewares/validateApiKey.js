@@ -6,7 +6,7 @@ import { INTERNAL_API_KEYS, ALLOW_LOCAL_NO_PROXY, HACK_EXTENSION } from "../conf
 
 // 🔐 Middleware pro validaci přístupu (proxy-only + serverové tajemství)
 export function validateApiKey(routeDescription = "api") {
-  console.log("validateApiKey ✅ aktivní");
+  console.log("✅ validateApiKey aktivní pro:", req.method, req.originalUrl);
 
   const ALLOWED_METHODS = new Set(["GET", "POST", "HEAD", "OPTIONS"]);  const INTERNAL_HEADER_NAME = "x-internal-auth";
   const VALID_KEYS = new Set(INTERNAL_API_KEYS);
