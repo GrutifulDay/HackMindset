@@ -12,9 +12,9 @@ console.log(chalk.white.bold("{digitalRoutes.js} pripojeno"));
 router.get(
     "/digitalSignpost",
     stripUntruthVotes,
-    validateApiKey(HACK_EXTENSION, "Zavolání /digitalSignpost routeru"),
+    validateApiKey("digitalSignpost"),
     getDigital
-)
+  )
 
 export default router
 
