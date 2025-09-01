@@ -6,13 +6,8 @@ import { fetchNasaImage } from "../fetch/fetchNasa.js";
 import { createAddTooltip } from "../utils/dom/tooltip.js";
 
 export async function createNasaSection() {
-    console.log("{funkce createNasaSection} ✅ funguje");
-
     const lang = getLanguage()
-    const nasaData = await fetchNasaImage()
-
-    console.log("{nasaSection.js}📌 Načtený NASA obrázek:", nasaData);
-    
+    const nasaData = await fetchNasaImage()    
     const section = el("section", null, {}, {})      
 
     const titleWrapper = el("div", null, {

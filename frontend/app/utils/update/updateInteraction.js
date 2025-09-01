@@ -1,6 +1,4 @@
-console.log("{updateInteractions.js} 🧹 připraven na úklid")
 /**
- *
  * @param {string[]} keys 
  */
 
@@ -12,7 +10,6 @@ export function clearOldInteractions(keys = []) {
       const storedDate = localStorage.getItem(dateKey)
   
       if (storedDate !== today) {
-        console.log(`🧹 Mazu hodnoty pro ${key}, ulozene: ${storedDate}`)
         localStorage.removeItem(key);
         localStorage.setItem(dateKey, today)
       }

@@ -28,7 +28,6 @@ export function createLanguageSwitcher() {
 
     if (title) flag.title = title;
 
-
     if (isActive) {
       flag.classList.add("active-lang")
     }
@@ -43,7 +42,6 @@ export function createLanguageSwitcher() {
     lang === "cz" 
   )
 
-  
   const { wrapper: enWrapper, flag: enFlag } = createFlagWrapper(
     "../assets/icons/EN.svg",
     null,

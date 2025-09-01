@@ -6,7 +6,6 @@ import { createInfoIcon } from "./icons_import/infoIcon.js";
 import { attachInfoToggle } from "../utils/dom/uiSnippets.js";
 
 export async function createTopPanel() {
-  console.log("{funkce createTopPanel} ✅ funguje");
   const lang = getLanguage()
   const languageSwitcher = createLanguageSwitcher()
   const aside = el("aside", null, {})

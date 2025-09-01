@@ -15,9 +15,7 @@ export async function createRetroMachine() {
   let retroData = getCachedData(CACHE_KEY)
 
   if (retroData) {
-    console.log("[retro] ⏳ Data jsou aktuální – čtu z cache.")
   } else {
-    console.log("🌐 Načítám nová data ze serveru");
     retroData = await fetchRetroMachine()
     if (retroData) setCachedData(CACHE_KEY, retroData)
   }
@@ -161,9 +159,7 @@ export async function createRetroMachine() {
   feedbackWrapper.append(notExperienceWrapper, rememberWrapper)
   
   const todayKey = retroData.date 
-  const localStorageKey = `retroVotedToday_${todayKey}` 
-  console.log("🧪 todayKey:", todayKey)
-  
+  const localStorageKey = `retroVotedToday_${todayKey}`   
   const voteCounts = await fetchGetVoteRetro(todayKey)
   const votedToday = localStorage.getItem(localStorageKey)
   
@@ -250,8 +246,6 @@ untruthWrapper.addEventListener("mouseenter", () => {
 untruthWrapper.addEventListener("mouseleave", () => {
   untruthWrapper.style.opacity = "0.6"
 })
-
-console.log("🧪 untruthIcon:", untruthIcon)
 
 untruthWrapper.append(untruthIcon)
 

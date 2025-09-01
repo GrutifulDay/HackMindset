@@ -5,20 +5,14 @@ import { createUntruthIcon } from "./icons_import/untruthIcon.js";
 import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js";
 import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
 
-console.log("{digitalSignpost.js} 🧩 sekce se generuje...");
-
 export async function createDigitalSignpost() {
-    console.log("{funkce createDigitalSignpost} ✅ funguje");
-
     const lang = getLanguage()
     const CACHE_KEY = `digital_cache_${lang}`
 
     let digitalData = getCachedData(CACHE_KEY)
 
     if (digitalData) {
-        console.log("[retro] ⏳ Data jsou aktuální – čtu z cache.")
       } else {
-        console.log("🌐 Načítám nová data ze serveru")
         digitalData = await fetchDigitalSignpost() 
         if (digitalData) setCachedData(CACHE_KEY, digitalData)
       }
@@ -75,7 +69,6 @@ export async function createDigitalSignpost() {
 
     untruthIcon.dataset.section = section
 
-
     const untruthWrapper = el("div", null, {
         position: "absolute",
         top: "8px",
@@ -85,9 +78,7 @@ export async function createDigitalSignpost() {
         opacity: "0.6",
         transition: "opacity 0.2s",        
       })
-      
       untruthIcon.addEventListener("click", () => {
-        console.log("🧪 CLICK DETEKTOVÁN NA untruthIcon")
         untruthVotingWindow.show(untruthIcon, {
           section,
           date

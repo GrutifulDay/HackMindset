@@ -5,7 +5,6 @@ export async function fetchDigitalSignpost() {
   const shouldUpdate = await updateSectionData("digitalSignpost", "weekly");
 
   if (!shouldUpdate) {
-    console.log("[digitalSignpost] ⏳ Data jsou aktuální – čtu z cache.");
     const { digitalSignpostData } = await new Promise((resolve) => {
       chrome.storage.local.get("digitalSignpostData", (result) => resolve(result));
     })

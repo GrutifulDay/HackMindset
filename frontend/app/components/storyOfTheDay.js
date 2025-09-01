@@ -14,9 +14,7 @@ export async function createStoryOfTheDay() {
   let storyData = getCachedData(CACHE_KEY)
 
   if (storyData) {
-    console.log("[story] ⏳ Data jsou aktuální – čtu z cache.")
   } else {
-    console.log("🌐 Načítám nová data ze serveru");
     storyData = await fetchStoryOfTheDay()
     if (storyData) setCachedData(CACHE_KEY, storyData)
   }
@@ -164,8 +162,6 @@ feedbackWrapper.append(rememberWrapper, notExperienceWrapper)
 
 const todayKey = storyData.date 
 const localStorageKey = `storyVotedToday_${todayKey}` 
-console.log("🧪 todayKey:", todayKey)
-
 const voteCounts = await fetchGetVoteStory(todayKey)
 const votedToday = localStorage.getItem(localStorageKey)
 

@@ -152,9 +152,7 @@ export function createUntruthVotingWindow() {
         }
       })
       document.addEventListener("click", handleOutsideClick)
-      console.log("✅ Zobrazovací funkce FINÁLNĚ nastavila pozici.")
     })
-    
   }
   
     submitButton.addEventListener("click", async () => {
@@ -184,7 +182,6 @@ export function createUntruthVotingWindow() {
           : "Thanks. Your report was recorded. 👍"
         )
       } else {
-        console.log("📛 Zneužití už bylo tento měsíc zaznamenáno")
       }
     } else {
       await fetchUntruthVotes(date, selected, section)
@@ -208,6 +205,5 @@ export function createUntruthVotingWindow() {
     listWrapper,
     submitButton
   )
-
   return container
 }

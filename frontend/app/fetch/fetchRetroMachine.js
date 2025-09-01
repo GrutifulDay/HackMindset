@@ -5,7 +5,6 @@ export async function fetchRetroMachine() {
   const shouldUpdate = await updateSectionData("retro")
 
   if (!shouldUpdate) {
-    console.log("[retro] ⏳ Data jsou aktuální – čtu z cache.");
     const { retroData } = await new Promise((resolve) => {
       chrome.storage.local.get("retroData", (result) => resolve(result))
     })

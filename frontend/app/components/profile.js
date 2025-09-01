@@ -89,8 +89,6 @@ export async function createProfile() {
   button.addEventListener("click", () => {
     navigator.clipboard.writeText(tag)
       .then(() => {
-        console.log(`✅ Zkopírováno: ${tag}`)
-
         button.replaceChildren(checkIcon)
 
         setTimeout(() => {
