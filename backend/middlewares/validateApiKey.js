@@ -26,11 +26,17 @@ export function validateApiKey(routeDescription = "api") {
     console.log("→ ALLOW_LOCAL_NO_PROXY:", ALLOW_LOCAL_NO_PROXY);
     console.log("→ VALID_KEYS:", [...VALID_KEYS]);
 
-    // Vypiš všechny příchozí hlavičky (pro ladění proxy!)
+    const internalHeader = req.get("X-Internal-Auth") || "";
+    let allowed = false;
+
+    // 📦 Vypiš všechny příchozí hlavičky (pro ladění proxy)
     console.log("📦 Příchozí hlavičky:");
     for (const [key, value] of Object.entries(req.headers)) {
       console.log(`→ ${key}: ${value}`);
     }
+
+    // 📋 výpis hlavičky a klíčů
+    console.log("🔍 internalHeader:", `"${internalHeader}"`);
 
     // 0) OPTIONS
     if (req.method === "OPTIONS") {
@@ -51,15 +57,12 @@ export function validateApiKey(routeDescription = "api") {
       return res.status(403).json({ error: "Vaše IP je na blacklistu." });
     }
 
-    // 3) Autorizace – proxy hlavička
-    const internalHeader = req.get("X-Internal-Auth") || "";
-    let allowed = false;
-
-    console.log("🔍 internalHeader:", `"${internalHeader}"`);
+    // 3) Hlavní autorizace přes interní proxy klíč
     for (const k of VALID_KEYS) {
-      if (safeEq(internalHeader, k)) {
-        allowed = true;
+      console.log("🔑 Testuji klíč:", k);
+      if (safeEq(String(internalHeader), String(k))) {
         console.log("✅ Povolen přístup přes proxy klíč:", k);
+        allowed = true;
         break;
       }
     }
@@ -69,7 +72,6 @@ export function validateApiKey(routeDescription = "api") {
       const isLoopback =
         userIP === "127.0.0.1" || userIP === "::1" || userIP === "::ffff:127.0.0.1";
       if (isLoopback) {
-        // transformace Beareru
         const auth = req.headers.authorization || "";
         const bearer = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
         const transformedBearer = bearer === "HACK_EXTENSION" ? HACK_EXTENSION : bearer;
