@@ -29,9 +29,9 @@ export default async function ipBlocker(req, res, next) {
   const clientIP = normalizeIp(req.ip)
 
   // 🧲 Honeypoint výjimka – nikdy neblokovat přístup
-  if (req.originalUrl === "/api/feedbackForm") {
-    return next()
-  }
+  // if (req.originalUrl === "/api/feedbackForm") {
+  //   return next()
+  // }
 
   // Allowlist
   if (ignoredIPs.has(clientIP)) {
