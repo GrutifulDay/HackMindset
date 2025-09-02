@@ -6,7 +6,6 @@ import { INTERNAL_API_KEYS, ALLOW_LOCAL_NO_PROXY, HACK_EXTENSION } from "../conf
 
 // 🔐 Middleware pro validaci přístupu (proxy-only + serverové tajemství)
 export function validateApiKey(routeDescription = "api") {
-
   const ALLOWED_METHODS = new Set(["GET", "POST", "HEAD", "OPTIONS"]);
   const VALID_KEYS = new Set(INTERNAL_API_KEYS);
 
@@ -20,11 +19,15 @@ export function validateApiKey(routeDescription = "api") {
 
   return async function (req, res, next) {
     console.log("\n🔐 === validateApiKey aktivní ===");
+    console.log("🧩 CELÉ HEADERS:", JSON.stringify(req.headers, null, 2));
     console.log("→ URL:", req.originalUrl);
     console.log("→ METHOD:", req.method);
     console.log("→ IP:", req.ip);
     console.log("→ ALLOW_LOCAL_NO_PROXY:", ALLOW_LOCAL_NO_PROXY);
     console.log("→ VALID_KEYS:", [...VALID_KEYS]);
+    console.log("🔍 internalHeader:", req.headers["x-internal-auth"]);
+    console.log("🛡️  from proxy (x-from-openresty):", req.headers["x-from-openresty"]);
+
 
     const internalHeader = req.get("X-Internal-Auth") || "";
     let allowed = false;
