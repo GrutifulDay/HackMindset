@@ -10,7 +10,7 @@ console.log("{nasaRoutes.js} pripojeno");
 
 router.get(
     "/nasa",
-    validateApiKey(HACK_EXTENSION, "Zavolání /nasa routeru"),
+    validateApiKey("nasa"),
     fetchNasaImage
 )
 

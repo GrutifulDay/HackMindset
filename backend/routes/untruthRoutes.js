@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.post(
     "/untruth-votes",
-    validateApiKey(HACK_EXTENSION, "Zavolání POST /untruth-votes"),
+    validateApiKey("untruth-votes"),
     reportUntruthByToday
 )
 

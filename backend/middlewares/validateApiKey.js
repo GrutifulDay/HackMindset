@@ -25,6 +25,8 @@ export function validateApiKey(routeDescription = "api") {
     console.log("→ IP:", req.ip);
     console.log("→ ALLOW_LOCAL_NO_PROXY:", ALLOW_LOCAL_NO_PROXY);
     console.log("→ VALID_KEYS:", [...VALID_KEYS]);
+    console.log("→ HACK_EXTENSION:", [...HACK_EXTENSION]);
+
     console.log("🔍 internalHeader:", req.headers["x-internal-auth"]);
     console.log("🛡️  from proxy (x-from-openresty):", req.headers["x-from-openresty"]);
 

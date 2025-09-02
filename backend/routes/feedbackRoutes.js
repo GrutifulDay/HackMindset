@@ -10,7 +10,7 @@ console.log(chalk.red.bold("{feedbackRoutes.js} připojen"))
 
 router.post(
     "/feedbackForm",
-    validateApiKey(HACK_EXTENSION, "Zavolání /feedbackForm routeru"),
+    validateApiKey("feedbackForm"),
     feedbackHoneyPoint
   )
 

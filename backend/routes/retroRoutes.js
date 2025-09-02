@@ -13,7 +13,7 @@ console.log("{storyRoutes.js} pripojeno");
 router.get(
     "/retro-machine",
     stripUntruthVotes,
-    validateApiKey(HACK_EXTENSION, "Zavolání /retro-machine routeru"),
+    validateApiKey("retro-machine"),
     getRetroMachine
 )
 

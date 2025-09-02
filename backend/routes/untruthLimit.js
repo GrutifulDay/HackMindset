@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.post(
     "/untruth-limit-log",
-    validateApiKey(HACK_EXTENSION, "Zavolání /untruth-limit-log routeru"),
+    validateApiKey("untruth-limit-log"),
     postUntruthLimit
 )
 

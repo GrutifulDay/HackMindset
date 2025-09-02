@@ -10,7 +10,7 @@ console.log(chalk.white.bold("{profileRoutes.js} pripojeno"));
 
 router.get(
     "/profile",
-    validateApiKey(HACK_EXTENSION, "Zavolání /profile routeru"),
+    validateApiKey("profile"),
     getProfile
 )
 

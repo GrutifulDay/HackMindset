@@ -13,21 +13,21 @@ console.log("{storyRoutes.js} pripojeno");
 router.get(
     "/story-of-the-day",
     stripUntruthVotes,
-    validateApiKey(HACK_EXTENSION, "Zavolání /story-of-the-day routeru"),
+    validateApiKey("story-of-the-day"),
     getStoryOfTheDay
 )
 
 router.get(
     "/story-of-the-day/storyVotesGet/:date",
     stripUntruthVotes,
-    validateApiKey(HACK_EXTENSION, "Zavolání GET /storyVotesGet"),
+    validateApiKey("story-of-the-day"),
     getStoryVotes
 )
 
 router.post(
     "/story-of-the-day/storyVotesPost",
     stripUntruthVotes,
-    validateApiKey(HACK_EXTENSION, "Zavolání POST /storyVotesPost"),
+    validateApiKey("story-of-the-day"),
     addStoryVote
 )
 
