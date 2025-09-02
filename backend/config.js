@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // ── SEC-TAJEMSTVÍ ─────────────────────────────────────────────
-export const INTERNAL_API_KEYS = (process.env.INTERNAL_API_KEY || "")
+export const INTERNAL_API_KEY = (process.env.INTERNAL_API_KEY || "")
   .split(",")
   .map(s => s.trim())
   .filter(Boolean);
