@@ -129,10 +129,15 @@ app.get("/health", async (_req, res) => {
 // ─────────────────────────────────────────────────────────────
 app.use(secLogRoutes)
 
+app.use((req, res, next) => {
+  res.setHeader("Vary", "Origin");
+  next();
+});
 // ─────────────────────────────────────────────────────────────
 // Globální middlewares pro „zbytek“ provozu
 // ─────────────────────────────────────────────────────────────
 app.use(corsOptions)    // 1) preflight
+app.options("*", cors(corsOptions));
 app.use(ipBlacklist)    // 2) blokace známých IP
 app.use(botProtection)  // 3) detekce botů/UA
 app.use(speedLimiter)   // 4) zpomalení floodu

@@ -34,7 +34,7 @@ const corsOptions = {
   },
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 204
 };
 
 export default cors(corsOptions);
