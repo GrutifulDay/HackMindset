@@ -81,7 +81,7 @@ export async function createNasaSection() {
     const shortText = fullText.length > 100 ? fullText.slice(0, 100) + "..." : fullText
     
     const nasaDescription = el("p", shortText, {
-        // fontFamily: "`JetBrains Mono`",
+        cursor: "pointer"
     })
 
     nasaDescription.addEventListener("click", () => {
