@@ -1,33 +1,44 @@
 import cors from "cors";
 import { CHROME_EXTENSION_ALL_URL } from "../config.js";
 
-// Whitelist povolených originů
+// Whitelist
 const allowedOrigins = [
-  "http://127.0.0.1:5501",
-  CHROME_EXTENSION_ALL_URL,
-  "https://hackmindset.app"
+  "http://127.0.0.1:5501",          
+  "https://hackmindset.app",        
+  CHROME_EXTENSION_ALL_URL         
 ];
 
+// fce pro budouci logovani
+const logBlockedOrigin = (origin) => {
+  console.warn(`[CORS BLOCKED] Origin: ${origin || "null"} - ${new Date().toISOString()}`);
+  // TODO: sendToDiscord(`[CORS BLOCKED] Origin: ${origin || "null"}`)
+
+  // sendToDiscord(`🚫 *CORS BLOCKED:*\nOrigin: ${origin}`); - pozdeji 
+
+};
+
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Povolí požadavek, pokud není origin nebo je v whitelistu
+  origin: (origin, callback) => {
     if (!origin) {
-      // return callback(new Error("Missing origin header")); // server vracel 500 - chyba 
-      return callback(null, false);
-      // TODO: Přidat Discord logiku pro neautorizované originy (viz corsLogger.js)
+      // Preflight nebo CLI nástroj – můžeš bloknout nebo povolit
+      return callback(null, false); // Bloknout tiše bez chyby
     }
+
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
-    callback(new Error("Not allowed by CORS"));
+
+    // nepovoleny origin – loguj a tiše zablokuj (bez 500 chyby)
+    logBlockedOrigin(origin);
+    return callback(null, false);
   },
   methods: ["GET", "POST", "OPTIONS"],
-  // credentials: true, // povoli autorizaci - nepotrebne  
   allowedHeaders: ["Content-Type", "Authorization"],
   optionsSuccessStatus: 200
 };
 
 export default cors(corsOptions);
+
 
 
 
