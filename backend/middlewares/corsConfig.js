@@ -11,14 +11,18 @@ const allowedOrigins = [
 const corsOptions = {
   origin: function (origin, callback) {
     // Povolí požadavek, pokud není origin nebo je v whitelistu
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
+    if (!origin) {
+      // return callback(new Error("Missing origin header")); // server vracel 500 - chyba 
+      return callback(null, false);
+      // TODO: Přidat Discord logiku pro neautorizované originy (viz corsLogger.js)
     }
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error("Not allowed by CORS"));
   },
   methods: ["GET", "POST", "OPTIONS"],
-  credentials: true,
+  // credentials: true, // povoli autorizaci - nepotrebne  
   allowedHeaders: ["Content-Type", "Authorization"],
   optionsSuccessStatus: 200
 };
