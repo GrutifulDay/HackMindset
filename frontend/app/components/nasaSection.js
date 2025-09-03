@@ -67,7 +67,9 @@ export async function createNasaSection() {
     const fullText = nasaData.explanation
     const shortText = fullText.length > 100 ? fullText.slice(0, 100) + "..." : fullText
     
-    const nasaDescription = el("p", shortText, {})
+    const nasaDescription = el("p", shortText, {
+        cursor: "pointer"
+    })
 
     nasaDescription.addEventListener("click", () => {
         nasaDescription.textContent = (nasaDescription.textContent === shortText) ? fullText : shortText
