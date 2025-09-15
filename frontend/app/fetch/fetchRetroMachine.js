@@ -1,10 +1,18 @@
 import { updateSectionData } from "../utils/update/updateSectionData.js"
 import { API } from "../utils/config.js";
+import { getJwtToken } from "../utils/auth/jwtToken.js"
 
 console.log("{fetchRetroMachine.js} 📡 je načtený")
 
 export async function fetchRetroMachine() {
   console.log("{funkce fetchRetroMachine} ✅ funguje");
+
+  const token = await getJwtToken() 
+
+  if (!token) {
+    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    return null;
+  }
 
   const shouldUpdate = await updateSectionData("retro")
 
@@ -23,7 +31,7 @@ export async function fetchRetroMachine() {
       method: "GET",
       mode: "cors",
       headers: {
-        "Authorization": "Bearer HACK_EXTENSION"
+        Authorization: `Bearer ${token}`,
       }
     })
 

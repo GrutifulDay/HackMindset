@@ -1,4 +1,5 @@
 import { updateSectionData } from "../utils/update/updateSectionData.js";
+import { getJwtToken } from "../utils/auth/jwtToken.js";
 import { API } from "../utils/config.js";
 
 console.log("{fetchDigitalSignpost.js} 📡 je načtený");
@@ -6,6 +7,13 @@ console.log("{fetchDigitalSignpost.js} 📡 je načtený");
 export async function fetchDigitalSignpost() {
   console.log("{funkce fetchDigitalSignpost} ✅ funguje");
 
+  const token = await getJwtToken() 
+
+  if (!token) {
+    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    return null;
+  }
+  
   const shouldUpdate = await updateSectionData("digitalSignpost", "weekly");
 
   if (!shouldUpdate) {
@@ -23,7 +31,7 @@ export async function fetchDigitalSignpost() {
       method: "GET",
       mode: "cors",
       headers: {
-        "Authorization": "Bearer HACK_EXTENSION",
+        Authorization: `Bearer ${token}`,
       },
     })
 

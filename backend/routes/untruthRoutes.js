@@ -1,13 +1,12 @@
 import express from "express";
 import {reportUntruthByToday} from "../controllers/untruthVotesController.js"
-import { HACK_EXTENSION } from "../config.js"
 import { validateApiKey } from "../middlewares/validateApiKey.js"
 
 const router = express.Router()
 
 router.post(
     "/untruth-votes",
-    validateApiKey(HACK_EXTENSION, "Zavolání POST /untruth-votes"),
+    validateApiKey("Zavolání POST /untruth-votes"),
     reportUntruthByToday
 )
 

@@ -1,5 +1,5 @@
 import cors from "cors";
-import { CHROME_EXTENSION_ALL_URL } from "../config.js";
+import { CHROME_EXTENSION_ALL_URL, HACK_MINDSET } from "../config.js";
 
 // Whitelist povolených originů
 const allowedOrigins = [
@@ -19,7 +19,7 @@ const corsOptions = {
   },
   methods: ["GET", "POST", "OPTIONS"],
   credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-hackmindset"],
   optionsSuccessStatus: 200
 };
 

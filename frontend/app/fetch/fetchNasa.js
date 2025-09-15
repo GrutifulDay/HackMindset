@@ -1,10 +1,18 @@
 import { updateSectionData } from "../utils/update/updateSectionData.js"
+import { getJwtToken } from "../utils/auth/jwtToken.js"
 import { API } from "../utils/config.js";
 
 console.log("{fetchNasa.js} 📡 je načtený")
 
 export async function fetchNasaImage() {
   console.log("{funkce fetchNasaImage} ✅ funguje");
+
+  const token = await getJwtToken() 
+
+  if (!token) {
+    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    return null;
+  }
 
   const shouldUpdate = await updateSectionData("nasa")
 
@@ -23,7 +31,7 @@ export async function fetchNasaImage() {
       method: "GET",
       mode: "cors",
       headers: {
-        "Authorization": "Bearer HACK_EXTENSION"
+        Authorization: `Bearer ${token}`,
       }
     })
 

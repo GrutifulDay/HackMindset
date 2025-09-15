@@ -1,4 +1,5 @@
 import { API } from "../utils/config.js";
+import { getJwtToken } from "../utils/auth/jwtToken.js"
 
 console.log("{fetchUntruthLimit.js} 📡 aktivní");
 
@@ -8,6 +9,12 @@ export async function fetchUntruthLimit(section, date) {
   const formattedDate = `${year}-${month}`
   
   console.log("🧪 fetchUntruthLimit: section =", section, "date =", date);
+  const token = await getJwtToken() 
+
+  if (!token) {
+    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    return null;
+  }
   
   
   const response = await fetch(API.untruthLimitLog, {
@@ -15,7 +22,7 @@ export async function fetchUntruthLimit(section, date) {
     mode: "cors",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer HACK_EXTENSION"
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ section, date: formattedDate }) 
   })

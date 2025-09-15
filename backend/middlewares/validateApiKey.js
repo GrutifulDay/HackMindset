@@ -1,124 +1,90 @@
-import { UAParser } from "ua-parser-js"
-import { addToBlacklist, isBlacklisted } from "./ipBlacklist.js"
-import { getCityByIP } from "../utils/getCityByIP.js"
-import { CHROME_EXTENSION_ALL_URL, HACK_EXTENSION } from "../config.js"
+import jwt from "jsonwebtoken";
+import { UAParser } from "ua-parser-js";
+import { addToBlacklist, isBlacklisted } from "./ipBlacklist.js";
+import { getCityByIP } from "../utils/getCityByIP.js";
+import { CHROME_EXTENSION_ALL_URL, JWT_SECRET } from "../config.js";
 
-// 🔐 Middleware pro validaci přístupu
-export function validateApiKey(expectedKey, routeDescription) {
-  console.log("validateApiKey funguje")
+export function validateApiKey(routeDescription) {
+  console.log("validateApiKey funguje");
 
   return async function (req, res, next) {
     const userIP =
       req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
       req.socket?.remoteAddress ||
-      "neznámá IP"
+      "neznámá IP";
 
-    const userAgentString = req.get("User-Agent") || "Neznámý"
-    const origin = req.headers.origin || ""
-    const referer = req.headers.referer || ""
-    const extensionID = CHROME_EXTENSION_ALL_URL
-    const rawAuthHeader = req.headers.authorization || ""
-    const extensionHeader = rawAuthHeader.startsWith("Bearer ")
-        ? rawAuthHeader.split(" ")[1]
-        : ""
+    const userAgentString = req.get("User-Agent") || "Neznámý";
+    const origin = req.headers.origin || "";
+    const referer = req.headers.referer || "";
+    const extensionID = CHROME_EXTENSION_ALL_URL;
+    const rawAuthHeader = req.headers.authorization || "";
+    const tokenFromHeader = rawAuthHeader.startsWith("Bearer ")
+      ? rawAuthHeader.split(" ")[1]
+      : "";
 
-    // preklad aliasu na skutecny klic 
-    const realExtensionHeader =
-      extensionHeader === "HACK_EXTENSION"
-        ? HACK_EXTENSION
-        : extensionHeader
-
-    // kontrola IP z blacklist
+    // ⚠️ Kontrola IP blacklistu
     if (await isBlacklisted(userIP)) {
-      return res.status(403).json({ error: "Vaše IP je na blacklistu." })
+      return res.status(403).json({ error: "Vaše IP je na blacklistu." });
     }
 
     console.log("📦 PŘÍCHOZÍ HLAVIČKY:");
-
     Object.entries(req.headers).forEach(([key, value]) => {
       console.log(`→ ${key}: ${value}`);
     });
 
-
-    // pristup povoleny jen z google rozsireni
-    // pokud alias - tak je z roszireni 
-    // pokud někdo pošle HACK_EXTENSION jako alias, musi mít spravny origin nebo referer
-    const isAlias = extensionHeader === "HACK_EXTENSION"
+    // 🔎 Kontrola zdroje pozadavku
     const isLikelyFromChrome =
-    userAgentString.includes("Chrome") && !userAgentString.includes("Postman")
+      userAgentString.includes("Chrome") && !userAgentString.includes("Postman");
 
-    // z povoleneho zdroje
     const isFromAllowedSource =
       origin.includes(extensionID) ||
       referer.includes(extensionID) ||
-      isLikelyFromChrome
+      isLikelyFromChrome;
 
-    // 💣 Honeypoint výjimka – přístup jen pokud zadá HACK_EXTENSION
-    if (req.originalUrl === "/api/feedbackForm") {
-      if (extensionHeader === "HACK_EXTENSION") {
-        console.log("🧲 Honeypoint výjimka aktivní – přístup povolen")
-        return next()
-      } else {
-        // Logování IP a blokace
-        const userAgentString = req.get("User-Agent") || "Neznámý"
-        const parser = new UAParser(userAgentString)
-        const result = parser.getResult()
-        const city = await getCityByIP(userIP)
-    
-        await addToBlacklist(userIP, "Neplatný pokus o honeypoint", {
-          userAgent: userAgentString,
-          browser: result.browser?.name || "Neznámý",
-          os: result.os?.name || "Neznámý",
-          deviceType: result.device?.type || "Neznámý",
-          city: city || "Neznámý",
-        })
-    
-        console.warn(`🚨 Honeypoint – blokace IP: ${userIP}`)
-        return res.status(403).json({ error: "Neplatný API klíč" })
-      }
+    // 🔐 overeni JWT tokenu (nahrazuje alias HACK_EXTENSION)
+    let decodedToken;
+    try {
+      decodedToken = jwt.verify(tokenFromHeader, JWT_SECRET);
+    } catch (err) {
+      console.warn("❌ Neplatný JWT token:", err.message);
+      return await blockRequest(req, res, userIP, userAgentString, routeDescription);
     }
 
-
-    // 
-    const isFromExtension =
-      (isAlias && isFromAllowedSource) ||               // alias + spravny zdroj
-      (!isAlias && realExtensionHeader === expectedKey) // pripadny test klic 
+    // 🔑 podminky, kdy pusti dal
+    const isFromExtension = isFromAllowedSource && decodedToken.extId === CHROME_EXTENSION_ALL_URL;
 
     if (isFromExtension) {
-      console.log("✅ Povolen přístup z rozšíření");
-      
-      console.log("CHROME_EXTENSION_ALL_URL:", CHROME_EXTENSION_ALL_URL);
-      console.log("🧪 Příchozí Authorization:", req.headers["Authorization"]);
-      console.log("🧪 Očekávaný klíč (expectedKey):", expectedKey);
+      console.log("✅ Povolen přístup z rozšíření (JWT validní)");
 
-      console.log("📩 Headers přijaté od klienta:");
-      console.log("→ origin:", req.headers.origin || "žádný origin");
-      console.log("→ referer:", req.headers.referer || "žádný referer");
-      console.log("→ Authorization:", req.headers["Authorization"] || "žádný");
-      console.log("→ user-agent:", req.headers["user-agent"] || "žádný");
-      console.log("🔍 isAlias:", isAlias);
-      console.log("🔍 isFromAllowedSource:", isFromAllowedSource);
-      console.log("🔍 isLikelyFromChrome:", isLikelyFromChrome);
+      console.log("🔐 JWT payload:", decodedToken);
+      console.log("→ origin:", origin || "žádný");
+      console.log("→ referer:", referer || "žádný");
+      console.log("→ user-agent:", userAgentString);
 
-      return next()
+      req.tokenPayload = decodedToken;
+      return next();
     }
 
-    // mesto + neautorizovany klic
-    const parser = new UAParser(userAgentString)
-    const result = parser.getResult()
-    const city = await getCityByIP(userIP)
+    // pokud nesedi – blokuje
+    console.warn("⛔️ Token validní, ale zdroj neodpovídá.");
+    return await blockRequest(req, res, userIP, userAgentString, routeDescription);
+  };
+}
 
-    // pridani na blacklist
-    await addToBlacklist(userIP, routeDescription, {
-      userAgent: userAgentString,
-      browser: result.browser?.name || "Neznámý",
-      os: result.os?.name || "Neznámý",
-      deviceType: result.device?.type || "Neznámý",
-      city: city || "Neznámý",
-    })
+async function blockRequest(req, res, userIP, userAgentString, routeDescription) {
+  const parser = new UAParser(userAgentString);
+  const result = parser.getResult();
+  const city = await getCityByIP(userIP);
 
-    return res
-      .status(403)
-      .json({ error: "Neplatny API klic nebo neautorizovany zdroj" })
-  }
+  await addToBlacklist(userIP, routeDescription, {
+    userAgent: userAgentString,
+    browser: result.browser?.name || "Neznámý",
+    os: result.os?.name || "Neznámý",
+    deviceType: result.device?.type || "Neznámý",
+    city: city || "Neznámý",
+  });
+
+  return res
+    .status(403)
+    .json({ error: "Neautorizovaný přístup nebo neplatný token." });
 }

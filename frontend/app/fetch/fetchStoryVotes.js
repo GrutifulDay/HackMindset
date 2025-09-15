@@ -1,16 +1,23 @@
 import { API } from "../utils/config.js";
+import { getJwtToken } from "../utils/auth/jwtToken.js"
 
 console.log("{fetchStoryVotes.js} 📡 načten");
 
 // ziskani postu hlasu pro dany den 
 export async function fetchGetVoteStory(date) {
+  const token = await getJwtToken() 
+
+  if (!token) {
+    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    return null;
+  }
   try {
     const response = await fetch(`${API.storyVotesGet}/${date}`, {
       method: "GET",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer HACK_EXTENSION"
+        Authorization: `Bearer ${token}`,
       }
     })
 
@@ -30,7 +37,7 @@ export async function fetchPostVoteStory(date, option) {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer HACK_EXTENSION"
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ date, option })
     })

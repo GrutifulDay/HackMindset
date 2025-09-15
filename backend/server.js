@@ -21,6 +21,7 @@ import digitalRoutes from "./routes/digitalRoutes.js"
 import untruthRoutes from "./routes/untruthRoutes.js"
 import untruthLimitRoutes from "./routes/untruthLimit.js"
 import feedbackRoutes from "./routes/feedbackRoutes.js"
+import tokenRoutes from "./routes/tokenRoutes.js";
 
 import secLogRoutes from "./routes/secLog.js"
 
@@ -44,7 +45,7 @@ import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
 
 const app = express()
-app.set("trust proxy", true); 
+app.set("trust proxy", false); // true = proxy / false = vyvoj 
 app.disable("etag");  
 
 app.use(secLogRoutes)
@@ -119,6 +120,7 @@ app.use(express.json({ limit: "25kb" }))
 // app.use("/api/feedbackForm", express.json({ limit: "4kb" }));
 
 // ✅ Načtení NASA router
+app.use("/api", tokenRoutes);
 app.use("/api", nasaRoutes)
 app.use("/api", storyRoutes)
 app.use("/api", retroRoutes)
@@ -204,22 +206,22 @@ app.use(express.static(path.join(__dirname, "frontend")))
 
 
 // nacitani certifikatu ze slozky cert
-// const options = {
-//     key: fs.readFileSync('./cert/key.pem'),
-//     cert: fs.readFileSync('./cert/cert.pem'),
-// }
+const options = {
+    key: fs.readFileSync('./cert/key.pem'),
+    cert: fs.readFileSync('./cert/cert.pem'),
+}
 
 
-// https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-//   console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
-// });
-
-console.log(app._router.stack.map(r => r.route && r.route.path).filter(Boolean))
-
-// ✅ Spuštění serveru
-app.listen(PORT, "127.0.0.1", () => {
-  console.log(`✅ Server běží na http://127.0.0.1:${PORT}`);
+https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
+  console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
 });
+
+// console.log(app._router.stack.map(r => r.route && r.route.path).filter(Boolean))
+
+// // ✅ Spuštění serveru
+// app.listen(PORT, "127.0.0.1", () => {
+//   console.log(`✅ Server běží na http://127.0.0.1:${PORT}`);
+// });
 
 
 
