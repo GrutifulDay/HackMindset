@@ -23,7 +23,7 @@ export async function getJwtToken() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "x-hackmindset": "HACK_MINDSET"
+          "Authorization": "Bearer HACK_MINDSET"
         }
        });
     if (!res.ok) {
