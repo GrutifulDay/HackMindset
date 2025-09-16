@@ -44,8 +44,8 @@ import path from "path"
 import mongoose from "mongoose"
 
 const app = express()
-// app.set("trust proxy", "loopback"); 
-app.set("trust proxy", false); // true = proxy / false = vyvoj 
+app.set("trust proxy", "loopback"); 
+//app.set("trust proxy", false); // true = proxy / false = vyvoj 
 
 app.disable("etag")
 app.disable("x-powered-by")
@@ -190,17 +190,17 @@ try {
 } catch { /* ignore */ }
 
 // ✅ Spuštění serveru
-// app.listen(PORT, "127.0.0.1", () => {
-//   info(`✅ Server běží na http://127.0.0.1:${PORT}`);
-// });
+app.listen(PORT, "127.0.0.1", () => {
+  info(`✅ Server běží na http://127.0.0.1:${PORT}`);
+});
 
 
 // pro lokalni testovani 
-const options = {
-  key: fs.readFileSync('./cert/key.pem'),
-  cert: fs.readFileSync('./cert/cert.pem'),
-}
+// const options = {
+//   key: fs.readFileSync('./cert/key.pem'),
+//   cert: fs.readFileSync('./cert/cert.pem'),
+// }
 
-https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
-});
+// https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
+// console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
+// });
