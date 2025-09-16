@@ -1,16 +1,24 @@
 import { API } from "../utils/config.js";
+import { getJwtToken } from "../utils/auth/jwtToken.js";
 
 console.log("{fetchRetroVotes.js} 📡 načten");
 
 // ziskani postu hlasu pro dany den 
 export async function fetchGetVoteRetro(date) {
+  const token = await getJwtToken() 
+
+  if (!token) {
+    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    return null;
+  }
+  
   try {
     const response = await fetch(`${API.retroVotesGet}/${date}`, {
       method: "GET",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "X-Client-Tag": "HACK_EXTENSION",
+        Authorization: `Bearer ${token}`,
       }
     })
 
@@ -23,6 +31,12 @@ export async function fetchGetVoteRetro(date) {
 
 // odesilani hlasu
 export async function fetchPostVoteRetro(date, option) {
+  const token = await getJwtToken() 
+
+  if (!token) {
+    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    return null;
+  }
 
   try {
     const response = await fetch(API.retroVotesPost, {
@@ -30,7 +44,7 @@ export async function fetchPostVoteRetro(date, option) {
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "X-Client-Tag": "HACK_EXTENSION"
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ date, option })
     })

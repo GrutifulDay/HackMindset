@@ -34,6 +34,10 @@ export const MONGO_URI_FRONTEND = process.env.MONGO_URI_FRONTEND || "";
 // IPinfo.io
 export const TOKEN_IP_CITY = process.env.TOKEN_IP_CITY || "";
 
+// JWT token 
+export const JWT_SECRET = process.env.JWT_SECRET
+export const HACK_MINDSET = process.env.HACK_MINDSET
+
 // Api key frontend (pokud je používáš)
 export const NASA_API_FRONTEND = process.env.NASA_API_FRONTEND || "";
 export const STORY_API_FRONTEND = process.env.STORY_API_FRONTEND || "";

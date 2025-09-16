@@ -4,6 +4,9 @@ import { PORT } from "./config.js"
 import { debug, info, error } from "./utils/logger.js"
 
 // zaklad
+import fs from "fs"
+// lokalni testovani 
+import https from "https"
 import { UAParser } from "ua-parser-js"
 
 // NPM knihovny 
@@ -21,6 +24,7 @@ import untruthRoutes from "./routes/untruthRoutes.js"
 import untruthLimitRoutes from "./routes/untruthLimit.js"
 // import feedbackRoutes from "./routes/feedbackRoutes.js"
 import secLogRoutes from "./routes/secLog.js"
+import tokenRoutes from "./routes/tokenRoutes.js"
 
 // Middleware
 import limiterApi from "./middlewares/rateLimit.js"
@@ -40,7 +44,9 @@ import path from "path"
 import mongoose from "mongoose"
 
 const app = express()
-app.set("trust proxy", "loopback");
+// app.set("trust proxy", "loopback"); 
+app.set("trust proxy", false); // true = proxy / false = vyvoj 
+
 app.disable("etag")
 app.disable("x-powered-by")
 
@@ -137,7 +143,7 @@ app.use((req, res, next) => {
 // Globální middlewares pro „zbytek“ provozu
 // ─────────────────────────────────────────────────────────────
 app.use(corsOptions)    // 1) preflight
-app.options("*", cors(corsOptions));
+// app.options("*", cors(corsOptions));
 app.use(ipBlacklist)    // 2) blokace známých IP
 app.use(botProtection)  // 3) detekce botů/UA
 app.use(speedLimiter)   // 4) zpomalení floodu
@@ -150,11 +156,12 @@ app.use(express.json({ limit: "25kb" }))
 // 🔐 API brána – aplikuj JEN na /api/*
 // (Autorita je serverová; očekává interní hlavičku od proxy +/nebo tajný klíč z .env)
 // ─────────────────────────────────────────────────────────────
-app.use("/api", validateApiKey("api"))
+// app.use("/api", validateApiKey("api"))
 
 // ─────────────────────────────────────────────────────────────
 // API routy – až ZA validátorem
 // ─────────────────────────────────────────────────────────────
+app.use("/api", tokenRoutes);
 app.use("/api", nasaRoutes)
 app.use("/api", storyRoutes)
 app.use("/api", retroRoutes)
@@ -183,6 +190,17 @@ try {
 } catch { /* ignore */ }
 
 // ✅ Spuštění serveru
-app.listen(PORT, "127.0.0.1", () => {
-  info(`✅ Server běží na http://127.0.0.1:${PORT}`);
+// app.listen(PORT, "127.0.0.1", () => {
+//   info(`✅ Server běží na http://127.0.0.1:${PORT}`);
+// });
+
+
+// pro lokalni testovani 
+const options = {
+  key: fs.readFileSync('./cert/key.pem'),
+  cert: fs.readFileSync('./cert/cert.pem'),
+}
+
+https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
+console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
 });

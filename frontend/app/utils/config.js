@@ -1,5 +1,5 @@
-const BASE_URL = "https://hackmindset.app/api"
-// const BASE_URL = "https://localhost:3000/api"
+//const BASE_URL = "https://hackmindset.app/api"
+ const BASE_URL = "https://localhost:3000/api"
 
 export const API = {
   nasa: `${BASE_URL}/nasa`,
@@ -12,7 +12,8 @@ export const API = {
   storyVotesGet: `${BASE_URL}/story-of-the-day/storyVotesGet`,
   storyVotesPost: `${BASE_URL}/story-of-the-day/storyVotesPost`,
   untruthVotesPost: `${BASE_URL}/untruth-votes`,
-  untruthLimitLog: `${BASE_URL}/untruth-limit-log`
+  untruthLimitLog: `${BASE_URL}/untruth-limit-log`,
+  getToken: `${BASE_URL}/get-token`
 }
 
 export const DEV_MODE = true // true / false - pro produkci 
