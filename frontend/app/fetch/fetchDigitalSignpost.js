@@ -27,6 +27,7 @@ export async function fetchDigitalSignpost() {
   }
 
   try {
+    console.log("JWT token:", token);
     const response = await fetch(API.digitalSignpost, {
       method: "GET",
       mode: "cors",
