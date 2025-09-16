@@ -26,6 +26,8 @@ export async function fetchNasaImage() {
   }
 
   try {
+    console.log("JWT token:", token);
+
     const response = await fetch(API.nasa, {
       method: "GET",
       mode: "cors",
