@@ -3,6 +3,18 @@ import { UAParser } from "ua-parser-js";
 import { addToBlacklist, isBlacklisted } from "./ipBlacklist.js";
 import { getCityByIP } from "../utils/getCityByIP.js";
 import { CHROME_EXTENSION_ALL_URL, JWT_SECRET } from "../config.js";
+import { notifyBlockedIP } from "../utils/discordNotification.js";  // <- doplnit
+import { redactHeaders } from "../utils/redact.js";
+
+// citlivé hlavičky maskujeme
+// const redact = (obj = {}) => {
+//   const SENSITIVE = new Set(["authorization","cookie","proxy-authorization","x-api-key","set-cookie"]);
+//   const out = {};
+//   for (const [k,v] of Object.entries(obj)) {
+//     out[k] = SENSITIVE.has(k.toLowerCase()) ? "[REDACTED]" : v;
+//   }
+//   return out;
+// };
 
 export function validateApiKey(routeDescription) {
   console.log("validateApiKey funguje");
@@ -32,7 +44,7 @@ export function validateApiKey(routeDescription) {
       console.log(`→ ${key}: ${value}`);
     });
 
-    // 🔎 Kontrola zdroje pozadavku
+    // 🔎 Kontrola zdroje požadavku
     const isLikelyFromChrome =
       userAgentString.includes("Chrome") && !userAgentString.includes("Postman");
 
@@ -41,37 +53,31 @@ export function validateApiKey(routeDescription) {
       referer.includes(extensionID) ||
       isLikelyFromChrome;
 
-    // 🔐 overeni JWT tokenu (nahrazuje alias HACK_EXTENSION)
+    // 🔐 ověření JWT tokenu
     let decodedToken;
     try {
       decodedToken = jwt.verify(tokenFromHeader, JWT_SECRET);
     } catch (err) {
       console.warn("❌ Neplatný JWT token:", err.message);
-      return await blockRequest(req, res, userIP, userAgentString, routeDescription);
+      return await blockRequest(req, res, userIP, userAgentString, routeDescription, "Invalid JWT token");
     }
 
-    // 🔑 podminky, kdy pusti dal
+    // 🔑 povolení jen pokud sedí i extension ID
     const isFromExtension = isFromAllowedSource && decodedToken.extId === CHROME_EXTENSION_ALL_URL;
 
     if (isFromExtension) {
       console.log("✅ Povolen přístup z rozšíření (JWT validní)");
-
-      console.log("🔐 JWT payload:", decodedToken);
-      console.log("→ origin:", origin || "žádný");
-      console.log("→ referer:", referer || "žádný");
-      console.log("→ user-agent:", userAgentString);
-
       req.tokenPayload = decodedToken;
       return next();
     }
 
-    // pokud nesedi – blokuje
+    // pokud nesedí – blokuje
     console.warn("⛔️ Token validní, ale zdroj neodpovídá.");
-    return await blockRequest(req, res, userIP, userAgentString, routeDescription);
+    return await blockRequest(req, res, userIP, userAgentString, routeDescription, "Valid JWT, bad origin/referer");
   };
 }
 
-async function blockRequest(req, res, userIP, userAgentString, routeDescription) {
+async function blockRequest(req, res, userIP, userAgentString, routeDescription, reason = "Access denied") {
   const parser = new UAParser(userAgentString);
   const result = parser.getResult();
   const city = await getCityByIP(userIP);
@@ -82,9 +88,20 @@ async function blockRequest(req, res, userIP, userAgentString, routeDescription)
     os: result.os?.name || "Neznámý",
     deviceType: result.device?.type || "Neznámý",
     city: city || "Neznámý",
+    method: req.method,
+    path: req.originalUrl
   });
 
-  return res
-    .status(403)
-    .json({ error: "Access denied" });
+  // 📢 pošli notifikaci
+  await notifyBlockedIP({
+    ip: userIP,
+    city: city || "Neznámé",
+    userAgent: userAgentString,
+    reason,
+    method: req.method,
+    path: req.originalUrl,
+    headers: redactHeaders(req.headers), 
+  });
+
+  return res.status(403).json({ error: "Access denied" });
 }

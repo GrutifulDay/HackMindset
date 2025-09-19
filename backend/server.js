@@ -33,6 +33,9 @@ import botProtection from "./middlewares/botProtection.js"
 import ipBlacklist from "./middlewares/ipBlacklist.js"
 import speedLimiter from "./middlewares/slowDown.js"
 import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
+import captureHeaders from "./middlewares/captureHeaders.js";
+// import detectSecretLeak from "./middlewares/detectSecretLeak.js";
+
 
 // ✅ API brána (validátor) – použij svůj modul/umístění
 import { validateApiKey } from "./middlewares/validateApiKey.js"
@@ -45,7 +48,7 @@ import mongoose from "mongoose"
 
 const app = express()
 app.set("trust proxy", "loopback"); 
-//app.set("trust proxy", false); // true = proxy / false = vyvoj 
+//app.set("trust proxy", true); // true = proxy / false = vyvoj 
 
 app.disable("etag")
 app.disable("x-powered-by")
@@ -139,17 +142,37 @@ app.use((req, res, next) => {
   res.setHeader("Vary", "Origin");
   next();
 });
+
+// JSON parser musí být dřív
+app.use(express.json({ limit: "25kb" }));
+
+// Hlavičky a logování (jen jednou)
+app.use(captureHeaders({
+  notifyOn: (req) => {
+    const ua = (req.get("User-Agent") || "").toLowerCase();
+    const hasPostman = !!req.headers["postman-token"];
+    const isPostmanUA = ua.includes("postman");
+    return hasPostman || isPostmanUA;
+  },
+  notifyReason: "Client using Postman / test tool"
+}));
+
+// Detekce úniku tajemství (JWT, API klíče, hesla…)
+// app.use(detectSecretLeak({
+//   blockOnLeak: true,       // stopne request
+//   blacklistOnLeak: true    // přidá IP do blacklistu
+// }));
+
 // ─────────────────────────────────────────────────────────────
 // Globální middlewares pro „zbytek“ provozu
 // ─────────────────────────────────────────────────────────────
 app.use(corsOptions)    // 1) preflight
-app.use(ipBlacklist)    // 2) blokace známých IP
-app.use(botProtection)  // 3) detekce botů/UA
-app.use(speedLimiter)   // 4) zpomalení floodu
-app.use(limiterApi)     // 5) tvrdý rate limit
+app.use(botProtection)  // 2) detekce botů/UA
+app.use(speedLimiter)   // 3) zpomalení floodu
+app.use(limiterApi)     // 4) tvrdý rate limit (počítá přestupky, teprve pak blacklistuje)
+app.use(ipBlacklist)    // 5) blokace známých IP (už uložených)
 
-// JSON parser pro běžné API
-app.use(express.json({ limit: "25kb" }))
+
 
 // ─────────────────────────────────────────────────────────────
 // 🔐 API brána – aplikuj JEN na /api/*
@@ -170,6 +193,7 @@ app.use("/api", untruthRoutes)
 app.use("/api", untruthLimitRoutes)
 // app.use("/api", feedbackRoutes)
 
+
 // testovací router
 app.get("/api/test", (req, res) => {
   const userAgentString = req.get("User-Agent") || "neznámý"
@@ -189,17 +213,17 @@ try {
 } catch { /* ignore */ }
 
 // ✅ Spuštění serveru
-app.listen(PORT, "127.0.0.1", () => {
-  info(`✅ Server běží na http://127.0.0.1:${PORT}`);
-});
+// app.listen(PORT, "127.0.0.1", () => {
+//   info(`✅ Server běží na http://127.0.0.1:${PORT}`);
+// });
 
 
 // pro lokalni testovani 
-// const options = {
-//   key: fs.readFileSync('./cert/key.pem'),
-//   cert: fs.readFileSync('./cert/cert.pem'),
-// }
+const options = {
+  key: fs.readFileSync('./cert/key.pem'),
+  cert: fs.readFileSync('./cert/cert.pem'),
+}
 
-// https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-// console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
-// });
+https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
+console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
+});

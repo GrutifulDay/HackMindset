@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 // Black List 
 const blacklistedIPSchema = new mongoose.Schema({
@@ -9,7 +9,7 @@ const blacklistedIPSchema = new mongoose.Schema({
   },
   userAgent: {
     type: String,
-    default: "Neznámý", // muze byt dopneno pri detekci
+    default: "Neznámý",
   },
   browser: {
     type: String,
@@ -27,17 +27,32 @@ const blacklistedIPSchema = new mongoose.Schema({
     type: String,
     default: "Automatické blokování",
   },
+  city: {
+    type: String,
+    default: "Neznámá",
+  }, 
+  method: {
+    type: String,
+    default: "Neznámá",
+  },
+  path: {
+    type: String,
+    default: "Neznámá",
+  },
+  headers: {
+    type: Object, // uloží se JSON redaktnutých hlaviček
+    default: {},
+  },
+  attempts: {
+    type: Number,
+    default: 1, // když zablokuješ poprvé, nastavíš 1 a pak můžeš inkrementovat
+  },
   date: {
     type: Date,
     default: Date.now,
-    expires: 2592000,
-  },
-  city: {
-    type: String,
-    default: "Neznámá"
-  }, 
-  // expires: 2592000 // (TTL nastaveni) automaticky smaze po 30 dnech
-})
+    expires: 2592000, // TTL 30 dní
+  }
+}, { timestamps: true }); // přidá createdAt a updatedAt
 
-const BlacklistedIP = mongoose.model("BlacklistedIP", blacklistedIPSchema)
-export default BlacklistedIP
+const BlacklistedIP = mongoose.model("BlacklistedIP", blacklistedIPSchema);
+export default BlacklistedIP;

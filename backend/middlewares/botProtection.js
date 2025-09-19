@@ -1,27 +1,23 @@
 import { addToBlacklist } from "./ipBlacklist.js";
 import { UAParser } from "ua-parser-js"
-
-// ❌ = ZAKOMENTUJ PRO TESTY ❌ 
-
-// ROZDELIT FCE DO SLOZEK
+import { redactHeaders } from "../utils/redact.js";
 
 
 // ✅ Pomocná funkce pro správné získání IP adresy
 function getUserIP(req) {
     return (
-        req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||    // vezme prvni IP
-        req.socket?.remoteAddress ||    // pokud neni, vezne IP ze sitoveho pripojeni
-        req.connection?.remoteAddress ||    // starsi zpusob - naprimo ze sitoveho spojeni
-        "neznámá IP"    // pokud na nic neprisel
+        req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
+        req.socket?.remoteAddress ||
+        req.connection?.remoteAddress ||
+        "neznámá IP"
     )
 }
 
 export default function botProtection(req, res, next) {
     const userAgentString = req.get("User-Agent");
-    const userIP = getUserIP(req); // 
+    const userIP = getUserIP(req);
 
-    // ❌ 
-    // ✅ Výjimka pro Postman
+    // Výjimka pro Postman (volitelně odkomentovat při testech)
     // if (userAgentString && userAgentString.includes("Postman")) {
     //     console.log("🧪 Postman detekován – povolen.");
     //     return next();
@@ -29,34 +25,47 @@ export default function botProtection(req, res, next) {
 
     // ⛔️ Blokování bez user-agent
     if (!userAgentString) {
-        console.warn(`🚨 Bot detekován: IP ${userIP} přidána na blacklist.`);
-        addToBlacklist(userIP)
-        return res.status(403).json({ error: "❌ Přístup zamítnut." })
+        console.warn(`🚨 Bot detekován (bez UA) – IP ${userIP}`);
+    
+        addToBlacklist(userIP, "Missing User-Agent", {
+            userAgent: "EMPTY",
+            method: req.method,
+            path: req.originalUrl,
+            headers: redactHeaders(req.headers),
+            ref: req.get("referer"),
+            origin: req.get("origin"),
+          });
+    
+        return res.status(403).json({ error: "Request cannot be processed." })
     }
-
 
     // Analýza pomocí UAParser
     const parser = new UAParser(userAgentString)
     const result = parser.getResult()
 
-    const browserName = result.browser.name || "Neznámý" // prohlizec
-    const deviceType = result.device.type || "Neznámý"  // zařízení
-    const osName = result.os.name || "neznámý"  // operacni system
+    const browserName = result.browser?.name || "Neznámý"
+    const deviceType = result.device?.type || "Neznámý"
+    const osName = result.os?.name || "Neznámý"
 
     // ⚠️ Podezřelý user-agent
     if (browserName === "Other" || browserName === undefined) {
-        console.warn(`🚨 Podezřelý bot detekován (${deviceType}, ${osName}) – IP ${userIP}`);
-
-        addToBlacklist(userIP, "Chybějící User-Agent",{
+        console.warn(`🚨 Podezřelý bot (${deviceType}, ${osName}) – IP ${userIP}`);
+    
+        addToBlacklist(userIP, "Suspicious User-Agent", {
             userAgent: userAgentString,
-            browser: result.browser.name,
-            os: result.os.name,
-            deviceType: result.device.type
-        })
-        return res.status(403).json({ error: "❌ Přístup zamítnut."})
+            browser: browserName,
+            os: osName,
+            deviceType: deviceType,
+            method: req.method,
+            path: req.originalUrl,
+            headers: redactHeaders(req.headers),
+            ref: req.get("referer"),
+            origin: req.get("origin"),
+          });
+      
+    
+        return res.status(403).json({ error: "Request cannot be processed." })
     }
 
-    next() 
+    next()
 }
-
-

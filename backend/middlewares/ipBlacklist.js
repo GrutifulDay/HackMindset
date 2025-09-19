@@ -12,7 +12,7 @@ const normalizeIp = (ip) => {
 };
 
 // IP adresy, které se nikdy neblokují (lokální/provozní prostředí)
-const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"]);
+// const ignoredIPs = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"]);
 
 // Redakce citlivých hodnot v query/hlavičkách
 const redact = (obj = {}) => {
@@ -34,9 +34,9 @@ export default async function ipBlocker(req, res, next) {
   // }
 
   // Allowlist
-  if (ignoredIPs.has(clientIP)) {
-    return next()
-  }
+  // if (ignoredIPs.has(clientIP)) {
+  //   return next()
+  // }
 
   // Zablokovaná IP → zaloguj, co zkouší, a vrať 403
   if (blacklistedIPs.has(clientIP)) {
@@ -78,10 +78,10 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
   if (!ip) return false;
 
   // nepřidávej vlastní server / localhost
-  if (ignoredIPs.has(ip)) {
-    console.log(`ℹ️ ${ip} je v allowlistu – přeskočeno.`);
-    return false;
-  }
+  // if (ignoredIPs.has(ip)) {
+  //   console.log(`ℹ️ ${ip} je v allowlistu – přeskočeno.`);
+  //   return false;
+  // }
 
   console.log("📥 Ukládám do blacklistu:", ip, info.city);
 
@@ -100,10 +100,21 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
           os: info.os || "Neznámý",
           deviceType: info.deviceType || "Neznámý",
           city: info.city || "Neznámý",
-        })
+          method: info.method || "Neznámá",
+          path: info.path || "Neznámá",
+        })        
         await newIP.save()
         console.log(`🛑 IP ${ip} uložena do databáze`);
-        await notifyBlockedIP(ip, info.city, reason)
+        await notifyBlockedIP({
+          ip,
+          city: info.city || "Neznámé",
+          userAgent: info.userAgent || "Neznámý",
+          reason,
+          method: info.method || "?",
+          path: info.path || "?",
+          headers: info.headers || {},
+        });
+        
       } else {
         console.log(`⚠️ IP ${ip} už v databázi existuje`);
       }
@@ -122,10 +133,10 @@ export async function loadBlacklistFromDB() {
   try {
     const allBlocked = await BlacklistedIP.find({}, { ip: 1 });
     blacklistedIPs.clear();
-    allBlocked.forEach(entry => {
-      const ip = normalizeIp(entry.ip);
-      if (ip && !ignoredIPs.has(ip)) blacklistedIPs.add(ip);
-    });
+    // allBlocked.forEach(entry => {
+    //   const ip = normalizeIp(entry.ip);
+    //   if (ip && !ignoredIPs.has(ip)) blacklistedIPs.add(ip);
+    // });
     console.log(`✅ Načteno ${blacklistedIPs.size} IP adres z DB do paměti`)
   } catch (err) {
     console.error("❌ Chyba při načítání blacklistu z DB:", err.message);
