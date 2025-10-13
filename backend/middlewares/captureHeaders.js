@@ -4,7 +4,8 @@ import { notifyBlockedIP, maskToken } from "../utils/discordNotification.js";
 const SENSITIVE = new Set([
   "cookie",
   "proxy-authorization",
-  "set-cookie"
+  "set-cookie",
+  "Authorization"
   // Authorization a X-API-Key 
 ]);
 
