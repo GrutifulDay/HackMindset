@@ -50,7 +50,7 @@ const blacklistedIPSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now,
-    expires: 2592000, // TTL 30 dní
+    expires: 86400, // 2592000 = 30 dní, 86400 = 24h
   }
 }, { timestamps: true }); // přidá createdAt a updatedAt
 

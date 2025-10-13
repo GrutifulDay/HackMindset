@@ -26,23 +26,23 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 })
 
 
-// Volání honeypointu – bez osobních údajů
-fetch("https://localhost:3000/api/feedbackForm", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer HACK_EXTENSION"
-  },
-  body: JSON.stringify({
-    context: "extension-check",
-    timestamp: Date.now()
-  })
-})
-.then(res => res.json())
-.then(data => {
-  console.log("✅ Honeypoint odpověděl:", data.message)
-})
-.catch(err => {
-  console.warn("❌ Honeypoint fetch selhal:", err.message)
-})
+// // Volání honeypointu – bez osobních údajů
+// fetch("https://localhost:3000/api/feedbackForm", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//     "Authorization": "Bearer HACK_EXTENSION"
+//   },
+//   body: JSON.stringify({
+//     context: "extension-check",
+//     timestamp: Date.now()
+//   })
+// })
+// .then(res => res.json())
+// .then(data => {
+//   console.log("✅ Honeypoint odpověděl:", data.message)
+// })
+// .catch(err => {
+//   console.warn("❌ Honeypoint fetch selhal:", err.message)
+// })
 

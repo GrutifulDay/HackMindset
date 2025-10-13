@@ -63,7 +63,6 @@ export const INTERNAL_API_KEY = (process.env.INTERNAL_API_KEY || "")
 
 export const SHARED_KEY = process.env.SHARED_KEY || "";
 export const ALLOW_LOCAL_NO_PROXY = process.env.ALLOW_LOCAL_NO_PROXY === "1";
-export const HACK_EXTENSION = process.env.HACK_EXTENSION || "HACK_EXTENSION";
 
 // ── OSTATNÍ ───────────────────────────────────────────────────
 export const DEBUG = process.env.DEBUG === "1";

@@ -41,7 +41,7 @@ export default function corsWithLogging(req, res, next) {
       headers: redactHeaders(req.headers), 
     });
 
-    return res.status(403).json({ error: "Request denied" });
+    return res.status(403).json({ error: "access denied" });
   }
 
   return cors({

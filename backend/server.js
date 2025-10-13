@@ -38,7 +38,8 @@ import captureHeaders from "./middlewares/captureHeaders.js";
 
 
 // ✅ API brána (validátor) – použij svůj modul/umístění
-import { validateApiKey } from "./middlewares/validateApiKey.js"
+//import { validateToken } from "./middlewares/validateToken.js"
+
 
 // Databaze 
 import connectDB from "./db/db.js"
@@ -113,6 +114,11 @@ debug("🛠️ Tento soubor se opravdu spustil!");
 app.get("/", (_req, res) => {
   res.status(200).send("HackMindset backend is running")
 })
+
+// app.get("/debug-auth", validateToken(process.env.HACK_MINDSET, "Debug route"), (req, res) => {
+//   res.json({ msg: "Přístup povolen ✅" })
+// })
+
 
 app.get("/ping", (_req, res) => {
   res.status(200).send("pong")

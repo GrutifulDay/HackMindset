@@ -1,6 +1,5 @@
 import express from "express";
 import {reportUntruthByToday} from "../controllers/untruthVotesController.js"
-import { HACK_EXTENSION } from "../config.js"
 import { validateApiKey } from "../middlewares/validateApiKey.js"
 
 const router = express.Router()

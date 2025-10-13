@@ -2,7 +2,6 @@ import express from "express"
 import chalk from "chalk"
 import { validateApiKey } from "../middlewares/validateApiKey.js"
 import { getProfile } from "../controllers/profileController.js"
-import { HACK_EXTENSION } from "../config.js"
 
 const router = express.Router()
 

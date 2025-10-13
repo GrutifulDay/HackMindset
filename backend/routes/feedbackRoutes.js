@@ -2,7 +2,6 @@
 // import chalk from "chalk"
 // import { validateApiKey } from "../middlewares/validateApiKey.js"
 // import { feedbackHoneyPoint } from "../controllers/feedbackController.js"
-// import { HACK_EXTENSION } from "../config.js"
 
 // const router = express.Router()
 
