@@ -1,6 +1,7 @@
 import cors from "cors";
 import { CHROME_EXTENSION_ALL_URL } from "../config.js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";
+import { addToBlacklist } from "./ipBlacklist.js";   // ✅ přidáno
 import { UAParser } from "ua-parser-js";
 import { redactHeaders } from "../utils/redact.js";
 
@@ -16,18 +17,22 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
-export default function corsWithLogging(req, res, next) {
+export default async function corsWithLogging(req, res, next) {
   const origin = req.headers.origin;
 
+  // ❌ Pokud není origin nebo není v seznamu povolených
   if (!origin || !allowedOrigins.includes(origin)) {
     const uaString = req.get("User-Agent") || "Neznámý";
     const parser = new UAParser(uaString);
     const result = parser.getResult();
 
+    const clientIP = req.ip || "Neznámé";
+
     console.warn(`[CORS BLOCKED] Origin: ${origin || "null"} - ${new Date().toISOString()}`);
 
-    notifyBlockedIP({
-      ip: req.ip || "Neznámé",
+    // ✅ 1. Zaloguj blokaci (Discord)
+    await notifyBlockedIP({
+      ip: clientIP,
       reason: "CORS Blocked",
       userAgent: uaString,
       method: req.method,
@@ -38,12 +43,24 @@ export default function corsWithLogging(req, res, next) {
       os: result.os?.name || "Neznámý",
       deviceType: result.device?.type || "Neznámý",
       referer: req.get("Referer"),
-      headers: redactHeaders(req.headers), 
+      headers: redactHeaders(req.headers),
     });
 
-    return res.status(403).json({ error: "access denied" });
+    // ✅ 2. Přidej IP do blacklistu
+    await addToBlacklist(clientIP, "CORS Blocked", {
+      userAgent: uaString,
+      browser: result.browser?.name,
+      os: result.os?.name,
+      deviceType: result.device?.type,
+      method: req.method,
+      path: req.originalUrl,
+    });
+
+    // ✅ 3. Okamžitě vrať chybu
+    return res.status(403).json({ error: "Přístup zablokován CORS politikou" });
   }
 
+  // ✅ Jinak – standardní CORS
   return cors({
     ...corsOptions,
     origin: origin
