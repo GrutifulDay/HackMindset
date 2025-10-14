@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 // Black List 
 const blacklistedIPSchema = new mongoose.Schema({
-  ip: {
+  ipHash: {
     type: String,
-    default: "Neznámá IP",
-    unique: true, // neopakuje se
+    required: true,
+    index: true, // vyhledávací pole
   },
   userAgent: {
     type: String,
@@ -45,14 +45,14 @@ const blacklistedIPSchema = new mongoose.Schema({
   },
   attempts: {
     type: Number,
-    default: 1, // když zablokuješ poprvé, nastavíš 1 a pak můžeš inkrementovat
+    default: 1,
   },
   date: {
     type: Date,
     default: Date.now,
-    expires: 86400, // 2592000 = 30 dní, 86400 = 24h
+    expires: 86400, // automaticky smaže po 24 h
   }
-}, { timestamps: true }); // přidá createdAt a updatedAt
+}, { timestamps: true });
 
 const BlacklistedIP = mongoose.model("BlacklistedIP", blacklistedIPSchema);
 export default BlacklistedIP;
