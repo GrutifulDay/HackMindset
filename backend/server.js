@@ -238,7 +238,7 @@ console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
 });
 
 // 🕛 Cron – nacteni extension v urceny cas 
-cron.schedule("34 09 * * *", async () => {
+cron.schedule("48 09 * * *", async () => {
   try {
     console.log("🌙 Cron job: spouštím noční načtení NASA obrázku...");
     await fetchNasaImage({ internal: true }, { json: () => {} });

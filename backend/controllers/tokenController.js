@@ -18,6 +18,9 @@ export function getToken(req, res) {
   // 📦 Payload tokenu
   const payload = {
     extId: CHROME_EXTENSION_ALL_URL, // overeni, ze je jen pro moje rozsireni
+    sub: "chrome-extension",
+    aud: "https://localhost:3000/api",
+    // aud: "https://hackmindset.app"
   };
 
   // 🔐 vytvoreni JWT 

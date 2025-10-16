@@ -5,6 +5,7 @@ import { getCityByIP } from "../utils/getCityByIP.js";
 import { CHROME_EXTENSION_ALL_URL, JWT_SECRET } from "../config.js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";  // <- doplnit
 import { redactHeaders } from "../utils/redact.js";
+import chalk from "chalk";
 
 // citlivé hlavičky maskujeme
 // const redact = (obj = {}) => {
@@ -57,6 +58,24 @@ export function validateApiKey(routeDescription) {
     let decodedToken;
     try {
       decodedToken = jwt.verify(tokenFromHeader, JWT_SECRET);
+
+      // kontrola audience pro vydani tokenu jen pro muj server v rozsireni 
+    if (decodedToken.aud !== "https://localhost:3000/api") {
+      console.warn("❌ Token má špatnou audience:");
+      console.warn(chalk.red.bold("→ expected:", expectedAudience));
+      console.warn(chalk.red.bold("→ received:", decodedToken.aud));
+      return await blockRequest(
+        req,
+        res,
+        userIP,
+        userAgentString,
+        routeDescription,
+        "Invalid audience"
+    );
+  }
+
+  console.log(chalk.magenta.bold("✅ JWT audience je platná:", decodedToken.aud));
+
     } catch (err) {
       console.warn("❌ Neplatný JWT token:", err.message);
       return await blockRequest(req, res, userIP, userAgentString, routeDescription, "Invalid JWT token");
