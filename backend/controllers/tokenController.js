@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import { CHROME_EXTENSION_ALL_URL, JWT_SECRET } from "../config.js";
+import crypto from "crypto";
+
 
 export function getToken(req, res) {
   const origin = req.headers.origin || "";
@@ -20,12 +22,13 @@ export function getToken(req, res) {
     extId: CHROME_EXTENSION_ALL_URL, // overeni, ze je jen pro moje rozsireni
     sub: "chrome-extension",
     aud: "https://localhost:3000/api",
-    // aud: "https://hackmindset.app"
+    // aud: "https://hackmindset.app",
+    jti: crypto.randomUUID(),
   };
 
   // 🔐 vytvoreni JWT 
   const token = jwt.sign(payload, JWT_SECRET, {
-    expiresIn: "30s",
+    expiresIn: "30min",
   });
 
   return res.json({ token });

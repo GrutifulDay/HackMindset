@@ -19,9 +19,11 @@ const corsOptions = {
 
 export default async function corsWithLogging(req, res, next) {
   const origin = req.headers.origin;
+  const isLocalRequest = req.hostname === "localhost" || req.hostname === "127.0.0.1";
+
 
   // ❌ Pokud není origin nebo není v seznamu povolených
-  if (!origin || !allowedOrigins.includes(origin)) {
+  if ((!origin || !allowedOrigins.includes(origin)) && !isLocalRequest) {
     const uaString = req.get("User-Agent") || "Neznámý";
     const parser = new UAParser(uaString);
     const result = parser.getResult();

@@ -64,11 +64,18 @@ export default async function ipBlocker(req, res, next) {
 
 // 🧩 Funkce pro přidání IP do blacklistu (DB + paměť)
 export async function addToBlacklist(ip, reason = "Automatické blokování", info = {}) {
+  // krátká ochrana proti "prázdným" hodnotám - často přichází jako null/undefined nebo string "null"
+  if (!ip || ip === "null" || ip === "undefined") {
+    console.warn("⚠️ Skipped saving to blacklist — IP undefined or invalid:", ip);
+    return false;
+  }
+  // normalizace ip adresy 
   ip = normalizeIp(ip);
   if (!ip) return false;
 
+  // kdyz existuje, nic se nestane 
   const ipHash = hashIp(ip);
-  if (blacklistedIPs.has(ipHash)) return false; // už existuje
+  if (blacklistedIPs.has(ipHash)) return false; 
 
   blacklistedIPs.add(ipHash);
   console.warn(`🧨 IP ${ip} přidána do Setu (důvod: ${reason})`);

@@ -5,6 +5,8 @@ import { getCityByIP } from "../utils/getCityByIP.js";
 import { CHROME_EXTENSION_ALL_URL, JWT_SECRET } from "../config.js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";  // <- doplnit
 import { redactHeaders } from "../utils/redact.js";
+import { isRevoked } from "../middlewares/tokenRevocation.js"
+import { registerTokenUsage } from "../middlewares/tokenUsage.js";
 import chalk from "chalk";
 
 // citlivé hlavičky maskujeme
@@ -74,7 +76,33 @@ export function validateApiKey(routeDescription) {
     );
   }
 
+  // zkus registrovat použití tokenu — pokud vrátí true, token byl revokován právě teď
+const abuseDetected = registerTokenUsage({
+  jti: decodedToken.jti,
+  ip: userIP,
+  userAgent: userAgentString,
+  path: req.originalUrl
+});
+
+if (abuseDetected) {
+  // token právě revokován -> chová se stejně jako blokace
+  return await blockRequest(req, res, userIP, userAgentString, routeDescription, "Token abuse detected and revoked");
+}
   console.log(chalk.magenta.bold("✅ JWT audience je platná:", decodedToken.aud));
+
+  if (isRevoked(decodedToken.jti)) {
+    console.warn("🚫 Token byl revokován:", decodedToken.jti);
+    return await blockRequest(
+      req,
+      res,
+      userIP,
+      userAgentString,
+      routeDescription,
+      "Revoked JWT"
+    );
+  }
+  
+  console.log("✅ JWT není revokován:", decodedToken.jti);
 
     } catch (err) {
       console.warn("❌ Neplatný JWT token:", err.message);
