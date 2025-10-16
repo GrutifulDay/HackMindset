@@ -79,6 +79,10 @@ export const CHROME_EXTENSION_ALL_URL = CHROME_EXTENSION_ID
 // Fetch API
 export const FETCH_API_NASA = process.env.FETCH_API_NASA || "";
 export const API_KEY_NASA = process.env.API_KEY_NASA || "";
+export const NASA_FALLBACK = process.env.NASA_FALLBACK || "";
+export const NASA_ARCHIVE = process.env.NASA_ARCHIVE || "";
+export const NASA_BASE_URL = process.env.NASA_BASE_URL || "";
+
 
 // Databáze
 export const MONGO_URI = process.env.MONGO_URI || "";

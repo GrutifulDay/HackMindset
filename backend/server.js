@@ -13,6 +13,7 @@ import { UAParser } from "ua-parser-js"
 import express from "express"
 import helmet from "helmet"
 import chalk from "chalk"
+import cron from "node-cron";
 
 // Routes
 import nasaRoutes from "./routes/nasaRoutes.js"
@@ -36,6 +37,8 @@ import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
 import captureHeaders from "./middlewares/captureHeaders.js";
 // import detectSecretLeak from "./middlewares/detectSecretLeak.js";
 
+// Controller
+import { fetchNasaImage } from "./controllers/nasaController.js"
 
 // ✅ API brána (validátor) – použij svůj modul/umístění
 //import { validateToken } from "./middlewares/validateToken.js"
@@ -232,4 +235,15 @@ const options = {
 
 https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
 console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
+});
+
+// 🕛 Cron – nacteni extension v urceny cas 
+cron.schedule("34 09 * * *", async () => {
+  try {
+    console.log("🌙 Cron job: spouštím noční načtení NASA obrázku...");
+    await fetchNasaImage({ internal: true }, { json: () => {} });
+    console.log("✅ NASA obrázek úspěšně uložen do cache.");
+  } catch (err) {
+    console.error("❌ Chyba při nočním načítání NASA obrázku:", err.message);
+  }
 });
