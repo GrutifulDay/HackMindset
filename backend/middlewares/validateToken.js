@@ -1,9 +1,24 @@
 import { isBlacklisted } from "./ipBlacklist.js"
-import { HACK_MINDSET } from "../config.js"
+import { HACK_MINDSET, CHROME_EXTENSION_ALL_URL } from "../config.js";
 import chalk from "chalk"
 
 export function validateToken() {
-  return async function (req, res, next) {
+    return async function (req, res, next) {
+      // get-token
+      const origin = req.headers.origin || "";
+      const referer = req.headers.referer || "";
+      const ua = req.get("User-Agent") || "";
+  
+      const isFromExtensionOrigin = origin.includes(CHROME_EXTENSION_ALL_URL) || referer.includes(CHROME_EXTENSION_ALL_URL);
+      const isChromeUA = ua.includes("Chrome");
+  
+      const isGetTokenRoute = req.path === "/api/get-token" || req.originalUrl?.startsWith("/api/get-token");
+  
+      if (isGetTokenRoute && (isFromExtensionOrigin || isChromeUA)) {
+        // povolit request pro vydani tokenu (getToken overi origin & UA)
+        return next();
+      }
+
     const userIP =
       req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
       req.socket?.remoteAddress ||
@@ -14,11 +29,11 @@ export function validateToken() {
       ? rawAuthHeader.split(" ")[1]
       : ""
 
-    // 🔁 Pokud přišel alias "HACK_MINDSET", přelož ho na tajné heslo z env
+    // 🔁 Pokud prisel alias "HACK_MINDSET", prelozi na tajne heslo z env
     const resolvedKey =
       authValue === "HACK_MINDSET" ? HACK_MINDSET : authValue
 
-    // Ověření proti očekávanému klíči (z .env)
+    // overeni proti ocekavanemu klici (z .env)
     const isValid = resolvedKey === HACK_MINDSET
 
     if (await isBlacklisted(userIP)) {

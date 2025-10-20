@@ -1,0 +1,42 @@
+// watch/startWatchForIPChanges.js
+import BlacklistedIP  from "../../models/BlacklistedIP.js"
+import { refreshAllSections } from "../refreshAll.js";
+import chalk from "chalk"
+
+
+let lastUpdateTime = 0;     // cas kdy naposled probehl refresh 
+const MIN_INTERVAL = 3 * 60 * 1000; // 10 minut ochranna pauza
+
+
+ //sleduje models blacklistedips, pri nove IP spousti refresh systemu.
+export function startWatchForIPChanges() {
+  console.log(chalk.red("👁️ [Watcher] Sleduji kolekci blacklistedips..."));
+
+  try {
+    const changeStream = BlacklistedIP.watch();
+
+    changeStream.on("change", async (change) => {
+      if (change.operationType === "insert") {
+        const now = Date.now();
+
+        // ochrana proti prilis castemu spousteni
+        if (now - lastUpdateTime < MIN_INTERVAL) {
+          console.log("⚠️ [Watcher] Příliš brzy od posledního refreshi – přeskočeno.");
+          return;
+        }
+
+        console.log(chalk.magenta.bold("🚨 [Watcher] Nová IP přidána – spouštím interní refresh všech sekcí..."));
+        await refreshAllSections();
+        lastUpdateTime = now;
+      }
+    });
+
+    changeStream.on("error", (err) => {
+      console.error("❌ [Watcher] Chyba:", err.message);
+      console.log("🔁 [Watcher] Restart za 5 sekund...");
+      setTimeout(startWatchForIPChanges, 5000);
+    });
+  } catch (err) {
+    console.error("❌ [Watcher] Nelze spustit sledování:", err.message);
+  }
+}

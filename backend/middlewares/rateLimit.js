@@ -13,7 +13,7 @@ import { redactHeaders } from "../utils/redact.js";
 // };
 
 // In-memory mapy (jen pro jeden proces, do restartu serveru)
-const offenders = new Map();          // počty přestupků pro IP
+const offenders = new Map();          // pocty prestupku pro IP
 
 const normalizeIp = (ip) => {
   if (!ip) return ip;
@@ -23,9 +23,21 @@ const normalizeIp = (ip) => {
 
 const limiterApi = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minuta
-  max: 30,              
+  max: (req) => {
+    if (req.originalUrl.includes("/get-token")) return 6; // prisnejsi limit pro vydavani tokenu
+    return 100; // ostatni routy
+  },
   standardHeaders: true,
   legacyHeaders: false,
+
+  keyGenerator: (req) => normalizeIp(req.ip),
+
+  // 💡 BONUS: rozšíření (chrome-extension://) limiter neomezuje
+  skip: (req) => {
+    const origin = req.headers.origin || req.headers.referer || "";
+    const isFromExtension = origin.includes("chrome-extension://");
+    return isFromExtension;
+  },
 
   handler: async (req, res) => {
     const ip = normalizeIp(req.ip);

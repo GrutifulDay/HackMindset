@@ -5,6 +5,7 @@ import { debug, info, error } from "./utils/logger.js"
 
 // zaklad
 import fs from "fs"
+
 // lokalni testovani 
 import https from "https"
 import { UAParser } from "ua-parser-js"
@@ -13,7 +14,6 @@ import { UAParser } from "ua-parser-js"
 import express from "express"
 import helmet from "helmet"
 import chalk from "chalk"
-import cron from "node-cron";
 
 // Routes
 import nasaRoutes from "./routes/nasaRoutes.js"
@@ -31,24 +31,21 @@ import tokenRoutes from "./routes/tokenRoutes.js"
 import limiterApi from "./middlewares/rateLimit.js"
 import corsOptions from "./middlewares/corsConfig.js"
 import botProtection from "./middlewares/botProtection.js"
-import ipBlacklist from "./middlewares/ipBlacklist.js"
+import ipBlocker from "./middlewares/ipBlacklist.js"
 import speedLimiter from "./middlewares/slowDown.js"
 import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
 import captureHeaders from "./middlewares/captureHeaders.js";
 // import detectSecretLeak from "./middlewares/detectSecretLeak.js";
 
-// Controller
-import { fetchNasaImage } from "./controllers/nasaController.js"
-
-// ✅ API brána (validátor) – použij svůj modul/umístění
-//import { validateToken } from "./middlewares/validateToken.js"
+// Utils 
+import { startDailyCron } from "./utils/cron/dailyRefresh.js"
+import { startWatchForIPChanges } from "./utils/watch/startWatchForIPChanges.js"
 
 
 // Databaze 
 import connectDB from "./db/db.js"
 import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
-import mongoose from "mongoose"
 
 const app = express()
 app.set("trust proxy", "loopback"); 
@@ -62,9 +59,6 @@ app.use((req, res, next) => {
   debug(`➡️  ${req.method} ${req.url}`);
   next();
 });
-
-info("✅ Start server.js");
-
 
 const startTime = new Date().toLocaleString("cs-CZ", {
   timeZone: "Europe/Prague",
@@ -81,11 +75,15 @@ console.log(chalk.magenta.bold(`💣 Server spuštěn: ${startTime}`))
 const __dirname = path.resolve() // pri pouziti ES modulů
 
 // MongoDB
-await connectDB()
-await connectFrontendDB()
+await connectDB();
+await connectFrontendDB();
 
 // Kontrola IP adres 
-await loadBlacklistFromDB()
+await loadBlacklistFromDB();
+
+// refresh google extension po pridani ip do db
+startDailyCron();
+startWatchForIPChanges();
 
 // Helmet – CSP (lehce)
 app.use(
@@ -111,17 +109,6 @@ app.use(
 debug("🛠️ Tento soubor se opravdu spustil!");
 
 
-// ─────────────────────────────────────────────────────────────
-// Veřejné routy – necháme je fungovat vždy
-// ─────────────────────────────────────────────────────────────
-app.get("/", (_req, res) => {
-  res.status(200).send("HackMindset backend is running")
-})
-
-// app.get("/debug-auth", validateToken(process.env.HACK_MINDSET, "Debug route"), (req, res) => {
-//   res.json({ msg: "Přístup povolen ✅" })
-// })
-
 
 app.get("/ping", (_req, res) => {
   res.status(200).send("pong")
@@ -129,7 +116,6 @@ app.get("/ping", (_req, res) => {
 
 app.get("/health", async (_req, res) => {
   try {
-    // ... původní kód ...
     return res.status(200).json({ status: "ok" });
   } catch (err) {
     if (err.message.includes("timeout")) {
@@ -179,19 +165,10 @@ app.use(corsOptions)    // 1) preflight
 app.use(botProtection)  // 2) detekce botů/UA
 app.use(speedLimiter)   // 3) zpomalení floodu
 app.use(limiterApi)     // 4) tvrdý rate limit (počítá přestupky, teprve pak blacklistuje)
-app.use(ipBlacklist)    // 5) blokace známých IP (už uložených)
+app.use(ipBlocker)   // 5) blokace známých IP (už uložených)
 
 
-
-// ─────────────────────────────────────────────────────────────
-// 🔐 API brána – aplikuj JEN na /api/*
-// (Autorita je serverová; očekává interní hlavičku od proxy +/nebo tajný klíč z .env)
-// ─────────────────────────────────────────────────────────────
-// app.use("/api", validateApiKey("api"))
-
-// ─────────────────────────────────────────────────────────────
-// API routy – až ZA validátorem
-// ─────────────────────────────────────────────────────────────
+// router
 app.use("/api", tokenRoutes);
 app.use("/api", nasaRoutes)
 app.use("/api", storyRoutes)
@@ -212,7 +189,7 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "Server OK", originalUserAgent: userAgentString, parsed: result })
 })
 
-// Statické soubory (pokud je potřebuješ)
+// Statické soubory
 app.use(express.static(path.join(__dirname, "frontend")))
 
 // Debug výpis registrovaných cest
@@ -237,13 +214,3 @@ https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
 console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
 });
 
-// 🕛 Cron – nacteni extension v urceny cas 
-cron.schedule("48 09 * * *", async () => {
-  try {
-    console.log("🌙 Cron job: spouštím noční načtení NASA obrázku...");
-    await fetchNasaImage({ internal: true }, { json: () => {} });
-    console.log("✅ NASA obrázek úspěšně uložen do cache.");
-  } catch (err) {
-    console.error("❌ Chyba při nočním načítání NASA obrázku:", err.message);
-  }
-});

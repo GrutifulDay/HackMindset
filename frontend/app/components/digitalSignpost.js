@@ -1,4 +1,4 @@
-import { el, createFadeLine, attachInfoToggle } from "../utils/dom/uiSnippets.js";
+import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
 import { fetchDigitalSignpost } from "../fetch/fetchDigitalSignpost.js"
 import { createUntruthIcon } from "./icons_import/untruthIcon.js";
@@ -19,7 +19,7 @@ export async function createDigitalSignpost() {
         console.log("[retro] ⏳ Data jsou aktuální – čtu z cache.")
       } else {
         console.log("🌐 Načítám nová data ze serveru")
-        digitalData = await fetchDigitalSignpost()  // ✅ už funguje
+        digitalData = await fetchDigitalSignpost() 
         if (digitalData) setCachedData(CACHE_KEY, digitalData)
       }
     

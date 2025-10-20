@@ -37,17 +37,24 @@ export function validateApiKey(routeDescription) {
       ? rawAuthHeader.split(" ")[1]
       : "";
 
-    // ⚠️ Kontrola IP blacklistu
-    if (await isBlacklisted(userIP)) {
-      return res.status(403).json({ error: "Vaše IP je na blacklistu." });
-    }
+      // Vyjimka pokud ma request platny JWT z extension → povoli dal, i kdyz je IP blokovana 
+      if (req.tokenPayload?.sub === "chrome-extension") {
+        console.log("🧩 validateApiKey: požadavek z rozšíření s platným JWT → povoleno (přeskakuji IP blacklist)");
+        return next();
+      }
+  
+      // kontrola IP blacklistu
+      if (await isBlacklisted(userIP)) {
+        return res.status(403).json({ error: "Vaše IP je na blacklistu." });
+      }
+
 
     console.log("📦 PŘÍCHOZÍ HLAVIČKY:");
     Object.entries(req.headers).forEach(([key, value]) => {
       console.log(`→ ${key}: ${value}`);
     });
 
-    // 🔎 Kontrola zdroje požadavku
+    // kontrola zdroje pozadavku
     const isLikelyFromChrome =
       userAgentString.includes("Chrome") && !userAgentString.includes("Postman");
 
@@ -56,7 +63,7 @@ export function validateApiKey(routeDescription) {
       referer.includes(extensionID) ||
       isLikelyFromChrome;
 
-    // 🔐 ověření JWT tokenu
+    // overeni JWT tokenu
     let decodedToken;
     try {
       decodedToken = jwt.verify(tokenFromHeader, JWT_SECRET);
@@ -76,7 +83,7 @@ export function validateApiKey(routeDescription) {
     );
   }
 
-  // zkus registrovat použití tokenu — pokud vrátí true, token byl revokován právě teď
+  // pokud vrati true, token byl revokovan
 const abuseDetected = registerTokenUsage({
   jti: decodedToken.jti,
   ip: userIP,
@@ -85,7 +92,7 @@ const abuseDetected = registerTokenUsage({
 });
 
 if (abuseDetected) {
-  // token právě revokován -> chová se stejně jako blokace
+  // token revokovan -> blokace ip adresy
   return await blockRequest(req, res, userIP, userAgentString, routeDescription, "Token abuse detected and revoked");
 }
   console.log(chalk.magenta.bold("✅ JWT audience je platná:", decodedToken.aud));
@@ -109,7 +116,7 @@ if (abuseDetected) {
       return await blockRequest(req, res, userIP, userAgentString, routeDescription, "Invalid JWT token");
     }
 
-    // 🔑 povolení jen pokud sedí i extension ID
+    // povoleni jen pokud sedi i extension ID
     const isFromExtension = isFromAllowedSource && decodedToken.extId === CHROME_EXTENSION_ALL_URL;
 
     if (isFromExtension) {
@@ -118,7 +125,7 @@ if (abuseDetected) {
       return next();
     }
 
-    // pokud nesedí – blokuje
+    // pokud nesedi – blokuje
     console.warn("⛔️ Token validní, ale zdroj neodpovídá.");
     return await blockRequest(req, res, userIP, userAgentString, routeDescription, "Valid JWT, bad origin/referer");
   };
@@ -139,7 +146,6 @@ async function blockRequest(req, res, userIP, userAgentString, routeDescription,
     path: req.originalUrl
   });
 
-  // 📢 pošli notifikaci
   await notifyBlockedIP({
     ip: userIP,
     city: city || "Neznámé",

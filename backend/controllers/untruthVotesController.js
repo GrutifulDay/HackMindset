@@ -1,5 +1,3 @@
-import dayjs from "dayjs"
-import chalk from "chalk"
 import Story from "../models/Story.js"
 import Retro from "../models/Retro.js"
 import Digital from "../models/Digital.js"

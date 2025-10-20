@@ -28,7 +28,7 @@ export function getToken(req, res) {
 
   // 🔐 vytvoreni JWT 
   const token = jwt.sign(payload, JWT_SECRET, {
-    expiresIn: "30min",
+    expiresIn: "5m",
   });
 
   return res.json({ token });

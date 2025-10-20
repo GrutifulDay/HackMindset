@@ -60,6 +60,7 @@ export async function fetchNasaImage(req, res) {
       };
       nasaCache = result;
       nasaCacheDate = today;
+      if (req.internal) return result;
       return res.json(result);
     }
 
