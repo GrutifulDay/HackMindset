@@ -6,6 +6,7 @@ import { saveSecurityLog } from "../services/securityLogService.js";
 import { hashIp } from "../utils/hashIp.js";
 import { isRevoked } from "./tokenRevocation.js";
 import { CHROME_EXTENSION_ALL_URL, JWT_SECRET } from "../config.js";
+import { debug, info, warn, error } from "../utils/logger.js";
 
 const blacklistedIPs = new Set();
 
@@ -69,7 +70,7 @@ export default async function ipBlocker(req, res, next) {
       const okAud = decoded?.aud?.includes("/api");
       const revoked = decoded?.jti ? isRevoked(decoded.jti) : false;
   
-      console.log("✅ Kontrola JWT:", { okExt, okSub, okAud, revoked });
+      debug("✅ Kontrola JWT:", { okExt, okSub, okAud, revoked });
   
       if (okExt && okSub && okAud && !revoked) {
         console.log(`🧩 IP ${clientIP} je na blacklistu, ale má platný JWT z rozšíření → POVOLENO`);

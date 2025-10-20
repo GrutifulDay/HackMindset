@@ -65,8 +65,13 @@ export const SHARED_KEY = process.env.SHARED_KEY || "";
 export const ALLOW_LOCAL_NO_PROXY = process.env.ALLOW_LOCAL_NO_PROXY === "1";
 
 // ── OSTATNÍ ───────────────────────────────────────────────────
-export const DEBUG = process.env.DEBUG === "1";
 export const NODE_ENV = process.env.NODE_ENV || "development";
+export const DEBUG = process.env.DEBUG === "true"; // nebo "1", podle toho, co používáš
+
+export const config = {
+  env: NODE_ENV,
+  debug: DEBUG,
+};
 
 export const PORT = process.env.PORT || 3000;
 

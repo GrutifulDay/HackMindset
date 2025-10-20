@@ -5,7 +5,7 @@ import chalk from "chalk"
 
 
 let lastUpdateTime = 0;     // cas kdy naposled probehl refresh 
-const MIN_INTERVAL = 3 * 60 * 1000; // 10 minut ochranna pauza
+const MIN_INTERVAL = 10 * 60 * 1000; // 10 minut ochranna pauza
 
 
  //sleduje models blacklistedips, pri nove IP spousti refresh systemu.

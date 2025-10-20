@@ -1,7 +1,7 @@
 // dotevn
 import { PORT } from "./config.js"
 
-import { debug, info, error } from "./utils/logger.js"
+import { debug, info, warn, error } from "./utils/logger.js";
 
 // zaklad
 import fs from "fs"
