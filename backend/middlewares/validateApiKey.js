@@ -8,7 +8,7 @@ import { redactHeaders } from "../utils/redact.js";
 import { isRevoked } from "../middlewares/tokenRevocation.js"
 import { registerTokenUsage } from "../middlewares/tokenUsage.js";
 import { debug, warn } from "../utils/logger.js";
-import { DEBUG, NODE_ENV } from "../config.js";
+import { DEBUG, NODE_ENV, API_BASE_URL } from "../config.js";
 
 
 // citlivé hlavičky maskujeme
@@ -73,7 +73,7 @@ export function validateApiKey(routeDescription) {
       decodedToken = jwt.verify(tokenFromHeader, JWT_SECRET);
 
       // kontrola audience pro vydani tokenu jen pro muj server v rozsireni 
-    if (decodedToken.aud !== "https://localhost:3000/api") {
+    if (decodedToken.aud !== API_BASE_URL) {
       warn("❌ Token má špatnou audience:");
       warn("→ expected:", expectedAudience);
       warn("→ received:", decodedToken.aud);
