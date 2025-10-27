@@ -1,6 +1,9 @@
 // dotevn
 import { PORT } from "./config.js"
 
+// console.log("ENV:", process.env.NODE_ENV);
+// console.log("DEBUG:", process.env.DEBUG);
+
 import util from "util";
 global.util = util;
 
@@ -16,7 +19,6 @@ import { UAParser } from "ua-parser-js"
 // NPM knihovny 
 import express from "express"
 import helmet from "helmet"
-import chalk from "chalk"
 
 // Routes
 import nasaRoutes from "./routes/nasaRoutes.js"
@@ -73,7 +75,7 @@ const startTime = new Date().toLocaleString("cs-CZ", {
   minute: "2-digit",
   second: "2-digit",
 })
-console.log(chalk.magenta.bold(`💣 Server spuštěn: ${startTime}`))
+info(`💣 Server spuštěn: ${startTime}`);
 
 const __dirname = path.resolve() // pri pouziti ES modulů
 
@@ -198,7 +200,7 @@ app.use(express.static(path.join(__dirname, "frontend")))
 // Debug výpis registrovaných cest
 try {
   const routes = app._router?.stack?.map(r => r?.route?.path).filter(Boolean)
-  if (routes?.length) console.log(routes)
+  if (routes?.length) debug(routes)
 } catch { /* ignore */ }
 
 // ✅ Spuštění serveru
@@ -214,6 +216,6 @@ const options = {
 }
 
 https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-console.log(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
+debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
 });
 

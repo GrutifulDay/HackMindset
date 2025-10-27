@@ -1,8 +1,9 @@
-// routes/secLog.js
 import express from "express";
 import crypto from "crypto";
 import { saveSecurityLog } from "../services/securityLogService.js";
 import { SHARED_KEY } from "../config.js"
+import { error } from "../utils/logger.js";
+
 
 const router = express.Router();
 
@@ -90,7 +91,7 @@ router.post("/_sec-log", async (req, res) => {
     await saveSecurityLog(entry);
   } catch (err) {
     // Tichý fail – nechceme prozrazovat detaily
-    console.error("sec-log save error:", err?.message || String(err));
+    error("sec-log save error:", err?.message || String(err));
   }
 
   // 202 Accepted – log zpracujeme asynchronně

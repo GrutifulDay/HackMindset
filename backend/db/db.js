@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
-import chalk from "chalk"
 import { MONGO_URI } from "../config.js"
+import { info, error } from "../utils/logger.js";
 
 // pripojeni DB 
 const connectDB = async () => {
@@ -12,9 +12,9 @@ const connectDB = async () => {
     const dbName = mongoose.connection.name
     const host = mongoose.connection.host
 
-    console.log(chalk.green.bold(`✅ MongoDB connected to ${host}/${dbName}`));
-  } catch (err) {
-    console.error(chalk.red.bold("❌ MongoDB error:"), err.message);
+    info(`✅ MongoDB connected to ${host}/${dbName}`)
+    } catch (err) {
+      error("❌ MongoDB error:", err.message)
     process.exit(1)
   }
 }

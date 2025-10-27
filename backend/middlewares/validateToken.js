@@ -1,6 +1,7 @@
 import { isBlacklisted } from "./ipBlacklist.js"
 import { HACK_MINDSET, CHROME_EXTENSION_ALL_URL } from "../config.js";
-import chalk from "chalk"
+import { debug, warn } from "../utils/logger.js";
+
 
 export function validateToken() {
     return async function (req, res, next) {
@@ -41,15 +42,15 @@ export function validateToken() {
     }
 
     if (isValid) {
-      console.log("✅ Přístup povolen")
-      console.log(chalk.red.bold("→ resolvedKey:", resolvedKey))
-      console.log(chalk.red.bold("→ expectedKey:", HACK_MINDSET))
+      debug("✅ Přístup povolen")
+      debug("→ resolvedKey:", resolvedKey)
+      debug("→ expectedKey:", HACK_MINDSET)
       return next()
     }
 
-    console.warn("🚫 Zamítnuto – neplatný klíč")
-    console.log("→ authValue:", authValue)
-    console.log("→ expectedKey:", HACK_MINDSET)
+    warn("🚫 Zamítnuto – neplatný klíč")
+    debug("→ authValue:", authValue)
+    debug("→ expectedKey:", HACK_MINDSET)
     return res.status(403).json({ error: "Access denied" })
   }
 }

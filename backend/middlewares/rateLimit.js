@@ -2,6 +2,8 @@ import rateLimit from "express-rate-limit";
 import { addToBlacklist } from "./ipBlacklist.js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";
 import { redactHeaders } from "../utils/redact.js";
+import { debug } from "../utils/logger.js";
+
 
 // const redact = (obj = {}) => {
 //   const SENSITIVE = new Set(["authorization","cookie","proxy-authorization","x-api-key","set-cookie"]);
@@ -45,7 +47,7 @@ const limiterApi = rateLimit({
     const parser = new UAParser(uaString);
     const result = parser.getResult();
 
-    console.warn(`⚠️ Rate limit exceeded for IP: ${ip}`);
+    debug(`⚠️ Rate limit exceeded for IP: ${ip}`);
 
     // zvysi prestupek hned
     const count = (offenders.get(ip) || 0) + 1;

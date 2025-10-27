@@ -1,5 +1,6 @@
-// utils/discordNotification.js
 import { DISCORD_WEBHOOK_URL } from "../config.js";
+import { debug, error } from "../utils/logger.js";
+
 
 // 🧠 Tyto dvě mapy slouží jako "paměť" mezi jednotlivými voláními funkce.
 // notifyBuffer ukládá informace o tom, kolikrát byla IP blokována (aby se notifikace neposílaly zbytečně často).
@@ -227,9 +228,9 @@ export async function notifyBlockedIP({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(message),
         });
-        console.log(`✅ Notifikace (${reason}) pro ${ip}: ${r.count}x`);
+        debug(`✅ Notifikace (${reason}) pro ${ip}: ${r.count}x`);
       } catch (e) {
-        console.error("❌ Chyba při odesílání na Discord:", e.message);
+        error("❌ Chyba při odesílání na Discord:", e.message);
       }
 
       // po odeslání vymažeme buffer i timer

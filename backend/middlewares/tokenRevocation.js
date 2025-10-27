@@ -1,10 +1,11 @@
 import { notifyBlockedIP } from "../utils/discordNotification.js";
+import { debug, info, warn, error } from "../utils/logger.js";
 
 const revokedTokens = new Set();
 
 export function revokeToken(jti, meta = {}) {
   revokedTokens.add(jti);
-  console.log("🚫 Revokován token s JTI:", jti);
+  debug("🚫 Revokován token s JTI:", jti);
 
   // discord notifikace
   notifyBlockedIP?.({

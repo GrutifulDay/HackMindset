@@ -4,6 +4,8 @@ import { notifyBlockedIP } from "../utils/discordNotification.js";
 import { addToBlacklist } from "./ipBlacklist.js";   // ✅ přidáno
 import { UAParser } from "ua-parser-js";
 import { redactHeaders } from "../utils/redact.js";
+import { warn } from "../utils/logger.js";
+
 
 const allowedOrigins = [
   "http://127.0.0.1:5501",
@@ -30,7 +32,7 @@ export default async function corsWithLogging(req, res, next) {
 
     const clientIP = req.ip || "Neznámé";
 
-    console.warn(`[CORS BLOCKED] Origin: ${origin || "null"} - ${new Date().toISOString()}`);
+    warn(`[CORS BLOCKED] Origin: ${origin || "null"} - ${new Date().toISOString()}`);
 
     // ✅ 1. Zaloguj blokaci (Discord)
     await notifyBlockedIP({

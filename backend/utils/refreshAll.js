@@ -1,20 +1,22 @@
-import { fetchNasaImage } from "../controllers/nasaController.js"
+import { fetchNasaImage } from "../controllers/nasaController.js";
 import { getDigital } from "../controllers/digitalController.js"; 
-import { getStoryOfTheDay } from "../controllers/storyController.js"
-import { getRetroMachine } from "../controllers/retroControllers.js"
-import { getProfile } from "../controllers/profileController.js"
+import { getStoryOfTheDay } from "../controllers/storyController.js";
+import { getRetroMachine } from "../controllers/retroControllers.js";
+import { getProfile } from "../controllers/profileController.js";
+import { debug, info, error } from "../utils/logger.js";
+
 
 // interni refresh vsech sekcí – pres controllery, zadny fetch
 let isRefreshing = false;
 
 export async function refreshAllSections() {
   if (isRefreshing) {
-    console.log("⚠️ [refreshAll] Refresh už probíhá – přeskočeno.");
+    info("⚠️ [refreshAll] Refresh už probíhá – přeskočeno.");
     return;
   }
 
   isRefreshing = true;
-  console.log("♻️ [refreshAll] Spouštím interní refresh všech sekcí...");
+  debug("♻️ [refreshAll] Spouštím interní refresh všech sekcí...");
 
   try {
     const fakeReq = { internal: true };
@@ -26,9 +28,9 @@ export async function refreshAllSections() {
     await getRetroMachine(fakeReq, fakeRes);
     await getProfile(fakeReq, fakeRes);
 
-    console.log("✅ [refreshAll] Všechny sekce úspěšně přednačteny (interně).");
+    info("✅ [refreshAll] Všechny sekce úspěšně přednačteny (interně).");
   } catch (err) {
-    console.error("❌ [refreshAll] Chyba při interním refreshi:", err.message);
+    error("❌ [refreshAll] Chyba při interním refreshi:", err.message);
   } finally {
     isRefreshing = false;
   }

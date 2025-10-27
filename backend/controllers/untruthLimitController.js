@@ -1,5 +1,5 @@
-// controllers/untruthLimitController.js
 import UntruthLog from "../models/UntruthLog.js"
+import { error } from "../utils/logger.js";
 
 export async function postUntruthLimit(req, res) {
   try {
@@ -32,8 +32,8 @@ export async function postUntruthLimit(req, res) {
         abuseCount: 1
       })
     }
-  } catch (error) {
-    console.error("❌ Chyba v postUntruthLimit:", error);
+  } catch (err) {
+    error("❌ Chyba v postUntruthLimit:", err)
     res.status(500).json({ error: "Interní chyba serveru" });
   }
 }

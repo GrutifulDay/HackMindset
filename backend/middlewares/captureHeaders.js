@@ -1,4 +1,6 @@
 import { notifyBlockedIP, maskToken } from "../utils/discordNotification.js";
+import { warn, error, debug } from "../utils/logger.js";
+import { DEBUG, NODE_ENV } from "../config.js";
 
 // fce pro detekci hlavicek
 const SENSITIVE = new Set([
@@ -78,12 +80,15 @@ export default function captureHeaders(options = {}) {
       req._headersSummary = summary;
       req._redactedHeaders = raw;
 
-      console.log("📦 PŘÍCHOZÍ HLAVIČKY:");
-      summary.split("\n").forEach(line => console.log(line));
-
-      if (sensitive.length > 0) {
-        console.log("🔑 Sensitive headers detected:");
-        sensitive.forEach(s => console.log("  " + s));
+      if (DEBUG && NODE_ENV !== "production") {
+        debug("📦 PŘÍCHOZÍ HLAVIČKY:");
+        summary.split("\n").forEach(line => debug(line));
+      }
+      
+      if (NODE_ENV !== "production" && DEBUG) {
+        if (sensitive.length > 0) {
+          warn("🔑 Sensitive headers detected:", sensitive);
+        }
       }
 
       if (typeof notifyOn === "function" && notifyOn(req)) {
@@ -98,12 +103,12 @@ export default function captureHeaders(options = {}) {
             headers: raw,
             sensitive,
           });
-        } catch (e) {
-          console.error("Notify error in captureHeaders:", e.message || e);
+        } catch (notifyErr) {
+          error("Notify error in captureHeaders:", notifyErr.message || notifyErr);
         }
       }
     } catch (err) {
-      console.error("captureHeaders error:", err.message || err);
+      error("captureHeaders error:", err.message || err);
     }
 
     return next();

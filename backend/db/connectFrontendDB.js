@@ -1,8 +1,6 @@
-// db/connectFrontendDB.js
-
 import mongoose from "mongoose"
 import { MONGO_URI_FRONTEND } from "../config.js"
-import chalk from "chalk"
+import { info, error } from "../utils/logger.js";
 
 let frontendConnection
 
@@ -13,15 +11,15 @@ export default function connectFrontendDB() {
     })
 
     frontendConnection.on("connected", () => {
-      console.log(chalk.green.bold("✅ Připojeno k MongoDB"));
+      info("✅ Připojeno k MongoDB")
     })
 
     frontendConnection.on("error", (err) => {
-      console.error(chalk.red.bold("❌ Chyba v připojení k MongoDB:", err.message));
+      error("❌ Chyba v připojení k MongoDB:", err.message)
     });
 
     return frontendConnection
-  } catch (error) {
-    console.error(chalk.red.bold("❌ Nepodařilo se připojit k MongoDB:", error.message));
+  } catch (err) {
+    error("❌ Nepodařilo se připojit k MongoDB:", err.message);
   }
 }

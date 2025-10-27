@@ -1,6 +1,7 @@
 import Story from "../models/Story.js"
 import Retro from "../models/Retro.js"
 import Digital from "../models/Digital.js"
+import { error } from "../utils/logger.js";
 
 
 const sectionModels = {
@@ -44,7 +45,7 @@ export async function reportUntruthByToday(req, res) {
       updatedVotes: Object.fromEntries(doc.untruthVotes)
     })
   } catch (err) {
-    console.error("❌ Chyba při ukládání hlasu:", err)
+    error("❌ Chyba při ukládání hlasu:", err)
     res.status(500).json({ error: "Chyba serveru" })
   }
 }

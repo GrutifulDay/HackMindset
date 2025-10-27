@@ -7,7 +7,9 @@ import { notifyBlockedIP } from "../utils/discordNotification.js";
 import { redactHeaders } from "../utils/redact.js";
 import { isRevoked } from "../middlewares/tokenRevocation.js"
 import { registerTokenUsage } from "../middlewares/tokenUsage.js";
-import chalk from "chalk";
+import { debug, warn } from "../utils/logger.js";
+import { DEBUG, NODE_ENV } from "../config.js";
+
 
 // citlivé hlavičky maskujeme
 // const redact = (obj = {}) => {
@@ -20,7 +22,7 @@ import chalk from "chalk";
 // };
 
 export function validateApiKey(routeDescription) {
-  console.log("validateApiKey funguje");
+  debug("validateApiKey funguje");
 
   return async function (req, res, next) {
     const userIP =
@@ -39,7 +41,7 @@ export function validateApiKey(routeDescription) {
 
       // Vyjimka pokud ma request platny JWT z extension → povoli dal, i kdyz je IP blokovana 
       if (req.tokenPayload?.sub === "chrome-extension") {
-        console.log("🧩 validateApiKey: požadavek z rozšíření s platným JWT → povoleno (přeskakuji IP blacklist)");
+        debug("🧩 validateApiKey: požadavek z rozšíření s platným JWT → povoleno (přeskakuji IP blacklist)");
         return next();
       }
   
@@ -49,10 +51,12 @@ export function validateApiKey(routeDescription) {
       }
 
 
-    console.log("📦 PŘÍCHOZÍ HLAVIČKY:");
-    Object.entries(req.headers).forEach(([key, value]) => {
-      console.log(`→ ${key}: ${value}`);
-    });
+      if (DEBUG && NODE_ENV !== "production") {
+        debug("📦 PŘÍCHOZÍ HLAVIČKY:");
+        Object.entries(req.headers).forEach(([key, value]) => {
+          debug(`→ ${key}: ${value}`);
+        });
+      }
 
     // kontrola zdroje pozadavku
     const isLikelyFromChrome =
@@ -70,9 +74,9 @@ export function validateApiKey(routeDescription) {
 
       // kontrola audience pro vydani tokenu jen pro muj server v rozsireni 
     if (decodedToken.aud !== "https://localhost:3000/api") {
-      console.warn("❌ Token má špatnou audience:");
-      console.warn(chalk.red.bold("→ expected:", expectedAudience));
-      console.warn(chalk.red.bold("→ received:", decodedToken.aud));
+      warn("❌ Token má špatnou audience:");
+      warn("→ expected:", expectedAudience);
+      warn("→ received:", decodedToken.aud);
       return await blockRequest(
         req,
         res,
@@ -95,10 +99,10 @@ if (abuseDetected) {
   // token revokovan -> blokace ip adresy
   return await blockRequest(req, res, userIP, userAgentString, routeDescription, "Token abuse detected and revoked");
 }
-  console.log(chalk.magenta.bold("✅ JWT audience je platná:", decodedToken.aud));
+  debug("✅ JWT audience je platná:", decodedToken.aud);
 
   if (isRevoked(decodedToken.jti)) {
-    console.warn("🚫 Token byl revokován:", decodedToken.jti);
+    warn("🚫 Token byl revokován:", decodedToken.jti);
     return await blockRequest(
       req,
       res,
@@ -109,10 +113,10 @@ if (abuseDetected) {
     );
   }
   
-  console.log("✅ JWT není revokován:", decodedToken.jti);
+  debug("✅ JWT není revokován:", decodedToken.jti);
 
     } catch (err) {
-      console.warn("❌ Neplatný JWT token:", err.message);
+      warn("❌ Neplatný JWT token:", err.message);
       return await blockRequest(req, res, userIP, userAgentString, routeDescription, "Invalid JWT token");
     }
 
@@ -120,13 +124,13 @@ if (abuseDetected) {
     const isFromExtension = isFromAllowedSource && decodedToken.extId === CHROME_EXTENSION_ALL_URL;
 
     if (isFromExtension) {
-      console.log("✅ Povolen přístup z rozšíření (JWT validní)");
+      debug("✅ Povolen přístup z rozšíření (JWT validní)");
       req.tokenPayload = decodedToken;
       return next();
     }
 
     // pokud nesedi – blokuje
-    console.warn("⛔️ Token validní, ale zdroj neodpovídá.");
+    warn("⛔️ Token validní, ale zdroj neodpovídá.");
     return await blockRequest(req, res, userIP, userAgentString, routeDescription, "Valid JWT, bad origin/referer");
   };
 }

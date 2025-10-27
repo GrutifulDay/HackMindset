@@ -2,6 +2,8 @@ import slowDown from "express-slow-down";
 import { UAParser } from "ua-parser-js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";
 import { redactHeaders } from "../utils/redact.js";
+import { warn } from "../utils/logger.js";
+
 
 // citlivé hlavičky anonymizujeme
 // const redact = (obj = {}) => {
@@ -29,7 +31,7 @@ async function logSlowRequests(req, res, next) {
     const parser = new UAParser(uaString);
     const result = parser.getResult();
 
-    console.warn(`🐌 IP ${req.ip} is slowed down: ${used}/${limit}`);
+    warn(`🐌 IP ${req.ip} is slowed down: ${used}/${limit}`);
     res.setHeader("X-Slowed-Down", "true");
 
     await notifyBlockedIP({

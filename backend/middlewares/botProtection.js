@@ -1,6 +1,7 @@
 import { addToBlacklist } from "./ipBlacklist.js";
 import { UAParser } from "ua-parser-js"
 import { redactHeaders } from "../utils/redact.js";
+import { warn } from "../utils/logger.js";
 
 
 // ✅ Pomocná funkce pro správné získání IP adresy
@@ -25,7 +26,7 @@ export default function botProtection(req, res, next) {
 
     // ⛔️ Blokování bez user-agent
     if (!userAgentString) {
-        console.warn(`🚨 Bot detekován (bez UA) – IP ${userIP}`);
+        warn(`🚨 Bot detekován (bez UA) – IP ${userIP}`);
     
         addToBlacklist(userIP, "Missing User-Agent", {
             userAgent: "EMPTY",
@@ -49,7 +50,7 @@ export default function botProtection(req, res, next) {
 
     // ⚠️ Podezřelý user-agent
     if (browserName === "Other" || browserName === undefined) {
-        console.warn(`🚨 Podezřelý bot (${deviceType}, ${osName}) – IP ${userIP}`);
+        warn(`🚨 Podezřelý bot (${deviceType}, ${osName}) – IP ${userIP}`);
     
         addToBlacklist(userIP, "Suspicious User-Agent", {
             userAgent: userAgentString,

@@ -1,6 +1,7 @@
 // middlewares/tokenUsage.js
 import { revokeToken } from "./tokenRevocation.js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";
+import { debug, warn } from "../utils/logger.js";
 
 
 // In-memory store: jti -> usage info
@@ -43,11 +44,11 @@ export function registerTokenUsage({ jti, ip, userAgent, path }) {
   if (userAgent) info.uas.add(userAgent);
   info.count += 1;
 
-  console.log(`tokenUsage: jti=${jti} ips=${[...info.ips].join(",")} uas=${[...info.uas].slice(0,3).join("|")} count=${info.count}`);
+  debug(`tokenUsage: jti=${jti} ips=${[...info.ips].join(",")} uas=${[...info.uas].slice(0,3).join("|")} count=${info.count}`);
 
   // pravidla pro revokaci
   if (info.ips.size > MAX_IPS) {
-    console.warn(`⚠️ Revoking token ${jti} — used from ${info.ips.size} IPs`);
+    warn(`⚠️ Revoking token ${jti} — used from ${info.ips.size} IPs`);
     revokeToken(jti);
     
     notifyBlockedIP?.({
@@ -63,7 +64,7 @@ export function registerTokenUsage({ jti, ip, userAgent, path }) {
   }
 
   if (info.uas.size > MAX_UAS) {
-    console.warn(`⚠️ Revoking token ${jti} — multiple UAs (${[...info.uas].join(",")})`);
+    warn(`⚠️ Revoking token ${jti} — multiple UAs (${[...info.uas].join(",")})`);
     revokeToken(jti);
     notifyBlockedIP?.({
       ip: ip || "unknown",
@@ -78,7 +79,7 @@ export function registerTokenUsage({ jti, ip, userAgent, path }) {
   }
 
   if (info.count > MAX_REQUESTS) {
-    console.warn(`⚠️ Revoking token ${jti} — excessive requests (${info.count})`);
+    warn(`⚠️ Revoking token ${jti} — excessive requests (${info.count})`);
     revokeToken(jti);
     notifyBlockedIP?.({
       ip: ip || "unknown",

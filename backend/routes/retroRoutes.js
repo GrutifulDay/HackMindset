@@ -1,31 +1,29 @@
 import express from "express"
 import { validateApiKey } from "../middlewares/validateApiKey.js"
-// import stripUntruthVotes from "../middlewares/stripUntruthVotes.js"
 import { getRetroMachine } from "../controllers/retroControllers.js"
 import { getRetroVotes, addRetroVote } from "../controllers/retroVotesController.js"
+import { debug } from "../utils/logger.js";
+
 
 const router = express.Router()
 
  
-console.log("{storyRoutes.js} pripojeno");
+debug("{storyRoutes.js} pripojeno");
 
 router.get(
     "/retro-machine",
-    // stripUntruthVotes,
     validateApiKey("retro-machine"),
     getRetroMachine
 )
 
 router.get(
     "/retro-machine/retroVotesGet/:date",
-    // stripUntruthVotes,
     validateApiKey("Zavolání GET /retroVotesGet"),
     getRetroVotes
 )
 
 router.post(
     "/retro-machine/retroVotesPost",
-    // stripUntruthVotes,
     validateApiKey("Zavolání POST /retroVotesPost"),
     addRetroVote
 )

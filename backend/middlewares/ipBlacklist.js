@@ -54,7 +54,7 @@ export default async function ipBlocker(req, res, next) {
   // 🚨 IP JE NA BLACKLISTU → zkontroluje vyjimky
   // /api/get-token z rozsireni → povolen
   if (isTokenIssueRoute && isFromExtensionOrigin && isChromeUA) {
-    console.log(`⚠️ IP ${clientIP} je na blacklistu, ale povoluji /get-token pro rozšíření.`);
+    debug(`⚠️ IP ${clientIP} je na blacklistu, ale povoluji /get-token pro rozšíření.`);
     return next();
   }
 
@@ -65,7 +65,7 @@ export default async function ipBlocker(req, res, next) {
   if (token) {
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
-      console.log("🔍 Decoded JWT payload:", decoded);
+      debug("🔍 Decoded JWT payload:", decoded);
   
       const okExt = decoded?.extId === CHROME_EXTENSION_ALL_URL;
       const okSub = decoded?.sub === "chrome-extension";
@@ -75,14 +75,14 @@ export default async function ipBlocker(req, res, next) {
       debug("✅ Kontrola JWT:", { okExt, okSub, okAud, revoked });
   
       if (okExt && okSub && okAud && !revoked) {
-        console.log(`🧩 IP ${clientIP} je na blacklistu, ale má platný JWT z rozšíření → POVOLENO`);
+        debug(`🧩 IP ${clientIP} je na blacklistu, ale má platný JWT z rozšíření → POVOLENO`);
         req.tokenPayload = decoded;
         return next();
       } else {
-        console.warn(`🚫 Token neprošel validací – extId/sub/aud nesedí nebo je revokován`);
+        warn(`🚫 Token neprošel validací – extId/sub/aud nesedí nebo je revokován`);
       }
     } catch (err) {
-      console.warn("❌ ipBlocker: JWT verify failed:", err.message);
+      warn("❌ ipBlocker: JWT verify failed:", err.message);
     }
   }
   
@@ -112,7 +112,7 @@ export default async function ipBlocker(req, res, next) {
       },
     });
   } catch (e) {
-    console.error("sec-log save error:", e.message);
+    error("sec-log save error:", e.message);
   }
 
   await notifyBlockedIP({
@@ -132,7 +132,7 @@ export default async function ipBlocker(req, res, next) {
 // Pridani IP do blacklistu (DB + pamet)
 export async function addToBlacklist(ip, reason = "Automatické blokování", info = {}) {
   if (!ip || ip === "null" || ip === "undefined") {
-    console.warn("⚠️ Skipped saving to blacklist — IP undefined or invalid:", ip);
+    warn("⚠️ Skipped saving to blacklist — IP undefined or invalid:", ip);
     return false;
   }
 
@@ -143,7 +143,7 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
   if (blacklistedIPs.has(ipHash)) return false;
 
   blacklistedIPs.add(ipHash);
-  console.warn(`🧨 IP ${ip} přidána do Setu (důvod: ${reason})`);
+  warn(`🧨 IP ${ip} přidána do Setu (důvod: ${reason})`);
 
   try {
     const exists = await BlacklistedIP.findOne({ ipHash });
@@ -160,7 +160,7 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
         path: info.path || "Neznámá",
       });
       await newIP.save();
-      console.log(`🛑 IP ${ip} uložena do databáze (hash: ${ipHash})`);
+      debug(`🛑 IP ${ip} uložena do databáze (hash: ${ipHash})`);
 
       await notifyBlockedIP({
         ip,
@@ -172,10 +172,10 @@ export async function addToBlacklist(ip, reason = "Automatické blokování", in
         headers: info.headers || {},
       });
     } else {
-      console.log(`⚠️ IP ${ip} (hash: ${ipHash}) už v databázi existuje`);
+      debug(`⚠️ IP ${ip} (hash: ${ipHash}) už v databázi existuje`);
     }
   } catch (err) {
-    console.error("❌ Chyba při ukládání IP do DB:", err.message);
+    error("❌ Chyba při ukládání IP do DB:", err.message);
   }
 
   return true;
@@ -191,9 +191,9 @@ export async function loadBlacklistFromDB() {
       if (entry.ipHash) blacklistedIPs.add(entry.ipHash);
     });
 
-    console.log(`✅ Načteno ${blacklistedIPs.size} IP adres z DB do paměti`);
+    info(`✅ Načteno ${blacklistedIPs.size} IP adres z DB do paměti`);
   } catch (err) {
-    console.error("❌ Chyba při načítání blacklistu z DB:", err.message);
+    error("❌ Chyba při načítání blacklistu z DB:", err.message);
   }
 }
 
@@ -204,7 +204,7 @@ export async function isBlacklisted(ip) {
     const found = await BlacklistedIP.findOne({ ipHash: hashIp(ip) });
     return !!found;
   } catch (err) {
-    console.error("❌ Chyba při kontrole blacklistu:", err.message);
+    error("❌ Chyba při kontrole blacklistu:", err.message);
     return false;
   }
 }
