@@ -30,7 +30,7 @@ export function registerTokenUsage({ jti, ip, userAgent, path }) {
     usage.set(jti, info);
   }
 
-  // reset pokud okno prošlo
+  // reset pokud okno proslo
   if (now - info.lastSeen > WINDOW_MS) {
     info.firstSeen = now;
     info.ips = new Set();
@@ -82,7 +82,7 @@ export function registerTokenUsage({ jti, ip, userAgent, path }) {
     revokeToken(jti);
     notifyBlockedIP?.({
       ip: ip || "unknown",
-      reason: `Token excessive requests (${info.count})`,
+      reason: `Token excessive requests (${info.count}) [jti=${jti}]`,
       userAgent,
       method: "TOKEN_USAGE",
       path,

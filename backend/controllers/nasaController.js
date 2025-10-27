@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import { JSDOM } from "jsdom";
+import { debug, info, warn, error } from "../utils/logger.js";
 import {
   FETCH_API_NASA,
   API_KEY_NASA,
@@ -8,11 +9,11 @@ import {
   NASA_BASE_URL
 } from "../config.js";
 
-// ukladani do cache (RAM)
+// 🧠 Cache v paměti
 let nasaCache = null;
 let nasaCacheDate = null;
 
-// 🔢 stejny img pro vsechny na jeden den z archivu 
+// 🔢 Výpočet denního indexu (pro archiv)
 function getDailyIndex(linksLength) {
   const now = new Date();
   const year = now.getFullYear();
@@ -30,24 +31,28 @@ function isToday(dateString) {
 export async function fetchNasaImage(req, res) {
   const today = new Date().toISOString().slice(0, 10);
 
-  // kontrola backend cache
+  // 🟢 Kontrola backend cache
   if (nasaCache && nasaCacheDate === today) {
-    console.log("⚡ NASA backend cache – posílám uložená data");
-    if (req.internal) return; // 🟢 důležité pro cron – nevrací JSON
+    debug("⚡ NASA backend cache – posílám uložená data");
+    if (req.internal) return; // pro cron – nevrací JSON
     return res.json(nasaCache);
   }
 
   try {
-    // pokus o NASA API
+    // 🌐 Pokus o přímé NASA API
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
     const apiUrlNasa = `${FETCH_API_NASA}${API_KEY_NASA}`;
+
+    debug("🛰️ Fetching NASA API:", apiUrlNasa);
+
     const response = await fetch(apiUrlNasa, { signal: controller.signal });
     clearTimeout(timeout);
 
     if (!response.ok) throw new Error(`Chyba NASA API: ${response.status}`);
 
     const data = await response.json();
+    debug("✅ NASA API odpověď:", data.date);
 
     if (isToday(data.date)) {
       const result = {
@@ -58,19 +63,22 @@ export async function fetchNasaImage(req, res) {
         source: "api",
         pageUrl: data.hdurl || "https://apod.nasa.gov/apod/astropix.html"
       };
+
       nasaCache = result;
       nasaCacheDate = today;
+
+      info("✅ NASA API OK – data uložena do cache");
       if (req.internal) return result;
       return res.json(result);
     }
 
-    console.warn(`⚠️ NASA API má staré datum (${data.date}) – přepínám na archiv.`);
+    warn(`⚠️ NASA API má staré datum (${data.date}) – přepínám na archiv.`);
     throw new Error("Staré datum v API");
 
-  } catch (error) {
-    console.warn("⚠️ NASA API nedostupné nebo neaktuální – zkouším fallback...");
+  } catch (apiError) {
+    warn("⚠️ NASA API nedostupné nebo neaktuální – zkouším fallback...");
 
-    // fallback HTML
+    // 🪐 Fallback HTML
     try {
       const htmlResponse = await fetch(NASA_FALLBACK);
       const html = await htmlResponse.text();
@@ -83,7 +91,7 @@ export async function fetchNasaImage(req, res) {
       const url = `${NASA_BASE_URL}${img?.getAttribute("src")}`;
 
       if (!dateText.includes(new Date().getFullYear())) {
-        console.warn("⚠️ Fallback HTML nemá dnešní datum – archivní režim.");
+        warn("⚠️ Fallback HTML nemá dnešní datum – archivní režim.");
         throw new Error("Fallback stale");
       }
 
@@ -94,54 +102,59 @@ export async function fetchNasaImage(req, res) {
         date: dateText,
         source: "fallback"
       };
+
       nasaCache = result;
       nasaCacheDate = today;
+
+      info("✅ NASA fallback použit úspěšně");
       return res.json(result);
 
-    } catch {
-      // archivni rezim
-
+    } catch (fallbackError) {
+      // 🧩 Archivní režim
       try {
+        warn("⚠️ NASA fallback selhal – zkouším archiv...");
+
         const archiveRes = await fetch(NASA_ARCHIVE);
         const archiveHtml = await archiveRes.text();
         const archiveDom = new JSDOM(archiveHtml);
-        const links = [
-          ...archiveDom.window.document.querySelectorAll("a[href^='ap']")
-        ];
+        const links = [...archiveDom.window.document.querySelectorAll("a[href^='ap']")];
 
         if (!links.length) throw new Error("Archivní odkazy nenalezeny");
 
         const index = getDailyIndex(links.length);
         const randomLink = links[index].getAttribute("href");
         const randomUrl = `${NASA_BASE_URL}${randomLink}`;
+
+        debug("📂 Archivní URL:", randomUrl);
+
         const randomPageRes = await fetch(randomUrl);
         const randomHtml = await randomPageRes.text();
         const randomDom = new JSDOM(randomHtml);
         const randomDoc = randomDom.window.document;
 
         const img = randomDoc.querySelector("img");
-        const explanation =
-          randomDoc.querySelector("p")?.textContent ||
-          "Popis není dostupný.";
+        const explanation = randomDoc.querySelector("p")?.textContent || "Popis není dostupný.";
 
-          const result = {
-            type: "image",
-            url: `${NASA_BASE_URL}${img?.getAttribute("src")}`,
-            explanation,
-            date: "Archivní výběr",
-            source: "archive-random",
-            pageUrl: randomUrl // ✅ klíčové
-          };
-          
+        const result = {
+          type: "image",
+          url: `${NASA_BASE_URL}${img?.getAttribute("src")}`,
+          explanation,
+          date: "Archivní výběr",
+          source: "archive-random",
+          pageUrl: randomUrl
+        };
+
         nasaCache = result;
         nasaCacheDate = today;
+
+        info("📚 NASA archivní režim – úspěšně načteno");
         return res.json(result);
 
       } catch (archiveError) {
-        console.error("❌ NASA archiv selhal:", archiveError.message);
-        return res
-          .status(502)
-          .json({ error: "NASA API i archiv momentálně nedostupné." });
+        error("❌ NASA archiv selhal:", archiveError.message);
+        return res.status(502).json({
+          error: "NASA API i archiv momentálně nedostupné."
+        });
       }
     }
   }

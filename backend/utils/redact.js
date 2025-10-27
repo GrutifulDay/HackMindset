@@ -1,4 +1,3 @@
-// utils/redact.js
 import { maskToken } from "./discordNotification.js";
 
 // univerzalni redakce hlavicek

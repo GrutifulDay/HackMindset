@@ -6,6 +6,7 @@ import { saveSecurityLog } from "../services/securityLogService.js";
 import { hashIp } from "../utils/hashIp.js";
 import { isRevoked } from "./tokenRevocation.js";
 import { CHROME_EXTENSION_ALL_URL, JWT_SECRET } from "../config.js";
+import util from "util";
 import { debug, info, warn, error } from "../utils/logger.js";
 
 const blacklistedIPs = new Set();
@@ -36,6 +37,7 @@ const redact = (obj = {}) => {
 
 // Middleware pro blokovani IP
 export default async function ipBlocker(req, res, next) {
+  global.util = util;
   const clientIP = normalizeIp(req.ip);
   const ipHash = hashIp(clientIP);
   if (req.method === "OPTIONS") return next();
@@ -120,8 +122,9 @@ export default async function ipBlocker(req, res, next) {
     reason: "IP Blacklist",
     method: req.method,
     path: req.originalUrl,
-    headers: {},
+    headers: req.headers, // ← přidej skutečné hlavičky
   });
+  
 
   return res.status(403).json({ error: "Vaše IP adresa byla zablokována." });
 }

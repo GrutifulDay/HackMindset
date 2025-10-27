@@ -3,7 +3,7 @@ import { UAParser } from "ua-parser-js";
 import { addToBlacklist, isBlacklisted } from "./ipBlacklist.js";
 import { getCityByIP } from "../utils/getCityByIP.js";
 import { CHROME_EXTENSION_ALL_URL, JWT_SECRET } from "../config.js";
-import { notifyBlockedIP } from "../utils/discordNotification.js";  // <- doplnit
+import { notifyBlockedIP } from "../utils/discordNotification.js";  
 import { redactHeaders } from "../utils/redact.js";
 import { isRevoked } from "../middlewares/tokenRevocation.js"
 import { registerTokenUsage } from "../middlewares/tokenUsage.js";

@@ -1,13 +1,23 @@
-// 🧱 In-memory seznam revokovaných tokenů (zmizi po restartu serveru)
+import { notifyBlockedIP } from "../utils/discordNotification.js";
+
 const revokedTokens = new Set();
 
-// fce pro revokaci tokenu (např. pri podezreni nebo logoutu)
-export function revokeToken(jti) {
+export function revokeToken(jti, meta = {}) {
   revokedTokens.add(jti);
   console.log("🚫 Revokován token s JTI:", jti);
+
+  // discord notifikace
+  notifyBlockedIP?.({
+    ip: meta.ip || "Neznámá",
+    city: meta.city || "Neznámé",
+    userAgent: meta.userAgent || "Neznámý",
+    reason: `Token revoked [jti=${jti}]`,
+    method: meta.method || "REVOKE",
+    path: meta.path || "/api/revoke-token",
+    headers: meta.headers || {},
+  }).catch(() => {});
 }
 
-// overeni, zda token byl revokovan
 export function isRevoked(jti) {
   return revokedTokens.has(jti);
 }

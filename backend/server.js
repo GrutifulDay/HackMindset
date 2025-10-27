@@ -1,6 +1,9 @@
 // dotevn
 import { PORT } from "./config.js"
 
+import util from "util";
+global.util = util;
+
 import { debug, info, warn, error } from "./utils/logger.js";
 
 // zaklad
@@ -106,7 +109,7 @@ app.use(
   })
 )
 
-debug("🛠️ Tento soubor se opravdu spustil!");
+// debug("🛠️ Tento soubor se opravdu spustil!");
 
 
 

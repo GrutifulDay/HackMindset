@@ -4,7 +4,7 @@ import { refreshAllSections } from "../refreshAll.js";
 
 // refresh kazdy den v urcity cas 
 export function startDailyCron() {
-  cron.schedule("33 15 * * *", async () => {
+  cron.schedule("32 09 * * *", async () => {
     console.log("🕛 [CRON] Spouštím noční refresh všech sekcí...");
     try {
       await refreshAllSections();
