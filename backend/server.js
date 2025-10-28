@@ -1,9 +1,9 @@
 // dotevn
 import { PORT } from "./config.js"
-
 // console.log("ENV:", process.env.NODE_ENV);
 // console.log("DEBUG:", process.env.DEBUG);
 
+// node token = util
 import util from "util";
 global.util = util;
 
@@ -65,6 +65,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// start cas serveru 
 const startTime = new Date().toLocaleString("cs-CZ", {
   timeZone: "Europe/Prague",
   hour12: false,
@@ -90,13 +91,15 @@ await loadBlacklistFromDB();
 startDailyCron();
 startWatchForIPChanges();
 
-// Helmet – CSP (lehce)
+// Helmet – CSP -> povoleni jen pro muj server (img, url, css atd.)
 app.use(
   helmet.contentSecurityPolicy({
     useDefaults: false,
     directives: {
-      "default-src": ["'self'"],
-      "script-src": ["'self'"],
+      "default-src": ["'self'"],    // vychozi zdroj pro obsah nacitani
+      "script-src": ["'self'"],     // js scripty odkud
+      "style-src": ["'self'", "'unsafe-inline'"], // ✅ povolí tvé i inline CSS
+      "font-src": ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"], // ✅ povolí fonty
       "img-src": [
         "'self'",
         "https://apod.nasa.gov",
@@ -109,9 +112,7 @@ app.use(
       "frame-ancestors": ["'none'"]
     }
   })
-)
-
-// debug("🛠️ Tento soubor se opravdu spustil!");
+);
 
 
 
@@ -131,6 +132,13 @@ app.get("/health", async (_req, res) => {
     return res.status(500).json({ status: "error", detail: err.message });
   }
 });
+
+// detekce uniklych hesel
+// app.use(detectSecretLeak({
+//   blockOnLeak: true,          // blokuje pozadavek
+//   blacklistOnLeak: true       // prida IP na blacklist
+// }));
+
 
 // ─────────────────────────────────────────────────────────────
 // Interní servisní router pro /_sec-log
@@ -157,23 +165,20 @@ app.use(captureHeaders({
   notifyReason: "Client using Postman / test tool"
 }));
 
-// Detekce úniku tajemství (JWT, API klíče, hesla…)
-// app.use(detectSecretLeak({
-//   blockOnLeak: true,       // stopne request
-//   blacklistOnLeak: true    // přidá IP do blacklistu
-// }));
-
-// ─────────────────────────────────────────────────────────────
-// Globální middlewares pro „zbytek“ provozu
-// ─────────────────────────────────────────────────────────────
-app.use(corsOptions)    // 1) preflight
-app.use(botProtection)  // 2) detekce botů/UA
-app.use(speedLimiter)   // 3) zpomalení floodu
-app.use(limiterApi)     // 4) tvrdý rate limit (počítá přestupky, teprve pak blacklistuje)
-app.use(ipBlocker)   // 5) blokace známých IP (už uložených)
+// globalni Middleware
+app.use(ipBlocker);   // 1) blokace známých IP
+app.use(corsOptions); // 2) preflight pro zbylé
+app.use(botProtection);
+app.use(speedLimiter);
+app.use(limiterApi);
+// app.use(corsOptions)    // 1) preflight
+// app.use(botProtection)  // 2) detekce botů/UA
+// app.use(speedLimiter)   // 3) zpomalení floodu
+// app.use(limiterApi)     // 4) tvrdý rate limit (počítá přestupky, teprve pak blacklistuje)
+// app.use(ipBlocker)   // 5) blokace známých IP (už uložených)
 
 
-// router
+// routes
 app.use("/api", tokenRoutes);
 app.use("/api", nasaRoutes)
 app.use("/api", storyRoutes)
@@ -182,6 +187,7 @@ app.use("/api", profileRoutes)
 app.use("/api", digitalRoutes)
 app.use("/api", untruthRoutes)
 app.use("/api", untruthLimitRoutes)
+
 // app.use("/api", feedbackRoutes)
 
 

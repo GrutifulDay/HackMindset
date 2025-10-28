@@ -1,5 +1,5 @@
 import { notifyBlockedIP } from "../utils/discordNotification.js";
-import { debug, info, warn, error } from "../utils/logger.js";
+import { debug } from "../utils/logger.js";
 
 const revokedTokens = new Set();
 

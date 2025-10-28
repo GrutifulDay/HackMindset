@@ -25,7 +25,7 @@ export function startWatchForIPChanges() {
           return;
         }
 
-        debug(chalk.magenta.bold("🚨 [Watcher] Nová IP přidána – spouštím interní refresh všech sekcí..."));
+        debug("🚨 [Watcher] Nová IP přidána – spouštím interní refresh všech sekcí...");
         await refreshAllSections();
         lastUpdateTime = now;
       }
