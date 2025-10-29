@@ -47,6 +47,9 @@ export const HACK_MINDSET = process.env.HACK_MINDSET
 // Discord
 export const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || "";
 
+// Hash
+export const HASH_KEY = process.env.HASH_KEY
+
 // Seznam hlidanych hesel
 export const SENSITIVE_KEYS = (process.env.SENSITIVE_KEYS || "")
   .split(",")

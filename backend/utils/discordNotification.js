@@ -1,5 +1,6 @@
 import { DISCORD_WEBHOOK_URL } from "../config.js";
 import { debug, error } from "../utils/logger.js";
+import { hashIp } from "./hashIp.js";
 
 
 // 🧠 Tyto dvě mapy slouží jako "paměť" mezi jednotlivými voláními funkce.
@@ -94,19 +95,19 @@ function detectSensitive(headers = {}) {
 
 
 // 🌍 Zamaskuje IP adresu (IPv4 i IPv6) – z bezpečnostních důvodů neukazuje celé.
-function maskIP(ip = "") {
-  if (!ip) return "Neznámá IP";
-  if (/^\d+\.\d+\.\d+\.\d+$/.test(ip)) { // IPv4
-    const parts = ip.split(".");
-    parts[3] = "*";
-    return parts.join(".");
-  }
-  if (ip.includes(":")) { // IPv6
-    const parts = ip.split(":");
-    return parts.slice(0, 2).join(":") + ":****:****";
-  }
-  return ip;
-}
+// function maskIP(ip = "") {
+//   if (!ip) return "Neznámá IP";
+//   if (/^\d+\.\d+\.\d+\.\d+$/.test(ip)) { // IPv4
+//     const parts = ip.split(".");
+//     parts[3] = "*";
+//     return parts.join(".");
+//   }
+//   if (ip.includes(":")) { // IPv6
+//     const parts = ip.split(":");
+//     return parts.slice(0, 2).join(":") + ":****:****";
+//   }
+//   return ip;
+// }
 
 
 // 🚨 Hlavní export – odešle Discord notifikaci o zablokované IP, revokovaném tokenu apod.
@@ -159,11 +160,13 @@ export async function notifyBlockedIP({
 
       const requestsInfo = typeof requests === "number" ? `📊 Requests: ${requests}\n` : "";
 
+      const hashedIp = hashIp(ip);
+      
       // 🧩 základní text notifikace
       let content =
         `🚫 **Blocked**\n` +
         `📄 Reason: *${reason}*\n` +
-        `🌐 IP: ${maskIP(ip)}\n` +
+        `🌐 IP (hashed): ${hashedIp}\n` +
         (r.method && r.path ? `🔗 Endpoint: ${r.method} ${r.path}\n` : "") +
         `💻 User-Agent: ${r.ua}\n` +
         `🌏 City: ${r.city}\n` +
@@ -239,3 +242,4 @@ export async function notifyBlockedIP({
     }, 5000)
   );
 }
+

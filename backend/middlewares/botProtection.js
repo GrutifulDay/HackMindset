@@ -20,7 +20,7 @@ export default function botProtection(req, res, next) {
 
     // Výjimka pro Postman (volitelně odkomentovat při testech)
     // if (userAgentString && userAgentString.includes("Postman")) {
-    //     console.log("🧪 Postman detekován – povolen.");
+    //     info("🧪 Postman detekován – povolen.");
     //     return next();
     // }
 
