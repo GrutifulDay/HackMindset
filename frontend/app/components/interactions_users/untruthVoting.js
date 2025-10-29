@@ -54,14 +54,6 @@ export function createUntruthVotingWindow() {
     color: "#273E64"
   })
 
-  // const = el("p", lang === "cz"
-  //   ? "Pokud si myslíš, že tento článek není pravdivý, označ konkrétní části."
-  //   : "If you think this article isn't true, select specific parts below.", {
-  //   marginTop: "8px",
-  //   color: "#273E64",
-  //   fontSize: "1em"
-  // })
-
   const listItems = [
     lang === "cz" ? "Rok je špatně" : "The year is wrong",
     lang === "cz" ? "Není to dnešní datum" : "This is not today's date",
@@ -122,7 +114,6 @@ export function createUntruthVotingWindow() {
     container.dataset.date = metadata.date || ""
     container.style.display = "block"
   
-    // ✅ kontrola, jestli už bylo odesláno dnes
     const section = container.dataset.section
     const date = container.dataset.date
     const today = new Date().toISOString().slice(0, 10)
@@ -140,7 +131,6 @@ export function createUntruthVotingWindow() {
       submitButton.style.opacity = "1"
     }
   
-    // pozice leva / prava stejna vzdalenost od ikony 
     requestAnimationFrame(() => {
       const rect = referenceElement.getBoundingClientRect()
     
@@ -153,7 +143,6 @@ export function createUntruthVotingWindow() {
       container.style.top = `${top}px`
       container.style.left = `${left}px`
     
-      // 🟣 scroll nahoru, kdyz neni videt cely okno 
       requestAnimationFrame(() => {
         const rectContainer = container.getBoundingClientRect()
     
@@ -186,13 +175,11 @@ export function createUntruthVotingWindow() {
     const voteKey = `untruth-${section}-${date}-${today}`
     const abuseKey = `abuse-limit-${section}-${month}`
 
-    // Zneuziti = vsechno zaskrtnuto
     const isAbuse = selected.length === 4
 
-    // Pokud uz v tomhle mesici poslal zneuziti, nepridavat znova
     if (isAbuse) {
       if (!localStorage.getItem(abuseKey)) {
-        await fetchUntruthLimit( section, date ) // +1 v DB
+        await fetchUntruthLimit( section, date ) 
         localStorage.setItem(abuseKey, "1")
         createFeedbackUntruth(lang === "cz"
           ? "Díky. Tvůj podnět byl zaznamenán 👍"
@@ -202,7 +189,6 @@ export function createUntruthVotingWindow() {
         debug("📛 Zneužití už bylo tento měsíc zaznamenáno")
       }
     } else {
-      // Platny bezny hlas
       await fetchUntruthVotes(date, selected, section)
       increaseUntruthVote()
       createFeedbackUntruth(lang === "cz"

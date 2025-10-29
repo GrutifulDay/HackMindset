@@ -4,7 +4,6 @@ import { debug, error } from "../utils/logger/logger.js";
 
 debug("{fetchStoryVotes.js} 📡 načten");
 
-// ziskani postu hlasu pro dany den 
 export async function fetchGetVoteStory(date) {
   const token = await getJwtToken() 
 
@@ -29,7 +28,6 @@ export async function fetchGetVoteStory(date) {
   }
 }
 
-// odesilani hlasu
 export async function fetchPostVoteStory(date, option) {
   const token = await getJwtToken() 
 

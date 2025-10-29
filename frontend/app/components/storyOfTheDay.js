@@ -77,7 +77,6 @@ export async function createStoryOfTheDay() {
     marginTop: "30px"
   })
 
- // HLASOVANI  
  const feedbackWrapper = el("div", null, {
   display: "flex",
   gap: "40px",
@@ -86,7 +85,6 @@ export async function createStoryOfTheDay() {
   marginTop: "0px"
 })
 
-// vedel/a
 const rememberIMG = el("img", null, {
   width: "56px",
   height: "auto",
@@ -105,7 +103,6 @@ const rememberCount = el("span", "", {
   className: "vote-count"
 })
 
-// nevedel
 const notExperienceIMG = el("img", null, {
   width: "57px",
   height: "auto",
@@ -118,17 +115,13 @@ createAddTooltip( notExperienceIMG,
   lang === "cz" ? "Tohle jsem fakt nevěděl/a!" : "Wow, I didn’t know this!"
   )
 
-
 const notExperienceCount = el("span", "", {
   display: "none"
 }, {
   className: "vote-count"
 })
 
-
-// fce hlasovani 
 function createVoteElement(imgElement, countSpan) {
-  // Wrapper pro img + cislo
   const imageWrapper = el("div", null, {
     position: "relative",
     height: "100px", 
@@ -139,12 +132,9 @@ function createVoteElement(imgElement, countSpan) {
     paddingTop: "47px" 
   })
 
-  // img
   imgElement.style.height = "100%"
   imgElement.style.objectFit = "contain"
 
-
-  // cislo nad img
   Object.assign(countSpan.style, {
     position: "absolute",
     fontFamily: "monospace",
@@ -165,7 +155,6 @@ function createVoteElement(imgElement, countSpan) {
 
   imageWrapper.append(imgElement, countSpan)
 
-  // cely hlasovaci blok 
   const wrapper = el("div", null, {
     display: "flex",
     flexDirection: "column",
@@ -179,12 +168,10 @@ function createVoteElement(imgElement, countSpan) {
   return wrapper
 }
 
-// pridani fce k wrapper
 const rememberWrapper = createVoteElement(rememberIMG, rememberCount) 
 const notExperienceWrapper = createVoteElement(notExperienceIMG, notExperienceCount)
 feedbackWrapper.append(rememberWrapper, notExperienceWrapper)
 
-// Kontrola, zda uzivatel jiz hlasoval
 const todayKey = storyData.date 
 const localStorageKey = `storyVotedToday_${todayKey}` 
 debug("🧪 todayKey:", todayKey)
@@ -192,8 +179,6 @@ debug("🧪 todayKey:", todayKey)
 const voteCounts = await fetchGetVoteStory(todayKey)
 const votedToday = localStorage.getItem(localStorageKey)
 
-
-// zablokuje hlasovani, ukaze barevny img 
 if (votedToday) {
   rememberIMG.style.pointerEvents = "none"
   notExperienceIMG.style.pointerEvents = "none"
@@ -213,7 +198,6 @@ rememberCount.style.display = "inline"
 notExperienceCount.style.display = "inline"
 }
 
-// zablokuj hlasovani, zobraz barevny/vybranny img a aktual. pocty z db 
 async function handleVote(option) {
   const updated = await fetchPostVoteStory(todayKey, option)
   if (!updated) return
@@ -241,7 +225,6 @@ async function handleVote(option) {
   createVotingReportUsers(lang === "cz" ? "Děkujeme, ze hlasujete každý den 💚" : "Thank you for voting every day 💚")
 }
 
-// Event listenery
 rememberIMG.addEventListener("click", () => {
   handleVote("like")
 })
@@ -250,7 +233,6 @@ notExperienceIMG.addEventListener("click", () => {
   handleVote("dislike")
 })
 
-// OZNACENI CHYBNE INFORMACE 
 const untruthIcon = createUntruthIcon()
 const untruthVotingWindow = createUntruthVotingWindow()
 document.body.append(untruthVotingWindow)
@@ -276,7 +258,6 @@ untruthIcon.addEventListener("click", () => {
   })
 })
 
-// zvyrazneni 
 untruthWrapper.addEventListener("mouseenter", () => {
     untruthWrapper.style.opacity = "1"
 })

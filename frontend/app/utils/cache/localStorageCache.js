@@ -1,6 +1,5 @@
 import { DEV_MODE } from "../config.js"; 
 
-// obecna fce pro ukladani
 export function getCachedData(cacheKey) {
   if (DEV_MODE) {
     localStorage.removeItem(cacheKey)

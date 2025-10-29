@@ -5,7 +5,6 @@ import { debug, error } from "../utils/logger/logger.js";
 
 debug("{fetchProfile.js} 📡 je načtený")
 
-
 export async function fetchProfile() {
   debug("{funkce fetchProfile} ✅ funguje");
 

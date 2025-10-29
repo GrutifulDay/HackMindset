@@ -2,7 +2,6 @@ import { el } from "../../utils/dom/uiSnippets.js";
 import { setLanguage, hasLanguageSet } from "../../utils/language/language.js";
 import { initPopup } from "../../initApp.js";
 
-// VYBER JAZYKA - zacatek 
 export function selectionLanguage() {
   if (hasLanguageSet()) return;
 

@@ -61,7 +61,6 @@ export async function fetchNasaImage() {
 
     const data = await response.json();
 
-    // overeni dat z backendu
     if (!data || !data.url) {
       warn("⚠️ fetchNasaImage: Data z backendu neobsahují URL");
       return { 
@@ -70,7 +69,6 @@ export async function fetchNasaImage() {
       };
     }
 
-    // ulozeni do Chrome storage
     await new Promise((resolve) => {
       chrome.storage.local.set(
         {
@@ -87,7 +85,6 @@ export async function fetchNasaImage() {
   } catch (error) {
     error("❌ fetchNasaImage error", error);
 
-    // fallback – zkusi z cache
     const { nasaData } = await new Promise((resolve) => {
       chrome.storage.local.get("nasaData", (result) => resolve(result));
     });

@@ -12,8 +12,6 @@ export async function initPopup() {
     debug("{initApp.js} ✅ Běží hlavní obsah!");
 
     const body = document.body;
-
-
     const topPanel = await createTopPanel();
     const hackMindset = await createHackMindset();
     const nasaSection = await createNasaSection();

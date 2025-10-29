@@ -67,13 +67,12 @@ export async function createDigitalSignpost() {
 
     const recommendation = el("p", digitalData.recommendation?. [lang] ||"", {})
 
-    // OZNACENI CHYBNE INFORMACE 
     const untruthIcon = createUntruthIcon()
     const untruthVotingWindow = createUntruthVotingWindow()
     document.body.append(untruthVotingWindow)
 
     const section = "digital"
-    const date = digitalData.date //  napr. "2025-07-14"
+    const date = digitalData.date 
 
     untruthIcon.dataset.section = section
 
@@ -98,7 +97,6 @@ export async function createDigitalSignpost() {
       })
       
 
-    // zvyrazneni 
     untruthWrapper.addEventListener("mouseenter", () => {
         untruthWrapper.style.opacity = "1"
     })

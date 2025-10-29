@@ -73,10 +73,8 @@ export async function createRetroMachine() {
     marginTop: "30px"
 
   })
-  // FCE PRO ZVUK 
   createModemSound(retroData, lang, title)
 
-  // HLASOVANI  
   const feedbackWrapper = el("div", null, {
     display: "flex",
     gap: "40px",
@@ -85,7 +83,6 @@ export async function createRetroMachine() {
     marginTop: "0px"
   })
   
-
   const rememberIMG = el("img", null, {
     width: "56px",
     cursor: "pointer"
@@ -120,11 +117,8 @@ export async function createRetroMachine() {
   }, {
     className: "vote-count"
   })
-  
-  
-  // fce hlasovani 
+   
   function createVoteElement(imgElement, countSpan) {
-    // Wrapper pro img i cislo
     const imageWrapper = el("div", null, {
       position: "relative",
       height: "100px", 
@@ -135,11 +129,9 @@ export async function createRetroMachine() {
       paddingTop: "26px" 
     })
   
-    // Obrazek 
     imgElement.style.height = "auto";
     imgElement.style.objectFit = "contain";
   
-    // cislo nad img 
     Object.assign(countSpan.style, {
       position: "absolute",
       fontFamily: "monospace",
@@ -160,7 +152,6 @@ export async function createRetroMachine() {
   
     imageWrapper.append(imgElement, countSpan)
   
-    // Celý hlasovací blok
     const wrapper = el("div", null, {
       display: "flex",
       flexDirection: "column",
@@ -174,12 +165,10 @@ export async function createRetroMachine() {
     return wrapper
   }
   
-  // pridani fce k wrapper
   const rememberWrapper = createVoteElement(rememberIMG, rememberCount) 
   const notExperienceWrapper = createVoteElement(notExperienceIMG, notExperienceCount)
   feedbackWrapper.append(notExperienceWrapper, rememberWrapper)
   
-  // Kontrola, zda uzivatel jz hlasoval
   const todayKey = retroData.date 
   const localStorageKey = `retroVotedToday_${todayKey}` 
   debug("🧪 todayKey:", todayKey)
@@ -187,8 +176,6 @@ export async function createRetroMachine() {
   const voteCounts = await fetchGetVoteRetro(todayKey)
   const votedToday = localStorage.getItem(localStorageKey)
   
-  
-  // zablokuje hlasovani, ukaze barevny img 
   if (votedToday) {
     rememberIMG.style.pointerEvents = "none"
     notExperienceIMG.style.pointerEvents = "none"
@@ -208,7 +195,6 @@ export async function createRetroMachine() {
   notExperienceCount.style.display = "inline"
   }
   
-  // zablokuj hlasovani, zobraz barevny/vybranny img a aktual. pocty z db 
   async function handleVote(option) {
     const updated = await fetchPostVoteRetro(todayKey, option)
     if (!updated) return
@@ -236,7 +222,6 @@ export async function createRetroMachine() {
     createVotingReportUsers(lang === "cz" ? "Děkujeme, že hlasujete každý den 💚" : "Thank you for voting every day 💚")
   }
   
-    // Event listenery
     rememberIMG.addEventListener("click", () => {
       handleVote("like")
     })
@@ -245,17 +230,15 @@ export async function createRetroMachine() {
       handleVote("dislike")
     })
   
-// OZNACENI CHYBNE INFORMACE
 const untruthIcon = createUntruthIcon()
 const untruthVotingWindow = createUntruthVotingWindow()
 document.body.append(untruthVotingWindow)
 
 const section = "retro"
-const date = retroData.date // napr. "2025-07-14"
+const date = retroData.date 
 
 untruthIcon.dataset.section = section
 
-// wrapper pro pozici + hover efekt
 const untruthWrapper = el("div", null, {
   position: "absolute",
   top: "8px",
@@ -272,7 +255,6 @@ untruthIcon.addEventListener("click", () => {
   })
 })
 
-// hover efekt
 untruthWrapper.addEventListener("mouseenter", () => {
   untruthWrapper.style.opacity = "1"
 })

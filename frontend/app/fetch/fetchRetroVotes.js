@@ -4,7 +4,6 @@ import { debug, error } from "../utils/logger/logger.js";
 
 debug("{fetchRetroVotes.js} 📡 načten");
 
-// ziskani postu hlasu pro dany den 
 export async function fetchGetVoteRetro(date) {
   const token = await getJwtToken() 
 
@@ -30,7 +29,6 @@ export async function fetchGetVoteRetro(date) {
   }
 }
 
-// odesilani hlasu
 export async function fetchPostVoteRetro(date, option) {
   const token = await getJwtToken() 
 
