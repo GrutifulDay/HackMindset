@@ -37,7 +37,7 @@ export async function createNasaSection() {
     debug("⚡ NASA data načtena z cache");
   }
 
-  debug("{nasaSection.js}📌 Načtený NASA obrázek:", nasaData);
+  debug("{nasaSection.js}📌 Načtený NASA obrázek:", nasaData.url);
 
   if (!nasaData || !nasaData.url) {
     warn("[nasa] ⚠️ Žádná validní NASA data – sekci vynechám.");
