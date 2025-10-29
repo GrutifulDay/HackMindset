@@ -4,11 +4,12 @@ import { fetchDigitalSignpost } from "../fetch/fetchDigitalSignpost.js"
 import { createUntruthIcon } from "./icons_import/untruthIcon.js";
 import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js";
 import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
+import { debug, warn } from "../utils/logger/logger.js";
 
-console.log("{digitalSignpost.js} 🧩 sekce se generuje...");
+debug("{digitalSignpost.js} 🧩 sekce se generuje...");
 
 export async function createDigitalSignpost() {
-    console.log("{funkce createDigitalSignpost} ✅ funguje");
+    debug("{funkce createDigitalSignpost} ✅ funguje");
 
     const lang = getLanguage()
     const CACHE_KEY = `digital_cache_${lang}`
@@ -16,15 +17,15 @@ export async function createDigitalSignpost() {
     let digitalData = getCachedData(CACHE_KEY)
 
     if (digitalData) {
-        console.log("[retro] ⏳ Data jsou aktuální – čtu z cache.")
+        debug("[retro] ⏳ Data jsou aktuální – čtu z cache.")
       } else {
-        console.log("🌐 Načítám nová data ze serveru")
+        debug("🌐 Načítám nová data ze serveru")
         digitalData = await fetchDigitalSignpost() 
         if (digitalData) setCachedData(CACHE_KEY, digitalData)
       }
     
       if (!digitalData) {
-        console.warn("⚠️ Žádný příběh nenalezen.");
+        warn("⚠️ Žádný příběh nenalezen.");
         return
       }
 
@@ -89,7 +90,7 @@ export async function createDigitalSignpost() {
       
 
       untruthIcon.addEventListener("click", () => {
-        console.log("🧪 CLICK DETEKTOVÁN NA untruthIcon")
+        debug("🧪 CLICK DETEKTOVÁN NA untruthIcon")
         untruthVotingWindow.show(untruthIcon, {
           section,
           date

@@ -1,12 +1,13 @@
 import { updateSectionData } from "../utils/update/updateSectionData.js";
 import { API } from "../utils/config.js";
 import { getJwtToken } from "../utils/auth/jwtToken.js";
+import { debug } from "../utils/logger/logger.js";
 
 
-console.log("{fetchDigitalSignpost.js} 📡 je načtený");
+debug("{fetchDigitalSignpost.js} 📡 je načtený");
 
 export async function fetchDigitalSignpost() {
-  console.log("{funkce fetchDigitalSignpost} ✅ funguje");
+  debug("{funkce fetchDigitalSignpost} ✅ funguje");
 
   const token = await getJwtToken() 
   if (!token) {
@@ -17,7 +18,7 @@ export async function fetchDigitalSignpost() {
   const shouldUpdate = await updateSectionData("digitalSignpost", "weekly");
 
   if (!shouldUpdate) {
-    console.log("[digitalSignpost] ⏳ Data jsou aktuální – čtu z cache.");
+    debug("[digitalSignpost] ⏳ Data jsou aktuální – čtu z cache.");
 
     const { digitalSignpostData } = await new Promise((resolve) => {
       chrome.storage.local.get("digitalSignpostData", (result) => resolve(result));
@@ -27,7 +28,7 @@ export async function fetchDigitalSignpost() {
   }
 
   try {
-    console.log("JWT token:", token);
+    debug("JWT token:", token);
     const response = await fetch(API.digitalSignpost, {
       method: "GET",
       mode: "cors",
@@ -48,7 +49,7 @@ export async function fetchDigitalSignpost() {
       )
     })
 
-    console.log("[digitalSignpost] ✅ Nová data uložena");
+    debug("[digitalSignpost] ✅ Nová data uložena");
     return data
   } catch (error) {
     console.error("❌ fetchDigitalSignpost error", error);

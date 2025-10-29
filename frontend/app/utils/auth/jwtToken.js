@@ -1,4 +1,5 @@
 import { API } from "../config.js";
+import { debug, error } from "../logger/logger.js";
 
 let jwtToken = null;
 let tokenExpiry = null; // kdy token vyprsi
@@ -37,11 +38,11 @@ export async function getJwtToken() {
     const decoded = decodeJwt(jwtToken);
     tokenExpiry = decoded.exp * 1000; // ms
 
-    console.log("🔐 Nový JWT token získán, exp:", new Date(tokenExpiry).toLocaleTimeString());
+    debug("🔐 Nový JWT token získán, exp:", new Date(tokenExpiry).toLocaleTimeString());
 
     return jwtToken;
   } catch (err) {
-    console.error("❌ Chyba při získávání JWT tokenu:", err);
+    error("❌ Chyba při získávání JWT tokenu:", err);
     return null;
   }
 }

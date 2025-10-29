@@ -1,4 +1,6 @@
-console.log("{uiSnippets.js} ✅ funguje")
+import { debug } from "../logger/logger.js"
+
+debug("{uiSnippets.js} ✅ funguje")
 
 // POMOCNE FUNKCE
 

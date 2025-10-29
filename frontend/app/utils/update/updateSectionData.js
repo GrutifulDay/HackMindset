@@ -1,10 +1,11 @@
 import { DEV_MODE } from "../config.js"; 
+import { debug, warn } from "../logger/logger.js";
 
 export async function updateSectionData(key, interval = "daily") {
     const now = new Date()
   
     if (DEV_MODE) {
-      console.warn(`[${key}] 🧪 DEV_MODE aktivní – stahuji data znovu.`);
+      warn(`[${key}] 🧪 DEV_MODE aktivní – stahuji data znovu.`);
       return true
     }
   
@@ -15,7 +16,7 @@ export async function updateSectionData(key, interval = "daily") {
     })
   
     if (!lastFetch) {
-      console.log(`[${key}] 📥 První fetch – data se stahují.`)
+      debug(`[${key}] 📥 První fetch – data se stahují.`)
       return true
     }
   
@@ -27,11 +28,11 @@ export async function updateSectionData(key, interval = "daily") {
         getMonday(now) !== getMonday(lastFetchDate)
   
       if (isNewWeek) {
-        console.log(`[${key}] 🔁 Nový týden – data se aktualizují.`);
+        debug(`[${key}] 🔁 Nový týden – data se aktualizují.`);
         return true
       }
   
-      console.log(`[${key}] ✅ Týdenní data jsou aktuální.`);
+      debug(`[${key}] ✅ Týdenní data jsou aktuální.`);
       return false
     }
   
@@ -42,11 +43,11 @@ export async function updateSectionData(key, interval = "daily") {
       now.getDate() !== lastFetchDate.getDate()
   
     if (isDifferentDay) {
-      console.log(`[${key}] 🔁 Nový den – data se aktualizují.`);
+      debug(`[${key}] 🔁 Nový den – data se aktualizují.`);
       return true
     }
   
-    console.log(`[${key}] ✅ Denní data jsou aktuální.`);
+    debug(`[${key}] ✅ Denní data jsou aktuální.`);
     return false
   }
   
@@ -62,7 +63,7 @@ export async function updateSectionData(key, interval = "daily") {
 //     const now = new Date()
 
 //     if (DEV_MODE) {
-//         console.warn(`[${key}] 🧪 DEV_MODE aktivní – stahuji data znovu.`);
+//         warn(`[${key}] 🧪 DEV_MODE aktivní – stahuji data znovu.`);
 //         return true
 //     }
 
@@ -73,7 +74,7 @@ export async function updateSectionData(key, interval = "daily") {
 //     })
 
 //     if (!lastFetch) {
-//         console.log(`[${key}] 📥 První fetch – data se stahují.`);
+//         debug(`[${key}] 📥 První fetch – data se stahují.`);
 //         return true
 //     }
 
@@ -85,10 +86,10 @@ export async function updateSectionData(key, interval = "daily") {
 //         now.getDate() !== lastFetchDate.getDate()
 
 //     if (isDifferentDay) {
-//         console.log(`[${key}] 🔁 Nový den – data se aktualizují.`);
+//         debug(`[${key}] 🔁 Nový den – data se aktualizují.`);
 //         return true
 //     }
 
-//     console.log(`[${key}] ✅ Data jsou aktuální.`);
+//     debug(`[${key}] ✅ Data jsou aktuální.`);
 //     return false
 // }

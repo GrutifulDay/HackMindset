@@ -10,12 +10,13 @@ import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js
 import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
 
 import { createAddTooltip } from "../utils/dom/tooltip.js";
+import { debug, warn } from "../utils/logger/logger.js";
 
-console.log("{storyOfTheDay.js} 🧩 sekce se generuje...");
+debug("{storyOfTheDay.js} 🧩 sekce se generuje...");
 
 
 export async function createStoryOfTheDay() {
-  console.log("{FUNKCE createStoryOfTheDay} ✅ funguje");
+  debug("{FUNKCE createStoryOfTheDay} ✅ funguje");
 
 
   const lang = getLanguage()
@@ -24,15 +25,15 @@ export async function createStoryOfTheDay() {
   let storyData = getCachedData(CACHE_KEY)
 
   if (storyData) {
-    console.log("[story] ⏳ Data jsou aktuální – čtu z cache.")
+    debug("[story] ⏳ Data jsou aktuální – čtu z cache.")
   } else {
-    console.log("🌐 Načítám nová data ze serveru");
+    debug("🌐 Načítám nová data ze serveru");
     storyData = await fetchStoryOfTheDay()
     if (storyData) setCachedData(CACHE_KEY, storyData)
   }
 
   if (!storyData) {
-    console.warn("⚠️ Žádný příběh nenalezen.");
+    warn("⚠️ Žádný příběh nenalezen.");
     return
   }
 
@@ -186,7 +187,7 @@ feedbackWrapper.append(rememberWrapper, notExperienceWrapper)
 // Kontrola, zda uzivatel jiz hlasoval
 const todayKey = storyData.date 
 const localStorageKey = `storyVotedToday_${todayKey}` 
-console.log("🧪 todayKey:", todayKey)
+debug("🧪 todayKey:", todayKey)
 
 const voteCounts = await fetchGetVoteStory(todayKey)
 const votedToday = localStorage.getItem(localStorageKey)

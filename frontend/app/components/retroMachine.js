@@ -11,12 +11,13 @@ import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js
 import { createAddTooltip } from "../utils/dom/tooltip.js";
 
 import { createModemSound } from "./sound_section/modem.js";
+import { debug, warn } from "../utils/logger/logger.js";
 
 
-console.log("{retroMachine.js} 🧩 sekce se generuje...");
+debug("{retroMachine.js} 🧩 sekce se generuje...");
 
 export async function createRetroMachine() {
-  console.log("{funkce createRetroMachine} ✅ funguje");
+  debug("{funkce createRetroMachine} ✅ funguje");
 
   const lang = getLanguage()
   const CACHE_KEY = `retro_cache_${lang}`
@@ -24,15 +25,15 @@ export async function createRetroMachine() {
   let retroData = getCachedData(CACHE_KEY)
 
   if (retroData) {
-    console.log("[retro] ⏳ Data jsou aktuální – čtu z cache.")
+    debug("[retro] ⏳ Data jsou aktuální – čtu z cache.")
   } else {
-    console.log("🌐 Načítám nová data ze serveru");
+    debug("🌐 Načítám nová data ze serveru");
     retroData = await fetchRetroMachine()
     if (retroData) setCachedData(CACHE_KEY, retroData)
   }
 
   if (!retroData) {
-    console.warn("⚠️ Žádný příběh nenalezen.");
+    warn("⚠️ Žádný příběh nenalezen.");
     return
   }
 
@@ -181,7 +182,7 @@ export async function createRetroMachine() {
   // Kontrola, zda uzivatel jz hlasoval
   const todayKey = retroData.date 
   const localStorageKey = `retroVotedToday_${todayKey}` 
-  console.log("🧪 todayKey:", todayKey)
+  debug("🧪 todayKey:", todayKey)
   
   const voteCounts = await fetchGetVoteRetro(todayKey)
   const votedToday = localStorage.getItem(localStorageKey)
@@ -279,7 +280,7 @@ untruthWrapper.addEventListener("mouseleave", () => {
   untruthWrapper.style.opacity = "0.6"
 })
 
-console.log("🧪 untruthIcon:", untruthIcon)
+debug("🧪 untruthIcon:", untruthIcon)
 
 untruthWrapper.append(untruthIcon)
 

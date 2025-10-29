@@ -2,12 +2,13 @@ import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
 import { fetchProfile } from "../fetch/fetchProfile.js";
 import { createAddTooltip } from "../utils/dom/tooltip.js";
+import { debug, error } from "../utils/logger/logger.js";
 
 
-console.log("{profile.js} 🧩 sekce se generuje...");
+debug("{profile.js} 🧩 sekce se generuje...");
 
 export async function createProfile() {
-  console.log("{funkce createProfile} ✅ funguje");
+  debug("{funkce createProfile} ✅ funguje");
 
   const lang = getLanguage()
   const profileData = await fetchProfile()
@@ -99,7 +100,7 @@ export async function createProfile() {
   button.addEventListener("click", () => {
     navigator.clipboard.writeText(tag)
       .then(() => {
-        console.log(`✅ Zkopírováno: ${tag}`)
+        debug(`✅ Zkopírováno: ${tag}`)
 
         // smaz obsah a nahrad 
         button.replaceChildren(checkIcon)
@@ -111,7 +112,7 @@ export async function createProfile() {
           }, 1000)
         })
         .catch(err => {
-          console.error("❌ Chyba při kopírování:", err)
+          error("❌ Chyba při kopírování:", err)
         })
       })
 

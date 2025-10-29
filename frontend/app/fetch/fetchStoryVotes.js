@@ -1,14 +1,15 @@
 import { API } from "../utils/config.js";
 import { getJwtToken } from "../utils/auth/jwtToken.js";
+import { debug, error } from "../utils/logger/logger.js";
 
-console.log("{fetchStoryVotes.js} 📡 načten");
+debug("{fetchStoryVotes.js} 📡 načten");
 
 // ziskani postu hlasu pro dany den 
 export async function fetchGetVoteStory(date) {
   const token = await getJwtToken() 
 
   if (!token) {
-    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    error("❌ Chybí JWT token – fetch se neprovede.");
     return null;
   }
   try {
@@ -23,7 +24,7 @@ export async function fetchGetVoteStory(date) {
 
     return await response.json()
   } catch (error) {
-    console.error("❌ Chyba při získávání hlasů:", error);
+    error("❌ Chyba při získávání hlasů:", error);
     return { like: 0, dislike: 0 }
   }
 }
@@ -33,7 +34,7 @@ export async function fetchPostVoteStory(date, option) {
   const token = await getJwtToken() 
 
   if (!token) {
-    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    error("❌ Chybí JWT token – fetch se neprovede.");
     return null;
   }
 
@@ -50,7 +51,7 @@ export async function fetchPostVoteStory(date, option) {
 
     return await response.json()
   } catch (error) {
-    console.error("❌ Chyba při odesílání hlasu:", error);
+    error("❌ Chyba při odesílání hlasu:", error);
     return null
   }
 }

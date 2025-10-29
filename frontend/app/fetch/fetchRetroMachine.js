@@ -1,22 +1,23 @@
 import { updateSectionData } from "../utils/update/updateSectionData.js"
 import { API } from "../utils/config.js";
 import { getJwtToken } from "../utils/auth/jwtToken.js";
+import { debug, error } from "../utils/logger/logger.js";
 
-console.log("{fetchRetroMachine.js} 📡 je načtený")
+debug("{fetchRetroMachine.js} 📡 je načtený")
 
 export async function fetchRetroMachine() {
-  console.log("{funkce fetchRetroMachine} ✅ funguje");
+  debug("{funkce fetchRetroMachine} ✅ funguje");
   const token = await getJwtToken() 
 
   if (!token) {
-    console.error("❌ Chybí JWT token fetchRetroMachine – fetch se neprovede.");
+    error("❌ Chybí JWT token fetchRetroMachine – fetch se neprovede.");
     return null;
   }
 
   const shouldUpdate = await updateSectionData("retro")
 
   if (!shouldUpdate) {
-    console.log("[retro] ⏳ Data jsou aktuální – čtu z cache.");
+    debug("[retro] ⏳ Data jsou aktuální – čtu z cache.");
 
     const { retroData } = await new Promise((resolve) => {
       chrome.storage.local.get("retroData", (result) => resolve(result))
@@ -46,10 +47,10 @@ export async function fetchRetroMachine() {
       )
     })
 
-    console.log("[retro] ✅ Nová data uložena");
+    debug("[retro] ✅ Nová data uložena");
     return data
   } catch (error) {
-    console.error("❌ fetchRetroMachine error", error);
+    error("❌ fetchRetroMachine error", error);
     return null
   }
 }

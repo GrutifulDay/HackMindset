@@ -5,10 +5,11 @@ import { createStoryOfTheDay } from "./components/storyOfTheDay.js";
 import { createRetroMachine } from "./components/retroMachine.js";
 import { createProfile } from "./components/profile.js";
 import { createDigitalSignpost } from "./components/digitalSignpost.js";
+import { debug } from "./utils/logger/logger.js";
 
 
 export async function initPopup() {
-    console.log("{initApp.js} ✅ Běží hlavní obsah!");
+    debug("{initApp.js} ✅ Běží hlavní obsah!");
 
     const body = document.body;
 
@@ -25,5 +26,5 @@ export async function initPopup() {
     .filter(Boolean)
     .forEach((section) => body.appendChild(section));
 
-  console.log("{initApp.js} ✅ Všechny sekce byly přidány!");
+  debug("{initApp.js} ✅ Všechny sekce byly přidány!");
 }

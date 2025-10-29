@@ -1,22 +1,23 @@
 import { updateSectionData } from "../utils/update/updateSectionData.js"
 import { API } from "../utils/config.js";
 import { getJwtToken } from "../utils/auth/jwtToken.js";
+import { debug, error } from "../utils/logger/logger.js";
 
-console.log("{fetchStoryOfTheDay.js} 📡 je načtený")
+debug("{fetchStoryOfTheDay.js} 📡 je načtený")
 
 export async function fetchStoryOfTheDay() {
-  console.log("{funkce fetchStoryOfTheDay} ✅ funguje");
+  debug("{funkce fetchStoryOfTheDay} ✅ funguje");
   const token = await getJwtToken() 
 
   if (!token) {
-    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    error("❌ Chybí JWT token – fetch se neprovede.");
     return null;
   }
 
   const shouldUpdate = await updateSectionData("story")
 
   if (!shouldUpdate) {
-    console.log("[story] ⏳ Data jsou aktuální – čtu z cache.");
+    debug("[story] ⏳ Data jsou aktuální – čtu z cache.");
 
     const { storyData } = await new Promise((resolve) => {
       chrome.storage.local.get("storyData", (result) => resolve(result))
@@ -46,10 +47,10 @@ export async function fetchStoryOfTheDay() {
       )
     })
 
-    console.log("[story] ✅ Nová data uložena");
+    debug("[story] ✅ Nová data uložena");
     return data
   } catch (error) {
-    console.error("❌ fetchStoryOfTheDay error", error);
+    error("❌ fetchStoryOfTheDay error", error);
     return null
   }
 }

@@ -4,6 +4,7 @@ import { fetchUntruthVotes } from "../../fetch/fetchUntruthVotes.js";
 import { fetchUntruthLimit } from "../../fetch/fetchUntruthLimit.js";
 import { increaseUntruthVote, initUntruthLimit } from "../../utils/cache/untruthLimit.js";
 import { createFeedbackUntruth } from "../interactions_users/votingReport.js";
+import { debug } from "../../utils/logger/logger.js";
 
 export function createUntruthVotingWindow() {
   const lang = getLanguage()
@@ -164,7 +165,7 @@ export function createUntruthVotingWindow() {
         }
       })
       document.addEventListener("click", handleOutsideClick)
-      console.log("✅ Zobrazovací funkce FINÁLNĚ nastavila pozici.")
+      debug("✅ Zobrazovací funkce FINÁLNĚ nastavila pozici.")
     })
     
   }
@@ -198,7 +199,7 @@ export function createUntruthVotingWindow() {
           : "Thanks. Your report was recorded. 👍"
         )
       } else {
-        console.log("📛 Zneužití už bylo tento měsíc zaznamenáno")
+        debug("📛 Zneužití už bylo tento měsíc zaznamenáno")
       }
     } else {
       // Platny bezny hlas

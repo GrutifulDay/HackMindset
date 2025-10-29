@@ -1,10 +1,11 @@
 import { el } from "../utils/dom/uiSnippets.js"
 import { getLanguage } from "../utils/language/language.js"
+import { debug } from "../utils/logger/logger.js"
 
-console.log("{hackMindset.js} 🧩 sekce se generuje...")
+debug("{hackMindset.js} 🧩 sekce se generuje...")
 
 export async function createHackMindset() {
-    console.log("{funkce createHackMindset} ✅ funguje")
+    debug("{funkce createHackMindset} ✅ funguje")
 
     const lang = getLanguage() 
     

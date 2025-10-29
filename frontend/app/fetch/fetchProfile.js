@@ -1,24 +1,25 @@
 import { updateSectionData } from "../utils/update/updateSectionData.js"
 import { API } from "../utils/config.js";
 import { getJwtToken } from "../utils/auth/jwtToken.js";
+import { debug, error } from "../utils/logger/logger.js";
 
-console.log("{fetchProfile.js} 📡 je načtený")
+debug("{fetchProfile.js} 📡 je načtený")
 
 
 export async function fetchProfile() {
-  console.log("{funkce fetchProfile} ✅ funguje");
+  debug("{funkce fetchProfile} ✅ funguje");
 
   const token = await getJwtToken() 
 
   if (!token) {
-    console.error("❌ Chybí JWT token fetchProfile – fetch se neprovede.");
+    error("❌ Chybí JWT token fetchProfile – fetch se neprovede.");
     return null;
   }
 
   const shouldUpdate = await updateSectionData("profile")
 
   if (!shouldUpdate) {
-    console.log("[profile] ⏳ Data jsou aktuální – čtu z cache.");
+    debug("[profile] ⏳ Data jsou aktuální – čtu z cache.");
 
     const { profileData } = await new Promise((resolve) => {
       chrome.storage.local.get("profileData", (result) => resolve(result))
@@ -48,10 +49,10 @@ export async function fetchProfile() {
       )
     })
 
-    console.log("[profile] ✅ Nová data uložena");
+    debug("[profile] ✅ Nová data uložena");
     return data
   } catch (error) {
-    console.error("❌ fetchProfile error", error);
+    error("❌ fetchProfile error", error);
     return null
   }
 }

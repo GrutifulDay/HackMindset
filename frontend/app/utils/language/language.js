@@ -1,4 +1,6 @@
-console.log("{language.js} ✅ funguje")
+import { debug } from "../logger/logger.js"
+
+debug("{language.js} ✅ funguje")
 
 
 export function setLanguage(lang) {

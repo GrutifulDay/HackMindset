@@ -1,6 +1,9 @@
  // const BASE_URL = "https://hackmindset.app/api"
  const BASE_URL = "https://localhost:3000/api"
 
+ export const DEV_MODE = true // true / false - pro produkci 
+
+
 export const API = {
   nasa: `${BASE_URL}/nasa`,
   profile: `${BASE_URL}/profile`,
@@ -16,7 +19,6 @@ export const API = {
   getToken: `${BASE_URL}/get-token`
 }
 
-export const DEV_MODE = true // true / false - pro produkci 
 
 // chrome.storage.local.clear() // pro uplny vymaz 
 // localStorage.clear()   

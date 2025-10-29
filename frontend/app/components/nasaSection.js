@@ -5,9 +5,10 @@ import { getLanguage } from "../utils/language/language.js";
 import { fetchNasaImage } from "../fetch/fetchNasa.js";
 import { createAddTooltip } from "../utils/dom/tooltip.js";
 import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
+import { debug, warn } from "../utils/logger/logger.js";
 
 export async function createNasaSection() {
-  console.log("{funkce createNasaSection} ✅ funguje");
+  debug("{funkce createNasaSection} ✅ funguje");
 
   const lang = getLanguage();
   const cacheKey = "nasa-image";
@@ -16,7 +17,7 @@ export async function createNasaSection() {
 
   // kdyz neni cache → stahne z backendu
   if (!nasaData || !nasaData.url) {
-    console.log("📡 Žádná nebo neplatná cache – načítám z backendu...");
+    debug("📡 Žádná nebo neplatná cache – načítám z backendu...");
     const fresh = await fetchNasaImage();
 
     // validuj
@@ -30,20 +31,20 @@ export async function createNasaSection() {
       });
 
       if (chromeCache && chromeCache.url) {
-        console.log("⚡ NASA data načtena z Chrome storage.");
+        debug("⚡ NASA data načtena z Chrome storage.");
         nasaData = chromeCache;
         setCachedData(cacheKey, nasaData); // sjednoti i localStorage cache
       }
     }
   } else {
-    console.log("⚡ NASA data načtena z cache");
+    debug("⚡ NASA data načtena z cache");
   }
 
-  console.log("{nasaSection.js}📌 Načtený NASA obrázek:", nasaData);
+  debug("{nasaSection.js}📌 Načtený NASA obrázek:", nasaData);
 
   // pokud nejsou validni data, vraci null 
   if (!nasaData || !nasaData.url) {
-    console.warn("[nasa] ⚠️ Žádná validní NASA data – sekci vynechám.");
+    warn("[nasa] ⚠️ Žádná validní NASA data – sekci vynechám.");
     return null;
   }
 

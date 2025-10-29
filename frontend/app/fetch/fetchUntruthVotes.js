@@ -1,7 +1,8 @@
 import { API } from "../utils/config.js"
 import { getJwtToken } from "../utils/auth/jwtToken.js";
+import { debug, error } from "../utils/logger/logger.js";
 
-console.log("{fetchPostUntruthVotes.js} 📡 načten")
+debug("{fetchPostUntruthVotes.js} 📡 načten")
 
 /**
  * Odeslání hlasování o nepravdivé informaci
@@ -15,7 +16,7 @@ export async function fetchUntruthVotes(date, feedback, section) {
   const token = await getJwtToken() 
 
   if (!token) {
-    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    error("❌ Chybí JWT token – fetch se neprovede.");
     return null;
   }
   try {
@@ -35,7 +36,7 @@ export async function fetchUntruthVotes(date, feedback, section) {
 
     return await response.json()
   } catch (error) {
-    console.error("❌ Chyba při odesílání untruth feedback:", error)
+    error("❌ Chyba při odesílání untruth feedback:", error)
     return null
   }
 }

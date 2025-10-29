@@ -1,4 +1,6 @@
-console.log("{updateInteractions.js} 🧹 připraven na úklid")
+import { debug } from "../logger/logger.js"
+
+debug("{updateInteractions.js} 🧹 připraven na úklid")
 /**
  * Projde zadané localStorage klíče a odstraní jejich hodnoty,
  * pokud nejsou z dnešního dne.
@@ -14,12 +16,12 @@ export function clearOldInteractions(keys = []) {
       const storedDate = localStorage.getItem(dateKey)
   
       if (storedDate !== today) {
-        console.log(`🧹 Mazu hodnoty pro ${key}, ulozene: ${storedDate}`)
+        debug(`🧹 Mazu hodnoty pro ${key}, ulozene: ${storedDate}`)
         localStorage.removeItem(key);
         localStorage.setItem(dateKey, today)
       }
     })
 }
 
-console.log("{clearOldInteractions.js} 🧹 připraven na testování")
+debug("{clearOldInteractions.js} 🧹 připraven na testování")
 

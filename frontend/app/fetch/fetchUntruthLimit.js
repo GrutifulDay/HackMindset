@@ -1,19 +1,20 @@
 import { API } from "../utils/config.js";
 import { getJwtToken } from "../utils/auth/jwtToken.js";
+import { debug, error } from "../utils/logger/logger.js";
 
-console.log("{fetchUntruthLimit.js} 📡 aktivní");
+debug("{fetchUntruthLimit.js} 📡 aktivní");
 
 //odesila info, ze uzivatel oznacil vse jako nepravdu 
 export async function fetchUntruthLimit(section, date) {
   const [day, month, year] = date.split("-")
   const formattedDate = `${year}-${month}`
   
-  console.log("🧪 fetchUntruthLimit: section =", section, "date =", date);
+  debug("🧪 fetchUntruthLimit: section =", section, "date =", date);
   
   const token = await getJwtToken() 
 
   if (!token) {
-    console.error("❌ Chybí JWT token – fetch se neprovede.");
+    error("❌ Chybí JWT token – fetch se neprovede.");
     return null;
   }
   

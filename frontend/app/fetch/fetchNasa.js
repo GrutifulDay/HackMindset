@@ -1,16 +1,17 @@
 import { updateSectionData } from "../utils/update/updateSectionData.js";
 import { API } from "../utils/config.js";
 import { getJwtToken } from "../utils/auth/jwtToken.js";
+import { debug, warn, error } from "../utils/logger/logger.js";
 
-console.log("{fetchNasa.js} 📡 je načtený");
+debug("{fetchNasa.js} 📡 je načtený");
 
 export async function fetchNasaImage() {
-  console.log("{funkce fetchNasaImage} ✅ funguje");
+  debug("{funkce fetchNasaImage} ✅ funguje");
 
   const token = await getJwtToken();
 
   if (!token) {
-    console.error("❌ Chybí JWT token fetchNasaImage – fetch se neprovede.");
+    error("❌ Chybí JWT token fetchNasaImage – fetch se neprovede.");
     return { 
       error: true,
       message: "Chybí JWT token – NASA sekce se nenačte."
@@ -19,18 +20,18 @@ export async function fetchNasaImage() {
 
   const shouldUpdate = await updateSectionData("nasa");
   if (!shouldUpdate) {
-    console.log("[nasa] ⏳ Data jsou aktuální – čtu z cache.");
+    debug("[nasa] ⏳ Data jsou aktuální – čtu z cache.");
 
     const { nasaData } = await new Promise((resolve) => {
       chrome.storage.local.get("nasaData", (result) => resolve(result));
     });
 
     if (nasaData && nasaData.url) return nasaData;
-    console.warn("[nasa] ⚠️ Cache je prázdná nebo neobsahuje URL – načítám znovu.");
+    warn("[nasa] ⚠️ Cache je prázdná nebo neobsahuje URL – načítám znovu.");
   }
 
   try {
-    console.log("JWT token:", token);
+    debug("JWT token:", token);
 
     const response = await fetch(API.nasa, {
       method: "GET",
@@ -42,14 +43,14 @@ export async function fetchNasaImage() {
 
     if (!response.ok) {
       const text = await response.text();
-      console.warn(`⚠️ fetchNasaImage: Server vrátil ${response.status}`);
-      console.warn(`🔹 Response text: ${text}`);
+      warn(`⚠️ fetchNasaImage: Server vrátil ${response.status}`);
+      warn(`🔹 Response text: ${text}`);
 
       const { nasaData } = await new Promise((resolve) => {
         chrome.storage.local.get("nasaData", (result) => resolve(result));
       });
       if (nasaData) {
-        console.warn("[nasa] Používám starší data z cache (server error).");
+        warn("[nasa] Používám starší data z cache (server error).");
         return nasaData;
       }
       return { 
@@ -62,7 +63,7 @@ export async function fetchNasaImage() {
 
     // overeni dat z backendu
     if (!data || !data.url) {
-      console.warn("⚠️ fetchNasaImage: Data z backendu neobsahují URL");
+      warn("⚠️ fetchNasaImage: Data z backendu neobsahují URL");
       return { 
         error: true,
         message: "NASA data nejsou platná – backend nevrátil obrázek."
@@ -80,11 +81,11 @@ export async function fetchNasaImage() {
       );
     });
 
-    console.log("[nasa] ✅ Nová data uložena");
+    debug("[nasa] ✅ Nová data uložena");
     return data;
 
   } catch (error) {
-    console.error("❌ fetchNasaImage error", error);
+    error("❌ fetchNasaImage error", error);
 
     // fallback – zkusi z cache
     const { nasaData } = await new Promise((resolve) => {
@@ -92,7 +93,7 @@ export async function fetchNasaImage() {
     });
 
     if (nasaData) {
-      console.warn("[nasa] ⚠️ Používám starší cache (fetch selhal).");
+      warn("[nasa] ⚠️ Používám starší cache (fetch selhal).");
       return nasaData;
     }
 

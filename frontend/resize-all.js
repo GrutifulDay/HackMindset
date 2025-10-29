@@ -1,6 +1,7 @@
 import sharp from "sharp"
 import fs from "fs"
 import path from "path"
+import { debug, error } from "./app/utils/logger/logger.js"
 
 const inputDir = "assets/icons/"
 const outputDir = "assets/icons/resized/"
@@ -35,8 +36,8 @@ filesToResize.forEach(async (file) => {
       .resize(width, height) // bez contain, bez background
       .toFile(outputPath)
 
-    console.log(`✅ ${file} → OK`)
+    debug(`✅ ${file} → OK`)
   } catch (err) {
-    console.error(`❌ Chyba u souboru ${file}:`, err.message)
+    error(`❌ Chyba u souboru ${file}:`, err.message)
   }
 })

@@ -6,13 +6,14 @@ import { createLanguageSwitcher } from "./info_icons/languageSwitcher.js";
 import { createInfoIcon } from "./icons_import/infoIcon.js";
 
 import { attachInfoToggle } from "../utils/dom/uiSnippets.js";
+import { debug } from "../utils/logger/logger.js";
 
 
-console.log("{topPanel.js} 🧩 sekce se generuje...");
+debug("{topPanel.js} 🧩 sekce se generuje...");
 
 // INFO Ikona
 export async function createTopPanel() {
-  console.log("{funkce createTopPanel} ✅ funguje");
+  debug("{funkce createTopPanel} ✅ funguje");
 
   const lang = getLanguage()
   const languageSwitcher = createLanguageSwitcher()
