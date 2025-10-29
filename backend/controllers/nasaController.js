@@ -9,11 +9,11 @@ import {
   NASA_BASE_URL
 } from "../config.js";
 
-// 🧠 Cache v paměti
+// cache v pameti
 let nasaCache = null;
 let nasaCacheDate = null;
 
-// 🔢 Výpočet denního indexu (pro archiv)
+// vypocet denniho indexu (pro archiv)
 function getDailyIndex(linksLength) {
   const now = new Date();
   const year = now.getFullYear();
@@ -34,7 +34,7 @@ export async function fetchNasaImage(req, res) {
   // 🟢 Kontrola backend cache
   if (nasaCache && nasaCacheDate === today) {
     debug("⚡ NASA backend cache – posílám uložená data");
-    if (req.internal) return; // pro cron – nevrací JSON
+    if (req.internal) return;
     return res.json(nasaCache);
   }
 
@@ -55,20 +55,27 @@ export async function fetchNasaImage(req, res) {
     debug("✅ NASA API odpověď:", data.date);
 
     if (isToday(data.date)) {
-      const result = {
-        type: data.media_type,
-        url: data.url,
-        explanation: data.explanation,
-        date: data.date,
-        source: "api",
-        pageUrl: data.hdurl || "https://apod.nasa.gov/apod/astropix.html"
-      };
+      const result =
+        data.media_type === "video"
+          ? {
+              type: "video",
+              url: data.url,
+              explanation: 'Dnes je video 🎥, klikni na odkaz: "Chceš vědět víc?"',
+              date: data.date,
+              source: "api",
+              pageUrl: data.url,
+            }
+          : {
+              type: "image",
+              url: data.url,
+              explanation: data.explanation,
+              date: data.date,
+              source: "api",
+              pageUrl: data.url || "https://apod.nasa.gov/apod/astropix.html",
+            };
 
       nasaCache = result;
       nasaCacheDate = today;
-
-      info("✅ NASA API OK – data uložena do cache");
-      if (req.internal) return result;
       return res.json(result);
     }
 
@@ -78,7 +85,7 @@ export async function fetchNasaImage(req, res) {
   } catch (apiError) {
     warn("⚠️ NASA API nedostupné nebo neaktuální – zkouším fallback...");
 
-    // 🪐 Fallback HTML
+    // Fallback HTML
     try {
       const htmlResponse = await fetch(NASA_FALLBACK);
       const html = await htmlResponse.text();
@@ -110,7 +117,7 @@ export async function fetchNasaImage(req, res) {
       return res.json(result);
 
     } catch (fallbackError) {
-      // 🧩 Archivní režim
+      // archivni rezim
       try {
         warn("⚠️ NASA fallback selhal – zkouším archiv...");
 
@@ -125,6 +132,10 @@ export async function fetchNasaImage(req, res) {
         const randomLink = links[index].getAttribute("href");
         const randomUrl = `${NASA_BASE_URL}${randomLink}`;
 
+        // video 
+        // const randomUrl = "https://apod.nasa.gov/apod/ap250915.html";
+
+
         debug("📂 Archivní URL:", randomUrl);
 
         const randomPageRes = await fetch(randomUrl);
@@ -132,22 +143,59 @@ export async function fetchNasaImage(req, res) {
         const randomDom = new JSDOM(randomHtml);
         const randomDoc = randomDom.window.document;
 
+        // video detekce
+        const iframe = randomDoc.querySelector("iframe");
         const img = randomDoc.querySelector("img");
-        const explanation = randomDoc.querySelector("p")?.textContent || "Popis není dostupný.";
+
+        // pokud existuje iframe (video) nebo chybi img, prepne na video hlasku
+        if (iframe || !img) {
+          const videoUrl = iframe?.getAttribute("src") || randomUrl;
+          const result = {
+            type: "video",
+            url: videoUrl,
+            explanation: 'Dnes je video 🎥, klikni na odkaz: "Chceš vědět víc?"',
+            date: "Archivní výběr",
+            source: "archive-video",
+            pageUrl: randomUrl
+          };
+          info("🎥 NASA archivní režim – detekováno video");
+          return res.json(result);
+        }
+
+        // 🧠 OPRAVA TEXTU – bereme druhý <p> nebo ten s 'Explanation:'
+        const paragraphs = [...randomDoc.querySelectorAll("p")];
+        let explanation = "Popis není dostupný.";
+
+        if (paragraphs.length > 0) {
+          const explanationNode = paragraphs.find(p =>
+            p.textContent.trim().startsWith("Explanation:")
+          );
+
+          if (explanationNode) {
+            // Odstrani <b>Explanation:</b> i HTML tagy
+            explanation = explanationNode.innerHTML
+              .replace(/<b>\s*Explanation:\s*<\/b>/i, "")
+              .replace(/^Explanation:\s*/i, "")
+              .replace(/<\/?[^>]+(>|$)/g, "")
+              .trim();
+          } else if (paragraphs.length > 1) {
+            explanation = paragraphs[1].textContent.trim();
+          }
+        }
 
         const result = {
           type: "image",
           url: `${NASA_BASE_URL}${img?.getAttribute("src")}`,
           explanation,
           date: "Archivní výběr",
-          source: "archive-random",
+          source: "archive-fixed",
           pageUrl: randomUrl
         };
 
         nasaCache = result;
         nasaCacheDate = today;
 
-        info("📚 NASA archivní režim – úspěšně načteno");
+        info("📚 NASA archivní režim – úspěšně načteno (opravený text)");
         return res.json(result);
 
       } catch (archiveError) {

@@ -4,7 +4,7 @@ import { el } from "../../utils/dom/uiSnippets.js";
 export function createTranslationInfoWindow() {
     const container = el("div", null, {
         position: "absolute",
-        bottom: "102px",
+        bottom: "-66px",
         right: "47px",
         padding: "15px",
         zIndex: "1000",

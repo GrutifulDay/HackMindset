@@ -112,10 +112,15 @@ export async function createNasaSection() {
   const shortText = fullText.length > 100 ? fullText.slice(0, 100) + "..." : fullText;
 
   const nasaDescription = el("p", shortText, { cursor: "pointer" });
-  nasaDescription.addEventListener("click", () => {
-    nasaDescription.textContent =
-      nasaDescription.textContent === shortText ? fullText : shortText;
-  });
+  if (nasaData.type !== "video") {
+    nasaDescription.style.cursor = "pointer";
+    nasaDescription.addEventListener("click", () => {
+      nasaDescription.textContent =
+        nasaDescription.textContent === shortText ? fullText : shortText;
+    });
+  } else {
+    nasaDescription.style.cursor = "default";
+  }
 
   if (lang !== "en") descriptionWrapper.append(translationIcon);
   descriptionWrapper.append(nasaDescription);
