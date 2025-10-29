@@ -1,8 +1,6 @@
- // const BASE_URL = "https://hackmindset.app/api"
- const BASE_URL = "https://localhost:3000/api"
+const BASE_URL = "https://hackmindset.app/api"
 
- export const DEV_MODE = true
-
+export const DEV_MODE = true
 
 export const API = {
   nasa: `${BASE_URL}/nasa`,
