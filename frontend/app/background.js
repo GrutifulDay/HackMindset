@@ -1,4 +1,4 @@
-import { debug, warn } from "./utils/logger/.js"
+// import { debug, warn } from "./utils/logger/.js"
 
 // Listener na insta 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -7,7 +7,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     tab.url &&
     tab.url.includes("instagram.com")
   ) {
-    debug("✅ Uživatel otevřel Instagram")
+    console.log();("✅ Uživatel otevřel Instagram")
 
     chrome.storage.local.get("preferredLanguage", (data) => {
       const lang = data.preferredLanguage || "cz"
@@ -17,9 +17,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         { type: "hackmindset_reminder", lang: lang },
         (response) => {
           if (chrome.runtime.lastError) {
-            warn("⚠️ Nepodařilo se doručit zprávu:", chrome.runtime.lastError.message);
+            console.warn("⚠️ Nepodařilo se doručit zprávu:", chrome.runtime.lastError.message);
           } else {
-            debug("✅ Zpráva byla doručena.");
+            log("✅ Zpráva byla doručena.");
           }
         }
       )
