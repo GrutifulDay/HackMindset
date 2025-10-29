@@ -1,31 +1,64 @@
-// import { debug, warn } from "./utils/logger/.js"
+// 🧠 Uložíme ID tabů, kde už reminder běžel
+const shownTabs = new Set();
 
-// Listener na insta 
+// kontrolni fce zda uz dnes popup okno bezelo
+function alreadyShownToday(callback) {
+  chrome.storage.local.get("lastReminderDate", (data) => {
+    const today = new Date().toISOString().split("T")[0];
+    if (data.lastReminderDate === today) {
+      callback(true);
+    } else {
+      chrome.storage.local.set({ lastReminderDate: today }, () => callback(false));
+    }
+  });
+}
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (
     changeInfo.status === "complete" &&
     tab.url &&
     tab.url.includes("instagram.com")
   ) {
-    console.log();("✅ Uživatel otevřel Instagram")
+    // pokud uz reminder na tomhle tabu bezel, neotevre se
+    if (shownTabs.has(tabId)) return;
+    shownTabs.add(tabId);
 
-    chrome.storage.local.get("preferredLanguage", (data) => {
-      const lang = data.preferredLanguage || "cz"
+    // console.log("✅ Uživatel otevřel Instagram");
 
-      chrome.tabs.sendMessage(
-        tabId,
-        { type: "hackmindset_reminder", lang: lang },
-        (response) => {
-          if (chrome.runtime.lastError) {
-            console.warn("⚠️ Nepodařilo se doručit zprávu:", chrome.runtime.lastError.message);
-          } else {
-            log("✅ Zpráva byla doručena.");
-          }
-        }
-      )
-    })
+    // overeni, jestli dnes reminder bezel
+    alreadyShownToday((wasShownToday) => {
+      if (wasShownToday) {
+        console.log("⏸️ Reminder už dnes byl zobrazen, přeskočeno.");
+        return;
+      }
+
+      chrome.storage.local.get("preferredLanguage", (data) => {
+        const lang = data.preferredLanguage || "cz";
+
+        // pocka, az se content.js nacte
+        setTimeout(() => {
+          chrome.tabs.sendMessage(tabId, { type: "hackmindset_reminder", lang }, () => {
+            // pokud se nedoruci, zkusi znovu
+            if (chrome.runtime.lastError) {
+              setTimeout(() => {
+                chrome.tabs.sendMessage(tabId, { type: "hackmindset_reminder", lang }, () => {
+                });
+              }, 3000);
+            }
+          });
+        }, 1500);
+      });
+    });
   }
-})
+});
+
+// kdyz se tab zavre, smaze z pameti
+chrome.tabs.onRemoved.addListener((tabId) => {
+  shownTabs.delete(tabId);
+});
+
+
+
 
 
 // // Volání honeypointu – bez osobních údajů

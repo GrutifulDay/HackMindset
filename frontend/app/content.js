@@ -119,6 +119,14 @@ function showHackMindsetReminder(langFromMessage) {
 // Listener na zpravy z background.js
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "hackmindset_reminder") {
-    showHackMindsetReminder(message.lang) 
+    // 🔔 Tady máš tvou logiku pro zobrazení reminderu
+    showHackMindsetReminder(message.lang);
+
+    // ✅ Pošli odpověď zpět — tím zabráníš chybě
+    sendResponse({ status: "ok" });
   }
-})
+
+  // ⚠️ Důležité: vracíme true, aby port zůstal otevřený dokud nepošleme odpověď
+  return true;
+});
+
