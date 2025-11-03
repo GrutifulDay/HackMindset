@@ -20,13 +20,18 @@ export async function refreshAllSections() {
 
   try {
     const fakeReq = { internal: true };
-    const fakeRes = { json: () => {} };
-
-    await fetchNasaImage(fakeReq, fakeRes);
-    await getDigital(fakeReq, fakeRes);
-    await getStoryOfTheDay(fakeReq, fakeRes);
-    await getRetroMachine(fakeReq, fakeRes);
-    await getProfile(fakeReq, fakeRes);
+    const fakeRes = {
+      status: () => fakeRes,
+      json: () => {},
+    };
+    
+    await Promise.all([
+      fetchNasaImage(fakeReq, fakeRes),
+      getDigital(fakeReq, fakeRes),
+      getStoryOfTheDay(fakeReq, fakeRes),
+      getRetroMachine(fakeReq, fakeRes),
+      getProfile(fakeReq, fakeRes),
+    ]);
 
     info("✅ [refreshAll] Všechny sekce úspěšně přednačteny (interně).");
   } catch (err) {
