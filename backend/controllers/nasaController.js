@@ -138,8 +138,23 @@ export async function fetchNasaImage(req, res) {
 
         debug("📂 Archivní URL:", randomUrl);
 
-        const randomPageRes = await fetch(randomUrl);
-        const randomHtml = await randomPageRes.text();
+        let randomPageRes;
+        let randomHtml;
+
+        try {
+          randomPageRes = await fetch(randomUrl, { timeout: 8000 });
+          randomHtml = await randomPageRes.text();
+        } catch (e) {
+          warn("⚠️ První pokus o archiv selhal, zkouším jiný odkaz...");
+          // zkusí jiný odkaz z archivu, ne ten samý
+          const altIndex = (index + 5) % links.length;
+          const altLink = links[altIndex].getAttribute("href");
+          const altUrl = `${NASA_BASE_URL}${altLink}`;
+          debug("📂 Alternativní archivní URL:", altUrl);
+          randomPageRes = await fetch(altUrl, { timeout: 10000 });
+          randomHtml = await randomPageRes.text();
+        }
+
         const randomDom = new JSDOM(randomHtml);
         const randomDoc = randomDom.window.document;
 
