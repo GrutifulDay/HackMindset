@@ -6,7 +6,7 @@ import { debug, error } from "../logger.js";
 
 // refresh kazdy den v urcity cas 
 export function startDailyCron() {
-  cron.schedule("12 10 * * *", async () => {
+  cron.schedule("25 10 * * *", async () => {
     debug("🕛 [CRON] Spouštím noční refresh všech sekcí...");
     try {
       await refreshAllSections();
