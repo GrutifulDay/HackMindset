@@ -12,13 +12,24 @@ export async function initPopup() {
     debug("{initApp.js} ✅ Běží hlavní obsah!");
 
     const body = document.body;
-    const topPanel = await createTopPanel();
-    const hackMindset = await createHackMindset();
-    const nasaSection = await createNasaSection();
-    const storyOfTheDay = await createStoryOfTheDay();
-    const retroMachine = await createRetroMachine();
-    const profile = await createProfile();
-    const digitalSignpost = await createDigitalSignpost();
+
+    const [
+        topPanel,
+        hackMindset,
+        nasaSection,
+        storyOfTheDay,
+        retroMachine,
+        profile,
+        digitalSignpost
+  ] = await Promise.all([
+        createTopPanel(),
+        createHackMindset(),
+        createNasaSection(),
+        createStoryOfTheDay(),
+        createRetroMachine(),
+        createProfile(),
+        createDigitalSignpost(),
+  ]);
 
   [topPanel, hackMindset, nasaSection, digitalSignpost, storyOfTheDay, retroMachine, profile]
     .filter(Boolean)
