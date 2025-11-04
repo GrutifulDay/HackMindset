@@ -17,8 +17,8 @@ import { warn } from "../utils/logger.js";
 
 const speedLimiter = slowDown({
   windowMs: 1 * 60 * 1000, // 1 min (změnit podle potřeby)
-  delayAfter: 100,         // až po 100 požadavcích
-  delayMs: () => 300,      // každý další request zpomalíme o 300ms
+  delayAfter: 50,         // až po 100 požadavcích
+  delayMs: () => 500,      // každý další request zpomalíme o 300ms
   message: "Too many requests – you are being slowed down."
 });
 

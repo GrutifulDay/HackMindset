@@ -10,10 +10,10 @@ global.util = util;
 import { debug, info, warn, error } from "./utils/logger.js";
 
 // zaklad
-import fs from "fs"
+// import fs from "fs"
 
 // lokalni testovani 
-import https from "https"
+// import https from "https"
 import { UAParser } from "ua-parser-js"
 
 // NPM knihovny 
@@ -53,11 +53,16 @@ import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
 
 const app = express()
-app.set("trust proxy", "loopback"); 
-//app.set("trust proxy", true); // true = proxy / false = vyvoj 
+//app.set("trust proxy", "loopback"); 
+app.set("trust proxy", true); // true = proxy / false = vyvoj 
 
 app.disable("etag")
 app.disable("x-powered-by")
+
+// ⚠️ Upozornění na dev režim
+if (process.env.NODE_ENV !== "production") {
+  debug("⚠️ Běžíš v development režimu – CSP a rate limity nejsou aktivní.");
+}
 
 // Request log (lehký)
 app.use((req, res, next) => {
@@ -166,16 +171,11 @@ app.use(captureHeaders({
 }));
 
 // globalni Middleware
-app.use(ipBlocker);   // 1) blokace známých IP
-app.use(corsOptions); // 2) preflight pro zbylé
+app.use(ipBlocker);   
+app.use(corsOptions); 
 app.use(botProtection);
 app.use(speedLimiter);
 app.use(limiterApi);
-// app.use(corsOptions)    // 1) preflight
-// app.use(botProtection)  // 2) detekce botů/UA
-// app.use(speedLimiter)   // 3) zpomalení floodu
-// app.use(limiterApi)     // 4) tvrdý rate limit (počítá přestupky, teprve pak blacklistuje)
-// app.use(ipBlocker)   // 5) blokace známých IP (už uložených)
 
 
 // routes
@@ -210,18 +210,18 @@ try {
 } catch { /* ignore */ }
 
 // ✅ Spuštění serveru
-// app.listen(PORT, "127.0.0.1", () => {
-//   info(`✅ Server běží na http://127.0.0.1:${PORT}`);
-// });
+app.listen(PORT, "127.0.0.1", () => {
+  info(`✅ Server běží na http://127.0.0.1:${PORT}`);
+});
 
 
 // pro lokalni testovani 
-const options = {
-  key: fs.readFileSync('./cert/key.pem'),
-  cert: fs.readFileSync('./cert/cert.pem'),
-}
+// const options = {
+//   key: fs.readFileSync('./cert/key.pem'),
+//   cert: fs.readFileSync('./cert/cert.pem'),
+// }
 
-https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
-});
+// https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
+// debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
+// });
 
