@@ -159,7 +159,7 @@ app.use((req, res, next) => {
 // JSON parser musí být dřív
 app.use(express.json({ limit: "25kb" }));
 
-app.get("/test-open", (req, res) => {
+app.get("/api/test-open", (req, res) => {
   res.status(200).json({
     ok: true,
     ip: req.ip,
