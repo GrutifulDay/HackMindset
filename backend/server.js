@@ -46,15 +46,15 @@ import captureHeaders from "./middlewares/captureHeaders.js";
 import { startDailyCron } from "./utils/cron/dailyRefresh.js"
 import { startWatchForIPChanges } from "./utils/watch/startWatchForIPChanges.js"
 
-
 // Databaze 
 import connectDB from "./db/db.js"
 import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
 
 const app = express()
-app.set("trust proxy", "loopback"); 
-//app.set("trust proxy", false); // true = proxy / false = vyvoj 
+
+// jsme za NGINX → používáme X-Forwarded-For
+app.set("trust proxy", "loopback")
 
 app.disable("etag")
 app.disable("x-powered-by")
@@ -64,7 +64,7 @@ if (process.env.NODE_ENV !== "production") {
   debug("⚠️ Běžíš v development režimu – CSP a rate limity nejsou aktivní.");
 }
 
-// Request log (lehký)
+// Lehký request log
 app.use((req, res, next) => {
   debug(`➡️  ${req.method} ${req.url}`);
   next();
@@ -85,7 +85,9 @@ info(`💣 Server spuštěn: ${startTime}`);
 
 const __dirname = path.resolve() // pri pouziti ES modulů
 
-// MongoDB
+// ─────────────────────────────────────
+// MongoDB + blacklist + cron
+// ─────────────────────────────────────
 await connectDB();
 await connectFrontendDB();
 
@@ -96,15 +98,17 @@ await loadBlacklistFromDB();
 startDailyCron();
 startWatchForIPChanges();
 
-// Helmet – CSP -> povoleni jen pro muj server (img, url, css atd.)
+// ─────────────────────────────────────
+// HELMET – CSP (ostatní hlavičky řeší NGINX)
+// ─────────────────────────────────────
 app.use(
   helmet.contentSecurityPolicy({
     useDefaults: false,
     directives: {
-      "default-src": ["'self'"],    // vychozi zdroj pro obsah nacitani
-      "script-src": ["'self'"],     // js scripty odkud
-      "style-src": ["'self'", "'unsafe-inline'"], // ✅ povolí tvé i inline CSS
-      "font-src": ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"], // ✅ povolí fonty
+      "default-src": ["'self'"],
+      "script-src": ["'self'"],
+      "style-src": ["'self'", "'unsafe-inline'"],
+      "font-src": ["'self'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
       "img-src": [
         "'self'",
         "https://apod.nasa.gov",
@@ -119,7 +123,9 @@ app.use(
   })
 );
 
-
+// ─────────────────────────────────────
+// ZÁKLADNÍ ENDPOINTY – BEZ OCHRANY
+// ─────────────────────────────────────
 
 app.get("/ping", (_req, res) => {
   res.status(200).send("pong")
@@ -138,27 +144,20 @@ app.get("/health", async (_req, res) => {
   }
 });
 
-// detekce uniklych hesel
-// app.use(detectSecretLeak({
-//   blockOnLeak: true,          // blokuje pozadavek
-//   blacklistOnLeak: true       // prida IP na blacklist
-// }));
-
-
-// ─────────────────────────────────────────────────────────────
 // Interní servisní router pro /_sec-log
 // (Uvnitř má vlastní pre-auth + JSON parser; tady nic dalšího nedávej.)
-// ─────────────────────────────────────────────────────────────
 app.use(secLogRoutes)
 
+// Vary: Origin pro CORS
 app.use((req, res, next) => {
   res.setHeader("Vary", "Origin");
   next();
 });
 
-// JSON parser musí být dřív
+// JSON parser musí být dřív než cokoliv, co čte body
 app.use(express.json({ limit: "25kb" }));
 
+// OTEVŘENÝ DEBUG ENDPOINT – schválně před security
 app.get("/api/test-open", (req, res) => {
   res.status(200).json({
     ok: true,
@@ -167,7 +166,9 @@ app.get("/api/test-open", (req, res) => {
   });
 });
 
-// Hlavičky a logování (jen jednou)
+// ─────────────────────────────────────
+// CAPTURE HEADERS (Postman / test nástroje)
+// ─────────────────────────────────────
 app.use(captureHeaders({
   notifyOn: (req) => {
     const ua = (req.get("User-Agent") || "").toLowerCase();
@@ -178,16 +179,33 @@ app.use(captureHeaders({
   notifyReason: "Client using Postman / test tool"
 }));
 
-// globalni Middleware
-app.use(ipBlocker);   
-app.use(corsOptions); 
+// ─────────────────────────────────────
+// SECURITY MIDDLEWARE – GLOBÁLNĚ PRO /api
+// ─────────────────────────────────────
+
+// CORS (tady řešíš allowedOrigins + blacklist v CORS)
+app.use(corsOptions);
+
+// IP blacklist (už máš výjimky pro /get-token → nechávám na tvé logice)
+app.use(ipBlocker);
+
+// ochrana proti botům / podezřelým UA
 app.use(botProtection);
+
+// soft limit (slow down)
 app.use(speedLimiter);
+
+// hard rate limit
 app.use(limiterApi);
 
+// ─────────────────────────────────────
+// ROUTES /api/* – teď už přes všechny security vrstvy
+// ─────────────────────────────────────
 
-// routes
+// JWT vydávání pro rozšíření (GET /api/get-token atd.)
 app.use("/api", tokenRoutes);
+
+// Zbytek API
 app.use("/api", nasaRoutes)
 app.use("/api", storyRoutes)
 app.use("/api", retroRoutes)
@@ -198,7 +216,6 @@ app.use("/api", untruthLimitRoutes)
 
 // app.use("/api", feedbackRoutes)
 
-
 // testovací router
 app.get("/api/test", (req, res) => {
   const userAgentString = req.get("User-Agent") || "neznámý"
@@ -208,20 +225,23 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "Server OK", originalUserAgent: userAgentString, parsed: result })
 })
 
-// Statické soubory
+// Statické soubory (aktuálně nic, ale nechávám)
 app.use(express.static(path.join(__dirname, "frontend")))
 
 // Debug výpis registrovaných cest
 try {
-  const routes = app._router?.stack?.map(r => r?.route?.path).filter(Boolean)
+  const routes = app._router?.stack
+    ?.map(r => r?.route?.path)
+    .filter(Boolean)
   if (routes?.length) debug(routes)
-} catch { /* ignore */ }
+} catch {
+  // ignore
+}
 
 // ✅ Spuštění serveru
 app.listen(PORT, "127.0.0.1", () => {
   info(`✅ Server běží na http://127.0.0.1:${PORT}`);
 });
-
 
 // pro lokalni testovani 
 // const options = {
@@ -230,6 +250,5 @@ app.listen(PORT, "127.0.0.1", () => {
 // }
 
 // https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-// debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
+//   debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
 // });
-
