@@ -167,9 +167,6 @@ app.get("/api/test-open", (req, res) => {
   });
 });
 
-
-app.use(corsOptions);
-
 // Hlavičky a logování (jen jednou)
 app.use(captureHeaders({
   notifyOn: (req) => {
@@ -182,7 +179,8 @@ app.use(captureHeaders({
 }));
 
 // globalni Middleware
-app.use(ipBlocker);
+app.use(ipBlocker);   
+app.use(corsOptions); 
 app.use(botProtection);
 app.use(speedLimiter);
 app.use(limiterApi);
