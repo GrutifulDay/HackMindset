@@ -159,6 +159,13 @@ app.use((req, res, next) => {
 // JSON parser musí být dřív
 app.use(express.json({ limit: "25kb" }));
 
+app.get("/api/test-open", (req, res) => {
+  res.json({
+    ok: true,
+    message: "Tento endpoint obchází všechny bezpečnostní vrstvy."
+  });
+});
+
 // Hlavičky a logování (jen jednou)
 app.use(captureHeaders({
   notifyOn: (req) => {
