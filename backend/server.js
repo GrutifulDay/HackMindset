@@ -53,8 +53,8 @@ import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
 
 const app = express()
-//app.set("trust proxy", "loopback"); 
-app.set("trust proxy", false); // true = proxy / false = vyvoj 
+app.set("trust proxy", "loopback"); 
+//app.set("trust proxy", false); // true = proxy / false = vyvoj 
 
 app.disable("etag")
 app.disable("x-powered-by")
