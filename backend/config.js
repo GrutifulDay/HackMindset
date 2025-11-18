@@ -42,7 +42,7 @@ export const SHARED_KEY = process.env.SHARED_KEY || "";
 
 // JWT token 
 export const JWT_SECRET = process.env.JWT_SECRET
-export const HACK_MINDSET = process.env.HACK_MINDSET
+export const EXTENSION_SIGNATURE = process.env.EXTENSION_SIGNATURE
 
 // Discord
 export const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || "";

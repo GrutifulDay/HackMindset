@@ -1,5 +1,5 @@
 import { isBlacklisted } from "./ipBlacklist.js"
-import { HACK_MINDSET, CHROME_EXTENSION_ALL_URL } from "../config.js";
+import { EXTENSION_SIGNATURE, CHROME_EXTENSION_ALL_URL } from "../config.js";
 import { debug, warn } from "../utils/logger.js";
 
 
@@ -30,12 +30,12 @@ export function validateToken() {
       ? rawAuthHeader.split(" ")[1]
       : ""
 
-    // 🔁 Pokud prisel alias "HACK_MINDSET", prelozi na tajne heslo z env
+    // 🔁 Pokud prisel alias "EXTENSION_SIGNATURE", prelozi na tajne heslo z env
     const resolvedKey =
-      authValue === "HACK_MINDSET" ? HACK_MINDSET : authValue
+      authValue === "EXTENSION_SIGNATURE" ? EXTENSION_SIGNATURE : authValue
 
     // overeni proti ocekavanemu klici (z .env)
-    const isValid = resolvedKey === HACK_MINDSET
+    const isValid = resolvedKey === EXTENSION_SIGNATURE
 
     if (await isBlacklisted(userIP)) {
       return res.status(403).json({ error: "IP je na blacklistu." })
@@ -44,13 +44,13 @@ export function validateToken() {
     if (isValid) {
       debug("✅ Přístup povolen")
       debug("→ resolvedKey:", resolvedKey)
-      debug("→ expectedKey:", HACK_MINDSET)
+      debug("→ expectedKey:", EXTENSION_SIGNATURE)
       return next()
     }
 
     warn("🚫 Zamítnuto – neplatný klíč")
     debug("→ authValue:", authValue)
-    debug("→ expectedKey:", HACK_MINDSET)
+    debug("→ expectedKey:", EXTENSION_SIGNATURE)
     return res.status(403).json({ error: "Access denied" })
   }
 }

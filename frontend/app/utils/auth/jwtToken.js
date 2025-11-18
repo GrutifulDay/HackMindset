@@ -24,7 +24,7 @@ export async function getJwtToken() {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer HACK_MINDSET"
+          "Authorization": "Bearer EXTENSION_SIGNATURE"
         }
        });
     if (!res.ok) {
