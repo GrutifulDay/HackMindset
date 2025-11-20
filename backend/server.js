@@ -111,7 +111,7 @@ app.use(
         "https://mars.nasa.gov",
         "https://images-assets.nasa.gov"
       ],
-      "connect-src": ["'self'", "https://api.nasa.gov"],
+      "connect-src": ["'self'", "https://api.nasa.gov", "https://hackmindset.app"],
       "base-uri": ["'self'"],
       "object-src": ["'none'"],
       "frame-ancestors": ["'none'"]
