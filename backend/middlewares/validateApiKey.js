@@ -25,6 +25,11 @@ export function validateApiKey(routeDescription) {
   debug("validateApiKey funguje");
 
   return async function (req, res, next) {
+    if (req.method === "OPTIONS") {
+      return next();
+    }
+    
+
     const userIP =
       req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
       req.socket?.remoteAddress ||
