@@ -14,8 +14,8 @@ export const config = {
 export const PORT = process.env.PORT || 3000;
 
 // ------------ URL VYVOJ / PRODUKCE -------------
-// export const API_BASE_URL = process.env.API_BASE_URL || "https://localhost:3000/api";
-export const API_BASE_URL = "https://hackmindset.app/api";
+export const API_BASE_URL = process.env.API_BASE_URL || "https://localhost:3000/api";
+// export const API_BASE_URL = "https://hackmindset.app/api";
 
 
 // ID Chrome (all URL jen pokud je ID dostupné)
