@@ -36,16 +36,14 @@ import tokenRoutes from "./routes/tokenRoutes.js"
 import limiterApi from "./middlewares/rateLimit.js"
 import corsOptions from "./middlewares/corsConfig.js"
 import botProtection from "./middlewares/botProtection.js"
-import ipBlocker from "./middlewares/ipBlacklist.js"
+import ipBlocker, { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
 import speedLimiter from "./middlewares/slowDown.js"
-import { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
 import captureHeaders from "./middlewares/captureHeaders.js";
 // import detectSecretLeak from "./middlewares/detectSecretLeak.js";
 
 // Utils 
 import { startDailyCron } from "./utils/cron/dailyRefresh.js"
 import { startWatchForIPChanges } from "./utils/watch/startWatchForIPChanges.js"
-
 
 // Databaze 
 import connectDB from "./db/db.js"
@@ -54,7 +52,7 @@ import path from "path"
 
 const app = express()
 app.set("trust proxy", "loopback"); 
-//app.set("trust proxy", false); // true = proxy / false = vyvoj 
+// app.set("trust proxy", false); // true = proxy / false = vyvoj 
 
 app.disable("etag")
 app.disable("x-powered-by")
@@ -119,8 +117,7 @@ app.use(
   })
 );
 
-
-
+// Základní health endpointy
 app.get("/ping", (_req, res) => {
   res.status(200).send("pong")
 })
@@ -144,21 +141,25 @@ app.get("/health", async (_req, res) => {
 //   blacklistOnLeak: true       // prida IP na blacklist
 // }));
 
-
 // ─────────────────────────────────────────────────────────────
 // Interní servisní router pro /_sec-log
 // (Uvnitř má vlastní pre-auth + JSON parser; tady nic dalšího nedávej.)
 // ─────────────────────────────────────────────────────────────
 app.use(secLogRoutes)
 
+// Vary: Origin – kvůli CORS cache
 app.use((req, res, next) => {
   res.setHeader("Vary", "Origin");
   next();
 });
 
-// JSON parser musí být dřív
+// 🔥 CORS – MUSÍ být před ipBlocker/botProtection
+app.use(corsOptions);
+
+// JSON parser (může být až za CORS)
 app.use(express.json({ limit: "25kb" }));
 
+// Otevřený test endpoint (bez ochranných middleware)
 app.get("/api/test-open", (req, res) => {
   res.status(200).json({
     ok: true,
@@ -178,13 +179,11 @@ app.use(captureHeaders({
   notifyReason: "Client using Postman / test tool"
 }));
 
-// globalni Middleware
-app.use(ipBlocker);   
-app.use(corsOptions); 
-app.use(botProtection);
-app.use(speedLimiter);
-app.use(limiterApi);
-
+// globalni Middleware – pořadí je důležité
+app.use(ipBlocker);       // blokuje známé útočníky
+app.use(botProtection);   // detekce botů / UA
+app.use(speedLimiter);    // soft limit
+app.use(limiterApi);      // tvrdý rate limit
 
 // routes
 app.use("/api", tokenRoutes);
@@ -195,9 +194,7 @@ app.use("/api", profileRoutes)
 app.use("/api", digitalRoutes)
 app.use("/api", untruthRoutes)
 app.use("/api", untruthLimitRoutes)
-
 // app.use("/api", feedbackRoutes)
-
 
 // testovací router
 app.get("/api/test", (req, res) => {
@@ -222,7 +219,6 @@ app.listen(PORT, "127.0.0.1", () => {
   info(`✅ Server běží na http://127.0.0.1:${PORT}`);
 });
 
-
 // pro lokalni testovani 
 // const options = {
 //   key: fs.readFileSync('./cert/key.pem'),
@@ -230,6 +226,5 @@ app.listen(PORT, "127.0.0.1", () => {
 // }
 
 // https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-// debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
+//   debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
 // });
-
