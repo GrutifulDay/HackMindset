@@ -1,20 +1,18 @@
-// IMPORTY
 import cors from "cors";
 import { CHROME_EXTENSION_ALL_URL } from "../config.js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";
-import { addToBlacklist } from "./ipBlacklist.js";
+import { addToBlacklist } from "./ipBlacklist.js";   // ✅ přidáno
 import { UAParser } from "ua-parser-js";
 import { redactHeaders } from "../utils/redact.js";
 import { warn } from "../utils/logger.js";
 
-// ORIGINY POVOLENÉ PRO API
+
 const allowedOrigins = [
   "http://127.0.0.1:5501",
   "https://hackmindset.app",
   CHROME_EXTENSION_ALL_URL
 ];
 
-// ZÁKLADNÍ POVOLENÉ HEADERY A METODY
 const corsOptions = {
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -22,76 +20,53 @@ const corsOptions = {
 };
 
 export default async function corsWithLogging(req, res, next) {
-  const origin = req.headers.origin || null;
-  const isLocalRequest =
-    req.hostname === "localhost" ||
-    req.hostname === "127.0.0.1";
+  const origin = req.headers.origin;
+  const isLocalRequest = req.hostname === "localhost" || req.hostname === "127.0.0.1";
 
-  // -------------------------------------------------------------------
-  // 🔥 1) Preflight (OPTIONS) MUSÍ projít BEZPEČNOSTNÍMI VRSTVAMI
-  // -------------------------------------------------------------------
-  if (req.method === "OPTIONS") {
-    return cors({
-      ...corsOptions,
-      origin: origin || "*"   // Chrome extension často nemá origin
-    })(req, res, next);
-  }
 
-  // -------------------------------------------------------------------
-  // 🔥 2) Požadavky BEZ ORIGINU nesmí být blokované – Chrome ext, mobile fetch, cron
-  // -------------------------------------------------------------------
-  if (!origin && !isLocalRequest) {
-    return cors({
-      ...corsOptions,
-      origin: false // odpoví bez CORS hlaviček, ale nezablokuje
-    })(req, res, next);
-  }
-
-  // -------------------------------------------------------------------
-  // 🔒 3) PODEZŘELÝ origin → log + blacklist + 403
-  // -------------------------------------------------------------------
-  const originNotAllowed = origin && !allowedOrigins.includes(origin);
-
-  if (originNotAllowed && !isLocalRequest) {
+  // ❌ Pokud není origin nebo není v seznamu povolených
+  if ((!origin || !allowedOrigins.includes(origin)) && !isLocalRequest) {
     const uaString = req.get("User-Agent") || "Neznámý";
     const parser = new UAParser(uaString);
-    const parsedUA = parser.getResult();
-    const clientIP = req.ip || "Neznámá IP";
+    const result = parser.getResult();
 
-    warn(`[CORS BLOCKED] Origin: ${origin} | Path: ${req.originalUrl}`);
+    const clientIP = req.ip || "Neznámé";
 
-    // 🔒 Notifikace
+    warn(`[CORS BLOCKED] Origin: ${origin || "null"} - ${new Date().toISOString()}`);
+
+    // ✅ 1. Zaloguj blokaci (Discord)
     await notifyBlockedIP({
       ip: clientIP,
       reason: "CORS Blocked",
       userAgent: uaString,
-      browser: parsedUA.browser?.name,
-      os: parsedUA.os?.name,
-      deviceType: parsedUA.device?.type,
       method: req.method,
       path: req.originalUrl,
-      origin: origin,
+      city: "Neznámé",
+      origin,
+      browser: result.browser?.name || "Neznámý",
+      os: result.os?.name || "Neznámý",
+      deviceType: result.device?.type || "Neznámý",
       referer: req.get("Referer"),
       headers: redactHeaders(req.headers),
     });
 
-    // 🔒 Blacklist
+    // ✅ 2. Přidej IP do blacklistu
     await addToBlacklist(clientIP, "CORS Blocked", {
       userAgent: uaString,
+      browser: result.browser?.name,
+      os: result.os?.name,
+      deviceType: result.device?.type,
       method: req.method,
-      path: req.originalUrl
+      path: req.originalUrl,
     });
 
-    return res.status(403).json({
-      error: "Access blocked by CORS policy"
-    });
+    // ✅ 3. Okamžitě vrať chybu
+    return res.status(403).json({ error: "Access blocked by CORS policy" });
   }
 
-  // -------------------------------------------------------------------
-  // ✔️ 4) Standardní CORS
-  // -------------------------------------------------------------------
+  // ✅ Jinak – standardní CORS
   return cors({
     ...corsOptions,
-    origin: origin || "*"
+    origin: origin
   })(req, res, next);
 }
