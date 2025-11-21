@@ -83,7 +83,7 @@ export default async function corsWithLogging(req, res, next) {
     });
 
     return res.status(403).json({
-      error: "Přístup zablokován CORS politikou"
+      error: "Access blocked by CORS policy"
     });
   }
 

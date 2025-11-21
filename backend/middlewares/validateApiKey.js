@@ -45,9 +45,9 @@ export function validateApiKey(routeDescription) {
         return next();
       }
   
-      // kontrola IP blacklistu
+      // kontrola IP blacklistu - adresa je na BL 
       if (await isBlacklisted(userIP)) {
-        return res.status(403).json({ error: "Vaše IP je na blacklistu." });
+        return res.status(403).json({ error: "Access blocked" });
       }
 
 

@@ -14,7 +14,7 @@ export function getToken(req, res) {
     referer.includes(CHROME_EXTENSION_ALL_URL);
 
   if (!isFromExtension || !userAgent.includes("Chrome")) {
-    return res.status(403).json({ error: "Nepovolený přístup k tokenu" });
+    return res.status(403).json({ error: "Unauthorized access to token" });
   }
 
   // 📦 Payload tokenu

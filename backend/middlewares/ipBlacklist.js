@@ -126,7 +126,7 @@ export default async function ipBlocker(req, res, next) {
   });
   
 
-  return res.status(403).json({ error: "Vaše IP adresa byla zablokována." });
+  return res.status(403).json({ error: "Access denied" });
 }
 
 // Pridani IP do blacklistu (DB + pamet)

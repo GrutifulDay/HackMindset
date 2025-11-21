@@ -38,7 +38,7 @@ export function validateToken() {
     const isValid = resolvedKey === EXTENSION_SIGNATURE
 
     if (await isBlacklisted(userIP)) {
-      return res.status(403).json({ error: "IP je na blacklistu." })
+      return res.status(403).json({ error: "Access blocked" })
     }
 
     if (isValid) {

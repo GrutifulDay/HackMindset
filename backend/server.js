@@ -43,7 +43,7 @@ import captureHeaders from "./middlewares/captureHeaders.js";
 
 // Utils 
 import { startDailyCron } from "./utils/cron/dailyRefresh.js"
-import { startWatchForIPChanges } from "./utils/watch/startWatchForIPChanges.js"
+//import { startWatchForIPChanges } from "./utils/watch/startWatchForIPChanges.js"
 
 // Databaze 
 import connectDB from "./db/db.js"
@@ -92,7 +92,7 @@ await loadBlacklistFromDB();
 
 // refresh google extension po pridani ip do db
 startDailyCron();
-startWatchForIPChanges();
+// startWatchForIPChanges();
 
 // Helmet – CSP -> povoleni jen pro muj server (img, url, css atd.)
 app.use(
