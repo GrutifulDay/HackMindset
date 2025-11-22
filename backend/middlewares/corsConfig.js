@@ -1,72 +1,167 @@
 import cors from "cors";
 import { CHROME_EXTENSION_ALL_URL } from "../config.js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";
-import { addToBlacklist } from "./ipBlacklist.js";   // ✅ přidáno
+import { addToBlacklist } from "./ipBlacklist.js";
 import { UAParser } from "ua-parser-js";
 import { redactHeaders } from "../utils/redact.js";
 import { warn } from "../utils/logger.js";
 
-
+// Povolené originy
 const allowedOrigins = [
-  "http://127.0.0.1:5501",
   "https://hackmindset.app",
-  CHROME_EXTENSION_ALL_URL
+  "http://127.0.0.1:5501",
+  CHROME_EXTENSION_ALL_URL  // Např. chrome-extension://abcd...
 ];
 
-const corsOptions = {
+// Base CORS options
+const corsOptionsBase = {
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
   optionsSuccessStatus: 204
 };
 
+// Robustní test, zda jde o Chrome Extension
+function isChromeExtension(origin, referer) {
+  return (
+    (origin && origin.startsWith("chrome-extension://")) ||
+    (referer && referer.startsWith("chrome-extension://"))
+  );
+}
+
+// Lokální vývoj = browser posílá ORIGIN
+function isLocalOrigin(origin) {
+  return (
+    origin === "http://localhost" ||
+    origin === "http://127.0.0.1:5501"
+  );
+}
+
 export default async function corsWithLogging(req, res, next) {
-  const origin = req.headers.origin;
-  const isLocalRequest = req.hostname === "localhost" || req.hostname === "127.0.0.1";
+  const origin = req.headers.origin || null;
+  const referer = req.headers.referer || null;
+  const ua = req.get("User-Agent") || "";
 
+  const extensionRequest = isChromeExtension(origin, referer);
 
-  // ❌ Pokud není origin nebo není v seznamu povolených
-  if ((!origin || !allowedOrigins.includes(origin)) && !isLocalRequest) {
-    const uaString = req.get("User-Agent") || "Neznámý";
-    const parser = new UAParser(uaString);
-    const result = parser.getResult();
+  // --------------------------------------------------------------------
+  // 1) Preflight OPTIONS — MUSÍ odpovídat přesně tomu, co bude platit i po něm
+  // --------------------------------------------------------------------
+  if (req.method === "OPTIONS") {
 
+    // Chrome extension
+    if (extensionRequest) {
+      return res
+        .status(204)
+        .set({
+          "Access-Control-Allow-Origin": CHROME_EXTENSION_ALL_URL,
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Max-Age": "86400",
+          "Access-Control-Allow-Credentials": "true"
+        })
+        .end();
+    }
+
+    // Lokální vývoj
+    if (isLocalOrigin(origin)) {
+      return res
+        .status(204)
+        .set({
+          "Access-Control-Allow-Origin": origin,
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Max-Age": "86400"
+        })
+        .end();
+    }
+
+    // Validní origin
+    if (allowedOrigins.includes(origin)) {
+      return res
+        .status(204)
+        .set({
+          "Access-Control-Allow-Origin": origin,
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Max-Age": "86400"
+        })
+        .end();
+    }
+
+    // Neoprávněný origin → blokace
+    return res.status(403).json({ error: "Access blocked by CORS policy" });
+  }
+
+  // --------------------------------------------------------------------
+  // 2) Chrome Extension request — povol bezpečně
+  // --------------------------------------------------------------------
+  if (extensionRequest) {
+    return cors({
+      ...corsOptionsBase,
+      origin: CHROME_EXTENSION_ALL_URL,
+    })(req, res, next);
+  }
+
+  // --------------------------------------------------------------------
+  // 3) Lokální vývoj
+  // --------------------------------------------------------------------
+  if (isLocalOrigin(origin)) {
+    return cors({
+      ...corsOptionsBase,
+      origin: origin,
+    })(req, res, next);
+  }
+
+  // --------------------------------------------------------------------
+  // 4) Neoprávněný ORIGIN (pokud je definovaný)
+  // --------------------------------------------------------------------
+  if (origin && !allowedOrigins.includes(origin)) {
     const clientIP = req.ip || "Neznámé";
+    const parser = new UAParser(ua);
+    const parsedUA = parser.getResult();
 
-    warn(`[CORS BLOCKED] Origin: ${origin || "null"} - ${new Date().toISOString()}`);
+    warn(`[CORS BLOCKED] Origin: ${origin} - ${new Date().toISOString()}`);
 
-    // ✅ 1. Zaloguj blokaci (Discord)
     await notifyBlockedIP({
       ip: clientIP,
       reason: "CORS Blocked",
-      userAgent: uaString,
+      userAgent: ua,
       method: req.method,
       path: req.originalUrl,
       city: "Neznámé",
       origin,
-      browser: result.browser?.name || "Neznámý",
-      os: result.os?.name || "Neznámý",
-      deviceType: result.device?.type || "Neznámý",
-      referer: req.get("Referer"),
+      browser: parsedUA.browser?.name,
+      os: parsedUA.os?.name,
+      deviceType: parsedUA.device?.type,
+      referer,
       headers: redactHeaders(req.headers),
     });
 
-    // ✅ 2. Přidej IP do blacklistu
     await addToBlacklist(clientIP, "CORS Blocked", {
-      userAgent: uaString,
-      browser: result.browser?.name,
-      os: result.os?.name,
-      deviceType: result.device?.type,
+      userAgent: ua,
       method: req.method,
       path: req.originalUrl,
     });
 
-    // ✅ 3. Okamžitě vrať chybu
     return res.status(403).json({ error: "Access blocked by CORS policy" });
   }
 
-  // ✅ Jinak – standardní CORS
+  // --------------------------------------------------------------------
+  // 5) Request BEZ Origin hlavičky (curl, bot apod.)
+  // → Nemůže být CORS exploit → ale nechceme povolit všechny
+  // --------------------------------------------------------------------
+  if (!origin) {
+    // Pro rozšíření to není problém, ale pro web requesty ano.
+    // Přístup bude povolen, pokud to není cross-site scénář.
+    return next();
+  }
+
+  // --------------------------------------------------------------------
+  // 6) Validní request z whitelisted originu
+  // --------------------------------------------------------------------
   return cors({
-    ...corsOptions,
+    ...corsOptionsBase,
     origin: origin
   })(req, res, next);
 }

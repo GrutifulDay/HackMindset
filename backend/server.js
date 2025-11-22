@@ -197,13 +197,13 @@ app.use("/api", untruthLimitRoutes)
 // app.use("/api", feedbackRoutes)
 
 // testovací router
-app.get("/api/test", (req, res) => {
-  const userAgentString = req.get("User-Agent") || "neznámý"
-  const parser = new UAParser(userAgentString)
-  const result = parser.getResult()
-  debug("UAParser výstup:", result)
-  res.json({ message: "Server OK", originalUserAgent: userAgentString, parsed: result })
-})
+// app.get("/api/test", (req, res) => {
+//   const userAgentString = req.get("User-Agent") || "neznámý"
+//   const parser = new UAParser(userAgentString)
+//   const result = parser.getResult()
+//   debug("UAParser výstup:", result)
+//   res.json({ message: "Server OK", originalUserAgent: userAgentString, parsed: result })
+// })
 
 // Statické soubory
 app.use(express.static(path.join(__dirname, "frontend")))
