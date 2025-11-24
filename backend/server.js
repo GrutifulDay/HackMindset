@@ -182,8 +182,8 @@ app.use(captureHeaders({
 // globalni Middleware – pořadí je důležité
 app.use(ipBlocker);       // blokuje známé útočníky
 app.use(botProtection);   // detekce botů / UA
-app.use(speedLimiter);    // soft limit
-app.use(limiterApi);      // tvrdý rate limit
+//app.use(speedLimiter);    // soft limit
+//app.use(limiterApi);      // tvrdý rate limit
 
 // routes
 app.use("/api", tokenRoutes);
