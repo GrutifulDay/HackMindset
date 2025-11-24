@@ -51,7 +51,7 @@ import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
 
 const app = express()
-app.set("trust proxy", 1);
+app.set("trust proxy", 1); 
 // app.set("trust proxy", false); // true = proxy / false = vyvoj 
 
 app.disable("etag")
@@ -182,8 +182,8 @@ app.use(captureHeaders({
 // globalni Middleware – pořadí je důležité
 app.use(ipBlocker);       // blokuje známé útočníky
 app.use(botProtection);   // detekce botů / UA
-//app.use(speedLimiter);    // soft limit
-//app.use(limiterApi);      // tvrdý rate limit
+app.use(speedLimiter);    // soft limit
+app.use(limiterApi);      // tvrdý rate limit
 
 // routes
 app.use("/api", tokenRoutes);
