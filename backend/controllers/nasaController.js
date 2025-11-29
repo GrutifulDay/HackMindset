@@ -52,9 +52,14 @@ export async function fetchNasaImage(req, res) {
     if (!response.ok) throw new Error(`Chyba NASA API: ${response.status}`);
 
     const data = await response.json();
+    // data.date = "2025-11-18";
     debug("✅ NASA API odpověď:", data.date);
 
     if (isToday(data.date)) {
+      // 🔥 TADY JE JEDINÉ MÍSTO, KTERÉ BYLO ŠPATNĚ:
+      const apodHtmlPage =
+        `https://apod.nasa.gov/apod/ap${data.date.replace(/-/g, "").slice(2)}.html`;
+
       const result =
         data.media_type === "video"
           ? {
@@ -63,7 +68,7 @@ export async function fetchNasaImage(req, res) {
               explanation: 'Dnes je video 🎥, klikni na odkaz: "Chceš vědět víc?"',
               date: data.date,
               source: "api",
-              pageUrl: data.url,
+              pageUrl: apodHtmlPage
             }
           : {
               type: "image",
@@ -71,7 +76,7 @@ export async function fetchNasaImage(req, res) {
               explanation: data.explanation,
               date: data.date,
               source: "api",
-              pageUrl: data.url || "https://apod.nasa.gov/apod/astropix.html",
+              pageUrl: apodHtmlPage || "https://apod.nasa.gov/apod/astropix.html",
             };
 
       nasaCache = result;
@@ -132,9 +137,8 @@ export async function fetchNasaImage(req, res) {
         const randomLink = links[index].getAttribute("href");
         const randomUrl = `${NASA_BASE_URL}${randomLink}`;
 
-        // video 
-        // const randomUrl = "https://apod.nasa.gov/apod/ap250915.html";
-
+        // video test
+        // const randomUrl = "https://apod.nasa.gov/apod/ap251118.html";
 
         debug("📂 Archivní URL:", randomUrl);
 
@@ -160,11 +164,16 @@ export async function fetchNasaImage(req, res) {
 
         // video detekce
         const iframe = randomDoc.querySelector("iframe");
+        const video = randomDoc.querySelector("video");
         const img = randomDoc.querySelector("img");
 
+
         // pokud existuje iframe (video) nebo chybi img, prepne na video hlasku
-        if (iframe || !img) {
-          const videoUrl = iframe?.getAttribute("src") || randomUrl;
+        if (iframe || video) {
+          const videoUrl = iframe?.getAttribute("src") || 
+                           video?.querySelector("source")?.getAttribute("src") ||
+                           randomUrl;
+
           const result = {
             type: "video",
             url: videoUrl,
@@ -173,7 +182,7 @@ export async function fetchNasaImage(req, res) {
             source: "archive-video",
             pageUrl: randomUrl
           };
-          info("🎥 NASA archivní režim – detekováno video");
+          info("🎥 NASA archivní režim – detekováno video (<iframe> nebo <video>)");
           return res.json(result);
         }
 
