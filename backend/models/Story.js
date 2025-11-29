@@ -4,7 +4,10 @@ import connectFrontendDB from "../db/connectFrontendDB.js";
 const frontendConnection = connectFrontendDB()
 
 const storySchema = new mongoose.Schema({
-  date: String,
+  year: { type: Number, required: true },
+  month: { type: Number, required: true },
+  day: { type: Number, required: true },
+  
   title: {
     cz: String,
     en: String

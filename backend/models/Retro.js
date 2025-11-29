@@ -4,8 +4,11 @@ import connectFrontendDB from "../db/connectFrontendDB.js";
 const frontendConnection = connectFrontendDB()
 
 const retroSchema = new mongoose.Schema({
-    date: String,
-    year: String,
+    year: { type: Number, required: true },
+    month: { type: Number, required: true },
+    day: { type: Number, required: true },
+    
+    eventYear: String,
     title: {
         cz: String,
         en: String

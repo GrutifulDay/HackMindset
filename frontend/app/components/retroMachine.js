@@ -60,7 +60,7 @@ export async function createRetroMachine() {
 
   retroWrapper.append(televisionIcon, retroMachineTitle)
 
-  const year = el("h3", retroData.year ? `> ${retroData.year} <` : "")
+  const eventYear = el("h3", retroData.eventYear ? `> ${retroData.eventYear} <` : "")
   const title = el("h3", retroData.title?.[lang] || "")
   const nostalgiggle = el("p", retroData.nostalgiggle?.[lang] || "")
   const voteTitle = el("p", lang === "cz" 
@@ -289,7 +289,7 @@ article.append(
   createFadeLine(),
   untruthWrapper,
   retroWrapper,
-  year,
+  eventYear,
   title,
   nostalgiggle,
   voteTitle,

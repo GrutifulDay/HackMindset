@@ -2,29 +2,42 @@ import dayjs from "dayjs"
 
 export async function getControllerDay(Model, req, res, options = {}) {
   try {
-    let targetDate
+    let target
 
     if (options.weekly) {
-      const today = dayjs()
-      const monday = today.startOf("week").add(1, "day"); // startOf("week") = neděle → +1 = pondělí
-      targetDate = monday.format("DD-MM-YYYY")
+      // pondělí aktuálního týdne
+      const monday = dayjs().startOf("week").add(1, "day")
+
+      target = {
+        year: monday.year(),
+        month: monday.month() + 1, // dayjs měsíce = 0–11
+        day: monday.date()
+      }
     } else {
-      targetDate = dayjs().format("DD-MM-YYYY")
+      const today = dayjs()
+
+      target = {
+        year: today.year(),
+        month: today.month() + 1,
+        day: today.date()
+      }
     }
 
-    const document = await Model.findOne({ date: targetDate })
+    const document = await Model.findOne(target)
 
     if (!document) {
-      return res.status(404).json({ error: "❌ Nenalezeno" })
+      return res.status(404).json({ error: "Nenalezeno" })
     }
 
+    // volitelně schovat datum
     if (options.excludeDate) {
-      const { date, ...cleaned } = document.toObject()
-      return res.json(cleaned)
+      const { year, month, day, ...rest } = document.toObject()
+      return res.json(rest)
     }
 
     res.json(document)
-  } catch (error) {
-    res.status(500).json({ error: "❌ Chyba serveru" })
+
+  } catch (err) {
+    res.status(500).json({ error: "Chyba serveru" })
   }
 }
