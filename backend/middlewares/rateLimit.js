@@ -1,5 +1,5 @@
 import rateLimit from "express-rate-limit";
-import UAParser from "ua-parser-js";
+import { UAParser } from "ua-parser-js";
 import { addToBlacklist } from "./ipBlacklist.js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";
 import { redactHeaders } from "../utils/redact.js";
