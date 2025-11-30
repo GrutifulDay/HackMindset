@@ -13,6 +13,12 @@ export async function createProfile() {
   const lang = getLanguage()
   const profileData = await fetchProfile()
 
+  // 🔥 DOPLNĚNO: pokud fetch selže → sekce se nevykreslí
+  if (!profileData || typeof profileData !== "object") {
+    error("❌ fetchProfile vrátil null – přeskočuji Profile sekci.");
+    return null;
+  }
+
   const aside = el("aside", null, {})
 
   const ul = el("ul", null, {
@@ -28,20 +34,20 @@ export async function createProfile() {
   // nadpis
   const profileWrapper = el("div", null, {
     display: "flex",
-  alignItems: "center",
-  justifyContent: "center", // vycentruje jako v ostatních sekcích
-  gap: "5px",               // mezera mezi ikonou a textem
-  marginTop: "-9px",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "5px",
+    marginTop: "-9px",
   })
 
   const instaIcon = el("img", null, {
     width: "40px",
-  height: "auto",
-  opacity: ".8",
-
+    height: "auto",
+    opacity: ".8",
   }, {
     src: "../assets/icons/insta.svg"
   })
+
   const hint = el("h2", lang === "cz" ? "Moje Insta Tipy:" : "My Insta Tips:", {})
 
   profileWrapper.append(instaIcon, hint)
@@ -59,62 +65,54 @@ export async function createProfile() {
     const li = el("li", null, {
       alignItems: "center",
       display: "flex"
-  })
+    })
 
-  const span = el("span", tag, {});
+    const span = el("span", tag, {});
+    const button = el("button", null, {
+      marginLeft: "3px",
+      cursor: "pointer",
+      border: "none",
+      padding: "4px",
+      background: "transparent",
+    })
 
-  const button = el("button", null, {
-    marginLeft: "3px",
-    cursor: "pointer",
-    border: "none",
-    padding: "4px",
-    background: "transparent",
-  })
-  
-  // přidání tooltipu
-  createAddTooltip(button, lang === "cz" ? "Zkopíruj" : "Copy")
+    createAddTooltip(button, lang === "cz" ? "Zkopíruj" : "Copy")
 
-  const copy = el("img", null, {
-    width: "20px",
-    height: "20px",
-    pointerEvents: "none",
-  }, {
-    src: "../assets/icons/copy.svg", 
-  })
+    const copy = el("img", null, {
+      width: "20px",
+      height: "20px",
+      pointerEvents: "none",
+    }, {
+      src: "../assets/icons/copy.svg", 
+    })
 
-  const check = el("img", null, {
-    width: "20px",
-    height: "20px",
-    pointerEvents: "none"
-  }, {
-    src: "../assets/icons/check.svg",
-  })
+    const check = el("img", null, {
+      width: "20px",
+      height: "20px",
+      pointerEvents: "none"
+    }, {
+      src: "../assets/icons/check.svg",
+    })
 
-  // zaloha pro pozdejsi vraceni
-  const copyIcon = copy.cloneNode(true) 
-  const checkIcon = check.cloneNode(true)
+    const copyIcon = copy.cloneNode(true) 
+    const checkIcon = check.cloneNode(true)
 
-  button.appendChild(copyIcon);
+    button.appendChild(copyIcon);
 
-  // fce pro kopirovani
-  button.addEventListener("click", () => {
-    navigator.clipboard.writeText(tag)
-      .then(() => {
-        debug(`✅ Zkopírováno: ${tag}`)
-
-        // smaz obsah a nahrad 
-        button.replaceChildren(checkIcon)
-
-        // Po 1s vrati ikonu 
-        setTimeout(() => {
-          button.textContent = ""
-          button.appendChild(copyIcon)
+    button.addEventListener("click", () => {
+      navigator.clipboard.writeText(tag)
+        .then(() => {
+          debug(`✅ Zkopírováno: ${tag}`)
+          button.replaceChildren(checkIcon)
+          setTimeout(() => {
+            button.textContent = ""
+            button.appendChild(copyIcon)
           }, 1000)
         })
         .catch(err => {
           error("❌ Chyba při kopírování:", err)
         })
-      })
+    })
 
     li.append(span, button)
     ul.appendChild(li)
@@ -123,3 +121,4 @@ export async function createProfile() {
   aside.append(createFadeLine(), profileWrapper, ul)
   return aside
 }
+

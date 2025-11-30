@@ -9,113 +9,114 @@ import { debug, warn } from "../utils/logger/logger.js";
 debug("{digitalSignpost.js} 🧩 sekce se generuje...");
 
 export async function createDigitalSignpost() {
-    debug("{funkce createDigitalSignpost} ✅ funguje");
+  debug("{funkce createDigitalSignpost} ✅ funguje");
 
-    const lang = getLanguage()
-    const CACHE_KEY = `digital_cache_${lang}`
+  const lang = getLanguage()
+  const CACHE_KEY = `digital_cache_${lang}`
 
-    let digitalData = getCachedData(CACHE_KEY)
+  let digitalData = getCachedData(CACHE_KEY)
 
-    if (digitalData) {
-        debug("[retro] ⏳ Data jsou aktuální – čtu z cache.")
-      } else {
-        debug("🌐 Načítám nová data ze serveru")
-        digitalData = await fetchDigitalSignpost() 
-        if (digitalData) setCachedData(CACHE_KEY, digitalData)
-      }
-    
+  if (digitalData) {
+      debug("[retro] ⏳ Data jsou aktuální – čtu z cache.")
+  } else {
+      debug("🌐 Načítám nová data ze serveru")
+      digitalData = await fetchDigitalSignpost()
+
+      // 🔥 1) TADY PŘIDÁVÁŠ KONTROLU, ŽE FETCH SELHAL
       if (!digitalData) {
-        warn("⚠️ Žádný příběh nenalezen.");
-        return
+          warn("⚠️ DigitalSignpost se nevykreslí – fetch vrátil null.")
+          return null            // ⬅⬅⬅ Tohle je to hlavní!
       }
 
-    const article = el("article", null, {
-        position: "relative"
-    })
+      setCachedData(CACHE_KEY, digitalData)
+  }
 
-    const digitalWrapper = el("div", null, {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: "10px",
-        marginTop: "17px",
-        marginLeft: "53px"
-    })
+  // ⚠️ 2) DRUHÁ POJISTKA (klidně může zůstat)
+  if (!digitalData) {
+      warn("⚠️ Žádný příběh nenalezen.");
+      return null
+  }
 
-    const titleDigitalSignpost = el ("h2", lang === "cz" ? "Digitální rozcestník" : "Digital signpost", {
-        margin: "0"
-    })
+  // ZBYTEK KÓDU SE NEMĚNÍ
+  const article = el("article", null, { position: "relative" })
 
-    const signpostIcon = el("img", null, {
-        width: "40px",
-        height: "auto",
-        opacity: ".8",
-        transform: "translateY(-9px)"
-    }, {
-        src: "../assets/icons/signpost.svg"
-    })
-    digitalWrapper.append(titleDigitalSignpost, signpostIcon)
+  const digitalWrapper = el("div", null, {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: "10px",
+      marginTop: "17px",
+      marginLeft: "53px"
+  })
 
+  const titleDigitalSignpost = el("h2",
+      lang === "cz" ? "Digitální rozcestník" : "Digital signpost",
+      { margin: "0" }
+  )
 
-    const infoTime = el("p", lang === "cz" ? "> Vychází každé pondělí <" :  "> Published every Monday <", {},{
-        id: "info-TimeDescription"
-    })
-   
-    const title =  el("h3", digitalData.title?.[lang] || "", {})
+  const signpostIcon = el("img", null, {
+      width: "40px",
+      height: "auto",
+      opacity: ".8",
+      transform: "translateY(-9px)"
+  }, {
+      src: "../assets/icons/signpost.svg"
+  })
+  digitalWrapper.append(titleDigitalSignpost, signpostIcon)
 
-    const content = el("p", digitalData.content?.[lang] || "", {})
+  const infoTime = el("p",
+      lang === "cz" ? "> Vychází každé pondělí <"
+                    : "> Published every Monday <",
+      {},
+      { id: "info-TimeDescription" }
+  )
 
-    const recommendation = el("p", digitalData.recommendation?. [lang] ||"", {})
+  const title = el("h3", digitalData.title?.[lang] || "", {})
+  const content = el("p", digitalData.content?.[lang] || "", {})
+  const recommendation = el("p", digitalData.recommendation?.[lang] || "", {})
 
-    // OZNACENI CHYBNE INFORMACE 
-    const untruthIcon = createUntruthIcon()
-    const untruthVotingWindow = createUntruthVotingWindow()
-    document.body.append(untruthVotingWindow)
+  const untruthIcon = createUntruthIcon()
+  const untruthVotingWindow = createUntruthVotingWindow()
+  document.body.append(untruthVotingWindow)
 
-    const section = "digital"
-    const date = digitalData.date //  napr. "2025-07-14"
+  const section = "digital"
+  const date = digitalData.date
 
-    untruthIcon.dataset.section = section
+  untruthIcon.dataset.section = section
 
+  const untruthWrapper = el("div", null, {
+      position: "absolute",
+      top: "8px",
+      left: "0px",
+      zIndex: "9999",
+      pointerEvents: "auto",
+      opacity: "0.6",
+      transition: "opacity 0.2s",
+  })
 
-    const untruthWrapper = el("div", null, {
-        position: "absolute",
-        top: "8px",
-        left: "0px",
-        zIndex: "9999",
-        pointerEvents: "auto",
-        opacity: "0.6",
-        transition: "opacity 0.2s",        
-      })
-      
+  untruthIcon.addEventListener("click", () => {
+      debug("🧪 CLICK DETEKTOVÁN NA untruthIcon")
+      untruthVotingWindow.show(untruthIcon, { section, date })
+  })
 
-      untruthIcon.addEventListener("click", () => {
-        debug("🧪 CLICK DETEKTOVÁN NA untruthIcon")
-        untruthVotingWindow.show(untruthIcon, {
-          section,
-          date
-        })
-      })
-      
+  untruthWrapper.addEventListener("mouseenter", () => {
+      untruthWrapper.style.opacity = "1"
+  })
+  untruthWrapper.addEventListener("mouseleave", () => {
+      untruthWrapper.style.opacity = "0.6"
+  })
 
-    // zvyrazneni 
-    untruthWrapper.addEventListener("mouseenter", () => {
-        untruthWrapper.style.opacity = "1"
-    })
-      untruthWrapper.addEventListener("mouseleave", () => {
-        untruthWrapper.style.opacity = "0.6"
-    })
-    
-    untruthWrapper.append(untruthIcon)
+  untruthWrapper.append(untruthIcon)
 
-    article.append(
-        createFadeLine(),
-        untruthWrapper,
-        digitalWrapper,
-        infoTime,
-        title,
-        content,
-        recommendation
-    )
-    return article
+  article.append(
+      createFadeLine(),
+      untruthWrapper,
+      digitalWrapper,
+      infoTime,
+      title,
+      content,
+      recommendation
+  )
+
+  return article
 }

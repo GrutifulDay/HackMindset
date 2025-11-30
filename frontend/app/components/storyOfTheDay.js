@@ -32,9 +32,10 @@ export async function createStoryOfTheDay() {
     if (storyData) setCachedData(CACHE_KEY, storyData)
   }
 
-  if (!storyData) {
-    warn("⚠️ Žádný příběh nenalezen.");
-    return
+  // 🔥 BEZPEČNOSTNÍ OCHRANA – ZABRÁNÍ PÁDU UI
+  if (!storyData || typeof storyData !== "object") {
+    warn("⚠️ Story data nejsou dostupná – sekce se nepřidá.");
+    return null;
   }
 
   const article = el("article", null, {

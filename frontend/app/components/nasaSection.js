@@ -20,34 +20,28 @@ export async function createNasaSection() {
     debug("📡 Žádná nebo neplatná cache – načítám z backendu...");
     const fresh = await fetchNasaImage();
 
-    // validuj
-    if (fresh && fresh.url) {
-      nasaData = fresh;
-      // ⚠️ uklada do cache jen validni data
-      setCachedData(cacheKey, nasaData);
-    } else {
-      const { nasaData: chromeCache } = await new Promise((resolve) => {
-        chrome.storage.local.get("nasaData", (result) => resolve(result));
-      });
-
-      if (chromeCache && chromeCache.url) {
-        debug("⚡ NASA data načtena z Chrome storage.");
-        nasaData = chromeCache;
-        setCachedData(cacheKey, nasaData); // sjednoti i localStorage cache
-      }
+    // 🔥 1) TADY DOPLNĚNO – fetch selhal → sekce se nevykreslí
+    if (!fresh || !fresh.url) {
+      warn("[nasa] ❌ fetchNasaImage vrátil null – NASA sekci přeskakuji.");
+      return null;
     }
+
+    // uložení validních dat
+    nasaData = fresh;
+    setCachedData(cacheKey, nasaData);
   } else {
     debug("⚡ NASA data načtena z cache");
   }
 
   debug("{nasaSection.js}📌 Načtený NASA obrázek:", nasaData);
 
-  // pokud nejsou validni data, vraci null 
+  // 🔥 2) tvoje existující kontrola (zůstává)
   if (!nasaData || !nasaData.url) {
     warn("[nasa] ⚠️ Žádná validní NASA data – sekci vynechám.");
     return null;
   }
 
+  // ZBYTEK KÓDU BEZ ZMĚNY
   const section = el("section", null, {}, {});
 
   const titleWrapper = el("div", null, {
@@ -106,10 +100,13 @@ export async function createNasaSection() {
 
   const translationIcon = createTranslationIcon();
   const translationInfoIcon = createTranslationInfoWindow();
-  attachInfoToggle(translationIcon, translationInfoIcon, () => translationInfoIcon.show());
+  attachInfoToggle(translationIcon, translationInfoIcon, () =>
+    translationInfoIcon.show()
+  );
 
   const fullText = nasaData.explanation || "";
-  const shortText = fullText.length > 100 ? fullText.slice(0, 100) + "..." : fullText;
+  const shortText =
+    fullText.length > 100 ? fullText.slice(0, 100) + "..." : fullText;
 
   const nasaDescription = el("p", shortText, { cursor: "pointer" });
   if (nasaData.type !== "video") {
@@ -138,7 +135,12 @@ export async function createNasaSection() {
     }
   );
 
-  const moreIcon = el("img", null, { width: "12px", height: "auto" }, { src: "../assets/icons/more.svg" });
+  const moreIcon = el(
+    "img",
+    null,
+    { width: "12px", height: "auto" },
+    { src: "../assets/icons/more.svg" }
+  );
   nasaLink.append(moreIcon);
 
   section.append(
@@ -152,4 +154,5 @@ export async function createNasaSection() {
 
   return section;
 }
+
 

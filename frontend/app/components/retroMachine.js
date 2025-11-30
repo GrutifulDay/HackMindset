@@ -4,12 +4,9 @@ import { createVotingReportUsers } from "./interactions_users/votingReport.js";
 import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
 import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
-
 import { createUntruthIcon } from "./icons_import/untruthIcon.js";
 import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js";
-
 import { createAddTooltip } from "../utils/dom/tooltip.js";
-
 import { createModemSound } from "./sound_section/modem.js";
 import { debug, warn } from "../utils/logger/logger.js";
 
@@ -19,27 +16,28 @@ debug("{retroMachine.js} 🧩 sekce se generuje...");
 export async function createRetroMachine() {
   debug("{funkce createRetroMachine} ✅ funguje");
 
-  const lang = getLanguage()
-  const CACHE_KEY = `retro_cache_${lang}`
+  const lang = getLanguage();
+  const CACHE_KEY = `retro_cache_${lang}`;
 
-  let retroData = getCachedData(CACHE_KEY)
+  let retroData = getCachedData(CACHE_KEY);
 
   if (retroData) {
-    debug("[retro] ⏳ Data jsou aktuální – čtu z cache.")
+    debug("[retro] ⏳ Data jsou aktuální – čtu z cache.");
   } else {
     debug("🌐 Načítám nová data ze serveru");
-    retroData = await fetchRetroMachine()
-    if (retroData) setCachedData(CACHE_KEY, retroData)
+    retroData = await fetchRetroMachine();
+    if (retroData) setCachedData(CACHE_KEY, retroData);
   }
 
-  if (!retroData) {
-    warn("⚠️ Žádný příběh nenalezen.");
-    return
+  // 🔥 BEZPEČNOSTNÍ OCHRANA – ZABRÁNÍ PÁDU UI
+  if (!retroData || typeof retroData !== "object") {
+    warn("⚠️ Retro data nejsou dostupná – sekce se nepřidá.");
+    return null;
   }
 
   const article = el("article", null, {
     position: "relative"
-  })
+  });
 
   const retroMachineTitle = el("h2", "Retro Machine")
   const retroWrapper = el("div", null, {

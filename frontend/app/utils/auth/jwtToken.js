@@ -2,9 +2,9 @@ import { API } from "../config.js";
 import { debug, error } from "../logger/logger.js";
 
 let jwtToken = null;
-let tokenExpiry = null; // kdy token vyprsi
+let tokenExpiry = null;
 
-// helper: dekóduj JWT (bez ověření signatury – jen base64 decode)
+// helper: dekóduj JWT
 function decodeJwt(token) {
   const payload = token.split(".")[1];
   return JSON.parse(atob(payload));
@@ -13,36 +13,57 @@ function decodeJwt(token) {
 export async function getJwtToken() {
   const now = Date.now();
 
-  // pokud ma token jeste 5s platnosti -> vrati
+  // Pokud má token ještě 5s platnost
   if (jwtToken && tokenExpiry && now < tokenExpiry - 5000) {
     return jwtToken;
   }
 
   try {
-    const res = await fetch(API.getToken, 
-      { 
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer EXTENSION_SIGNATURE"
-        }
-       });
+    const res = await fetch(API.getToken, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer EXTENSION_SIGNATURE"
+      }
+    });
+
+    // ❗ ZDE přidáme bezpečnou kontrolu
     if (!res.ok) {
-      throw new Error("❌ Nelze získat JWT token");
+      console.warn("[WARN] getJwtToken → server odmítl token:", res.status);
+
+      jwtToken = null;        // vynuluj
+      tokenExpiry = null;     // vynuluj
+
+      return null;            // klíčový krok – žádný throw
     }
 
     const data = await res.json();
+
+    // ❗ Další bezpečná kontrola
+    if (!data?.token) {
+      console.warn("[WARN] getJwtToken → token není v odpovědi:", data);
+
+      jwtToken = null;
+      tokenExpiry = null;
+
+      return null;
+    }
+
     jwtToken = data.token;
 
-    // dekóduj exp claim
     const decoded = decodeJwt(jwtToken);
-    tokenExpiry = decoded.exp * 1000; // ms
+    tokenExpiry = decoded.exp * 1000;
 
     debug("🔐 Nový JWT token získán, exp:", new Date(tokenExpiry).toLocaleTimeString());
 
     return jwtToken;
+
   } catch (err) {
     error("❌ Chyba při získávání JWT tokenu:", err);
+
+    jwtToken = null;
+    tokenExpiry = null;
+
     return null;
   }
 }
