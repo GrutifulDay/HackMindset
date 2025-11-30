@@ -1,21 +1,11 @@
 import rateLimit from "express-rate-limit";
+import UAParser from "ua-parser-js";
 import { addToBlacklist } from "./ipBlacklist.js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";
 import { redactHeaders } from "../utils/redact.js";
 import { debug } from "../utils/logger.js";
 
-
-// const redact = (obj = {}) => {
-//   const SENSITIVE = new Set(["authorization","cookie","proxy-authorization","x-api-key","set-cookie"]);
-//   const out = {};
-//   for (const [k, v] of Object.entries(obj)) {
-//     out[k] = SENSITIVE.has(k.toLowerCase()) ? "[REDACTED]" : v;
-//   }
-//   return out;
-// };
-
-// In-memory mapy (jen pro jeden proces, do restartu serveru)
-const offenders = new Map();          // pocty prestupku pro IP
+const offenders = new Map();
 
 const normalizeIp = (ip) => {
   if (!ip) return ip;
@@ -24,32 +14,30 @@ const normalizeIp = (ip) => {
 };
 
 const limiterApi = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minuta
+  windowMs: 60 * 1000,
   max: (req) => {
-    if (req.originalUrl.includes("/get-token")) return 6; // prisnejsi limit pro vydavani tokenu
-    return 100; // ostatni routy
+    if (req.originalUrl.includes("/get-token")) return 6;
+    return 100;
   },
   standardHeaders: true,
   legacyHeaders: false,
 
   keyGenerator: (req) => normalizeIp(req.ip),
 
-  // 💡 BONUS: rozšíření (chrome-extension://) limiter neomezuje
   skip: (req) => {
     const origin = req.headers.origin || req.headers.referer || "";
-    const isFromExtension = origin.includes("chrome-extension://");
-    return isFromExtension;
+    return origin.includes("chrome-extension://");
   },
 
   handler: async (req, res) => {
     const ip = normalizeIp(req.ip);
-    const uaString = req.get("User-Agent") || "Neznámý";
+
+    const uaString = String(req.get("User-Agent") || "Unknown");
     const parser = new UAParser(uaString);
     const result = parser.getResult();
 
     debug(`⚠️ Rate limit exceeded for IP: ${ip}`);
 
-    // zvysi prestupek hned
     const count = (offenders.get(ip) || 0) + 1;
     offenders.set(ip, count);
 
@@ -64,13 +52,13 @@ const limiterApi = rateLimit({
         reason: "První rate-limit hit",
         method: req.method,
         path: req.originalUrl,
-        headers: redactHeaders(req.headers), 
+        headers: redactHeaders(req.headers),
         origin: req.get("Origin"),
         referer: req.get("Referer"),
         requests: count,
       });
     }
-      
+
     if (count >= 3) {
       await addToBlacklist(ip, "Opakované překročení rate limitu", {
         userAgent: uaString,
@@ -91,7 +79,7 @@ const limiterApi = rateLimit({
         reason: "Rate limit exceeded → Blacklist",
         method: req.method,
         path: req.originalUrl,
-        headers: redactHeaders(req.headers), 
+        headers: redactHeaders(req.headers),
         origin: req.get("Origin"),
         referer: req.get("Referer"),
         requests: count,
@@ -99,18 +87,11 @@ const limiterApi = rateLimit({
 
       offenders.delete(ip);
     }
-      
+
     return res.status(429).json({
       error: "Rate limit exceeded. Try again later.",
     });
   },
-
-  keyGenerator: (req) => normalizeIp(req.ip),
-
-  // skip: (req) => {
-  //   const ignoredIPs = ["127.0.0.1", "::1", "::ffff:127.0.0.1"];
-  //   return ignoredIPs.includes(normalizeIp(req.ip));
-  // },
 });
 
 export default limiterApi;
