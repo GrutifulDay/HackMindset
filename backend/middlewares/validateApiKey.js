@@ -162,4 +162,3 @@ async function blockRequest(req, res, userIP, userAgentString, routeDescription,
 
   return res.status(403).json({ error: "Access denied" });
 }
-
