@@ -249,7 +249,7 @@ const untruthVotingWindow = createUntruthVotingWindow()
 document.body.append(untruthVotingWindow)
 
 const section = "retro"
-const date = retroData.date // napr. "2025-07-14"
+const date = `${retroData.day}-${retroData.month}-${retroData.year}`
 
 untruthIcon.dataset.section = section
 

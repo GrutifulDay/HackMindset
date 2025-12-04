@@ -6,7 +6,7 @@ debug("{fetchUntruthLimit.js} 📡 aktivní");
 
 //odesila info, ze uzivatel oznacil vse jako nepravdu 
 export async function fetchUntruthLimit(section, date) {
-  const [day, month, year] = date.split("-")
+  const [day, month, year] = date.split("-").map(Number)
   const formattedDate = `${year}-${month}`
   
   debug("🧪 fetchUntruthLimit: section =", section, "date =", date);
@@ -17,7 +17,6 @@ export async function fetchUntruthLimit(section, date) {
     error("❌ Chybí JWT token – fetch se neprovede.");
     return null;
   }
-  
   
   const response = await fetch(API.untruthLimitLog, {
     method: "POST",

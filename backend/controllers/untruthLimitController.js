@@ -8,6 +8,10 @@ export async function postUntruthLimit(req, res) {
     if (!section || !date) {
       return res.status(400).json({ error: "Chybí parametr 'section' nebo 'date'" })
     }
+    // 🛡️ VALIDACE — JEDINÝ NUTNÝ FIX
+    if (!/^\d{4}-\d{2}$/.test(date)) {
+      return res.status(400).json({ error: "Neplatný formát data, očekáváno YYYY-MM" })
+    }
 
     let log = await UntruthLog.findOne({ date })
 

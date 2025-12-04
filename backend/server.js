@@ -10,10 +10,10 @@ global.util = util;
 import { debug, info, warn, error } from "./utils/logger.js";
 
 // zaklad
-// import fs from "fs"
+import fs from "fs"
 
 // lokalni testovani 
-// import https from "https"
+import https from "https"
 import { UAParser } from "ua-parser-js"
 
 // NPM knihovny 
@@ -215,16 +215,16 @@ try {
 } catch { /* ignore */ }
 
 // ✅ Spuštění serveru
-app.listen(PORT, "127.0.0.1", () => {
-  info(`✅ Server běží na http://127.0.0.1:${PORT}`);
-});
+// app.listen(PORT, "127.0.0.1", () => {
+//   info(`✅ Server běží na http://127.0.0.1:${PORT}`);
+// });
 
 // pro lokalni testovani 
-// const options = {
-//   key: fs.readFileSync('./cert/key.pem'),
-//   cert: fs.readFileSync('./cert/cert.pem'),
-// }
+const options = {
+  key: fs.readFileSync('./cert/key.pem'),
+  cert: fs.readFileSync('./cert/cert.pem'),
+}
 
-// https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-//   debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
-// });
+https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
+  debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
+});

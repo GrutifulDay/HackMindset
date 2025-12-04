@@ -257,7 +257,7 @@ const untruthVotingWindow = createUntruthVotingWindow()
 document.body.append(untruthVotingWindow)
 
 const section = "story"
-const date = storyData.date
+const date = `${storyData.day}-${storyData.month}-${storyData.year}`
 
 untruthIcon.dataset.section = section
 

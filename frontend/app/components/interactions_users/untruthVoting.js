@@ -7,7 +7,7 @@ import { createFeedbackUntruth } from "../interactions_users/votingReport.js";
 import { debug } from "../../utils/logger/logger.js";
 
 export function createUntruthVotingWindow() {
-  const lang = getLanguage()
+  const lang = getLanguage();
 
   const container = el("div", null, {
     position: "absolute",
@@ -19,7 +19,7 @@ export function createUntruthVotingWindow() {
     borderRadius: "10px",
     boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
     fontFamily: "'JetBrains Mono', monospace",
-  })
+  });
 
   const closeBtn = el("span", "×", {
     position: "absolute",
@@ -29,202 +29,195 @@ export function createUntruthVotingWindow() {
     fontSize: "20px",
     fontWeight: "bold",
     color: "#333"
-  })
+  });
 
-  function closeContainer() {
+  closeBtn.addEventListener("click", () => {
     container.style.display = "none";
-    document.removeEventListener("click", handleOutsideClick)
-  }
+    document.removeEventListener("click", handleOutsideClick);
+  });
 
   function handleOutsideClick(e) {
     if (!container.contains(e.target)) {
-      closeContainer()
+      container.style.display = "none";
+      document.removeEventListener("click", handleOutsideClick);
     }
   }
 
-  closeBtn.addEventListener("click", closeContainer)
-
-  const title = el("h3", lang === "cz"
-    ? "Našli jste chybu?"
-    : "Did you find a mistake?", {
+  const title = el("h3", "", {
     display: "block",
     marginTop: "14px",
     fontWeight: "bold",
     textTransform: "uppercase",
     color: "#273E64"
-  })
+  });
 
-  // const = el("p", lang === "cz"
-  //   ? "Pokud si myslíš, že tento článek není pravdivý, označ konkrétní části."
-  //   : "If you think this article isn't true, select specific parts below.", {
-  //   marginTop: "8px",
-  //   color: "#273E64",
-  //   fontSize: "1em"
-  // })
+  // ---- LIST OF FEEDBACK OPTIONS ----
 
   const listItems = [
     lang === "cz" ? "Rok je špatně" : "The year is wrong",
     lang === "cz" ? "Není to dnešní datum" : "This is not today's date",
     lang === "cz" ? "Událost se stala jinak" : "It happened differently",
     lang === "cz" ? "Celý článek je špatně" : "The entire story is incorrect"
-  ]
+  ];
 
-  const selectedStates = []
+  let selectedStates = [];   // bude resetováno při každém otevření
   const listWrapper = el("div", null, {
     marginTop: "12px",
     fontSize: "1em",
     color: "#05054e"
-  })
+  });
 
-  listItems.forEach(text => {
-    const isSelected = { value: false }
+  // ---- SUBMIT BUTTON ----
 
-    const icon = el("img", null, {
-      width: "20px",
-      height: "20px",
-      cursor: "pointer"
-    }, {
-      src: "../assets/icons/mark-off.svg",
-      alt: "select icon"
-    })
+  const submitButton = el("button",
+    lang === "cz" ? "Odeslat" : "Submit",
+    {},
+    { class: "untruth-btn" }
+  );
 
-    icon.addEventListener("click", () => {
-      isSelected.value = !isSelected.value;
-      icon.src = isSelected.value
-        ? "../assets/icons/mark-on.svg"
-        : "../assets/icons/mark-off.svg";
-    })
+  initUntruthLimit(); // reset denního limitu
 
-    const label = el("span", text, {
-      marginLeft: "10px"
-    })
+  // ---- SHOW FUNCTION ----
 
-    const row = el("div", null, {
-      display: "flex",
-      marginBottom: "6px",
-      marginLeft: "54px"
-    })
-
-    row.append(icon, label);
-    listWrapper.appendChild(row);
-    selectedStates.push({ text, isSelected })
-  })
-
-  const submitButton = el("button", lang === "cz" ? "Odeslat" : "Submit", {}, {
-    class: "untruth-btn"
-  })
-
-  initUntruthLimit()
-
-  // otevreni okna 
   container.show = function (referenceElement, metadata = {}) {
-    container.dataset.section = metadata.section || "unknown"
-    container.dataset.date = metadata.date || ""
-    container.style.display = "block"
+
+    // 1) Uložit data
+    container.dataset.section = metadata.section || "unknown";
+    container.dataset.date = metadata.date || "";
   
-    // ✅ kontrola, jestli už bylo odesláno dnes
-    const section = container.dataset.section
-    const date = container.dataset.date
-    const today = new Date().toISOString().slice(0, 10)
-    const voteKey = `untruth-${section}-${date}-${today}`
+    const section = container.dataset.section;
+    const date = container.dataset.date;
   
-    const alreadySubmitted = localStorage.getItem(voteKey) === "1"
+    // 2) Dynamický jazyk (správně aktuální)
+    const currentLang = getLanguage();
+    title.textContent = currentLang === "cz"
+      ? `Našli jste chybu? (${section})`
+      : `Did you find a mistake? (${section})`;
   
+    // 3) Zobrazit okno
+    container.style.display = "block";
+    submitButton.disabled = false;
+  
+    // 4) Reset UI
+    listWrapper.innerHTML = "";
+    selectedStates = [];
+  
+    // 5) LocalStorage
+    const today = new Date().toISOString().slice(0, 10);
+    const voteKey = `untruth-${section}-${date}-${today}`;
+    const stored = JSON.parse(localStorage.getItem(voteKey));
+    const alreadySubmitted = !!stored;
+  
+    // 6) Render možností
+    listItems.forEach(text => {
+      const stateObj = { text, value: stored?.includes(text) || false };
+      selectedStates.push(stateObj);
+  
+      const icon = el("img", null, {
+        width: "20px",
+        height: "20px",
+        cursor: alreadySubmitted ? "default" : "pointer",
+        opacity: alreadySubmitted ? "0.6" : "1",
+        userSelect: "none",
+      }, {
+        src: stateObj.value
+          ? "../assets/icons/mark-on.svg"
+          : "../assets/icons/mark-off.svg",
+          draggable: "false"
+      });
+  
+      if (!alreadySubmitted) {
+        icon.addEventListener("click", () => {
+          stateObj.value = !stateObj.value;
+          icon.src = stateObj.value
+            ? "../assets/icons/mark-on.svg"
+            : "../assets/icons/mark-off.svg";
+        });
+      }
+  
+      const row = el("div", null, {
+        display: "flex",
+        marginBottom: "6px",
+        marginLeft: "54px"
+      });
+  
+      row.append(
+        icon,
+        el("span", text, { marginLeft: "10px" })
+      );
+  
+      listWrapper.appendChild(row);
+    });
+  
+    // 7) Nastavení tlačítka
     if (alreadySubmitted) {
-      submitButton.disabled = true
-      submitButton.textContent = lang === "cz" ? "Odesláno" : "Submitted"
-      submitButton.style.opacity = "0.6"
+      submitButton.disabled = true;
+      submitButton.textContent = currentLang === "cz" ? "Odesláno" : "Submitted";
+      submitButton.style.opacity = "0.6";
     } else {
-      submitButton.disabled = false
-      submitButton.textContent = lang === "cz" ? "Odeslat" : "Submit"
-      submitButton.style.opacity = "1"
+      submitButton.disabled = false;
+      submitButton.textContent = currentLang === "cz" ? "Odeslat" : "Submit";
+      submitButton.style.opacity = "1";
     }
   
-    // pozice leva / prava stejna vzdalenost od ikony 
+    // 8) Pozice
     requestAnimationFrame(() => {
-      const rect = referenceElement.getBoundingClientRect()
-    
-      const top = window.scrollY + rect.top - container.offsetHeight - 5
-      const screenCenter = window.innerWidth / 2
+      const rect = referenceElement.getBoundingClientRect();
+      const top = window.scrollY + rect.top - container.offsetHeight - 5;
+      const screenCenter = window.innerWidth / 2;
+  
       const left = rect.left < screenCenter
         ? window.scrollX + rect.right + 5
-        : window.scrollX + rect.left - container.offsetWidth - 5
-    
-      container.style.top = `${top}px`
-      container.style.left = `${left}px`
-    
-      // 🟣 scroll nahoru, kdyz neni videt cely okno 
-      requestAnimationFrame(() => {
-        const rectContainer = container.getBoundingClientRect()
-    
-        if (rectContainer.top < 0 || rectContainer.bottom > window.innerHeight) {
-          container.scrollIntoView({
-            behavior: "smooth",   // plynuly 
-            block: "start"    // center do stredu 
-          })
-        }
-      })
-      document.addEventListener("click", handleOutsideClick)
-      debug("✅ Zobrazovací funkce FINÁLNĚ nastavila pozici.")
-    })
-    
-  }
+        : window.scrollX + rect.left - container.offsetWidth - 5;
   
-    submitButton.addEventListener("click", async () => {
-    const section = container.dataset.section
-    const date = container.dataset.date
+      container.style.top = `${top}px`;
+      container.style.left = `${left}px`;
+  
+      document.addEventListener("click", handleOutsideClick);
+    });
+  };
+  
+
+  // ---- SUBMIT LOGIC ----
+
+  submitButton.addEventListener("click", async () => {
+    const section = container.dataset.section;
+    const date = container.dataset.date;
 
     const selected = selectedStates
-      .filter(item => item.isSelected.value)
-      .map(item => item.text);
+      .filter(i => i.value)
+      .map(i => i.text);
 
-    if (selected.length === 0 || !date) return;
+    if (selected.length === 0) return;
 
-    const today = new Date().toISOString().slice(0, 10)
-    const month = date.slice(0, 7)
+    const today = new Date().toISOString().slice(0, 10);
+    const voteKey = `untruth-${section}-${date}-${today}`;
 
-    const voteKey = `untruth-${section}-${date}-${today}`
-    const abuseKey = `abuse-limit-${section}-${month}`
+    // ABUSE = všech 4 položky
+    const isAbuse = selected.length === 4;
 
-    // Zneuziti = vsechno zaskrtnuto
-    const isAbuse = selected.length === 4
-
-    // Pokud uz v tomhle mesici poslal zneuziti, nepridavat znova
     if (isAbuse) {
-      if (!localStorage.getItem(abuseKey)) {
-        await fetchUntruthLimit( section, date ) // +1 v DB
-        localStorage.setItem(abuseKey, "1")
-        createFeedbackUntruth(lang === "cz"
-          ? "Díky. Tvůj podnět byl zaznamenán 👍"
-          : "Thanks. Your report was recorded. 👍"
-        )
-      } else {
-        debug("📛 Zneužití už bylo tento měsíc zaznamenáno")
-      }
-    } else {
-      // Platny bezny hlas
-      await fetchUntruthVotes(date, selected, section)
-      increaseUntruthVote()
+      await fetchUntruthLimit(section, date);
+      localStorage.setItem(voteKey, JSON.stringify(selected));
       createFeedbackUntruth(lang === "cz"
         ? "Děkujeme za nahlášení chyby 👍"
-        : "Thank you for reporting the error. 👍"
-      )
+        : "Thank you for reporting the error 👍"
+      );
+    } else {
+      await fetchUntruthVotes(date, selected, section);
+      increaseUntruthVote();
+      localStorage.setItem(voteKey, JSON.stringify(selected));
+      createFeedbackUntruth(lang === "cz"
+        ? "Děkujeme za nahlášení chyby 👍"
+        : "Thank you for reporting the error 👍"
+      );
     }
 
-    localStorage.setItem(voteKey, "1")
+    submitButton.disabled = true;
+    submitButton.textContent = lang === "cz" ? "Odesláno" : "Submitted";
+    submitButton.style.opacity = "0.6";
+  });
 
-    submitButton.disabled = true
-    submitButton.textContent = lang === "cz" ? "Odesláno" : "Submitted"
-    submitButton.style.opacity = "0.6"
-  })
-
-  container.append(
-    closeBtn,
-    title,
-    
-    listWrapper,
-    submitButton
-  )
-
-  return container
+  container.append(closeBtn, title, listWrapper, submitButton);
+  return container;
 }

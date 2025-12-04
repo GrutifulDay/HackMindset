@@ -75,12 +75,23 @@ export async function createDigitalSignpost() {
   const content = el("p", digitalData.content?.[lang] || "", {})
   const recommendation = el("p", digitalData.recommendation?.[lang] || "", {})
 
+  // neni clanek neni ikona
+  const articleIsEmpty =
+    (!digitalData.title?.[lang] || digitalData.title[lang].trim() === "") &&
+    (!digitalData.content?.[lang] || digitalData.content[lang].trim() === "") &&
+    (!digitalData.recommendation?.[lang] || digitalData.recommendation[lang].trim() === "")
+
+
   const untruthIcon = createUntruthIcon()
   const untruthVotingWindow = createUntruthVotingWindow()
   document.body.append(untruthVotingWindow)
 
+  if (articleIsEmpty) {
+    untruthIcon.style.display = "none"
+  }
+
   const section = "digital"
-  const date = digitalData.date
+  const date = `${digitalData.day}-${digitalData.month}-${digitalData.year}`
 
   untruthIcon.dataset.section = section
 

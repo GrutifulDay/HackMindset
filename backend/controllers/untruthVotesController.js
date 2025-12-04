@@ -23,7 +23,8 @@ export async function reportUntruthByToday(req, res) {
   }
 
   try {
-    const doc = await Model.findOne({ date })
+    const [day, month, year] = date.split("-").map(Number)
+    const doc = await Model.findOne({ day, month, year })
 
     if (!doc) {
       return res.status(404).json({ error: `Dokument pro datum ${date} v sekci '${section}' nenalezen` })
