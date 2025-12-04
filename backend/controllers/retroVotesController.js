@@ -5,7 +5,8 @@ export async function getRetroVotes(req, res) {
   const { date } = req.params;
 
   try {
-    const retro = await Retro.findOne({ date })
+    const [day, month, year] = date.split("-").map(Number)
+    const retro = await Retro.findOne({ day, month, year })
     if (!retro) {
       return res.status(404).json({ message: "Příběh Retro nenalezen" });
     }
@@ -28,7 +29,8 @@ export async function addRetroVote(req, res) {
   }
 
   try {
-    const retro = await Retro.findOne({ date })
+    const [day, month, year] = date.split("-").map(Number)
+    const retro = await Retro.findOne({ day, month, year })
     if (!retro) {
       return res.status(404).json({ message: "Příběh Retro nenalezen" });
     }

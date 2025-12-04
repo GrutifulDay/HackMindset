@@ -5,7 +5,8 @@ export async function getStoryVotes(req, res) {
   const { date } = req.params;
 
   try {
-    const story = await Story.findOne({ date })
+    const [day, month, year] = date.split("-").map(Number)
+    const story = await Story.findOne({ day, month, year })
     if (!story) {
       return res.status(404).json({ message: "Příběh Story nenalezen" });
     }
@@ -28,7 +29,8 @@ export async function addStoryVote(req, res) {
   }
 
   try {
-    const story = await Story.findOne({ date })
+    const [day, month, year] = date.split("-").map(Number)
+    const story = await Story.findOne({ day, month, year })
     if (!story) {
       return res.status(404).json({ message: "Příběh Story nenalezen" });
     }
