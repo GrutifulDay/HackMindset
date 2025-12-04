@@ -178,7 +178,7 @@ export async function createRetroMachine() {
   feedbackWrapper.append(notExperienceWrapper, rememberWrapper)
   
   // Kontrola, zda uzivatel jz hlasoval
-  const todayKey = retroData.date 
+  const todayKey = `${retroData.day}-${retroData.month}-${retroData.year}`
   const localStorageKey = `retroVotedToday_${todayKey}` 
   debug("🧪 todayKey:", todayKey)
   

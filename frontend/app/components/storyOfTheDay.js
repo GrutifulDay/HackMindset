@@ -186,7 +186,7 @@ const notExperienceWrapper = createVoteElement(notExperienceIMG, notExperienceCo
 feedbackWrapper.append(rememberWrapper, notExperienceWrapper)
 
 // Kontrola, zda uzivatel jiz hlasoval
-const todayKey = storyData.date 
+const todayKey = `${storyData.day}-${storyData.month}-${storyData.year}`
 const localStorageKey = `storyVotedToday_${todayKey}` 
 debug("🧪 todayKey:", todayKey)
 
