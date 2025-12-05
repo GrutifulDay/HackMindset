@@ -14,13 +14,17 @@ const normalizeIp = (ip) => {
 };
 
 const limiterApi = rateLimit({
-  windowMs: 60 * 1000,
+  windowMs: 60 * 1000, // minuta
   max: (req) => {
-    if (req.originalUrl.includes("/get-token")) return 6;
-    return 100;
+    // token endpoint
+    if (req.originalUrl.includes("/get-token")) {
+      return 60; 
+    }
+    // ostatni api
+    return 300;
   },
-  standardHeaders: true,
-  legacyHeaders: false,
+  standardHeaders: true,    // oficialni moderni hlavicky 
+  legacyHeaders: false,     // neposila stare hlavicky 
 
   keyGenerator: (req) => normalizeIp(req.ip),
 
