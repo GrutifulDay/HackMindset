@@ -1,11 +1,14 @@
 import rateLimit from "express-rate-limit";
-import { UAParser } from "ua-parser-js";
 import { addToBlacklist } from "./ipBlacklist.js";
 import { notifyBlockedIP } from "../utils/discordNotification.js";
-import { redactHeaders } from "../utils/redact.js";
 import { debug } from "../utils/logger.js";
 
 const offenders = new Map();
+
+const WINDOW_MS = 10 * 60 * 1000; // 10 minut
+const THRESHOLD = 10; // počet RL hitů během okna pro blacklist
+
+const makeKey = (ip, ua) => `${ip}::${ua}`;
 
 const normalizeIp = (ip) => {
   if (!ip) return ip;
@@ -14,82 +17,71 @@ const normalizeIp = (ip) => {
 };
 
 const limiterApi = rateLimit({
-  windowMs: 60 * 1000, // minuta
-  max: (req) => {
-    // token endpoint
-    if (req.originalUrl.includes("/get-token")) {
-      return 60; 
-    }
-    // ostatni api
-    return 300;
-  },
-  standardHeaders: true,    // oficialni moderni hlavicky 
-  legacyHeaders: false,     // neposila stare hlavicky 
+  windowMs: 60 * 1000,
+  max: (req) => req.originalUrl.includes("/get-token") ? 60 : 300,
+
+  standardHeaders: true,
+  legacyHeaders: false,
 
   keyGenerator: (req) => normalizeIp(req.ip),
 
+  // pokud prijde pozadavek z extension, je to ok 
   skip: (req) => {
     const origin = req.headers.origin || req.headers.referer || "";
-    return origin.includes("chrome-extension://");
+    const ua = req.get("User-Agent") || "";
+    return (
+      origin.startsWith("chrome-extension://") ||
+      ua.includes("Chrome/") && ua.includes("Safari")
+    );
   },
 
   handler: async (req, res) => {
     const ip = normalizeIp(req.ip);
+    const ua = req.get("User-Agent") || "Unknown-UA";
 
-    const uaString = String(req.get("User-Agent") || "Unknown");
-    const parser = new UAParser(uaString);
-    const result = parser.getResult();
+    const key = makeKey(ip, ua);
+    const now = Date.now();
 
-    debug(`⚠️ Rate limit exceeded for IP: ${ip}`);
+    let record = offenders.get(key);
 
-    const count = (offenders.get(ip) || 0) + 1;
-    offenders.set(ip, count);
+    // -----------------------
+    // RESET OKNA → správně na začátku
+    // -----------------------
+    if (!record || now - record.firstHit > WINDOW_MS) {
+      record = {
+        count: 0,            // reset
+        firstHit: now,       // nové okno
+        notified: false      // ještě jsme neposílali hlášení
+      };
+    }
 
-    if (count === 1) {
+    // pricteni az po resetu
+    record.count += 1;
+    offenders.set(key, record);
+
+    // -----------------------
+    // Jednorázová notifikace (první RL hit v okně)
+    // -----------------------
+    if (!record.notified) {
+      record.notified = true;
       await notifyBlockedIP({
         ip,
-        city: "Neznámé",
-        userAgent: uaString,
-        browser: result.browser?.name || "Neznámý",
-        os: result.os?.name || "Neznámý",
-        deviceType: result.device?.type || "Neznámý",
-        reason: "První rate-limit hit",
-        method: req.method,
+        reason: "Rate limit exceeded (first warning in window)",
         path: req.originalUrl,
-        headers: redactHeaders(req.headers),
-        origin: req.get("Origin"),
-        referer: req.get("Referer"),
-        requests: count,
+        userAgent: ua,
       });
     }
 
-    if (count >= 3) {
-      await addToBlacklist(ip, "Opakované překročení rate limitu", {
-        userAgent: uaString,
-        browser: result.browser?.name,
-        os: result.os?.name,
-        deviceType: result.device?.type,
-        method: req.method,
+    // -----------------------
+    // BLACKLIST: 10 hitů během 10 minut
+    // -----------------------
+    if (record.count >= THRESHOLD) {
+      await addToBlacklist(ip, "Repeated rate-limit abuse", {
+        userAgent: ua,
         path: req.originalUrl,
       });
 
-      await notifyBlockedIP({
-        ip,
-        city: "Neznámé",
-        userAgent: uaString,
-        browser: result.browser?.name || "Neznámý",
-        os: result.os?.name || "Neznámý",
-        deviceType: result.device?.type || "Neznámý",
-        reason: "Rate limit exceeded → Blacklist",
-        method: req.method,
-        path: req.originalUrl,
-        headers: redactHeaders(req.headers),
-        origin: req.get("Origin"),
-        referer: req.get("Referer"),
-        requests: count,
-      });
-
-      offenders.delete(ip);
+      offenders.delete(key);
     }
 
     return res.status(429).json({

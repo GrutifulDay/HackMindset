@@ -37,7 +37,7 @@ import limiterApi from "./middlewares/rateLimit.js"
 import corsOptions from "./middlewares/corsConfig.js"
 import botProtection from "./middlewares/botProtection.js"
 import ipBlocker, { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
-import speedLimiter from "./middlewares/slowDown.js"
+// import speedLimiter from "./middlewares/slowDown.js"
 import captureHeaders from "./middlewares/captureHeaders.js";
 // import detectSecretLeak from "./middlewares/detectSecretLeak.js";
 
@@ -51,7 +51,7 @@ import connectFrontendDB from "./db/connectFrontendDB.js"
 import path from "path"
 
 const app = express()
-app.set("trust proxy", 1); 
+app.set("trust proxy", 1); // pokud by byl Cloudflare, nutno navysit 
 // app.set("trust proxy", false); // true = proxy / false = vyvoj 
 
 app.disable("etag")
@@ -156,10 +156,10 @@ app.use((req, res, next) => {
 // 🔥 CORS – MUSÍ být před ipBlocker/botProtection
 app.use(corsOptions);
 
-// JSON parser (může být až za CORS)
+// nesmi poslat vetsi nez je limit v tele requestu
 app.use(express.json({ limit: "25kb" }));
 
-// Otevřený test endpoint (bez ochranných middleware)
+// ❗️smazat po testech❗️ - Otevřený test endpoint (bez ochranných middleware)
 app.get("/api/test-open", (req, res) => {
   res.status(200).json({
     ok: true,
@@ -182,7 +182,7 @@ app.use(captureHeaders({
 // globalni Middleware – pořadí je důležité
 app.use(ipBlocker);       // blokuje známé útočníky
 app.use(botProtection);   // detekce botů / UA
-app.use(speedLimiter);    // soft limit
+// app.use(speedLimiter);    // soft limit
 app.use(limiterApi);      // tvrdý rate limit
 
 // routes
@@ -206,7 +206,7 @@ app.use("/api", untruthLimitRoutes)
 // })
 
 // Statické soubory
-app.use(express.static(path.join(__dirname, "frontend")))
+// app.use(express.static(path.join(__dirname, "frontend")))
 
 // Debug výpis registrovaných cest
 try {
