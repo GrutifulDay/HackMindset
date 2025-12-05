@@ -59,13 +59,13 @@ export function validateApiKey(routeDescription) {
       }
 
     // kontrola zdroje pozadavku
-    const isLikelyFromChrome =
-      userAgentString.includes("Chrome") && !userAgentString.includes("Postman");
+    // const isLikelyFromChrome =
+    //   userAgentString.includes("Chrome") && !userAgentString.includes("Postman");
 
     const isFromAllowedSource =
       origin.includes(extensionID) ||
-      referer.includes(extensionID) ||
-      isLikelyFromChrome;
+      referer.includes(extensionID)
+      // isLikelyFromChrome;
 
     // overeni JWT tokenu
     let decodedToken;

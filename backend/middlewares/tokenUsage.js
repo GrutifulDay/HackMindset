@@ -9,10 +9,10 @@ const usage = new Map();
 
 // konfigurace 
 const WINDOW_MS = 2 * 60 * 1000; // 2 minuty
-const MAX_IPS = 2;                // víc než 2 IP = podezrele
-const MAX_UAS = 1;                // víc než 1 UA = podezrele
+const MAX_IPS = 10;                // víc než 2 IP = podezrele
+const MAX_UAS = 5;                // víc než 1 UA = podezrele
 // pocet requestu ve WINDOW_MS - casove okno ve kterem sleduje chovani tokenu (da se snizit)
-const MAX_REQUESTS = 200;   
+const MAX_REQUESTS = 500;   
 
 export function registerTokenUsage({ jti, ip, userAgent, path }) {
   if (!jti) return;
