@@ -1,7 +1,7 @@
 # HackMindset – Chrome Extension  
 A privacy-friendly daily knowledge companion that turns mindless scrolling into meaningful moments.
 
-![HackMindset Preview](assets/preview.png)
+![HackMindset Preview](readme-assets/preview.png)
 
 **Live Extension:** *(coming soon)*  
 **Repository:** https://github.com/GrutifulDay/HackMindset  
@@ -19,20 +19,20 @@ The project also serves as a fullstack security sandbox: JWT handling, rate limi
 ## 🌟 Features
 
 ### 🌌 NASA – Astronomy Picture of the Day
-![NASA Example](assets/nasa.png)
+![NASA Example](readme-assets/nasa.png)
 
 A daily view into space using NASA’s official APOD image and description.  
 A calm science moment embedded directly in your browser.
 
 ### 🧭 Digitální rozcestník (Digital Signpost)
-![Signpost Example](assets/signpost.png)
+![Signpost Example](readme-assets/signpost.png)
 
 A **daily** educational card explaining modern digital topics:  
 algorithms, privacy, AI behaviour, online identity, social media patterns and more.  
 Clear and practical guidance for navigating today’s digital world.
 
 ### 📜 Story of the Day
-![Story Example](assets/story.png)
+![Story Example](readme-assets/story.png)
 
 A true historical event connected to today’s date, always beginning with:
 
@@ -42,13 +42,13 @@ A true historical event connected to today’s date, always beginning with:
 Short, accurate and memorable — a small daily connection to history.
 
 ### 🕹 Retro Machine
-![Retro Example](assets/retro.png)
+![Retro Example](readme-assets/retro.png)
 
 A nostalgic journey through technological evolution from the 70s to today:  
 old computers, devices, media formats, operating systems and iconic sounds.
 
 ### 📸 Moje Insta tipy (Inspiration Profiles)
-![Insta Example](assets/insta.png)
+![Insta Example](readme-assets/insta.png)
 
 Curated Instagram recommendations from fields such as space, nature, science and technology.  
 A way to “hack your feed” and replace noise with meaningful content.
@@ -56,7 +56,7 @@ A way to “hack your feed” and replace noise with meaningful content.
 ---
 
 ## 🎞 Interaction Preview  
-![Interaction GIF](assets/interaction.gif)
+![Interaction GIF](readme-assets/interaction.gif)
 
 ---
 
