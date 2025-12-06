@@ -35,7 +35,7 @@ frontend
 1. ✅ zkratit funkce 
 2. ✅ kod
 3. ✅ pripravit kod pro UI
-4. ❌ prehodit popup.js > content.js - spatne pochopeny
+4. ✅ prehodit popup.js > content.js - spatne pochopeny
 5. ✅ dodelat UI 
 6. ✅ musim dodelat fetch API - kdyz spadne jedno, nespadlo i to co je za tim
 7. ✅ pocitani a ukladani like/dislike - localstorage ukladani na 24h, pak smazat - nova funkce
@@ -48,12 +48,12 @@ frontend
     bude jen pripomenuti na app 
 15. ✅ pridat img / svg pod story a retro 
 16. ✅ preklad pro chces vedet vic + display none pro translatorIcon 
-17. ❌ tool tip ?? - zatim ne 
+17. ✅ tool tip ?? - zatim ne 
 18. ✅ cache - jazyk + like = pro vsehcny funkce vc jazyka 
 19. ✅ interakce - ukladani, fetch, +1 vc omezeni na jeden klik, vymaz, img upravit 
-20. ✅ / ❌ github pridat link na profil 
-21. animace gsap tooltipy, kliky na img + icons 
-22. animace mezi prepinani jazyku !!!
+20. ✅ github pridat link na profil 
+21. ❌ animace gsap tooltipy, kliky na img + icons - nebude gsap
+22. ❌ animace mezi prepinani jazyku !!!- nelze 
 23. ✅ digital sekce - rozmyslet zda bude videt cely tyden do obnoveni, nebo bude skryty 
 24. ✅ text ohledne AI + nepravda = logika: pokud uzivatel bude klikat v mesici 
     31 > X = hlas se nazapocita. 
@@ -63,35 +63,35 @@ frontend
 26. ✅ background.js propojit s fetch? 
 27. ✅ bude pak fungovat content.js? - pokud ne, bude jen upozorneni 1x denne 
 28. ✅ dodelat texty 
-29. readme napsat 
+29. ✅ readme napsat 
 30. ✅ img zamenit 
 31. ✅ preklad doladit text vizualne - je nalepeny na sobe 
 32. ✅ nastavit delsi interval na zobrazeni podekovani - je to moc rychly 
 
-1. background - fetch na hp 
-2. sitova bezpecnost 
-3. vlozit texty 
-4. vlozit img 
-5. odtsanit logy 
-6. nahrat do db texty
-7. nastavit zpravne limity 
-8. zasifrovat v db ip adresy 
-9. readme 
-10. vizul u tooltipu 
+1. ✅ background - fetch na hp 
+2. ✅ sitova bezpecnost 
+3. ✅ vlozit texty 
+4. ✅ vlozit img 
+5. ✅ odtsanit logy 
+6. ✅ nahrat do db texty
+7. ✅ nastavit zpravne limity 
+8. ✅ zasifrovat v db ip adresy 
+9. ✅ readme 
+10. ✅ vizul u tooltipu 
 
 
 db
-1. nahrat data pro fetch 
+1. ✅ nahrat data pro fetch 
 
 ostatni
-1. testovani
-2. bezpecnost 
-3. readme
-4. upravit manifest.json 
-5. vymazat console.log
-6. texty v tabulkach 
-7. nasadit na server
-8. udelat si jeste jeden server pro honey
+1. ✅ testovani
+2. ✅ bezpecnost 
+3. ✅ readme
+4. ✅ upravit manifest.json 
+5. ✅ vymazat console.log
+6. ✅ texty v tabulkach 
+7. ✅ nasadit na server
+8. ✅ udelat si jeste jeden server pro honey
 
 = poslat frontend google, zverejnit 
 
