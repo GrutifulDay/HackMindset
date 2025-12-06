@@ -18,6 +18,7 @@ build/
 # Ignorování závislostí v backendu a frontendovém projektu
 backend/node_modules/
 frontend/node_modules/
+frontend/text
 
 # Ignorování verzovacích souborů
 .vscode/
