@@ -1,7 +1,13 @@
 import dayjs from "dayjs"
+import { DEMO_MODE } from "../config.js"
 
 export async function getControllerDay(Model, req, res, options = {}) {
   try {
+    // 🔧 DEMO_MODE – vrati staticka data 
+    if (DEMO_MODE && options.demoData) {
+      return res.json(options.demoData);
+    }
+    
     let target
 
     if (options.weekly) {

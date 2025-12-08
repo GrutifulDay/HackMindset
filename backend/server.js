@@ -1,5 +1,5 @@
 // dotevn
-import { PORT } from "./config.js"
+import { PORT, DEMO_MODE, NODE_ENV } from "./config.js"
 console.log("ENV:", process.env.NODE_ENV);
 console.log("DEBUG:", process.env.DEBUG);
 
@@ -58,9 +58,16 @@ app.disable("etag")
 app.disable("x-powered-by")
 
 // ⚠️ Upozornění na dev režim
-if (process.env.NODE_ENV !== "production") {
-  debug("⚠️ Běžíš v development režimu – CSP a rate limity nejsou aktivní.");
+if (NODE_ENV) {
+  debug("🛠️ Běžíš v development režimu");
 }
+
+// ⚠️ Upozornění na dev režim
+if (DEMO_MODE) {
+  warn("⭐️ Bezis v DEMO rezimu - mas nacteny data z JSON, vse je staticke!");
+}
+
+
 
 // Request log (lehký)
 app.use((req, res, next) => {
@@ -215,16 +222,16 @@ try {
 } catch { /* ignore */ }
 
 // ✅ Spuštění serveru
-app.listen(PORT, "127.0.0.1", () => {
-  info(`✅ Server běží na http://127.0.0.1:${PORT}`);
-});
+// app.listen(PORT, "127.0.0.1", () => {
+//   info(`✅ Server běží na http://127.0.0.1:${PORT}`);
+// });
 
 // pro lokalni testovani 
-// const options = {
-//   key: fs.readFileSync('./cert/key.pem'),
-//   cert: fs.readFileSync('./cert/cert.pem'),
-// }
+const options = {
+  key: fs.readFileSync('./cert/key.pem'),
+  cert: fs.readFileSync('./cert/cert.pem'),
+}
 
-// https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-//   debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
-// });
+https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
+  debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
+});

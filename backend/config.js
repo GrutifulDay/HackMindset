@@ -4,6 +4,8 @@ dotenv.config();
 // ── ZÁKLADNÍ NASTAVENÍ
 export const NODE_ENV = process.env.NODE_ENV || "development";
 export const DEBUG = process.env.DEBUG === "true";
+export const DEMO_MODE = process.env.DEMO_MODE === "true";
+
 
 export const config = {
   env: NODE_ENV,

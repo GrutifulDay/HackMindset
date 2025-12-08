@@ -8,7 +8,7 @@ import { redactHeaders } from "../utils/redact.js";
 import { isRevoked } from "../middlewares/tokenRevocation.js"
 import { registerTokenUsage } from "../middlewares/tokenUsage.js";
 import { debug, warn } from "../utils/logger.js";
-import { DEBUG, NODE_ENV, API_BASE_URL } from "../config.js";
+import { DEBUG, NODE_ENV, DEMO_MODE, API_BASE_URL } from "../config.js";
 
 
 // citlivé hlavičky maskujeme
@@ -22,6 +22,13 @@ import { DEBUG, NODE_ENV, API_BASE_URL } from "../config.js";
 // };
 
 export function validateApiKey(routeDescription) {
+  // 🔧 DEMO MODE → přeskočit veškerou bezpečnost, povolit request
+  if (DEMO_MODE === true) {
+    return function(req, res, next) {
+      return next();
+    };
+  }
+
   debug("validateApiKey funguje");
 
   return async function (req, res, next) {

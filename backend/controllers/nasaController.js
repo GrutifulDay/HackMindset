@@ -6,8 +6,19 @@ import {
   API_KEY_NASA,
   NASA_FALLBACK,
   NASA_ARCHIVE,
-  NASA_BASE_URL
+  NASA_BASE_URL,
+  DEMO_MODE
 } from "../config.js";
+
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const demoNasa = JSON.parse(
+  fs.readFileSync(path.join(__dirname, "../demo-data/nasa.json"), "utf8")
+);
 
 // cache v pameti
 let nasaCache = null;
@@ -29,6 +40,11 @@ function isToday(dateString) {
 }
 
 export async function fetchNasaImage(req, res) {
+  // 🟢 DEMO MODE → vraci demo NASA JSON
+  if (DEMO_MODE) {
+    return res.json(demoNasa);
+  }
+
   const today = new Date().toISOString().slice(0, 10);
 
   // 🟢 Kontrola backend cache
