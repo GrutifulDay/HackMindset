@@ -63,8 +63,8 @@ Curated Instagram recommendations in fields such as space, nature, science and t
   <img src="readme-assets/false-report.png" width="280">
   <img src="readme-assets/nevedel.png" width="280">
   <img src="readme-assets/vedel.png" width="280">
-  <img src="readme-assets/vedel-color.png" width="280">
   <img src="readme-assets/zazil-color.png" width="280">
+  <img src="readme-assets/vedel-color.png" width="280">
 </div>
 
 ---
