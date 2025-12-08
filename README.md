@@ -6,38 +6,38 @@ A privacy-friendly daily knowledge companion that turns mindless scrolling into 
   <img src="readme-assets/about-extension.png" width="280">
 </div>
 
-
-
 **Live Extension:** *(coming soon)*  
 **Repository:** https://github.com/GrutifulDay/HackMindset  
 
 ---
 
 ## 💡 Overview  
+
 HackMindset delivers small, meaningful pieces of knowledge that replace algorithm-driven noise with calm, inspiring content.  
 Every day, the extension brings insight from astronomy, history and digital culture — without tracking, ads or personal data collection.
 
-The project also serves as a fullstack security sandbox: JWT handling, rate limiting, anomaly detection, IP reputation logic, OpenResty network filtering and multi-layered API protection.
+The project also serves as a fullstack security sandbox: JWT handling, rate limiting, anomaly detection, IP reputation logic, NGINX-level filtering and multi-layered API protection.
+
+**HackMindset is also my long-term learning ground for backend development and security.  
+I built everything manually — JWT flow, IP reputation logic, rate limiting layers, NGINX protections and a future honeypoint — to understand how real attacks behave and how to defend against them.**
 
 ---
 
 ## 🌟 Features
 
-### 🌌 NASA – Astronomy Picture of the Day
+### 🌌 NASA – Astronomy Picture of the Day  
 <img src="readme-assets/nasa.png" width="400">
 
 A daily view into space using NASA’s official APOD image and description.  
 A calm science moment embedded directly in your browser.
 
-### 🧭 Digitální rozcestník (Digital Signpost)
+### 🧭 Digitální rozcestník (Digital Signpost)  
 <img src="readme-assets/signpost.png" width="400">
 
+A **weekly Monday** educational card explaining modern digital topics:  
+algorithms, privacy, AI behaviour, online identity, social media patterns and more.
 
-A **daily** educational card explaining modern digital topics:  
-algorithms, privacy, AI behaviour, online identity, social media patterns and more.  
-Clear and practical guidance for navigating today’s digital world.
-
-### 📜 Story of the Day
+### 📜 Story of the Day  
 <img src="readme-assets/story.png" width="400">
 
 A true historical event connected to today’s date, always beginning with:
@@ -45,117 +45,138 @@ A true historical event connected to today’s date, always beginning with:
 - **CZ:** „Dnes, ale v roce…“  
 - **EN:** „Today, back in the year…“
 
-Short, accurate and memorable — a small daily connection to history.
-
-### 🕹 Retro Machine
+### 🕹 Retro Machine  
 <img src="readme-assets/retro.png" width="400">
 
-A nostalgic journey through technological evolution from the 70s to today:  
-old computers, devices, media formats, operating systems and iconic sounds.
+A nostalgic journey through technological evolution from the 70s to today.
 
-### 📸 Moje Insta tipy (Inspiration Profiles)
+### 📸 Moje Insta tipy (Inspiration Profiles)  
 <img src="readme-assets/insta.png" width="400">
 
-Curated Instagram recommendations from fields such as space, nature, science and technology.  
-A way to “hack your feed” and replace noise with meaningful content.
+Curated Instagram recommendations in fields such as space, nature, science and technology.
 
 ---
 
-## 🎞 Interaction Preview  
+## 🎞 Interaction Preview and Tooltips  
 ![Interaction GIF](readme-assets/interaction.png)
+
 <div style="text-align: left;">
   <img src="readme-assets/nevedel.png" width="280">
   <img src="readme-assets/vedel.png" width="280">
   <img src="readme-assets/vedel-color.png" width="280">
   <img src="readme-assets/zazil-color.png" width="280">
-   <img src="readme-assets/false-report.png" width="280">
+  <img src="readme-assets/false-report.png" width="280">
 </div>
 
 ---
 
 ## 🛡 Security Architecture (Backend & Network)
 
-HackMindset is built with a layered defensive model suitable for real-world hardening.
+HackMindset is built with a layered defensive model.
 
 ### **API Protection**
 - JWT authentication (5-minute expiry)  
 - JTI-based token revocation  
 - Abuse detection with Discord alerts  
 - Origin + User-Agent validation  
-- Restricted API exposure  
+- Restricted API exposure → valid API key + JWT required  
+- All rejected requests are logged for analysis
 
 ### **Request Filtering & Middleware**
 - Adaptive rate limiting (soft + hard)  
 - Bot/User-Agent filtering  
-- IP blacklist (auto-updated on anomalies)  
+- IP blacklist (auto-updated)  
 - Custom CORS validation  
 - Header filtering & sanitization  
-- Private endpoint (`/_sec-log`) used for internal security telemetry  
-  and future honeypoint communication.
+- Private endpoint (`/_sec-log`) for future honeypoint and network-level logging
 
-### **Network & Infrastructure**
-- OpenResty (NGINX) reverse proxy  
-- Hardened security headers (CSP via Helmet, no duplicates)  
-- GeoIP-ready filtering  
-- Invalid host protection (`return 444`)  
-- UFW firewall (80/443/SSH)  
-- Fail2Ban for SSH  
-- SSH hardening (ed25519 keys, custom port, key-only login)
+### **Network & Infrastructure (NGINX Layer)**
+Production uses a hardened NGINX reverse proxy:
+
+- **GeoIP filtering (only CZ + DE)**  
+  *(If you test from outside these regions, requests will be blocked.)*
+- **Invalid Host Protection (`return 444`)**  
+- **Rate limiting:** `limit_req zone=reqlimit burst=40 nodelay`  
+- **Connection limiting:** `limit_conn connlimit 20`  
+- **Slow-attack defense:**  
+  - `client_header_timeout 10s`  
+  - `client_body_timeout 10s`  
+  - `send_timeout 10s`  
+  - `keepalive_timeout 15s`  
+- Strong TLS + OCSP stapling  
+- Security headers (HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy)
+- Blocklists for scanners (`phpmyadmin`, `.env`, backups, wp-admin…)  
+- Reverse proxy to Node.js on localhost  
+- `server_tokens off` + empty `Server` header
+
+Backend uses two MongoDB databases:
+- **frontendData** — content  
+- **securityDataIP** — blacklist, honeysessions, secret leaks, logs
 
 ---
 
 ## 🎨 Frontend (Chrome Extension)
-
-- Vanilla JS with **component-like architecture**  
-- Separation of popup / content script / background worker  
-- Multi-language support (CZ / EN)  
-- Time-based caching shared across all sections  
-- Tooltip UI system  
+- Component-like Vanilla JS  
+- Popup / content script / background separation  
+- Multi-language (CZ/EN)  
+- Central fetch + caching layer across modules  
+- Tooltip engine  
 - Sound trigger module  
-- JetBrains Mono typography & soft rounded UI  
-- Strict permissions: no cookies, no remote scripts, no tracking  
+- JetBrains Mono typography  
+- No tracking, no cookies, no external scripts
 
 ---
 
 ## 🛠 Backend (Node.js + Express)
-
-- Modular architecture (controllers, routes, services)  
-- MongoDB (Mongoose)  
-- JWT authentication with revocation  
-- Daily cron refresh at **00:01**  
-- Structured anomaly and attack logging  
-- Discord notifications for suspicious activity  
+- Controllers, routes, middlewares, utils  
+- Two MongoDB connections  
+- JWT auth with revocation  
+- IP reputation logic  
+- Structured anomaly logging  
+- Discord notifications  
+- Daily cron refresh (**00:01**)  
+- `/_sec-log` protected route  
+- Separation of content vs. security data
 
 ---
 
 ## 🏗 Server & Deployment
-
 - Ubuntu 22.04 VPS  
-- OpenResty reverse proxy  
-- HTTPS configuration with hardened headers  
-- UFW firewall + Fail2Ban  
-- Honeypoint architecture prepared for future testing  
+- Hardened NGINX reverse proxy  
+- GeoIP, rate limiting, slow-attack defense  
+- UFW + Fail2Ban  
+- Dedicated security headers  
+- Custom CORS preflight  
+- Backend on `127.0.0.1:3000`  
+- Honeypoint-ready architecture  
 
 ---
 
 ## 🔧 Chrome Extension Setup (Developer Mode)
 
-To run the extension locally:
+The extension UI loads normally, but all daily content (NASA, Story, Retro, Inspiration Profiles, Digital Signpost) is fetched from the backend API.  
+**Without the backend running, the UI will load but all content sections will remain empty.**
 
-1. Open **chrome://extensions/** in your browser.  
-2. Enable **Developer Mode** (top-right corner).  
-3. Click **Load unpacked**.  
-4. Select the **frontend** folder (the directory containing `manifest.json`).  
-5. The extension will appear under the puzzle icon (Extensions).  
-6. Pin **HackMindset** for easy access.  
-7. Click the icon to launch the extension.
+To make the extension fully functional:
+
+- Create a `.env` file based on `.env.example`
+- Start the backend locally
+
+Steps:
+1. Create `.env` from `.env.example` (backend directory)
+2. Start backend: `node server.js`
+3. Open **chrome://extensions/**
+4. Enable **Developer Mode**
+5. Load the **frontend** folder
+6. Launch the extension
 
 ---
 
-## 🔧 Backend Setup
-
+## 🔧 Backend Setup  
 ```bash
 git clone https://github.com/GrutifulDay/HackMindset.git
 cd HackMindset/backend
 npm install
+cp .env.example .env   # fill in your values
 node server.js
+```
