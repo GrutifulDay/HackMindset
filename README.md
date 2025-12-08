@@ -66,8 +66,8 @@ A way to “hack your feed” and replace noise with meaningful content.
 <div style="text-align: left;">
   <img src="readme-assets/nevedel.png" width="280">
   <img src="readme-assets/vedel.png" width="280">
-  <img src="readme-assets/vedel-barevna.png" width="280">
-  <img src="readme-assets/zazil-barevna.png" width="280">
+  <img src="readme-assets/vedel-color.png" width="280">
+  <img src="readme-assets/zazil-color.png" width="280">
 
 </div>
 
