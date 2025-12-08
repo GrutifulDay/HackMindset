@@ -19,7 +19,7 @@ The project also serves as a fullstack security sandbox: JWT handling, rate limi
 ## 🌟 Features
 
 ### 🌌 NASA – Astronomy Picture of the Day
-![NASA Example](readme-assets/nasa.png)
+![NASA Example](readme-assets/nasa.png)![NASA Example](readme-assets/nasa.png)
 
 A daily view into space using NASA’s official APOD image and description.  
 A calm science moment embedded directly in your browser.

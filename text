@@ -22,7 +22,7 @@ backend
 13. ✅ uklidit - ipBlacklist.js + botProtection > rozmistit fce ?
 14. ✅ validace - jen pro bloknute Ip adresy - fce pro sifrovani a odsifrovani (kdyz by se nekdo dodstal do db)
 15. ✅ Discord - ted je POST - zabezpeceni
-16. ❌ honeypoint - pozdeji 
+16. ❌ honeypoint - pozdeji v oddelenem projektu
 17. ✅ test pro rateLimit
 18. ✅ controller pro digital sekci 
 19. nastavit hodnoty pro rate a slow
@@ -44,7 +44,7 @@ frontend
 10. ✅ datum pod nadpisem - aktualni datum dnes
 11. ✅ updateNasa.js > nastavit na datum (ted je cas) - neni potreba
 12. ✅ update > ostatni fce kvuli nacitani - dle datumu 
-13. nastavit content.js jen pro profily aby se zobrazovali + background, pokud nepujde
+13. ✅ nastavit content.js jen pro profily aby se zobrazovali + background, pokud nepujde
     bude jen pripomenuti na app 
 15. ✅ pridat img / svg pod story a retro 
 16. ✅ preklad pro chces vedet vic + display none pro translatorIcon 

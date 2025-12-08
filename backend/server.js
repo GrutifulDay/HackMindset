@@ -143,7 +143,7 @@ app.get("/health", async (_req, res) => {
 
 // ─────────────────────────────────────────────────────────────
 // Interní servisní router pro /_sec-log
-// (Uvnitř má vlastní pre-auth + JSON parser; tady nic dalšího nedávej.)
+// (Uvnitř má vlastní pre-auth + JSON parser)
 // ─────────────────────────────────────────────────────────────
 app.use(secLogRoutes)
 
@@ -153,7 +153,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// 🔥 CORS – MUSÍ být před ipBlocker/botProtection
+
 app.use(corsOptions);
 
 // nesmi poslat vetsi nez je limit v tele requestu
