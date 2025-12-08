@@ -49,7 +49,10 @@ A nostalgic journey through technological evolution from the 70s to today:
 old computers, devices, media formats, operating systems and iconic sounds.
 
 ### 📸 Moje Insta tipy (Inspiration Profiles)
-<img src="readme-assets/insta.png" width="400">
+<p align="center">
+  <img src="readme-assets/insta.png" width="200">
+  <img src="readme-assets/insta.png" width="200">
+</p>
 
 Curated Instagram recommendations from fields such as space, nature, science and technology.  
 A way to “hack your feed” and replace noise with meaningful content.
