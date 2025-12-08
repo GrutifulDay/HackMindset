@@ -3,7 +3,7 @@ A privacy-friendly daily knowledge companion that turns mindless scrolling into 
 
 <div style="text-align: left;">
   <img src="readme-assets/preview.png" width="280">
-  <img src="readme-assets/about-extension.png" width="280">
+  <img src="readme-assets/about-extension.png" width="290">
 </div>
 
 **Live Extension:** *(coming soon)*  
