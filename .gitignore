@@ -6,6 +6,7 @@ node_modules/
 
 # Ignorování prostředí
 .env
+.env.example
 
 # Logy
 nohup.out
