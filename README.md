@@ -1,7 +1,12 @@
 # HackMindset – Chrome Extension  
 A privacy-friendly daily knowledge companion that turns mindless scrolling into meaningful moments.
 
-![HackMindset Preview](readme-assets/preview.png)
+<div style="text-align: left;">
+  <img src="readme-assets/preview.png" width="280">
+  <img src="readme-assets/about-extension.png" width="280">
+</div>
+
+
 
 **Live Extension:** *(coming soon)*  
 **Repository:** https://github.com/GrutifulDay/HackMindset  
@@ -49,10 +54,7 @@ A nostalgic journey through technological evolution from the 70s to today:
 old computers, devices, media formats, operating systems and iconic sounds.
 
 ### 📸 Moje Insta tipy (Inspiration Profiles)
-<p align="center">
-  <img src="readme-assets/insta.png" width="200">
-  <img src="readme-assets/insta.png" width="200">
-</p>
+<img src="readme-assets/insta.png" width="400">
 
 Curated Instagram recommendations from fields such as space, nature, science and technology.  
 A way to “hack your feed” and replace noise with meaningful content.
@@ -61,6 +63,13 @@ A way to “hack your feed” and replace noise with meaningful content.
 
 ## 🎞 Interaction Preview  
 ![Interaction GIF](readme-assets/interaction.png)
+<div style="text-align: left;">
+  <img src="readme-assets/nevedel.png" width="280">
+  <img src="readme-assets/vedel.png" width="280">
+  <img src="readme-assets/vedel-barevna.png" width="280">
+  <img src="readme-assets/zazil-barevna.png" width="280">
+
+</div>
 
 ---
 
