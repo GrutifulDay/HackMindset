@@ -5,11 +5,16 @@ import { createStoryOfTheDay } from "./components/storyOfTheDay.js";
 import { createRetroMachine } from "./components/retroMachine.js";
 import { createProfile } from "./components/profile.js";
 import { createDigitalSignpost } from "./components/digitalSignpost.js";
-import { debug } from "./utils/logger/logger.js";
+import { debug, warn } from "./utils/logger/logger.js";
+import { DEMO_MODE } from "./utils/config.js";
 
 
 export async function initPopup() {
     debug("{initApp.js} ✅ Běží hlavní obsah!");
+
+    if (DEMO_MODE) {
+      warn("🔧 DEMO MODE ACTIVE – hlasování se NEodesílá na backend.");
+    }
 
     const body = document.body;
 

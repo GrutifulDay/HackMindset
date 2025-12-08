@@ -10,6 +10,15 @@ export async function fetchUntruthLimit(section, date) {
   const formattedDate = `${year}-${month}`
   
   debug("🧪 fetchUntruthLimit: section =", section, "date =", date);
+
+  // 🔧 DEMO MODE – zadny backend, jen odpoved
+  if (DEMO_MODE === true) {
+    return {
+      demo: true,
+      status: "ok",
+      message: "Demo mode: limit log ignored."
+    };
+  }
   
   const token = await getJwtToken() 
 

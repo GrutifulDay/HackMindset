@@ -1,4 +1,4 @@
-import { API } from "../utils/config.js"
+import { API, DEMO_MODE } from "../utils/config.js"
 import { getJwtToken } from "../utils/auth/jwtToken.js";
 import { debug, error } from "../utils/logger/logger.js";
 
@@ -12,6 +12,17 @@ debug("{fetchPostUntruthVotes.js} 📡 načten")
  */
 
 export async function fetchUntruthVotes(date, feedback, section) {
+  // 🔧 DEMO MODE — nic se neodesila, pouze simulace
+  if (DEMO_MODE === true) {
+    const key = `untruth-${section}-${date}`;
+    localStorage.setItem(key, "voted");
+
+    return {
+      demo: true,
+      status: "ok",
+      message: "Demo mode: feedback stored locally."
+    };
+  }
 
   const token = await getJwtToken() 
 
