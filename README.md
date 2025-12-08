@@ -26,19 +26,19 @@ I built everything manually — JWT flow, IP reputation logic, rate limiting lay
 ## 🌟 Features
 
 ### 🌌 NASA – Astronomy Picture of the Day  
-<img src="readme-assets/nasa.png" width="400">
+<img src="readme-assets/nasa.png" width="280">
 
 A daily view into space using NASA’s official APOD image and description.  
 A calm science moment embedded directly in your browser.
 
 ### 🧭 Digitální rozcestník (Digital Signpost)  
-<img src="readme-assets/signpost.png" width="400">
+<img src="readme-assets/signpost.png" width="280">
 
 A **weekly Monday** educational card explaining modern digital topics:  
 algorithms, privacy, AI behaviour, online identity, social media patterns and more.
 
 ### 📜 Story of the Day  
-<img src="readme-assets/story.png" width="400">
+<img src="readme-assets/story.png" width="280">
 
 A true historical event connected to today’s date, always beginning with:
 
@@ -46,12 +46,12 @@ A true historical event connected to today’s date, always beginning with:
 - **EN:** „Today, back in the year…“
 
 ### 🕹 Retro Machine  
-<img src="readme-assets/retro.png" width="400">
+<img src="readme-assets/retro.png" width="280">
 
 A nostalgic journey through technological evolution from the 70s to today.
 
 ### 📸 Moje Insta tipy (Inspiration Profiles)  
-<img src="readme-assets/insta.png" width="400">
+<img src="readme-assets/insta.png" width="280">
 
 Curated Instagram recommendations in fields such as space, nature, science and technology.
 
