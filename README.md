@@ -25,14 +25,15 @@ A daily view into space using NASA’s official APOD image and description.
 A calm science moment embedded directly in your browser.
 
 ### 🧭 Digitální rozcestník (Digital Signpost)
-![Signpost Example](readme-assets/signpost.png)
+<img src="readme-assets/signpost.png" width="400">
+
 
 A **daily** educational card explaining modern digital topics:  
 algorithms, privacy, AI behaviour, online identity, social media patterns and more.  
 Clear and practical guidance for navigating today’s digital world.
 
 ### 📜 Story of the Day
-![Story Example](readme-assets/story.png)
+<img src="readme-assets/story.png" width="400">
 
 A true historical event connected to today’s date, always beginning with:
 
@@ -42,13 +43,13 @@ A true historical event connected to today’s date, always beginning with:
 Short, accurate and memorable — a small daily connection to history.
 
 ### 🕹 Retro Machine
-![Retro Example](readme-assets/retro.png)
+<img src="readme-assets/retro.png" width="400">
 
 A nostalgic journey through technological evolution from the 70s to today:  
 old computers, devices, media formats, operating systems and iconic sounds.
 
 ### 📸 Moje Insta tipy (Inspiration Profiles)
-![Insta Example](readme-assets/insta.png)
+<img src="readme-assets/insta.png" width="400">
 
 Curated Instagram recommendations from fields such as space, nature, science and technology.  
 A way to “hack your feed” and replace noise with meaningful content.
