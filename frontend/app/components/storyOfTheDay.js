@@ -239,7 +239,7 @@ async function handleVote(option) {
 
   localStorage.setItem(localStorageKey, option)
 
-  createVotingReportUsers(lang === "cz" ? "Děkujeme, ze hlasujete každý den 💚" : "Thank you for voting every day 💚")
+  createVotingReportUsers(lang === "cz" ? "Děkujeme, že hlasujete každý den 💚" : "Thank you for voting every day 💚")
 }
 
 // Event listenery
