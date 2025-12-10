@@ -14,13 +14,14 @@ A privacy-friendly daily knowledge companion that turns mindless scrolling into 
 
 ## 💡 Overview  
 
-HackMindset delivers small, meaningful pieces of knowledge that replace algorithm-driven noise with calm, inspiring content.  
+HackMindset delivers small, meaningful pieces of knowledge that replace algorithm-driven noise with calm, inspiring content.
 Every day, the extension brings insight from astronomy, history and digital culture — without tracking, ads or personal data collection.
 
 The project also serves as a fullstack security sandbox: JWT handling, rate limiting, anomaly detection, IP reputation logic, NGINX-level filtering and multi-layered API protection.
 
-**HackMindset is also my long-term learning ground for backend development and security.  
-I built everything manually — JWT flow, IP reputation logic, rate limiting layers, NGINX protections and a future honeypoint — to understand how real attacks behave and how to defend against them.**
+**This is a self-directed learning project.  
+All backend security layers were implemented manually to understand how these systems work internally — not as part of previous commercial experience.**
+
 
 ---
 
@@ -153,11 +154,12 @@ Backend uses two MongoDB databases:
 
 ## 🔧 Chrome Extension Setup (Developer Mode)
 
+
 The extension UI loads normally, but all daily content (NASA, Story, Retro, Inspiration Profiles, Digital Signpost) is fetched from the backend API.  
 **Without the backend running, the UI will load but all content sections will remain empty.**
 
 To make the extension fully functional:
-
+UPRAVIT 
 - Create a `.env` file based on `.env.example`
 - Start the backend locally
 
@@ -166,7 +168,7 @@ Steps:
 2. Start backend: `node server.js`
 3. Open **chrome://extensions/**
 4. Enable **Developer Mode**
-5. Load the **frontend** folder
+5. Load the **full project** folder
 6. Launch the extension
 
 ---
