@@ -1,7 +1,5 @@
 // dotevn
 import { PORT, DEMO_MODE, NODE_ENV } from "./config.js"
-console.log("ENV:", process.env.NODE_ENV);
-console.log("DEBUG:", process.env.DEBUG);
 
 // node token = util
 import util from "util";
@@ -28,18 +26,19 @@ import profileRoutes from "./routes/profileRoutes.js"
 import digitalRoutes from "./routes/digitalRoutes.js"
 import untruthRoutes from "./routes/untruthRoutes.js"
 import untruthLimitRoutes from "./routes/untruthLimit.js"
-// import feedbackRoutes from "./routes/feedbackRoutes.js"
 import secLogRoutes from "./routes/secLog.js"
 import tokenRoutes from "./routes/tokenRoutes.js"
+// import feedbackRoutes from "./routes/feedbackRoutes.js"
+
 
 // Middleware
 import limiterApi from "./middlewares/rateLimit.js"
 import corsOptions from "./middlewares/corsConfig.js"
 import botProtection from "./middlewares/botProtection.js"
 import ipBlocker, { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
-// import speedLimiter from "./middlewares/slowDown.js"
 import captureHeaders from "./middlewares/captureHeaders.js";
 // import detectSecretLeak from "./middlewares/detectSecretLeak.js";
+// import speedLimiter from "./middlewares/slowDown.js"
 
 // Utils 
 import { startDailyCron } from "./utils/cron/dailyRefresh.js"
@@ -59,15 +58,13 @@ app.disable("x-powered-by")
 
 // ⚠️ Upozornění na dev režim
 if (NODE_ENV) {
-  debug("🛠️ Běžíš v development režimu");
+  debug("🛠️ Bezis v development rezimu");
 }
 
 // ⚠️ Upozornění na dev režim
 if (DEMO_MODE) {
   warn("⭐️ Bezis v DEMO rezimu - mas nacteny data z JSON, vse je staticke!");
 }
-
-
 
 // Request log (lehký)
 app.use((req, res, next) => {
@@ -90,14 +87,37 @@ info(`💣 Server spuštěn: ${startTime}`);
 
 const __dirname = path.resolve() // pri pouziti ES modulů
 
-// MongoDB
-await connectDB();
-await connectFrontendDB();
+if (DEMO_MODE === false) {
+  await connectDB();
+  await connectFrontendDB();
+  await loadBlacklistFromDB();
+} else {
+  debug("🗂️ DEMO_MODE → MongoDB pripojeni prekoceno.");
+}
+
+
+// DEMO MODE → vypnout CORS ochranu
+if (DEMO_MODE === true) {
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "*");
+
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(200);
+    }
+    debug("🗂️ DEMO_MODE → cors preskoceny");
+
+    next();
+  });
+} //else {
+//   app.use(corsOptions);
+// }
 
 // Kontrola IP adres 
-await loadBlacklistFromDB();
+// await loadBlacklistFromDB();
 
-// refresh google extension po pridani ip do db
+// kazdy den refresh CRON v 00:01
 startDailyCron();
 // startWatchForIPChanges();
 
@@ -186,7 +206,7 @@ app.use(captureHeaders({
   notifyReason: "Client using Postman / test tool"
 }));
 
-// globalni Middleware – pořadí je důležité
+// globalni Middleware
 app.use(ipBlocker);       // blokuje známé útočníky
 app.use(botProtection);   // detekce botů / UA
 // app.use(speedLimiter);    // soft limit
@@ -203,35 +223,32 @@ app.use("/api", untruthRoutes)
 app.use("/api", untruthLimitRoutes)
 // app.use("/api", feedbackRoutes)
 
-// testovací router
-// app.get("/api/test", (req, res) => {
-//   const userAgentString = req.get("User-Agent") || "neznámý"
-//   const parser = new UAParser(userAgentString)
-//   const result = parser.getResult()
-//   debug("UAParser výstup:", result)
-//   res.json({ message: "Server OK", originalUserAgent: userAgentString, parsed: result })
-// })
 
-// Statické soubory
-// app.use(express.static(path.join(__dirname, "frontend")))
-
-// Debug výpis registrovaných cest
+// Debug vypis testovacich endpointu
 try {
   const routes = app._router?.stack?.map(r => r?.route?.path).filter(Boolean)
   if (routes?.length) debug(routes)
 } catch { /* ignore */ }
 
-// ✅ Spuštění serveru
-app.listen(PORT, "127.0.0.1", () => {
-  info(`✅ Server běží na http://127.0.0.1:${PORT}`);
-});
 
-// pro lokalni testovani 
-// const options = {
-//   key: fs.readFileSync('./cert/key.pem'),
-//   cert: fs.readFileSync('./cert/cert.pem'),
-// }
+// prepinani mezi demo mode a node env - developmen / production 
+const USE_HTTPS =
+  DEMO_MODE === true || NODE_ENV === "development";
 
-// https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
-//   debug(`✅ HTTPS server běží na https://127.0.0.1:${PORT}`);
-// });
+  if (USE_HTTPS) {
+    const options = {
+      key: fs.readFileSync("./cert/key.pem"),
+      cert: fs.readFileSync("./cert/cert.pem"),
+    };
+  
+    https.createServer(options, app).listen(PORT, "127.0.0.1", () => {
+      debug(`⭐ HTTPS server běží na https://127.0.0.1:${PORT} (DEMO nebo DEV)`);
+    });
+  
+  } else {
+    app.listen(PORT, "127.0.0.1", () => {
+      info(`🚀 Server běží na http://127.0.0.1:${PORT} (PROD)`);
+    });
+  }
+  
+
