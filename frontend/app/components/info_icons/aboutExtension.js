@@ -165,7 +165,7 @@ export function createAboutExtensionWindow() {
     const gitHubLink = el("a", null, {
         display: "inline-block"
     }, {
-        href: "https://github.com/GrutifulDay/HackMindset.git",
+        href: "https://github.com/GrutifulDay/HackMindset/blob/main/README.md",
         target: "_blank",
         rel: "noopener noreferrer"
     });
