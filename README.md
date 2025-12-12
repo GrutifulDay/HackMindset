@@ -107,7 +107,9 @@ Production uses a hardened NGINX reverse proxy:
 - Security headers (HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy)
 - Blocklists for scanners (`phpmyadmin`, `.env`, backups, wp-admin…)  
 - Reverse proxy to Node.js on localhost  
-- `server_tokens off` + empty `Server` header
+- `server_tokens off`
+- Server header minimization (full override planned with OpenResty)
+
 
 Backend uses two MongoDB databases:
 - **frontendData** — content  
@@ -152,32 +154,32 @@ Backend uses two MongoDB databases:
 
 ---
 
-## 🔧 Chrome Extension Setup (Developer Mode)
+## 🧪 Demo Setup (Evaluation)
 
+The Chrome extension fetches all daily content (NASA, Story, Retro, Inspiration Profiles,
+Digital Signpost) from the backend API.
 
-The extension UI loads normally, but all daily content (NASA, Story, Retro, Inspiration Profiles, Digital Signpost) is fetched from the backend API.  
-**Without the backend running, the UI will load but all content sections will remain empty.**
+**Without the backend running, the extension loads in a UI-only state (header, language switch and date are visible), but daily content sections are populated only when the backend API is running.**
 
-To make the extension fully functional:
-UPRAVIT 
-- Create a `.env` file based on `.env.example`
-- Start the backend locally
-
-Steps:
-1. Create `.env` from `.env.example` (backend directory)
-2. Start backend: `node server.js`
-3. Open **chrome://extensions/**
-4. Enable **Developer Mode**
-5. Load the **full project** folder
-6. Launch the extension
+This repository includes a prepared demo configuration intended for technical evaluation.
+The demo mode allows running the Chrome extension and backend locally
+without production data or live security infrastructure.
 
 ---
 
-## 🔧 Backend Setup  
+### Backend
 ```bash
-git clone https://github.com/GrutifulDay/HackMindset.git
-cd HackMindset/backend
-npm install
-cp .env.example .env   # fill in your values
+cd backend
+cp .env.example .env
 node server.js
 ```
+
+### Chrome Extension (Developer Mode)
+1. Open Google Chrome 
+2. Navigate to chrome://extensions 
+3. Enable **Developer Mode** 
+4. Click **Load unpacked**
+5. Select the **HackMindset** project root folder 
+6. Click the puzzle icon 
+7. *(Optional)* Click the **Pin** icon to keep the extension visible in the toolbar
+8. Open the HackMindset extension
