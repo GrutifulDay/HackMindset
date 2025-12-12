@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { HASH_KEY } from "../config.js";
+import { HASH_KEY, DEMO_MODE } from "../config.js";
 
 export function hashIp(ip) {
   if (DEMO_MODE) return null;
