@@ -1,11 +1,11 @@
 import { DEV_MODE } from "../config.js"; 
-import { debug, warn } from "../logger/logger.js";
+import { debug, info } from "../logger/logger.js";
 
 export async function updateSectionData(key, interval = "daily") {
     const now = new Date()
   
     if (DEV_MODE) {
-      warn(`[${key}] 🧪 DEV_MODE aktivní – stahuji data znovu.`);
+      info(`[${key}] 🧪 DEV_MODE aktivní – stahuji data znovu.`);
       return true
     }
   

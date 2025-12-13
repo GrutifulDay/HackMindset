@@ -1,5 +1,6 @@
 import { API } from "../config.js";
 import { debug, error } from "../logger/logger.js";
+import { warn } from "../logger/logger.js";
 
 let jwtToken = null;
 let tokenExpiry = null;
@@ -29,7 +30,7 @@ export async function getJwtToken() {
 
     // ❗ ZDE přidáme bezpečnou kontrolu
     if (!res.ok) {
-      console.warn("[WARN] getJwtToken → server odmítl token:", res.status);
+      warn("[WARN] getJwtToken → server odmítl token:", res.status);
 
       jwtToken = null;        // vynuluj
       tokenExpiry = null;     // vynuluj
@@ -41,7 +42,7 @@ export async function getJwtToken() {
 
     // ❗ Další bezpečná kontrola
     if (!data?.token) {
-      console.warn("[WARN] getJwtToken → token není v odpovědi:", data);
+      warn("[WARN] getJwtToken → token není v odpovědi:", data);
 
       jwtToken = null;
       tokenExpiry = null;

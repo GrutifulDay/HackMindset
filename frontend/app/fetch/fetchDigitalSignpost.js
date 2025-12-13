@@ -2,6 +2,7 @@ import { updateSectionData } from "../utils/update/updateSectionData.js";
 import { API } from "../utils/config.js";
 import { getJwtToken } from "../utils/auth/jwtToken.js";
 import { debug } from "../utils/logger/logger.js";
+import { error } from "../utils/logger/logger.js";
 
 
 debug("{fetchDigitalSignpost.js} 📡 je načtený");
@@ -11,7 +12,7 @@ export async function fetchDigitalSignpost() {
 
   const token = await getJwtToken() 
   if (!token) {
-    console.error("❌ Chybí JWT token fetchDigitalSignpost – fetch se neprovede.");
+    error("❌ Chybí JWT token fetchDigitalSignpost – fetch se neprovede.");
     return null;
   }
 
@@ -52,7 +53,7 @@ export async function fetchDigitalSignpost() {
     debug("[digitalSignpost] ✅ Nová data uložena");
     return data
   } catch (error) {
-    console.error("❌ fetchDigitalSignpost error", error);
+    error("❌ fetchDigitalSignpost error", error);
     return null
   }
 }
