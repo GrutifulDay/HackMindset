@@ -1,3 +1,9 @@
+// Reminder logika pro Chrome extension:
+// Sleduje otevreni Instagramu a zobrazi upozorneni maximalne jednou denne.
+// Zaroven hlida, aby se reminder nespoustel opakovane na stejnem tabu
+// a pocka na nacteni content skriptu pred odeslanim zpravy.
+
+
 // 🧠 Uložíme ID tabů, kde už reminder běžel
 const shownTabs = new Set();
 

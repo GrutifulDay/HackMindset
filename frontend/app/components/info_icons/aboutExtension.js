@@ -53,7 +53,7 @@ export function createAboutExtensionWindow() {
         zIndex: "1000",
         maxWidth: "300px",
         display: "none",
-        textAlign: "center"  // 💡 přidáno
+        textAlign: "center" 
     }, {
         id: "info-panel"
     });

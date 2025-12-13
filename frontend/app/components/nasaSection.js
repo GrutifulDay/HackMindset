@@ -20,13 +20,11 @@ export async function createNasaSection() {
     debug("📡 Žádná nebo neplatná cache – načítám z backendu...");
     const fresh = await fetchNasaImage();
 
-    // 🔥 1) TADY DOPLNĚNO – fetch selhal → sekce se nevykreslí
     if (!fresh || !fresh.url) {
       warn("[nasa] ❌ fetchNasaImage vrátil null – NASA sekci přeskakuji.");
       return null;
     }
 
-    // uložení validních dat
     nasaData = fresh;
     setCachedData(cacheKey, nasaData);
   } else {
@@ -35,13 +33,11 @@ export async function createNasaSection() {
 
   debug("{nasaSection.js}📌 Načtený NASA obrázek:", nasaData);
 
-  // 🔥 2) tvoje existující kontrola (zůstává)
   if (!nasaData || !nasaData.url) {
     warn("[nasa] ⚠️ Žádná validní NASA data – sekci vynechám.");
     return null;
   }
 
-  // ZBYTEK KÓDU BEZ ZMĚNY
   const section = el("section", null, {}, {});
 
   const titleWrapper = el("div", null, {
@@ -80,7 +76,6 @@ export async function createNasaSection() {
   nasaTitle.append(title, link);
   titleWrapper.append(rocketIcon, nasaTitle);
 
-  // Obrázek
   const nasaImage = el(
     "img",
     null,

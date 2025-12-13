@@ -43,14 +43,14 @@ export function createLanguageSwitcher() {
   const { wrapper: czWrapper, flag: czFlag } = createFlagWrapper(
     "../assets/icons/CZ.svg",
     null,
-    lang === "cz" // <-- DŮLEŽITÉ
+    lang === "cz" 
   )
 
   
   const { wrapper: enWrapper, flag: enFlag } = createFlagWrapper(
     "../assets/icons/EN.svg",
     null,
-    lang === "en" // <-- DŮLEŽITÉ
+    lang === "en" 
   )
 
   createAddTooltip(czFlag, "Čeština")

@@ -12,7 +12,6 @@ export function createModemSound(retroData, lang, titleEl) {
 
   if (!shouldAddSound) return;
 
-  // pridat ikonu modemu 
   const soundIcon = el("img", null, {
     marginLeft: "10px",
     width: "17px",

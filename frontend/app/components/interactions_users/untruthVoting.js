@@ -4,7 +4,10 @@ import { fetchUntruthVotes } from "../../fetch/fetchUntruthVotes.js";
 import { fetchUntruthLimit } from "../../fetch/fetchUntruthLimit.js";
 import { increaseUntruthVote, initUntruthLimit } from "../../utils/cache/untruthLimit.js";
 import { createFeedbackUntruth } from "../interactions_users/votingReport.js";
-import { debug } from "../../utils/logger/logger.js";
+
+// UI komponenta pro hlaseni nepravdivych nebo chybnych informaci
+// Zobrazuje interaktivni okno s feedbackem, odesila hlasy na backend
+// a obsahuje jednoduchou logiku pro detekci abuse (hromadne oznaceni)
 
 export function createUntruthVotingWindow() {
   const lang = getLanguage();
@@ -51,8 +54,7 @@ export function createUntruthVotingWindow() {
     color: "#273E64"
   });
 
-  // ---- LIST OF FEEDBACK OPTIONS ----
-
+  // seznam feedback
   const listItems = [
     lang === "cz" ? "Rok je špatně" : "The year is wrong",
     lang === "cz" ? "Není to dnešní datum" : "This is not today's date",
@@ -67,7 +69,6 @@ export function createUntruthVotingWindow() {
     color: "#05054e"
   });
 
-  // ---- SUBMIT BUTTON ----
 
   const submitButton = el("button",
     lang === "cz" ? "Odeslat" : "Submit",
@@ -77,18 +78,17 @@ export function createUntruthVotingWindow() {
 
   initUntruthLimit(); // reset denního limitu
 
-  // ---- SHOW FUNCTION ----
 
   container.show = function (referenceElement, metadata = {}) {
 
-    // 1) Uložit data
+    // 1) ulozi data
     container.dataset.section = metadata.section || "unknown";
     container.dataset.date = metadata.date || "";
   
     const section = container.dataset.section;
     const date = container.dataset.date;
   
-    // 2) Dynamický jazyk (správně aktuální)
+    // 2) dynamicky jazyk (aktualni)
     const currentLang = getLanguage();
     title.textContent = currentLang === "cz"
       ? `Našli jste chybu? (${section})`
@@ -108,7 +108,7 @@ export function createUntruthVotingWindow() {
     const stored = JSON.parse(localStorage.getItem(voteKey));
     const alreadySubmitted = !!stored;
   
-    // 6) Render možností
+    // 6) vykresleni moznosti
     listItems.forEach(text => {
       const stateObj = { text, value: stored?.includes(text) || false };
       selectedStates.push(stateObj);
@@ -149,7 +149,7 @@ export function createUntruthVotingWindow() {
       listWrapper.appendChild(row);
     });
   
-    // 7) Nastavení tlačítka
+    // 7) nastaveni button
     if (alreadySubmitted) {
       submitButton.disabled = true;
       submitButton.textContent = currentLang === "cz" ? "Odesláno" : "Submitted";
@@ -177,9 +177,7 @@ export function createUntruthVotingWindow() {
     });
   };
   
-
-  // ---- SUBMIT LOGIC ----
-
+  // submit logika
   submitButton.addEventListener("click", async () => {
     const section = container.dataset.section;
     const date = container.dataset.date;
@@ -193,7 +191,7 @@ export function createUntruthVotingWindow() {
     const today = new Date().toISOString().slice(0, 10);
     const voteKey = `untruth-${section}-${date}-${today}`;
 
-    // ABUSE = všech 4 položky
+    // Abuse = vsech 4
     const isAbuse = selected.length === 4;
 
     if (isAbuse) {

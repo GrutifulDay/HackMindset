@@ -9,7 +9,7 @@ export function createTranslationInfoWindow() {
         padding: "15px",
         zIndex: "1000",
         maxWidth: "300px",
-        display: "none", // start hidden 
+        display: "none", 
 
         backgroundColor: "#fff8e1",
         borderRadius: "10px",
@@ -105,7 +105,6 @@ export function createTranslationInfoWindow() {
         textDecoration: "underline"
     });
 
-    // doplnit logo z google 
     const line1 = el("p", null)
 
     line1.append(
@@ -129,9 +128,6 @@ export function createTranslationInfoWindow() {
         urlTranslation
     )
     
-    
-
-
     container.append(closeBtn, title, line1);
     return container;
 }

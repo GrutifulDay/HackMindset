@@ -29,7 +29,6 @@ export async function createRetroMachine() {
     if (retroData) setCachedData(CACHE_KEY, retroData);
   }
 
-  // 🔥 BEZPEČNOSTNÍ OCHRANA – ZABRÁNÍ PÁDU UI
   if (!retroData || typeof retroData !== "object") {
     warn("⚠️ Retro data nejsou dostupná – sekce se nepřidá.");
     return null;

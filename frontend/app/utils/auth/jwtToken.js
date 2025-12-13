@@ -14,7 +14,7 @@ function decodeJwt(token) {
 export async function getJwtToken() {
   const now = Date.now();
 
-  // Pokud má token ještě 5s platnost
+  // pokud ma token jeste 5s platnost
   if (jwtToken && tokenExpiry && now < tokenExpiry - 5000) {
     return jwtToken;
   }
@@ -28,19 +28,17 @@ export async function getJwtToken() {
       }
     });
 
-    // ❗ ZDE přidáme bezpečnou kontrolu
     if (!res.ok) {
       warn("[WARN] getJwtToken → server odmítl token:", res.status);
 
-      jwtToken = null;        // vynuluj
-      tokenExpiry = null;     // vynuluj
+      jwtToken = null;   
+      tokenExpiry = null;   
 
-      return null;            // klíčový krok – žádný throw
+      return null;           
     }
 
     const data = await res.json();
 
-    // ❗ Další bezpečná kontrola
     if (!data?.token) {
       warn("[WARN] getJwtToken → token není v odpovědi:", data);
 

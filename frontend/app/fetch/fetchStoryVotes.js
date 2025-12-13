@@ -2,7 +2,6 @@ import { API, DEMO_MODE } from "../utils/config.js";
 import { getJwtToken } from "../utils/auth/jwtToken.js";
 import { debug, error } from "../utils/logger/logger.js";
 
-
 debug("{fetchStoryVotes.js} 📡 načten");
 
 // ziskani postu hlasu pro dany den 

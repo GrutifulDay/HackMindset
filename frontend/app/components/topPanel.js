@@ -1,13 +1,9 @@
 import { el } from "../utils/dom/uiSnippets.js";
-import { getLanguage } from "../utils/language/language.js";
-
 import { createAboutExtensionWindow } from "./info_icons/aboutExtension.js";
 import { createLanguageSwitcher } from "./info_icons/languageSwitcher.js";
 import { createInfoIcon } from "./icons_import/infoIcon.js";
-
 import { attachInfoToggle } from "../utils/dom/uiSnippets.js";
 import { debug } from "../utils/logger/logger.js";
-
 
 debug("{topPanel.js} 🧩 sekce se generuje...");
 
@@ -15,7 +11,6 @@ debug("{topPanel.js} 🧩 sekce se generuje...");
 export async function createTopPanel() {
   debug("{funkce createTopPanel} ✅ funguje");
 
-  const lang = getLanguage()
   const languageSwitcher = createLanguageSwitcher()
 
   const aside = el("aside", null, {})

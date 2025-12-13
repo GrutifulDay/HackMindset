@@ -65,8 +65,6 @@ export async function fetchPostVoteRetro(date, option) {
     };
 }
 
-
-
   const token = await getJwtToken() 
 
   if (!token) {

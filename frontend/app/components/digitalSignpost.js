@@ -22,7 +22,6 @@ export async function createDigitalSignpost() {
       debug("🌐 Načítám nová data ze serveru")
       digitalData = await fetchDigitalSignpost()
 
-      // 🔥 1) TADY PŘIDÁVÁŠ KONTROLU, ŽE FETCH SELHAL
       if (!digitalData) {
           warn("⚠️ DigitalSignpost se nevykreslí – fetch vrátil null.")
           return null            // ⬅⬅⬅ Tohle je to hlavní!
@@ -31,13 +30,11 @@ export async function createDigitalSignpost() {
       setCachedData(CACHE_KEY, digitalData)
   }
 
-  // ⚠️ 2) DRUHÁ POJISTKA (klidně může zůstat)
   if (!digitalData) {
       warn("⚠️ Žádný příběh nenalezen.");
       return null
   }
 
-  // ZBYTEK KÓDU SE NEMĚNÍ
   const article = el("article", null, { position: "relative" })
 
   const digitalWrapper = el("div", null, {
@@ -75,7 +72,7 @@ export async function createDigitalSignpost() {
   const content = el("p", digitalData.content?.[lang] || "", {})
   const recommendation = el("p", digitalData.recommendation?.[lang] || "", {})
 
-  // neni clanek neni ikona
+  // neni clanek = neni ikona
   const articleIsEmpty =
     (!digitalData.title?.[lang] || digitalData.title[lang].trim() === "") &&
     (!digitalData.content?.[lang] || digitalData.content[lang].trim() === "") &&

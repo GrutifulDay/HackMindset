@@ -4,7 +4,6 @@ import { getJwtToken } from "../utils/auth/jwtToken.js";
 import { debug } from "../utils/logger/logger.js";
 import { error } from "../utils/logger/logger.js";
 
-
 debug("{fetchDigitalSignpost.js} 📡 je načtený");
 
 export async function fetchDigitalSignpost() {

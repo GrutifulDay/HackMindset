@@ -1,3 +1,6 @@
+// Jednoducha utilita pro pridani tooltipu k libovolnemu elementu
+// Dynamicky pocita pozici kurzoru a zabranuje pretecení mimo obrazovku
+
 export function createAddTooltip(targetElement, text) {
   if (!targetElement || !text) return;
 

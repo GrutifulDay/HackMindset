@@ -3,21 +3,16 @@ import { fetchGetVoteStory, fetchPostVoteStory } from "../fetch/fetchStoryVotes.
 import { createVotingReportUsers } from "./interactions_users/votingReport.js";
 import { el, createFadeLine } from "../utils/dom/uiSnippets.js";
 import { getLanguage } from "../utils/language/language.js";
-
 import { createUntruthIcon } from "./icons_import/untruthIcon.js";
 import { createUntruthVotingWindow } from "./interactions_users/untruthVoting.js";
-
 import { getCachedData, setCachedData } from "../utils/cache/localStorageCache.js";
-
 import { createAddTooltip } from "../utils/dom/tooltip.js";
 import { debug, warn } from "../utils/logger/logger.js";
 
 debug("{storyOfTheDay.js} 🧩 sekce se generuje...");
 
-
 export async function createStoryOfTheDay() {
   debug("{FUNKCE createStoryOfTheDay} ✅ funguje");
-
 
   const lang = getLanguage()
   const CACHE_KEY = `story_cache_${lang}`
@@ -32,7 +27,6 @@ export async function createStoryOfTheDay() {
     if (storyData) setCachedData(CACHE_KEY, storyData)
   }
 
-  // 🔥 BEZPEČNOSTNÍ OCHRANA – ZABRÁNÍ PÁDU UI
   if (!storyData || typeof storyData !== "object") {
     warn("⚠️ Story data nejsou dostupná – sekce se nepřidá.");
     return null;

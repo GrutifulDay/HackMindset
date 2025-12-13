@@ -4,7 +4,6 @@ import { fetchProfile } from "../fetch/fetchProfile.js";
 import { createAddTooltip } from "../utils/dom/tooltip.js";
 import { debug, error } from "../utils/logger/logger.js";
 
-
 debug("{profile.js} 🧩 sekce se generuje...");
 
 export async function createProfile() {
@@ -13,7 +12,6 @@ export async function createProfile() {
   const lang = getLanguage()
   const profileData = await fetchProfile()
 
-  // 🔥 DOPLNĚNO: pokud fetch selže → sekce se nevykreslí
   if (!profileData || typeof profileData !== "object") {
     error("❌ fetchProfile vrátil null – přeskočuji Profile sekci.");
     return null;
@@ -31,7 +29,6 @@ export async function createProfile() {
     justifyContent: "center"
   })
 
-  // nadpis
   const profileWrapper = el("div", null, {
     display: "flex",
     alignItems: "center",

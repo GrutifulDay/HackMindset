@@ -1,3 +1,11 @@
+// Content script pro Chrome extension:
+// Zobrazuje nenápadný reminder přímo na stránce (např. Instagram),
+// který uživatele upozorní na denní obsah v HackMindsetu.
+// Reminder se vykreslí pouze jednou (kontrola přes ID v DOM),
+// respektuje jazyk z message nebo localStorage,
+// reaguje na zprávu z background.js
+// a po určité době se automaticky zavře.
+
 // pomocna funkce pro tvorbu HTML el
 const el = (tag, text, style = {}, attributes = {}) => {
   const element = document.createElement(tag)
