@@ -9,7 +9,7 @@
 //   // 🎯 Aktivace honeypointu – generování náhodného session ID (např. "4f9a3bd1e7a2")
 //   const sessionId = crypto.randomBytes(8).toString("hex")
 
-//   // 🖨️ Vypiš ID do terminálu pro sledování
+//   // 🖨️ vypise ID do terminalu pro pro sledovani
 //   debug("✅ Honeypoint session uložena do DB")
 
 //   // 💾 Uložení do DB – ID + IP + user agent + čas
@@ -28,14 +28,14 @@
 //     console.error(chalk.red("❌ Chyba při ukládání session do DB:"), err.message)
 //   }
 
-//   // 🔄 Přesměrování můžeš řešit později (např. pomocí fetch do jiného serveru)
+//   // 🔄 Presmerovani - pozdeji pro HP, bude odkazovany na jiny server
 //   // fetch(`https://honeypoint.mojedomena.cz/api/start`, {
 //   //   method: "POST",
 //   //   headers: { "Content-Type": "application/json" },
 //   //   body: JSON.stringify({ sessionId })
 //   // })
 
-//   // 🕵️‍♀️ Falešná odpověď jako návnada
+//   // 🕵️‍♀️ falesna odpoved jako navnada 
 //   const fakeUser = {
 //     id: "u9843-f9a2b01",
 //     username: "internal-tester42",
@@ -45,6 +45,7 @@
 //     token: "null", 
 //   }
 
+//   // odpoved serveru 
 //   return res.status(200).json({
 //     message: "🧪 Systémový přístup potvrzen - test form",
 //     user: fakeUser

@@ -4,10 +4,8 @@ import { getStoryOfTheDay } from "../controllers/storyController.js";
 import { getStoryVotes, addStoryVote } from "../controllers/storyVotesController.js";
 import { debug, info, warn, error } from "../utils/logger.js";
 
-
 const router = express.Router()
 
- 
 debug("{storyRoutes.js} pripojeno");
 
 router.get(

@@ -9,8 +9,18 @@ import { CHROME_EXTENSION_ALL_URL, JWT_SECRET } from "../config.js";
 import util from "util";
 import { debug, info, warn, error } from "../utils/logger.js";
 
+// Middleware pro blokovani IP adres
+// Slouzi jako centralni ochrana proti opakovanemu zneuzivani API
+// Kombinuje pametovy blacklist + DB + vyjimky pro Chrome Extension
+
+// ------------------------------------------------------------
+// Pametovy blacklist (hashovane IP adresy)
+// Slouzi pro rychlou kontrolu bez DB dotazu
+// ------------------------------------------------------------
+
 const blacklistedIPs = new Set();
 
+// Normalizace IP (IPv6 -> IPv4)
 const normalizeIp = (ip) => {
   if (!ip) return ip;
   const m = String(ip).match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
@@ -48,7 +58,7 @@ export default async function ipBlocker(req, res, next) {
   const isChromeUA = ua.includes("Chrome");
   const isTokenIssueRoute = req.path === "/api/get-token";
 
-  // ✅ IP není na blacklistu → pokracuje
+  // 1) IP neni na blacklistu -> request pokracuje
   if (!blacklistedIPs.has(ipHash)) return next();
 
   // 🚨 IP JE NA BLACKLISTU → zkontroluje vyjimky
@@ -122,7 +132,7 @@ export default async function ipBlocker(req, res, next) {
     reason: "IP Blacklist",
     method: req.method,
     path: req.originalUrl,
-    headers: req.headers, // ← přidej skutečné hlavičky
+    headers: req.headers, // ← prida skutecne hlavicky
   });
   
 

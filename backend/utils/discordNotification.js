@@ -2,27 +2,35 @@ import { DISCORD_WEBHOOK_URL } from "../config.js";
 import { debug, error } from "../utils/logger.js";
 import { hashIp } from "./hashIp.js";
 
+// Centralni utilita pro odesilani bezpecnostnich notifikaci na Discord
+// Slucuje opakovane udalosti, maskuje citliva data a poskytuje
+// prehled o blokacich IP, revokaci tokenu a podezrelych requestech
 
-// 🧠 Tyto dvě mapy slouží jako "paměť" mezi jednotlivými voláními funkce.
-// notifyBuffer ukládá informace o tom, kolikrát byla IP blokována (aby se notifikace neposílaly zbytečně často).
-// notifyTimers zajišťuje, že se zpráva pošle až po určitém intervalu (zde 5 sekund).
+
+// ------------------------------------------------------------
+// Pamet pro slouceni opakovanych notifikaci
+// - notifyBuffer: pocita, kolikrat se udalost opakovala
+// - notifyTimers: zajistuje odeslani az po kratkem intervalu
+// ------------------------------------------------------------
 const notifyBuffer = new Map();
 const notifyTimers = new Map();
 
 
-// 🛡️ Funkce, která zamaskuje citlivý token (např. Bearer token nebo API klíč).
-// Používá se v hlavičkách i v dekódování JWT, aby se celé hodnoty nedostaly do logu nebo Discordu.
+// ------------------------------------------------------------
+// Maskovani tokenu (Authorization, API klice apod.)
+// Zabranuje uniku plnych hodnot do logu nebo Discordu
+// ------------------------------------------------------------
 export function maskToken(token = "") {
   const parts = token.split(" ");
 
-  // pokud není schéma ("Bearer"), maskujeme celý token
+  // Bez schematu (napr. jen token)
   if (parts.length === 1) {
     const t = parts[0];
     if (t.length <= 8) return t.replace(/.(?=.{2})/g, "*");
     return `${t.slice(0,4)}...${t.slice(-4)}`; // např. "abcd...wxyz"
   }
 
-  // jinak maskujeme jen samotnou hodnotu tokenu, ale zachováme "Bearer "
+  // Se schematem (napr. Bearer)
   const scheme = parts[0];
   const t = parts.slice(1).join(" ");
   const masked = t.length <= 8
@@ -32,7 +40,7 @@ export function maskToken(token = "") {
 }
 
 
-// 🧩 Seznam citlivých hlaviček, které nechceme logovat nebo posílat na Discord v plné podobě.
+// Seznam citlivych hlavicek, ktere se nikdy neposilaji cele
 const SENSITIVE = [
   "authorization",
   "cookie",
@@ -44,22 +52,22 @@ const SENSITIVE = [
   "x-real-ip"
 ];
 
-// 🧩 Pomocná funkce – pokud je hodnota dlouhá, zobrazí jen část prefixu a suffixu.
+// Zkraceni dlouhych hodnot (pro citelnost)
 function shortValue(v = "") {
   const s = String(v);
   if (s.length <= 40) return s;
   return `${s.slice(0,20)}...${s.slice(-10)}`;
 }
 
-
-// 📦 Vytvoří textový seznam hlaviček pro Discord zprávu.
-// Vynechá citlivé položky a u "Origin" zamaskuje ID Chrome rozšíření.
+// ------------------------------------------------------------
+// Vytvori citelny vypis hlavicek pro Discord
+// Citlive hlavicky vynecha nebo zamaskuje
+// ------------------------------------------------------------
 function formatHeaders(headers = {}) {
   return Object.entries(headers)
     .filter(([k]) => !SENSITIVE.includes(k.toLowerCase()))
     .map(([k, v]) => {
       if (k.toLowerCase() === "origin" && typeof v === "string" && v.startsWith("chrome-extension://")) {
-        // Maskujeme extension ID, aby nebylo veřejné
         const masked = v.length > 20
           ? `${v.slice(0, 20)}...${v.slice(-3)}`
           : v;
@@ -67,13 +75,13 @@ function formatHeaders(headers = {}) {
       }
       return `→ ${k}: ${v}`;
     })
-    .slice(0, 10) // omezíme počet zobrazených hlaviček (max. 10)
+    .slice(0, 10) // omezíme pocet zobrazenych hlavicek (max. 10)
     .join("\n");
 }
 
-
-// 🕵️‍♀️ Detekuje a maskuje citlivé hlavičky (Authorization, Cookies, API klíče...).
-// Výsledkem je seznam textových řádků vhodný pro přehledné zobrazení v notifikaci.
+// ------------------------------------------------------------
+// Detekce citlivych hlavicek a jejich maskovani
+// ------------------------------------------------------------
 function detectSensitive(headers = {}) {
   const found = [];
   const h = Object.fromEntries(
@@ -94,23 +102,7 @@ function detectSensitive(headers = {}) {
 }
 
 
-// 🌍 Zamaskuje IP adresu (IPv4 i IPv6) – z bezpečnostních důvodů neukazuje celé.
-// function maskIP(ip = "") {
-//   if (!ip) return "Neznámá IP";
-//   if (/^\d+\.\d+\.\d+\.\d+$/.test(ip)) { // IPv4
-//     const parts = ip.split(".");
-//     parts[3] = "*";
-//     return parts.join(".");
-//   }
-//   if (ip.includes(":")) { // IPv6
-//     const parts = ip.split(":");
-//     return parts.slice(0, 2).join(":") + ":****:****";
-//   }
-//   return ip;
-// }
-
-
-// 🚨 Hlavní export – odešle Discord notifikaci o zablokované IP, revokovaném tokenu apod.
+// Hlavni export notifikace Discord 
 export async function notifyBlockedIP({
   ip,
   city,
@@ -121,10 +113,10 @@ export async function notifyBlockedIP({
   headers,
   requests,
 }) {
-  // unikátní klíč pro slučování notifikací (IP + důvod)
+  // unikatni klic pro slucovani nofikaci (IP + reason)
   const key = `${ip}|${reason}`;
 
-  // získáme nebo vytvoříme záznam o dané IP
+  // ziskan nebo vytvori zaznam o dane IP
   const record = notifyBuffer.get(key) || {
     count: 0,
     method,
@@ -136,24 +128,24 @@ export async function notifyBlockedIP({
   record.count++;
   notifyBuffer.set(key, record);
 
-  // zabráníme opakovanému odesílání v krátkém čase
+  // zabrani opakovanemu odesilani
   if (notifyTimers.has(key)) return;
 
-  // ⏱️ Naplánujeme odeslání notifikace za 5 sekund (debounce mechanismus)
+  // ⏱️ planovane odesilani notifikace za 5 sekund
   notifyTimers.set(
     key,
     setTimeout(async () => {
       const r = notifyBuffer.get(key);
 
-      // zjištění citlivých hlaviček
+      // zjisteni citlivych hlavicek
       const sensitiveBlock = (r.originalHeaders || headers)
         ? detectSensitive(r.originalHeaders || headers)
         : [];
 
-      // zformátování běžných hlaviček
+      // zformatovani beznych hlavicek
       const headersBlock = headers ? `\n📦 Headers:\n${formatHeaders(headers)}` : "";
 
-      // vytvoření přehledu citlivých hodnot
+      // prehl vytroveni citlivych hlavicek
       const sensitiveInfo = sensitiveBlock.length > 0
         ? `\n🔑 Sensitive headers:\n- ${sensitiveBlock.join("\n- ")}`
         : "";
@@ -162,7 +154,7 @@ export async function notifyBlockedIP({
 
       const hashedIp = hashIp(ip);
       
-      // 🧩 základní text notifikace
+      // zakladni text notifikace
       let content =
         `🚫 **Blocked**\n` +
         `📄 Reason: *${reason}*\n` +
@@ -175,7 +167,7 @@ export async function notifyBlockedIP({
         sensitiveInfo +
         headersBlock;
 
-      // 🧠 JWT dekódování (s maskováním hodnot)
+      // dekodovani JWT payloadu (pouze informacne)
       const auth = headers?.authorization || headers?.Authorization;
       if (auth && auth.startsWith("Bearer ")) {
         const tokenPart = auth.split(" ")[1];
@@ -184,7 +176,6 @@ export async function notifyBlockedIP({
           try {
             const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString("utf8"));
 
-            // pomocné funkce pro maskování
             const maskId = (id = "") =>
               id.length <= 8 ? id.replace(/.(?=.{2})/g, "*") : `${id.slice(0, 4)}...${id.slice(-4)}`;
 
@@ -206,7 +197,6 @@ export async function notifyBlockedIP({
               catch { return aud.length > 30 ? aud.slice(0, 30) + "..." : aud; }
             };
 
-            // přidání dekódovaného, ale maskovaného JWT payloadu do zprávy
             content += `\n\n🔍 **Decoded JWT payload (masked):**`;
             if (payload.jti) content += `\n• JTI: ${maskId(payload.jti)}`;
             if (payload.sub) content += `\n• Sub: ${payload.sub}`;
@@ -222,7 +212,6 @@ export async function notifyBlockedIP({
         }
       }
 
-      // odeslání notifikace do Discord webhooku
       const message = { content };
 
       try {
@@ -236,7 +225,7 @@ export async function notifyBlockedIP({
         error("❌ Chyba při odesílání na Discord:", e.message);
       }
 
-      // po odeslání vymažeme buffer i timer
+      // po odeslani vymaze buffer i timer
       notifyBuffer.delete(key);
       notifyTimers.delete(key);
     }, 5000)

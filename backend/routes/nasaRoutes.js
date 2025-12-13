@@ -5,7 +5,6 @@ import { debug } from "../utils/logger.js";
 
 const router = express.Router()
 
- 
 debug("{nasaRoutes.js} pripojeno");
 
 router.get(

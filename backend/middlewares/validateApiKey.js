@@ -10,19 +10,13 @@ import { registerTokenUsage } from "../middlewares/tokenUsage.js";
 import { debug, warn } from "../utils/logger.js";
 import { DEBUG, NODE_ENV, DEMO_MODE, API_BASE_URL } from "../config.js";
 
-
-// citlivé hlavičky maskujeme
-const redact = (obj = {}) => {
-  const SENSITIVE = new Set(["authorization","cookie","proxy-authorization","x-api-key","set-cookie"]);
-  const out = {};
-  for (const [k,v] of Object.entries(obj)) {
-    out[k] = SENSITIVE.has(k.toLowerCase()) ? "[REDACTED]" : v;
-  }
-  return out;
-};
+// Centralni bezpecnostni middleware pro API
+// Overuje JWT tokeny z Chrome Extension, hlida zneuziti tokenu,
+// kontroluje IP blacklist a pri podezrelem chovani request blokuje
+// Zaroven neblokuje extension - pouze blokace z venku 
 
 export function validateApiKey(routeDescription) {
-  // 🔧 DEMO MODE → přeskočit veškerou bezpečnost, povolit request
+  // 🔧 DEMO MODE → prekoci veskerou bezpecnost, povoli request
   if (DEMO_MODE) {
     return function(req, res, next) {
       req.tokenPayload = { demo: true };

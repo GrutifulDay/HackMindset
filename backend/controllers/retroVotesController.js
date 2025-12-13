@@ -1,6 +1,8 @@
 import Retro from "../models/Retro.js";
 
-// ziskani hlasu posle data
+// podle tohoto data najde zaznam v DB
+// a bud vrati aktualni pocet hlasu, nebo zapise novy hlas.
+
 export async function getRetroVotes(req, res) {
   const { date } = req.params;
 
@@ -20,7 +22,6 @@ export async function getRetroVotes(req, res) {
   }
 }
 
-// pridani hlasu
 export async function addRetroVote(req, res) {
   const { date, option } = req.body;
 

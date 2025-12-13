@@ -1,6 +1,10 @@
 import { EXTENSION_SIGNATURE } from "../config.js";
 import { debug, warn } from "../utils/logger.js";
 
+// Jednoducha validace pristupu pomoci sdileneho tajneho klice
+// Slouzi jako lehka ochrana endpointu bez JWT 
+// (napr. interni nebo servisni volani)
+
 export function validateToken() {
   return function (req, res, next) {
 

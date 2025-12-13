@@ -20,6 +20,11 @@ const demoNasa = JSON.parse(
   fs.readFileSync(path.join(__dirname, "../demo-data/nasa.json"), "utf8")
 );
 
+
+// endpoint vraci denni NASA img (APOD). 
+// pouziva API, fallback HTML a archiv jako zalozni zdroje,
+// aby byl obsah dostupny i pri vypadku NASA sluzeb.
+
 // cache v pameti
 let nasaCache = null;
 let nasaCacheDate = null;
@@ -68,11 +73,12 @@ export async function fetchNasaImage(req, res) {
     if (!response.ok) throw new Error(`Chyba NASA API: ${response.status}`);
 
     const data = await response.json();
-    // data.date = "2025-11-18";
+    // pro testy IMG presne datum
+    // data.date = "2025-11-18"; 
     debug("✅ NASA API odpověď:", data.date);
 
     if (isToday(data.date)) {
-      // 🔥 TADY JE JEDINÉ MÍSTO, KTERÉ BYLO ŠPATNĚ:
+      
       const apodHtmlPage =
         `https://apod.nasa.gov/apod/ap${data.date.replace(/-/g, "").slice(2)}.html`;
 
@@ -166,7 +172,7 @@ export async function fetchNasaImage(req, res) {
           randomHtml = await randomPageRes.text();
         } catch (e) {
           warn("⚠️ První pokus o archiv selhal, zkouším jiný odkaz...");
-          // zkusí jiný odkaz z archivu, ne ten samý
+          // zkusi jiny odkaz z archivu, ne ten samy
           const altIndex = (index + 5) % links.length;
           const altLink = links[altIndex].getAttribute("href");
           const altUrl = `${NASA_BASE_URL}${altLink}`;
@@ -202,7 +208,7 @@ export async function fetchNasaImage(req, res) {
           return res.json(result);
         }
 
-        // 🧠 OPRAVA TEXTU – bereme druhý <p> nebo ten s 'Explanation:'
+        // 🧠 text pod IMG - popis
         const paragraphs = [...randomDoc.querySelectorAll("p")];
         let explanation = "Popis není dostupný.";
 

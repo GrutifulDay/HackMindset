@@ -1,6 +1,8 @@
 import { maskToken } from "./discordNotification.js";
 
-// univerzalni redakce hlavicek
+// Univerzalni utilita pro redakci HTTP hlavicek
+// Maskuje citliva data (tokeny, API klice, cookies) pred logovanim nebo notifikacemi
+
 export function redactHeaders(headers = {}) {
   const out = {};
   for (const [k, v] of Object.entries(headers)) {

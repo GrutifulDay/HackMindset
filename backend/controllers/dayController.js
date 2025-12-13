@@ -11,12 +11,12 @@ export async function getControllerDay(Model, req, res, options = {}) {
     let target
 
     if (options.weekly) {
-      // pondělí aktuálního týdne
+      // nastaveno pondeli - zacatek tydne ( tydenni datovy klic )
       const monday = dayjs().startOf("week").add(1, "day")
 
       target = {
         year: monday.year(),
-        month: monday.month() + 1, // dayjs měsíce = 0–11
+        month: monday.month() + 1, // dayjs mesice = 0–11
         day: monday.date()
       }
     } else {

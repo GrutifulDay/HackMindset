@@ -2,13 +2,16 @@ import { notifyBlockedIP, maskToken } from "../utils/discordNotification.js";
 import { warn, error, debug } from "../utils/logger.js";
 import { DEBUG, NODE_ENV } from "../config.js";
 
+
+// Middleware pro zaznamenani a maskovani HTTP hlavicek.
+// Slouzi k ladeni, bezpecnostnimu logovani a notifikacim podezrelych pozadavku.
+
 // fce pro detekci hlavicek
 const SENSITIVE = new Set([
   "cookie",
   "proxy-authorization",
   "set-cookie",
   "Authorization"
-  // Authorization a X-API-Key 
 ]);
 
 function redactHeaders(headers = {}) {

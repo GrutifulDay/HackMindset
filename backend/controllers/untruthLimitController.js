@@ -1,6 +1,8 @@
 import UntruthLog from "../models/UntruthLog.js"
 import { error } from "../utils/logger.js";
 
+// kazdy mesic = prehledny zaznam, ktery rika, 
+// kde se system snazi nekdo obchazet. Pocita, kolik zaznamu v danny mesic
 export async function postUntruthLimit(req, res) {
   try {
     const { section, date } = req.body
@@ -8,7 +10,7 @@ export async function postUntruthLimit(req, res) {
     if (!section || !date) {
       return res.status(400).json({ error: "Chybí parametr 'section' nebo 'date'" })
     }
-    // 🛡️ VALIDACE — JEDINÝ NUTNÝ FIX
+    // 🛡️ VALIDACE data
     if (!/^\d{4}-\d{2}$/.test(date)) {
       return res.status(400).json({ error: "Neplatný formát data, očekáváno YYYY-MM" })
     }

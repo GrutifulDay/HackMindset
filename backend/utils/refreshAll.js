@@ -6,7 +6,10 @@ import { getProfile } from "../controllers/profileController.js";
 import { debug, info, error } from "../utils/logger.js";
 
 
-// interni refresh vsech sekcí – pres controllery, zadny fetch
+// Interni refresh vsech obsahovych sekci
+// Spousti controllery primo (bez HTTP fetch) - bez fetch, krome Nasa (jiny princip nacitani)
+// Pouziva se pro prednacteni dat, aktualizaci cache a cron ulohy
+
 let isRefreshing = false;
 
 export async function refreshAllSections() {

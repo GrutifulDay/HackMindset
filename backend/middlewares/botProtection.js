@@ -3,8 +3,12 @@ import { UAParser } from "ua-parser-js"
 import { redactHeaders } from "../utils/redact.js";
 import { warn } from "../utils/logger.js";
 
+// zakladni ochrana proti botům – analyzuje User-Agent, 
+// odmita podezrele pozadavky
+// a zanamenava problematicke IP adresy do blacklistu
 
-// ✅ Pomocná funkce pro správné získání IP adresy
+
+// ✅ pomocna funkce pro spravne ziskani IP adresy
 function getUserIP(req) {
     return (
         req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
@@ -18,13 +22,7 @@ export default function botProtection(req, res, next) {
     const userAgentString = req.get("User-Agent");
     const userIP = getUserIP(req);
 
-    // Výjimka pro Postman (volitelně odkomentovat při testech)
-    // if (userAgentString && userAgentString.includes("Postman")) {
-    //     info("🧪 Postman detekován – povolen.");
-    //     return next();
-    // }
-
-    // ⛔️ Blokování bez user-agent
+    // ⛔️ Blokovani bez user-agent
     if (!userAgentString) {
         warn(`🚨 Bot detekován (bez UA) – IP ${userIP}`);
     
@@ -40,7 +38,7 @@ export default function botProtection(req, res, next) {
         return res.status(403).json({ error: "Request cannot be processed." })
     }
 
-    // Analýza pomocí UAParser
+    // analyza pomoci UAParser
     const parser = new UAParser(userAgentString)
     const result = parser.getResult()
 
@@ -48,7 +46,7 @@ export default function botProtection(req, res, next) {
     const deviceType = result.device?.type || "Neznámý"
     const osName = result.os?.name || "Neznámý"
 
-    // ⚠️ Podezřelý user-agent
+    // ⚠️ podezrely user-agent
     if (browserName === "Other" || browserName === undefined) {
         warn(`🚨 Podezřelý bot (${deviceType}, ${osName}) – IP ${userIP}`);
     

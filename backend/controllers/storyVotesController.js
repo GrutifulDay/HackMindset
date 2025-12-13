@@ -1,6 +1,8 @@
 import Story from "../models/Story.js";
 
-// ziskani hlasu posle data
+// podle tohoto data najde zaznam v DB
+// a bud vrati aktualni pocet hlasu, nebo zapise novy hlas.
+
 export async function getStoryVotes(req, res) {
   const { date } = req.params;
 
@@ -20,7 +22,6 @@ export async function getStoryVotes(req, res) {
   }
 }
 
-// pridavani hlasu
 export async function addStoryVote(req, res) {
   const { date, option } = req.body;
 

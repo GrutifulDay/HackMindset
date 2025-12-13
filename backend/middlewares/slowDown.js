@@ -4,24 +4,29 @@ import { notifyBlockedIP } from "../utils/discordNotification.js";
 import { redactHeaders } from "../utils/redact.js";
 import { warn } from "../utils/logger.js";
 
+// ------------------------------------------------------------------
+// ARCHIVNI MIDDLEWARE – express-slow-down
+// ------------------------------------------------------------------
+// Tento middleware byl drive pouzivan pro zpomaleni nadmernych requestu.
+// Slouzi zde pouze jako ukazka alternativni ochrany (rate -> slowdown).
+//
+// V aktualni architekture NENI aktivne pouzivan, protoze:
+// - zpomaloval odezvu Chrome Extension
+// - ochrana je nyni resena na sitove vrstve serveru (NGINX / proxy)
+// - kombinace rate limit + blacklist je efektivnejsi
+//
+// Kod je ponechan zamerne jako reference a dokumentace vyvoje
+// ------------------------------------------------------------------
 
-// citlivé hlavičky anonymizujeme
-// const redact = (obj = {}) => {
-//   const SENSITIVE = new Set(["authorization","cookie","proxy-authorization","x-api-key","set-cookie"]);
-//   const out = {};
-//   for (const [k, v] of Object.entries(obj)) {
-//     out[k] = SENSITIVE.has(k.toLowerCase()) ? "[REDACTED]" : v;
-//   }
-//   return out;
-// };
-
+// Zpomaleni requestu po prekroceni limitu
 const speedLimiter = slowDown({
-  windowMs: 1 * 60 * 1000, // 1 min (změnit podle potřeby)
-  delayAfter: 50,         // až po 100 požadavcích
-  delayMs: () => 500,      // každý další request zpomalíme o 300ms
+  windowMs: 1 * 60 * 1000, // 1 min 
+  delayAfter: 50,         // az po X pozadavcich
+  delayMs: () => 500,      // kazdy dalsi request zpomali o Xms
   message: "Too many requests – you are being slowed down."
 });
 
+// Logovani zpomalenych requestu (audit / monitoring)
 async function logSlowRequests(req, res, next) {
   const used = req.slowDown?.current || 0;
   const limit = req.slowDown?.limit || 0;

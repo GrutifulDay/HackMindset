@@ -4,6 +4,9 @@ import Digital from "../models/Digital.js"
 import { error } from "../utils/logger.js";
 
 
+// zanamenava a scitava ducody nahlaseni neprvdiveho obsahu 
+// pro konktretni den a sekci
+
 const sectionModels = {
   story: Story,
   retro: Retro,

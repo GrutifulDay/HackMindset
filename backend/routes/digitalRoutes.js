@@ -11,7 +11,6 @@ debug("{digitalRoutes.js} pripojeno");
 
 router.get(
     "/digitalSignpost",
-    // stripUntruthVotes,
     validateApiKey("digitalSignpost"),
     getDigital
   )

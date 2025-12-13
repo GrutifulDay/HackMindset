@@ -43,15 +43,11 @@ export const TOKEN_IP_CITY = process.env.TOKEN_IP_CITY || "";
 
 export const SHARED_KEY = process.env.SHARED_KEY || "";
 
-
-
 // JWT token 
 export const JWT_SECRET = process.env.JWT_SECRET
 
 export const EXTENSION_SIGNATURE = process.env.EXTENSION_SIGNATURE
 debug("🔑 EXTENSION_SIGNATURE (backend):", JSON.stringify(EXTENSION_SIGNATURE));
-
-
 
 // Discord
 export const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL || "";

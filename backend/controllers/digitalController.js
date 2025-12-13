@@ -12,7 +12,7 @@ const demoDigital = JSON.parse(
     fs.readFileSync(path.join(__dirname, "../demo-data/digital.json"), "utf8")
   );
 
-
+// kontrola data vs prepisnani v demo mode
 export function getDigital(req, res) {
     return getControllerDay(Digital, req, res, { demoData: demoDigital})
 }

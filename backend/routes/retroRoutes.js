@@ -4,10 +4,8 @@ import { getRetroMachine } from "../controllers/retroControllers.js"
 import { getRetroVotes, addRetroVote } from "../controllers/retroVotesController.js"
 import { debug } from "../utils/logger.js";
 
-
 const router = express.Router()
 
- 
 debug("{storyRoutes.js} pripojeno");
 
 router.get(

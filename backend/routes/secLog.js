@@ -7,8 +7,10 @@ import { error } from "../utils/logger.js";
 
 const router = express.Router();
 
-// 🔒 Tajný podpis mezi OpenResty ↔ backend (nastav v .env, např. SECLOG_SHARED_KEY=...)
-// Proxy HO MUSÍ posílat v hlavičce:  X-Internal-Auth: <tajny_podpis>
+// Interni endpoint pro prijem security logu z OpenResty
+// Pristup povolen pouze z localhostu s tajnym podpisem
+// Slouzi k bezpecnemu predani a ukladani sitovych bezpecnostnich udalosti
+
 // const SHARED_KEY = process.env.SECLOG_SHARED_KEY || "";
 
 // 🧪 Chrani proti timing utokum
@@ -20,7 +22,7 @@ function timingSafeEqual(a, b) {
   return crypto.timingSafeEqual(ab, bb);
 }
 
-// 🧹 sanitizace textu (omez délku, odstraň CR/LF)
+// 🧹 sanitizace textu (omezi delku, odstrani CR/LF - zjistit vic)
 function sanitize(text, max = 256) {
   if (typeof text !== "string") return "";
   return text.replace(/[\r\n]+/g, " ").slice(0, max);

@@ -1,5 +1,8 @@
 import SecurityLog from "../models/SecurityLog.js";
 
+// Pomocna funkce pro ukladani bezpecnostnich udalosti do databaze
+// Normalizuje IP adresu a uklada strukturovany security log
+
 function normalizeIp(ip){
   if (!ip) return ip;
   const m = String(ip).match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);

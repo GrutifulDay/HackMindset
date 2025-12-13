@@ -12,7 +12,6 @@ import fs from "fs"
 
 // lokalni testovani 
 import https from "https"
-import { UAParser } from "ua-parser-js"
 
 // NPM knihovny 
 import express from "express"
@@ -38,7 +37,6 @@ import botProtection from "./middlewares/botProtection.js"
 import ipBlocker, { loadBlacklistFromDB } from "./middlewares/ipBlacklist.js"
 import captureHeaders from "./middlewares/captureHeaders.js";
 // import detectSecretLeak from "./middlewares/detectSecretLeak.js";
-// import speedLimiter from "./middlewares/slowDown.js"
 
 // Utils 
 import { startDailyCron } from "./utils/cron/dailyRefresh.js"
@@ -56,12 +54,11 @@ app.set("trust proxy", 1); // pokud by byl Cloudflare, nutno navysit
 app.disable("etag")
 app.disable("x-powered-by")
 
-// ⚠️ Upozornění na dev režim
+// upozorneni na NODE / DEMO rezim
 if (NODE_ENV) {
   debug("🛠️ Bezis v development rezimu");
 }
 
-// ⚠️ Upozornění na dev režim
 if (DEMO_MODE) {
   warn("⭐️ Bezis v DEMO rezimu - mas nacteny data z JSON, vse je staticke!");
 }
@@ -110,16 +107,13 @@ if (DEMO_MODE === true) {
 
     next();
   });
-} //else {
-//   app.use(corsOptions);
-// }
+}
 
-// Kontrola IP adres 
-// await loadBlacklistFromDB();
 
 // kazdy den refresh CRON v 00:01
 startDailyCron();
-// startWatchForIPChanges();
+// startWatchForIPChanges()
+
 
 // Helmet – CSP -> povoleni jen pro muj server (img, url, css atd.)
 app.use(
@@ -169,8 +163,8 @@ app.get("/health", async (_req, res) => {
 // }));
 
 // ─────────────────────────────────────────────────────────────
-// Interní servisní router pro /_sec-log
-// (Uvnitř má vlastní pre-auth + JSON parser)
+// interni servisni router pro /_sec-log
+// (uvnitr ma vlastni pre-auth + JSON parser)
 // ─────────────────────────────────────────────────────────────
 app.use(secLogRoutes)
 
@@ -186,14 +180,14 @@ app.use(corsOptions);
 // nesmi poslat vetsi nez je limit v tele requestu
 app.use(express.json({ limit: "25kb" }));
 
-// ❗️smazat po testech❗️ - Otevřený test endpoint (bez ochranných middleware)
-app.get("/api/test-open", (req, res) => {
-  res.status(200).json({
-    ok: true,
-    ip: req.ip,
-    ua: req.get("User-Agent")
-  });
-});
+// ❗️zakomentovat po testech❗️ - Otevřený test endpoint (bez ochranných middleware)
+// app.get("/api/test-open", (req, res) => {
+//   res.status(200).json({
+//     ok: true,
+//     ip: req.ip,
+//     ua: req.get("User-Agent")
+//   });
+// });
 
 // Hlavičky a logování (jen jednou)
 app.use(captureHeaders({
@@ -207,10 +201,9 @@ app.use(captureHeaders({
 }));
 
 // globalni Middleware
-app.use(ipBlocker);       // blokuje známé útočníky
-app.use(botProtection);   // detekce botů / UA
-// app.use(speedLimiter);    // soft limit
-app.use(limiterApi);      // tvrdý rate limit
+app.use(ipBlocker);       
+app.use(botProtection);   
+app.use(limiterApi);  
 
 // routes
 app.use("/api", tokenRoutes);

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Black List 
 const blacklistedIPSchema = new mongoose.Schema({
   ipHash: {
     type: String,
@@ -50,7 +49,7 @@ const blacklistedIPSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now,
-    expires: 86400, // automaticky smaže po 24 h
+    expires: 86400, // automaticky smaze po 24 h
   }
 }, { timestamps: true });
 

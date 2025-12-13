@@ -3,6 +3,11 @@ import { CHROME_EXTENSION_ALL_URL, JWT_SECRET, API_BASE_URL } from "../config.js
 import crypto from "crypto";
 
 
+// Endpoint vydava krakodoby JWT token pouze userum, 
+// kteri vypadaji jako moje Chrome rozsireni. 
+// Token slouzi k docasnemu overenei pristupu k API bez nutnosti
+// vystavovat API klic ve frontendovém kodu.
+
 export function getToken(req, res) {
   const origin = req.headers.origin || "";
   const referer = req.headers.referer || "";
@@ -19,7 +24,7 @@ export function getToken(req, res) {
 
   // 📦 Payload tokenu
   const payload = {
-    extId: CHROME_EXTENSION_ALL_URL, // overeni, ze je jen pro moje rozsireni
+    extId: CHROME_EXTENSION_ALL_URL, // overeni, podle ID z extension
     sub: "chrome-extension",
     aud: API_BASE_URL,
     jti: crypto.randomUUID(),
