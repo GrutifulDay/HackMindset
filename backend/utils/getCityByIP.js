@@ -4,7 +4,6 @@ import { debug, error } from "../utils/logger.js";
 // Pomocna utilita pro zjisteni mesta podle IP adresy
 // Pouziva externi API a slouzi pouze pro informativni logovani
 
-
 export const getCityByIP = async (ip) => {
     debug("getCitybyIP.js funguje")
 

@@ -1,23 +1,17 @@
 body {
-  width: 100%;                 /* přizpůsobí se */
-  max-width: 550px;            /* nikdy nebude moc široké */
-  min-width: 450px;            /* ale ani extrémně úzké */
-  margin: 0 auto;              /* vycentrování */
-  padding: 16px;               /* víc prostoru kolem */
+  width: 100%;         
+  max-width: 550px;          
+  min-width: 450px;          
+  margin: 0 auto;           
+  padding: 16px;               
 
-  /* den */
   background: linear-gradient(to left, rgba(255, 255, 255, 0.887), rgba(240, 240, 240, 0.873)); 
-
-    /* tohle nejspis - dark mode */
-
-  /* background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364); */
-
   font-family: 'JetBrains Mono', monospace;
   text-align: center;
   object-fit: contain;
   box-shadow: 0 0 8px rgba(78, 112, 166, 0.6);
 
-  box-sizing: border-box;      /* lepší výpočty s paddingem */
+  box-sizing: border-box;    
   border: 2px solid #6c6c7a;
 }
 

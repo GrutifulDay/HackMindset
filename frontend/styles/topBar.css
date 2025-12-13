@@ -1,36 +1,4 @@
-/* vlajky ktere jsou aktivni */
-
 .active-lang {
   transform: scale(1.3);
   transform-origin: center;
 }
-
-
-/* Tooltip styl */
-/* [data-tooltip] {
-    position: relative;
-  }
-  
-  [data-tooltip]::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 120%; /* Nad elementem */
-    /* left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
-    color: #fff;
-    padding: 4px 8px;
-    font-size: 12px;
-    white-space: nowrap;
-    border-radius: 4px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease-in-out;
-    z-index: 9999;
-  } */
-  
-  /* [data-tooltip]:hover::after {
-    opacity: 1;
-  } */
-   /* */ 
-

@@ -2,7 +2,7 @@ import express from "express";
 import { validateApiKey } from "../middlewares/validateApiKey.js";
 import { getStoryOfTheDay } from "../controllers/storyController.js";
 import { getStoryVotes, addStoryVote } from "../controllers/storyVotesController.js";
-import { debug, info, warn, error } from "../utils/logger.js";
+import { debug } from "../utils/logger.js";
 
 const router = express.Router()
 
