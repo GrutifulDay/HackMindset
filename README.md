@@ -22,7 +22,6 @@ The project also serves as a fullstack security sandbox: JWT handling, rate limi
 **This is a self-directed learning project.  
 All backend security layers were implemented manually to understand how these systems work internally — not as part of previous commercial experience.**
 
-
 ---
 
 ## 🌟 Features
@@ -153,32 +152,13 @@ Backend uses two MongoDB databases:
 
 ---
 
-## 🧪 Demo Setup (Evaluation)
+## 🔍 Evaluation Notes
 
-The Chrome extension fetches all daily content (NASA, Story, Retro, Inspiration Profiles,
-Digital Signpost) from the backend API.
+This repository is intended as an architectural and technical reference.
 
-**Without the backend running, the extension loads in a UI-only state (header, language switch and date are visible), but daily content sections are populated only when the backend API is running.**
+The Chrome extension consumes all daily content from a secured backend API.
+Without the backend running, the extension loads in a UI-only state
+(header, language switch and date are visible).
 
-This repository includes a prepared demo configuration intended for technical evaluation.
-The demo mode allows running the Chrome extension and backend locally
-without production data or live security infrastructure.
-
----
-
-### Backend
-```bash
-cd backend
-cp .env.example .env
-node server.js
-```
-
-### Chrome Extension (Developer Mode)
-1. Open Google Chrome 
-2. Navigate to `chrome://extensions`
-3. Enable **Developer Mode** 
-4. Click **Load unpacked**
-5. Select the **HackMindset** project root folder 
-6. Click the puzzle icon 
-7. *(Optional)* Click the **Pin** icon to keep the extension visible in the toolbar
-8. Open the HackMindset extension
+Production configuration, environment variables and live security infrastructure
+are intentionally excluded.
