@@ -175,7 +175,7 @@ node server.js
 
 ### Chrome Extension (Developer Mode)
 1. Open Google Chrome 
-2. Navigate to chrome://extensions 
+2. Navigate to `chrome://extensions`
 3. Enable **Developer Mode** 
 4. Click **Load unpacked**
 5. Select the **HackMindset** project root folder 
