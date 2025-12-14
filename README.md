@@ -61,16 +61,15 @@ Curated Instagram recommendations in fields such as space, nature, science and t
 
 ## 🎞 Interaction Preview and Tooltips  
 <div style="text-align: left;">
-  <img src="readme-assets/false-report.png" width="280">
   <img src="readme-assets/nevedel.png" width="280">
   <img src="readme-assets/vedel.png" width="280">
-  <img src="readme-assets/zazil-color.png" width="280">
   <img src="readme-assets/vedel-color.png" width="280">
 </div>
 
 ---
 
 ## 🛡 Security Architecture (Backend & Network)
+Security logging and anomaly detection are used as a learning and analysis layer to observe real request patterns, detect abuse attempts and iteratively improve defensive mechanisms.
 
 HackMindset is built with a layered defensive model.
 
