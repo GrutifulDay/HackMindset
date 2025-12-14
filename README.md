@@ -62,7 +62,7 @@ Curated Instagram recommendations in fields such as space, nature, science and t
 ## 🎞 Interaction Preview and Tooltips  
 <div style="text-align: left;">
   <img src="readme-assets/nevedel.png" width="280">
-  <img src="readme-assets/vedel.png" width="280">
+  <img src="readme-assets/vedel.png" width="278">
   <img src="readme-assets/vedel-color.png" width="280">
 </div>
 
