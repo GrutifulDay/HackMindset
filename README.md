@@ -86,7 +86,7 @@ HackMindset is built with a layered defensive model.
 - IP blacklist (auto-updated)  
 - Custom CORS validation  
 - Header filtering & sanitization  
-- Private endpoint (`/_sec-log`) for future honeypoint and network-level logging
+- Private endpoint (`/_sec-log`) for future honeypot and network-level logging
 
 ### **Network & Infrastructure (NGINX Layer)**
 Production uses a hardened NGINX reverse proxy:
@@ -148,7 +148,7 @@ Backend uses two MongoDB databases:
 - Dedicated security headers  
 - Custom CORS preflight  
 - Backend on `127.0.0.1:3000`  
-- Honeypoint-ready architecture  
+- Honeypot-ready architecture  
 
 ---
 
