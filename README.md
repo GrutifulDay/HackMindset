@@ -148,7 +148,7 @@ Backend uses two MongoDB databases:
 - Dedicated security headers  
 - Custom CORS preflight  
 - Backend on `127.0.0.1:3000`  
-- Honeypot-ready architecture  
+- Architecture prepared for future honeypot and security experiments
 
 ---
 
