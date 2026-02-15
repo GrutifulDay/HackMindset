@@ -6,7 +6,6 @@ A privacy-friendly daily knowledge companion that turns mindless scrolling into 
   <img src="readme-assets/about-extension.png" width="285">
 </div>
 
-
 **Live Extension:** *(coming soon)*  
 **Repository:** https://github.com/GrutifulDay/HackMindset  
 
@@ -14,13 +13,14 @@ A privacy-friendly daily knowledge companion that turns mindless scrolling into 
 
 ## 💡 Overview  
 
-HackMindset delivers small, meaningful pieces of knowledge that replace algorithm-driven noise with calm, inspiring content.
-Every day, the extension brings insight from astronomy, history and digital culture — without tracking, ads or personal data collection.
+HackMindset delivers small, meaningful pieces of knowledge that replace algorithm-driven noise with calm, inspiring content.  
+Each day, the extension brings insight from astronomy, history and digital culture — without tracking, ads or personal data collection.
 
-The project also serves as a fullstack security sandbox: JWT handling, rate limiting, anomaly detection, IP reputation logic, NGINX-level filtering and multi-layered API protection.
+The project also serves as a fullstack architecture and security study.  
+The backend is deployed on a public VPS behind a hardened NGINX reverse proxy.  
+Real-world traffic (including bot and scanner attempts) is logged and used to iteratively improve defensive mechanisms.
 
-**This is a self-directed learning project.  
-All backend security layers were implemented manually to understand how these systems work internally — not as part of previous commercial experience.**
+All backend security layers were implemented manually to understand how authentication, filtering and infrastructure protection work in practice.
 
 ---
 
@@ -32,11 +32,14 @@ All backend security layers were implemented manually to understand how these sy
 A daily view into space using NASA’s official APOD image and description.  
 A calm science moment embedded directly in your browser.
 
+---
+
 ### 🧭 Digitální rozcestník (Digital Signpost)  
 <img src="readme-assets/signpost.png" width="280">
 
-A **weekly Monday** educational card explaining modern digital topics:  
-algorithms, privacy, AI behaviour, online identity, social media patterns and more.
+A weekly educational card explaining modern digital topics such as algorithms, privacy, AI behaviour, online identity and social media patterns.
+
+---
 
 ### 📜 Story of the Day  
 <img src="readme-assets/story.png" width="280">
@@ -46,15 +49,19 @@ A true historical event connected to today’s date, always beginning with:
 - **CZ:** „Dnes, ale v roce…“  
 - **EN:** „Today, back in the year…“
 
+---
+
 ### 🕹 Retro Machine  
 <img src="readme-assets/retro.png" width="280">
 
 A nostalgic journey through technological evolution from the 70s to today.
 
+---
+
 ### 📸 Moje Insta tipy (Inspiration Profiles)  
 <img src="readme-assets/insta.png" width="280">
 
-Curated Instagram recommendations in fields such as space, nature, science and technology.
+Curated Instagram recommendations in space, nature, science and technology.
 
 ---
 
@@ -67,88 +74,54 @@ Curated Instagram recommendations in fields such as space, nature, science and t
 
 ---
 
-## 🛡 Security Architecture (Backend & Network)
-Security logging and anomaly detection are used as a learning and analysis layer to observe real request patterns, detect abuse attempts and iteratively improve defensive mechanisms.
+## 🛡 Architecture & Security Model
 
-HackMindset is built with a layered defensive model.
+HackMindset follows a layered defensive approach.
 
-### **API Protection**
-- JWT authentication (5-minute expiry)  
-- JTI-based token revocation  
-- Abuse detection with Discord alerts  
-- Origin + User-Agent validation  
-- Restricted API exposure → valid API key + JWT required  
-- All rejected requests are logged for analysis
+### Backend (Node.js + Express)
 
-### **Request Filtering & Middleware**
-- Adaptive rate limiting (soft + hard)  
-- Bot/User-Agent filtering  
-- IP blacklist (auto-updated)  
-- Custom CORS validation  
-- Header filtering & sanitization  
-- Private endpoint (`/_sec-log`) for future honeypot and network-level logging
+- REST API with layered architecture (routes → controllers → services)  
+- JWT authentication (short-lived tokens + JTI revocation)  
+- Adaptive rate limiting  
+- Origin and User-Agent validation  
+- Structured anomaly logging  
+- IP blacklist with automated updates  
+- Discord notifications for suspicious activity  
 
-### **Network & Infrastructure (NGINX Layer)**
-Production uses a hardened NGINX reverse proxy:
+Two separate data domains are maintained:
+- **Content data** (daily entries)  
+- **Security data** (IP reputation, logs, anomaly tracking)
 
-- **GeoIP filtering (only CZ + DE)**  
-  *(If you test from outside these regions, requests will be blocked.)*
-- **Invalid Host Protection (`return 444`)**  
-- **Rate limiting:** `limit_req zone=reqlimit burst=40 nodelay`  
-- **Connection limiting:** `limit_conn connlimit 20`  
-- **Slow-attack defense:**  
-  - `client_header_timeout 10s`  
-  - `client_body_timeout 10s`  
-  - `send_timeout 10s`  
-  - `keepalive_timeout 15s`  
-- Strong TLS + OCSP stapling  
-- Security headers (HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy)
-- Blocklists for scanners (`phpmyadmin`, `.env`, backups, wp-admin…)  
-- Reverse proxy to Node.js on localhost  
-- `server_tokens off`
-- Server header minimization (full override planned with OpenResty)
+---
 
+### Network & Infrastructure
 
-Backend uses two MongoDB databases:
-- **frontendData** — content  
-- **securityDataIP** — blacklist, honeysessions, secret leaks, logs
+The backend runs on Ubuntu 22.04 VPS behind an NGINX reverse proxy.
+
+Key protections include:
+
+- HTTPS with TLS configuration  
+- Security headers (HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy)  
+- Region-based request filtering (GeoIP)  
+- Request and connection rate limiting  
+- Slow-client protection  
+- Scanner and invalid-host blocking  
+- UFW firewall + Fail2Ban  
+- Backend exposed only on `127.0.0.1:3000` behind reverse proxy  
+
+The infrastructure is continuously monitored and adjusted based on real traffic behaviour.
 
 ---
 
 ## 🎨 Frontend (Chrome Extension)
-- Component-like Vanilla JS  
-- Popup / content script / background separation  
-- Multi-language (CZ/EN)  
-- Central fetch + caching layer across modules  
+
+- Component-style Vanilla JavaScript  
+- Popup / background / content script separation  
+- Multi-language (CZ / EN)  
+- Centralized fetch & caching layer  
 - Tooltip engine  
-- Sound trigger module  
-- JetBrains Mono typography  
-- No tracking, no cookies, no external scripts
-
----
-
-## 🛠 Backend (Node.js + Express)
-- Controllers, routes, middlewares, utils  
-- Two MongoDB connections  
-- JWT auth with revocation  
-- IP reputation logic  
-- Structured anomaly logging  
-- Discord notifications  
-- Daily cron refresh (**00:01**)  
-- `/_sec-log` protected route  
-- Separation of content vs. security data
-
----
-
-## 🏗 Server & Deployment
-- Ubuntu 22.04 VPS  
-- Hardened NGINX reverse proxy  
-- GeoIP, rate limiting, slow-attack defense  
-- UFW + Fail2Ban  
-- Dedicated security headers  
-- Custom CORS preflight  
-- Backend on `127.0.0.1:3000`  
-- Architecture prepared for future honeypot and security experiments
+- Optional sound triggers for retro section  
+- No tracking, no cookies, no external analytics  
 
 ---
 
@@ -156,9 +129,7 @@ Backend uses two MongoDB databases:
 
 This repository is intended as an architectural and technical reference.
 
-The Chrome extension consumes all daily content from a secured backend API.
-Without the backend running, the extension loads in a UI-only state
-(header, language switch and date are visible).
+The Chrome extension consumes all daily content from a secured backend API.  
+If the backend is unavailable, the extension loads in a UI-only state.
 
-Production configuration, environment variables and live security infrastructure
-are intentionally excluded.
+Production configuration, environment variables and live infrastructure details are intentionally excluded.
